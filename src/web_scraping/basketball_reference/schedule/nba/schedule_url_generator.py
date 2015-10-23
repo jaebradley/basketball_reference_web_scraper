@@ -4,6 +4,10 @@ class ScheduleUrlGenerator:
 
     @staticmethod
     def generate_url(year):
+
+        assert year is not None
+        assert isinstance(year, int)
+
         """
         For seasons that span multiple years use greatest year value
         :param year:

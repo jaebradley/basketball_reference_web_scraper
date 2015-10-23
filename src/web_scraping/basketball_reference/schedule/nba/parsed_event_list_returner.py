@@ -8,10 +8,11 @@ class ParsedEventListReturner:
         pass
 
     @staticmethod
-    def return_parsed_event_list(raw_events):
+    def return_parsed_event_list(raw_html_events):
         event_list = list()
-        for counter in range(0, raw_events.__len__(), 9):
-            event_information = raw_events[counter:counter + 9]
+        # TODO: fix hard-coded length
+        for counter in range(0, raw_html_events.__len__(), 9):
+            event_information = raw_html_events[counter:counter + 9]
             utc_start_time = ParsedRawEventStartTimeInUtcReturner.return_parsed_start_time_in_utc(
                 event_information[0].text_content(),
                 event_information[1].text_content()
