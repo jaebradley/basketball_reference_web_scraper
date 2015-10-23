@@ -23,35 +23,6 @@ class TestEvent(TestCase):
         visiting_team_name = "test_visiting_team_name"
         home_team_name = "test_home_team_name"
 
-        try:
-            Event(
-                None,
-                visiting_team_name,
-                home_team_name
-            )
-            assert False, "should not reach this point"
-        except AssertionError:
-            pass
-            # expected
-
-        try:
-            Event(
-                test_date,
-                None,
-                home_team_name
-            )
-            assert False, "should not reach this point"
-        except AssertionError:
-            pass
-            # expected
-
-        try:
-            Event(
-                test_date,
-                visiting_team_name,
-                None
-            )
-            assert False, "should not reach this point"
-        except AssertionError:
-            pass
-            # expected
+        self.assertRaises(AssertionError, Event, None, visiting_team_name, home_team_name)
+        self.assertRaises(AssertionError, Event, test_date, None, home_team_name)
+        self.assertRaises(AssertionError, Event, test_date, visiting_team_name, None)
