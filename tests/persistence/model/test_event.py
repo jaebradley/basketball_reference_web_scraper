@@ -18,13 +18,13 @@ class TestEvent(TestCase):
         assert visiting_team_name == test_event.visiting_team_name
         assert home_team_name == test_event.home_team_name
 
-    def test_none(self):
+    def test_assertions(self):
         test_date = datetime.datetime.strptime("1990-01-01", "%Y-%m-%d")
         visiting_team_name = "test_visiting_team_name"
         home_team_name = "test_home_team_name"
 
         try:
-            test_event = Event(
+            Event(
                 None,
                 visiting_team_name,
                 home_team_name
@@ -35,7 +35,7 @@ class TestEvent(TestCase):
             # expected
 
         try:
-            test_event = Event(
+            Event(
                 test_date,
                 None,
                 home_team_name
@@ -46,7 +46,7 @@ class TestEvent(TestCase):
             # expected
 
         try:
-            test_event = Event(
+            Event(
                 test_date,
                 visiting_team_name,
                 None
