@@ -3,8 +3,12 @@ import csv
 
 class ScheduleCsvWriter:
 
-    def write_to_csv(self, schedule, output_file_path):
-        with open("{0}".format(output_file_path), "w") as csvfile:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def write_to_csv(schedule, output_file_path):
+        with open(output_file_path, "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(
                 (
