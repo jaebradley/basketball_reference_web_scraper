@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from helper_functions.schedule.schedule_url_generator import ScheduleUrlGenerator
+from basketball_reference_web_scraper.helper_functions.schedule.schedule_url_generator import ScheduleUrlGenerator
 
 
 class TestScheduleUrlGenerator(TestCase):

@@ -1,7 +1,7 @@
 from unittest import TestCase
 import datetime
 
-from models.event import Event
+from basketball_reference_web_scraper.models.event import Event
 
 
 class TestEvent(TestCase):

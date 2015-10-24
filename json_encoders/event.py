@@ -1,6 +1,6 @@
 import json
 
-from models.event import Event
+from basketball_reference_web_scraper.models.event import Event
 
 
 class EventJsonEncoder(json.JSONEncoder):

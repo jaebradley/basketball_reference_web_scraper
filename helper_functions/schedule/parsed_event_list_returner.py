@@ -1,8 +1,8 @@
 import json
 
-from models.event import Event
-from helper_functions.schedule.parsed_raw_event_start_time_in_utc_returner import ParsedRawEventStartTimeInUtcReturner
-from json_encoders.event import EventJsonEncoder
+from basketball_reference_web_scraper.models.event import Event
+from basketball_reference_web_scraper.helper_functions.schedule.parsed_raw_event_start_time_in_utc_returner import ParsedRawEventStartTimeInUtcReturner
+from basketball_reference_web_scraper.json_encoders.event import EventJsonEncoder
 
 
 class ParsedEventListReturner:

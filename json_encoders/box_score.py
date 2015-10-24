@@ -1,6 +1,6 @@
 import json
 
-from models.box_score import BoxScore
+from basketball_reference_web_scraper.models.box_score import BoxScore
 
 
 class BoxScoreJsonEncoder(json.JSONEncoder):

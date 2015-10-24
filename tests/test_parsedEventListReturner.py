@@ -2,9 +2,9 @@ from unittest import TestCase
 
 import lxml.html as html
 
-from helper_functions.schedule.parsed_event_list_returner import ParsedEventListReturner
-from models.event import Event
-from helper_functions.schedule.raw_events_returner import RawEventsReturner
+from basketball_reference_web_scraper.helper_functions.schedule.parsed_event_list_returner import ParsedEventListReturner
+from basketball_reference_web_scraper.models.event import Event
+from basketball_reference_web_scraper.helper_functions.schedule.raw_events_returner import RawEventsReturner
 
 
 class TestRawEventsReturner(RawEventsReturner):

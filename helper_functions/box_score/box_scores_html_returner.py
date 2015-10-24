@@ -3,7 +3,7 @@ import logging
 
 import lxml.html as html
 
-from setup_logging import setup_logging
+from basketball_reference_web_scraper.setup_logging import setup_logging
 
 
 class BoxScoresHtmlReturner:

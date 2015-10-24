@@ -3,9 +3,9 @@ import time
 import logging
 import json
 
-from setup_logging import setup_logging
-from models.box_score import BoxScore
-from json_encoders.box_score import BoxScoreJsonEncoder
+from basketball_reference_web_scraper.setup_logging import setup_logging
+from basketball_reference_web_scraper.models.box_score import BoxScore
+from basketball_reference_web_scraper.json_encoders.box_score import BoxScoreJsonEncoder
 
 
 class ParsedBoxScoresReturner:
