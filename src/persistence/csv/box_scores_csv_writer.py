@@ -1,5 +1,4 @@
 import csv
-import datetime
 
 
 class BoxScoresCsvWriter:
@@ -25,6 +24,7 @@ class BoxScoresCsvWriter:
                     box_score.three_point_field_goals,
                     box_score.three_point_field_goal_attempts,
                     box_score.free_throws,
+                    box_score.free_throw_attempts,
                     box_score.offensive_rebounds,
                     box_score.defensive_rebounds,
                     box_score.total_rebounds,

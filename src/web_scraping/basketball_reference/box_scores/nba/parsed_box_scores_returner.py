@@ -22,16 +22,20 @@ class ParsedBoxScoresReturner:
             count = stop
         return box_scores_list
 
-    def return_box_scores(self, box_scores_html, date):
+    @staticmethod
+    def return_box_scores(box_scores_html, date):
         # TODO: currently hard-coded should probably change in the future
-        box_score_list_of_lists = self.return_raw_box_score_list_of_lists(box_scores_html)
+        box_score_list_of_lists = ParsedBoxScoresReturner.return_raw_box_score_list_of_lists(box_scores_html)
         box_scores = list()
         for box_score_list in box_score_list_of_lists:
             full_name = box_score_list[1]
             first_name = full_name.split(" ")[0]
             last_name = full_name.split(" ")[1]
-            x = time.strptime(box_score_list[6], "%M:%S")
-            seconds_played = datetime.timedelta(hours=x.tm_hour, minutes=x.tm_min, seconds=x.tm_sec).total_seconds()
+            if box_score_list[6] == '':
+                seconds_played = 0
+            else:
+                x = time.strptime(box_score_list[6], "%M:%S")
+                seconds_played = datetime.timedelta(hours=x.tm_hour, minutes=x.tm_min, seconds=x.tm_sec).total_seconds()
             if "@" == box_score_list[3]:
                 is_home = False
             else:
