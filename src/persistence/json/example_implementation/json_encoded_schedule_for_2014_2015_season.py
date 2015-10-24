@@ -1,3 +1,0 @@
-from src.web_scraping.basketball_reference.schedule.nba.schedule_web_scraper import SeasonScheduleWebScraper
-
-print SeasonScheduleWebScraper.return_json_encoded_schedule(2014)
