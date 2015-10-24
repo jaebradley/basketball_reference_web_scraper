@@ -3,7 +3,7 @@ import logging
 
 import lxml.html as html
 
-import setup_logging
+from setup_logging import setup_logging
 
 
 class BoxScoresHtmlReturner:

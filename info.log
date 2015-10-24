@@ -1,0 +1,5 @@
+2015-10-24 09:13:13,903 - root - INFO - box score url: http://www.basketball-reference.com/friv/dailyleaders.cgi?month=11&day=11&year=2014
+2015-10-24 09:13:13,904 - root - INFO - making call to http://www.basketball-reference.com/friv/dailyleaders.cgi?month=11&day=11&year=2014
+2015-10-24 09:13:15,001 - root - INFO - received html for http://www.basketball-reference.com/friv/dailyleaders.cgi?month=11&day=11&year=2014
+2015-10-24 09:13:15,002 - root - INFO - parsing box scores for 2014_11_11
+2015-10-24 09:13:15,044 - root - INFO - finished parsing box scores for 2014_11_11

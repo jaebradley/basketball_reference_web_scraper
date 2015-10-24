@@ -3,7 +3,7 @@ import time
 import logging
 import json
 
-import setup_logging
+from setup_logging import setup_logging
 from models.box_score import BoxScore
 from json_encoders.box_score import BoxScoreJsonEncoder
 
