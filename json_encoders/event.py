@@ -1,5 +1,6 @@
-from src.persistence.model.event import Event
 import json
+
+from json_encoders.event import Event
 
 
 class EventJsonEncoder(json.JSONEncoder):

@@ -2,7 +2,7 @@ import urllib2
 
 from lxml import html
 
-from src.web_scraping.basketball_reference.schedule.nba.schedule_url_generator import ScheduleUrlGenerator
+from helper_functions.schedule.schedule_url_generator import ScheduleUrlGenerator
 
 
 class RawEventsReturner:

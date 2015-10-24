@@ -1,8 +1,10 @@
-import lxml.html as html
 from unittest import TestCase
-from src.web_scraping.basketball_reference.schedule.nba.parsed_event_list_returner import ParsedEventListReturner
-from src.persistence.model.event import Event
-from src.web_scraping.basketball_reference.schedule.nba.raw_events_returner import RawEventsReturner
+
+import lxml.html as html
+
+from helper_functions.schedule.parsed_event_list_returner import ParsedEventListReturner
+from models.event import Event
+from helper_functions.schedule.raw_events_returner import RawEventsReturner
 
 
 class TestRawEventsReturner(RawEventsReturner):

@@ -1,6 +1,7 @@
 from unittest import TestCase
-from src.persistence.model.event import Event
 import datetime
+
+from models.event import Event
 
 
 class TestEvent(TestCase):

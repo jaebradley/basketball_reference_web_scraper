@@ -1,5 +1,6 @@
-from src.persistence.model.box_score import BoxScore
 import json
+
+from models.box_score import BoxScore
 
 
 class BoxScoreJsonEncoder(json.JSONEncoder):

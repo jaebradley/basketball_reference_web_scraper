@@ -3,9 +3,9 @@ import time
 import logging
 import json
 
-from src.setup_logging import setup_logging
-from src.persistence.model.box_score import BoxScore
-from src.persistence.json.encoders.box_score import BoxScoreJsonEncoder
+import setup_logging
+from models.box_score import BoxScore
+from json_encoders.box_score import BoxScoreJsonEncoder
 
 
 class ParsedBoxScoresReturner:

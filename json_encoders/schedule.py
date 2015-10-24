@@ -1,5 +1,6 @@
-from src.persistence.model.schedule import Schedule
 import json
+
+from json_encoders.schedule import Schedule
 
 
 class ScheduleJsonEncoder(json.JSONEncoder):

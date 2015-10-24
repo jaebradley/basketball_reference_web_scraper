@@ -1,5 +1,6 @@
 import logging
-from src.setup_logging import setup_logging
+
+import setup_logging
 
 
 class BoxScoreUrlGenerator:

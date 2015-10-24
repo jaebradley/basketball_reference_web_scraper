@@ -1,7 +1,9 @@
-from src.persistence.model.event import Event
-from src.web_scraping.basketball_reference.schedule.nba.parsed_raw_event_start_time_in_utc_returner import ParsedRawEventStartTimeInUtcReturner
-from src.persistence.json.encoders.event import EventJsonEncoder
 import json
+
+from models.event import Event
+from helper_functions.schedule.parsed_raw_event_start_time_in_utc_returner import ParsedRawEventStartTimeInUtcReturner
+from json_encoders.event import EventJsonEncoder
+
 
 class ParsedEventListReturner:
     def __init__(self):
