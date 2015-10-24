@@ -15,9 +15,6 @@ class TestRawEventsReturner(RawEventsReturner):
         raw_html_events = schedule_html.xpath('//td')
         return raw_html_events
 
-    def __init__(self):
-        RawEventsReturner.__init__(self)
-
 
 class TestParsedEventListReturner(TestCase):
     def test_expected(self):

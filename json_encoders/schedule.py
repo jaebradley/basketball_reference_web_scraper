@@ -1,6 +1,6 @@
 import json
 
-from json_encoders.schedule import Schedule
+from models.schedule import Schedule
 
 
 class ScheduleJsonEncoder(json.JSONEncoder):

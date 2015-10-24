@@ -1,6 +1,6 @@
 import json
 
-from json_encoders.event import Event
+from models.event import Event
 
 
 class EventJsonEncoder(json.JSONEncoder):
