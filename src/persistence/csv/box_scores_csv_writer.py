@@ -1,5 +1,5 @@
 from src.web_scraping.basketball_reference.box_scores.nba.box_score_web_scraper import BoxScoreWebScraper
-from src.web_scraping.basketball_reference.schedule.nba.schedule_web_scraper import ScheduleWebScraper
+from src.web_scraping.basketball_reference.schedule.nba.schedule_web_scraper import SeasonScheduleWebScraper
 import os
 import pytz
 import csv
@@ -51,7 +51,7 @@ class BoxScoresCsvWriter:
 
     @staticmethod
     def write_box_scores_to_csv_for_season(season_start_year):
-        schedule = ScheduleWebScraper.return_event_list(season_start_year + 1)
+        schedule = SeasonScheduleWebScraper.return_schedule(season_start_year + 1)
         start_dates = sorted(set([event.start_time.astimezone(pytz.timezone("US/Eastern")).date() for event in schedule.parsed_event_list]))
         for start_date in start_dates:
             BoxScoresCsvWriter.write_box_scores_to_csv_for_date(start_date)

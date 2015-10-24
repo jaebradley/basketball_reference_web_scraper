@@ -1,7 +1,7 @@
 from src.persistence.model.event import Event
 from src.web_scraping.basketball_reference.schedule.nba.parsed_raw_event_start_time_in_utc_returner import ParsedRawEventStartTimeInUtcReturner
-import time
-
+from src.persistence.json.encoders.event import EventJsonEncoder
+import json
 
 class ParsedEventListReturner:
     def __init__(self):
@@ -24,3 +24,21 @@ class ParsedEventListReturner:
             )
             event_list.append(event)
         return event_list
+
+    @staticmethod
+    def return_parsed_json_encoded_event_list(raw_html_events):
+        json_encoded_event_list = list()
+        # TODO: fix hard-coded length
+        for counter in range(0, raw_html_events.__len__(), 9):
+            event_information = raw_html_events[counter:counter + 9]
+            utc_start_time = ParsedRawEventStartTimeInUtcReturner.return_parsed_start_time_in_utc(
+                event_information[0].text_content(),
+                event_information[1].text_content()
+            )
+            event = Event(
+                str(utc_start_time),
+                event_information[3].text_content(),
+                event_information[5].text_content()
+            )
+            json_encoded_event_list.append(json.dumps(event, cls=EventJsonEncoder))
+        return json_encoded_event_list
