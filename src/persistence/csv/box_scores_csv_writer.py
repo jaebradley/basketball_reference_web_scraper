@@ -2,15 +2,14 @@ import csv
 import datetime
 
 
-class CsvWriter:
+class BoxScoresCsvWriter:
     def __init__(self):
-        self.output_file_path = "../box_scores/"
+        pass
 
-    def write_to_csv(self, box_scores):
+    @staticmethod
+    def write_to_csv(box_scores, output_file_path):
         # TODO: find better solution than hard-coded
-        date = box_scores[0].date
-        date_string = date.strftime("%m_%d_%Y")
-        with open("{0}{1}.csv".format(self.output_file_path, date_string), "w") as csvfile:
+        with open(output_file_path, "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(
                 (
