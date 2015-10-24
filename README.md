@@ -6,18 +6,20 @@ Basically, I created this repository as a utility for another project where I'm 
 ## Getting Box Scores
 There are two methods that return box scores for a given date:
 
-* `BoxScoreWebScraper.return_box_scores_for_date(date)`
+### Methods located in `web_scrapers.py`
+* `return_box_scores_for_date(date)`
   * Returns a list of Box Score objects
-* `BoxScoreWebScraper.return_json_encoded_box_scores_for_date(date)`
+* `return_json_encoded_box_scores_for_date(date)`
   * Returns a JSON object representation of a list of Box Score objects
 
 ## Getting Season Schedule Information
 There are also two methods that return scheduling information for a given season start year (note that the NBA season generally spans two calendar years):
 
-* `SeasonScheduleWebScraper.return_schedule(season_start_year)`
+### Methods located in `web_scrapers.py`
+* `return_schedule(season_start_year)`
   * Returns a Schedule object
-* `SeasonScheduleWebScraper.return_json_encoded_schedule(season_start_year)`
+* `return_json_encoded_schedule(season_start_year)`
   * Returns a JSON representation of a Schedule object
 
 ## Writing to CSV
-I also created two utility classes (`BoxScoresCsvWriter` and `ScheduleCsvWriter`) that write box score and season data to the `src/persistence/csv/box_scores` and `src/persistence/csv/schedules` directories.
+I also created utility methods that write box score and season data to csv. They are located in `csv_writers.py`.
