@@ -18,3 +18,6 @@ There are also two methods that return scheduling information for a given season
   * Returns a Schedule object
 * `SeasonScheduleWebScraper.return_json_encoded_schedule(season_start_year)`
   * Returns a JSON representation of a Schedule object
+
+## Writing to CSV
+I also created two utility classes (`BoxScoresCsvWriter` and `ScheduleCsvWriter`) that write box score and season data to the `src/persistence/csv/box_scores` and `src/persistence/csv/schedules` directories.
