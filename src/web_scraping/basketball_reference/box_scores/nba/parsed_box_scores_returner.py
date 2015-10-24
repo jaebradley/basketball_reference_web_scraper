@@ -1,5 +1,7 @@
 import datetime
 import time
+import logging
+from src.setup_logging import setup_logging
 
 from src.persistence.model.box_score import BoxScore
 
@@ -25,6 +27,9 @@ class ParsedBoxScoresReturner:
     @staticmethod
     def return_box_scores(box_scores_html, date):
         # TODO: currently hard-coded should probably change in the future
+        setup_logging()
+        logging.getLogger("main")
+        logging.info("parsing box scores for {0}".format(date.strftime("%Y_%m_%d")))
         box_score_list_of_lists = ParsedBoxScoresReturner.return_raw_box_score_list_of_lists(box_scores_html)
         box_scores = list()
         for box_score_list in box_score_list_of_lists:
@@ -65,4 +70,5 @@ class ParsedBoxScoresReturner:
                 box_score_list[24]
             )
             box_scores.append(box_score)
+        logging.info("finished parsing box scores for {0}".format(date.strftime("%Y_%m_%d")))
         return box_scores

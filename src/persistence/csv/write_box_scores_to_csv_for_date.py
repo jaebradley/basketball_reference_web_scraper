@@ -16,7 +16,7 @@ def write_box_scores_to_csv_for_date(date):
 
 def write_box_scores_to_csv_for_season(season_start_year):
     schedule = ScheduleWebScraper.return_event_list(season_start_year + 1)
-    start_dates = sorted(set([event.start_time.astimezone(pytz.timezone("US/Eastern")) for event in schedule.parsed_event_list]))
+    start_dates = sorted(set([event.start_time.astimezone(pytz.timezone("US/Eastern")).date() for event in schedule.parsed_event_list]))
     for start_date in start_dates:
         write_box_scores_to_csv_for_date(start_date)
 
