@@ -1,7 +1,12 @@
 # Basketball Reference Web Scraper
 [Basketball Reference](http://www.basketball-reference.com) is a great site (especially for a basketball stats nut like me), and hopefully they don't get too pissed off at me for creating this.
 
-Basically, I created this repository as a utility for another project where I'm trying to estimate an NBA player's productivity as it relates to daily fantasy sports.  For that project, I need box score and scheduling information, which is provided by this utility. Here's the [PyPi package](https://pypi.python.org/pypi/basketball_reference_web_scraper/1.4).
+Basically, I created this repository as a utility for another project where I'm trying to estimate an NBA player's productivity as it relates to daily fantasy sports.  For that project, I need box score and scheduling information, which is provided by this utility. Here's the [PyPi package](https://pypi.python.org/pypi/basketball_reference_web_scraper/1.7).
+
+## Installing via pip
+I wrote this library as an exercise for creating my first PyPi package.  Hopefully this means that if you'd like to use this library, you can by simply downloading the package via [pip](https://pypi.python.org/pypi/pip) like so:
+
+`pip install basketball_reference_web_scraper`
 
 ## Getting Box Scores
 There are two methods that return box scores for a given date:
