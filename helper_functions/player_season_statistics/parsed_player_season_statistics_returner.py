@@ -14,112 +14,102 @@ class ParsedPlayerSeasonStatisticsReturner:
         pass
 
     @staticmethod
-    def return_raw_box_score_list_of_lists(box_scores_html):
-        box_scores_list = list()
-        header_count = len(box_scores_html.xpath('//tr[@class=""]/th//@data-stat'))
-        player_html = box_scores_html.xpath('//tr[@class=""]/td')
+    def return_raw_player_season_statistics(player_season_statistics_html):
+        player_season_statistics_list = list()
+        header_count = len(player_season_statistics_html.xpath('//tr[@class=""]/th//@data-stat'))
+        player_html = player_season_statistics_html.xpath('//tr[@class="full_table"]/td')
         count = 0
         while count < len(player_html):
             start = count
             stop = count + header_count
-            box_scores_list.append([box_score_element.text_content() for box_score_element in player_html[start:stop]])
+            player_season_statistics_list.append([player_season_statistics_element.text_content() for player_season_statistics_element in player_html[start:stop]])
             count = stop
-        return box_scores_list
+        return player_season_statistics_list
 
     @staticmethod
-    def return_box_scores(box_scores_html, date):
+    def return_player_season_statistics(player_season_statistics_html, season_start_year):
         # TODO: currently hard-coded should probably change in the future
         setup_logging()
-        logging.getLogger("main")
-        logging.info("parsing box scores for {0}".format(date.strftime("%Y_%m_%d")))
-        box_score_list_of_lists = ParsedBoxScoresReturner.return_raw_box_score_list_of_lists(box_scores_html)
-        box_scores = list()
-        for box_score_list in box_score_list_of_lists:
-            full_name = box_score_list[1]
-            first_name = full_name.split(" ")[0]
-            last_name = full_name.split(" ")[1]
-            if box_score_list[6] == '':
-                seconds_played = 0
-            else:
-                x = time.strptime(box_score_list[6], "%M:%S")
-                seconds_played = datetime.timedelta(hours=x.tm_hour, minutes=x.tm_min, seconds=x.tm_sec).total_seconds()
-            if "@" == box_score_list[3]:
-                is_home = False
-            else:
-                is_home = True
-            box_score = BoxScore(
-                first_name,
-                last_name,
-                date,
-                box_score_list[2],
-                box_score_list[4],
-                is_home,
-                seconds_played,
-                box_score_list[7],
-                box_score_list[8],
-                box_score_list[10],
-                box_score_list[11],
-                box_score_list[13],
-                box_score_list[14],
-                box_score_list[16],
-                box_score_list[17],
-                box_score_list[18],
-                box_score_list[19],
-                box_score_list[20],
-                box_score_list[21],
-                box_score_list[22],
-                box_score_list[23],
-                box_score_list[24]
-            )
-            box_scores.append(box_score)
-        logging.info("finished parsing box scores for {0}".format(date.strftime("%Y_%m_%d")))
-        return box_scores
+        logging.getLogger()
+        logging.info("starting to parse season statistics for {0}".format(season_start_year))
+        raw_player_season_statistics_list = ParsedPlayerSeasonStatisticsReturner.return_raw_player_season_statistics(player_season_statistics_html)
+        all_player_season_statistics = list()
+        for raw_player_season_statistics in raw_player_season_statistics_list:
+            # in case of total combined statistics
+            if raw_player_season_statistics[4] != 'TOT':
+                full_name = raw_player_season_statistics[1]
+                first_name = full_name.split(" ")[0]
+                last_name = full_name.split(" ")[1]
+                player_season_statistics = PlayerSeasonStatistics(
+                    first_name,
+                    last_name,
+                    raw_player_season_statistics[3],
+                    raw_player_season_statistics[4],
+                    raw_player_season_statistics[2],
+                    raw_player_season_statistics[5],
+                    raw_player_season_statistics[6],
+                    raw_player_season_statistics[7],
+                    raw_player_season_statistics[8],
+                    raw_player_season_statistics[9],
+                    raw_player_season_statistics[11],
+                    raw_player_season_statistics[12],
+                    raw_player_season_statistics[14],
+                    raw_player_season_statistics[15],
+                    raw_player_season_statistics[18],
+                    raw_player_season_statistics[19],
+                    raw_player_season_statistics[21],
+                    raw_player_season_statistics[22],
+                    raw_player_season_statistics[24],
+                    raw_player_season_statistics[25],
+                    raw_player_season_statistics[26],
+                    raw_player_season_statistics[27],
+                    raw_player_season_statistics[28],
+                    raw_player_season_statistics[29],
+                )
+                all_player_season_statistics.append(player_season_statistics)
+        logging.info("finished parsing season_statistics for {0}".format(season_start_year))
+        return all_player_season_statistics
 
     @staticmethod
-    def return_json_encoded_box_scores(box_scores_html, date):
+    def return_json_encoded_player_season_statistics(player_season_statistics_html, season_start_year):
         # TODO: currently hard-coded should probably change in the future
         setup_logging()
-        logging.getLogger("main")
-        logging.info("parsing box scores for {0}".format(date.strftime("%Y_%m_%d")))
-        box_score_list_of_lists = ParsedBoxScoresReturner.return_raw_box_score_list_of_lists(box_scores_html)
-        json_encoded_box_scores = list()
-        for box_score_list in box_score_list_of_lists:
-            full_name = box_score_list[1]
-            first_name = full_name.split(" ")[0]
-            last_name = full_name.split(" ")[1]
-            if box_score_list[6] == '':
-                seconds_played = 0
-            else:
-                x = time.strptime(box_score_list[6], "%M:%S")
-                seconds_played = datetime.timedelta(hours=x.tm_hour, minutes=x.tm_min, seconds=x.tm_sec).total_seconds()
-            if "@" == box_score_list[3]:
-                is_home = False
-            else:
-                is_home = True
-            box_score = BoxScore(
-                first_name,
-                last_name,
-                str(date),
-                box_score_list[2],
-                box_score_list[4],
-                is_home,
-                seconds_played,
-                box_score_list[7],
-                box_score_list[8],
-                box_score_list[10],
-                box_score_list[11],
-                box_score_list[13],
-                box_score_list[14],
-                box_score_list[16],
-                box_score_list[17],
-                box_score_list[18],
-                box_score_list[19],
-                box_score_list[20],
-                box_score_list[21],
-                box_score_list[22],
-                box_score_list[23],
-                box_score_list[24]
-            )
-            json_encoded_box_scores.append(json.dumps(box_score, cls=BoxScoreJsonEncoder))
-        logging.info("finished parsing box scores for {0}".format(date.strftime("%Y_%m_%d")))
-        return json_encoded_box_scores
+        logging.getLogger()
+        logging.info("starting to parse season statistics for {0}".format(season_start_year))
+        raw_player_season_statistics_list = ParsedPlayerSeasonStatisticsReturner.return_raw_player_season_statistics(player_season_statistics_html)
+        all_json_encoded_player_season_statistics = list()
+        for raw_player_season_statistics in raw_player_season_statistics_list:
+            # in case of total combined statistics
+            if raw_player_season_statistics[4] != 'TOT':
+                full_name = raw_player_season_statistics[1]
+                first_name = full_name.split(" ")[0]
+                last_name = full_name.split(" ")[1]
+                player_season_statistics = PlayerSeasonStatistics(
+                    first_name,
+                    last_name,
+                    raw_player_season_statistics[3],
+                    raw_player_season_statistics[4],
+                    raw_player_season_statistics[2],
+                    raw_player_season_statistics[5],
+                    raw_player_season_statistics[6],
+                    raw_player_season_statistics[7],
+                    raw_player_season_statistics[8],
+                    raw_player_season_statistics[9],
+                    raw_player_season_statistics[11],
+                    raw_player_season_statistics[12],
+                    raw_player_season_statistics[14],
+                    raw_player_season_statistics[15],
+                    raw_player_season_statistics[18],
+                    raw_player_season_statistics[19],
+                    raw_player_season_statistics[21],
+                    raw_player_season_statistics[22],
+                    raw_player_season_statistics[24],
+                    raw_player_season_statistics[25],
+                    raw_player_season_statistics[26],
+                    raw_player_season_statistics[27],
+                    raw_player_season_statistics[28],
+                    raw_player_season_statistics[29],
+                )
+                all_json_encoded_player_season_statistics.append(json.dumps(player_season_statistics, cls=PlayerSeasonStatisticsJsonEncoder))
+        logging.info("finished parsing season_statistics for {0}".format(season_start_year))
+        return all_json_encoded_player_season_statistics

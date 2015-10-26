@@ -8,6 +8,9 @@ from basketball_reference_web_scraper.json_encoders.schedule import ScheduleJson
 from basketball_reference_web_scraper.helper_functions.box_score.box_score_url_generator import BoxScoreUrlGenerator
 from basketball_reference_web_scraper.helper_functions.box_score.box_scores_html_returner import BoxScoresHtmlReturner
 from basketball_reference_web_scraper.helper_functions.box_score.parsed_box_scores_returner import ParsedBoxScoresReturner
+from basketball_reference_web_scraper.helper_functions.player_season_statistics.player_season_statistics_url_generator import PlayerSeasonStatisticsUrlGenerator
+from basketball_reference_web_scraper.helper_functions.player_season_statistics.player_season_statistics_html_returner import PlayerSeasonStatisticsHtmlReturner
+from basketball_reference_web_scraper.helper_functions.player_season_statistics.parsed_player_season_statistics_returner import ParsedPlayerSeasonStatisticsReturner
 
 
 def return_schedule(season_start_year):
@@ -36,3 +39,17 @@ def return_json_encoded_box_scores_for_date(date):
     raw_box_scores_html = BoxScoresHtmlReturner.return_html(box_score_url=generated_url)
     json_encoded_box_scores = ParsedBoxScoresReturner.return_json_encoded_box_scores(box_scores_html=raw_box_scores_html, date=date)
     return json_encoded_box_scores
+
+
+def return_player_season_statistics(season_start_year):
+    generated_url = PlayerSeasonStatisticsUrlGenerator.generate_url(season_start_year=season_start_year)
+    raw_player_season_statistics_html = PlayerSeasonStatisticsHtmlReturner.return_html(player_season_statistics_url=generated_url)
+    player_season_statistics = ParsedPlayerSeasonStatisticsReturner.return_player_season_statistics(raw_player_season_statistics_html, season_start_year)
+    return player_season_statistics
+
+
+def return_json_encoded_player_season_statistics(season_start_year):
+    generated_url = PlayerSeasonStatisticsUrlGenerator.generate_url(season_start_year=season_start_year)
+    raw_player_season_statistics_html = PlayerSeasonStatisticsHtmlReturner.return_html(player_season_statistics_url=generated_url)
+    player_season_statistics = ParsedPlayerSeasonStatisticsReturner.return_json_encoded_player_season_statistics(raw_player_season_statistics_html, season_start_year)
+    return player_season_statistics

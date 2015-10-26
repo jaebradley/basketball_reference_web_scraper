@@ -1,6 +1,9 @@
 class PlayerSeasonStatistics:
     def __init__(
             self,
+            first_name,
+            last_name,
+            age,
             team,
             position,
             games_played,
@@ -23,6 +26,9 @@ class PlayerSeasonStatistics:
             personal_fouls,
             points
     ):
+        self.age = age
+        self.first_name = first_name
+        self.last_name = last_name
         self.team = team
         self.position = position
         self.games_played = games_played
