@@ -3,3 +3,58 @@
 2015-10-24 09:13:15,001 - root - INFO - received html for http://www.basketball-reference.com/friv/dailyleaders.cgi?month=11&day=11&year=2014
 2015-10-24 09:13:15,002 - root - INFO - parsing box scores for 2014_11_11
 2015-10-24 09:13:15,044 - root - INFO - finished parsing box scores for 2014_11_11
+2015-10-25 22:31:35,682 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2014_totals.html?lid=header_seasons
+2015-10-25 22:31:35,683 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2014_totals.html?lid=header_seasons
+2015-10-25 22:31:37,463 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2014_totals.html?lid=header_seasons
+2015-10-25 22:31:37,465 - root - INFO - starting to parse season statistics for 2015
+2015-10-25 22:31:37,484 - root - INFO - finished parsing season_statistics for 2015
+2015-10-25 22:32:08,271 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:08,273 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:08,554 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:08,556 - root - INFO - starting to parse season statistics for 2015
+2015-10-25 22:32:08,556 - root - INFO - finished parsing season_statistics for 2015
+2015-10-25 22:32:19,111 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:19,112 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:19,473 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:19,474 - root - INFO - starting to parse season statistics for 2015
+2015-10-25 22:32:19,474 - root - INFO - finished parsing season_statistics for 2015
+2015-10-25 22:32:59,500 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:59,503 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:59,845 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:32:59,846 - root - INFO - starting to parse season statistics for 2015
+2015-10-25 22:32:59,847 - root - INFO - finished parsing season_statistics for 2015
+2015-10-25 22:33:57,562 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:33:57,563 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:33:57,894 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-10-25 22:33:57,904 - root - INFO - starting to parse season statistics for 2015
+2015-10-25 22:33:57,905 - root - INFO - finished parsing season_statistics for 2015
+2015-10-25 22:34:27,545 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:34:27,546 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:34:28,983 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:34:29,102 - root - INFO - starting to parse season statistics for 2014
+2015-10-25 22:34:29,126 - root - INFO - finished parsing season_statistics for 2014
+2015-10-25 22:34:58,269 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:34:58,271 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:34:59,660 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:34:59,661 - root - INFO - starting to parse season statistics for 2014
+2015-10-25 22:34:59,677 - root - INFO - finished parsing season_statistics for 2014
+2015-10-25 22:35:25,297 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:35:25,299 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:35:26,628 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:35:26,629 - root - INFO - starting to parse season statistics for 2014
+2015-10-25 22:35:26,818 - root - INFO - finished parsing season_statistics for 2014
+2015-10-25 22:36:03,718 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:36:03,720 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:36:05,097 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:36:05,098 - root - INFO - starting to parse season statistics for 2014
+2015-10-25 22:36:05,232 - root - INFO - finished parsing season_statistics for 2014
+2015-10-25 22:39:28,747 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:39:28,749 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:39:30,510 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:39:30,511 - root - INFO - starting to parse season statistics for 2014
+2015-10-25 22:39:30,623 - root - INFO - finished parsing season_statistics for 2014
+2015-10-25 22:40:18,840 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:40:18,844 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:40:20,625 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-25 22:40:20,626 - root - INFO - starting to parse season statistics for 2014
+2015-10-25 22:40:20,751 - root - INFO - finished parsing season_statistics for 2014
