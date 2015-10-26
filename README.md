@@ -21,5 +21,11 @@ There are also two methods that return scheduling information for a given season
 * `return_json_encoded_schedule(season_start_year)`
   * Returns a JSON representation of a Schedule object
 
+### Methods located in `web_scrapers.py`
+* `return_player_season_statistics(season_start_year)`
+  * Returns a list of Player Season Statistic objects
+* `return_json_encoded_player_season_statistics(season_start_year)`
+  *  Returns a JSON object representation of a list of all player season statistic totals for the given season
+
 ## Writing to CSV
 I also created utility methods that write box score and season data to csv. They are located in `csv_writers.py`.
