@@ -3,7 +3,7 @@ import logging
 from basketball_reference_web_scraper.setup_logging import setup_logging
 
 
-class ScheduleUrlGenerator:
+class SeasonScheduleUrlGenerator:
     def __init__(self):
         pass
 
