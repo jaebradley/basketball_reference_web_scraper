@@ -4,13 +4,13 @@ import lxml.html as html
 
 from basketball_reference_web_scraper.helper_functions.schedule.parsed_event_list_returner import ParsedEventListReturner
 from basketball_reference_web_scraper.models.event import Event
-from basketball_reference_web_scraper.helper_functions.schedule.raw_events_returner import RawEventsReturner
+from basketball_reference_web_scraper.helper_functions.schedule.raw_events_returner import RawEventsHTMLReturner
 
 
-class TestRawEventsReturner(RawEventsReturner):
+class TestRawEventsReturner(RawEventsHTMLReturner):
 
     @staticmethod
-    def return_raw_events(raw_content):
+    def return_raw_events_html(raw_content):
         schedule_html = html.fromstring(raw_content)
         raw_html_events = schedule_html.xpath('//td')
         return raw_html_events
@@ -19,7 +19,7 @@ class TestRawEventsReturner(RawEventsReturner):
 class TestParsedEventListReturner(TestCase):
     def test_expected(self):
         schedule_html = open("static/schedule.html").read()
-        raw_events = TestRawEventsReturner.return_raw_events(schedule_html)
+        raw_events = TestRawEventsReturner.return_raw_events_html(schedule_html)
         parsed_event_list_result = ParsedEventListReturner.return_parsed_event_list(raw_events)
 
         assert parsed_event_list_result is not None

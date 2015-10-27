@@ -1,7 +1,7 @@
 import csv
 import os
 import pytz
-from basketball_reference_web_scraper.web_scrapers import return_schedule, return_box_scores_for_date
+from basketball_reference_web_scraper.readers import return_schedule, return_box_scores_for_date
 
 
 def write_schedule_data_to_csv(schedule, output_file_path):
