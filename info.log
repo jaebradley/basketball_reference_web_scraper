@@ -58,3 +58,26 @@
 2015-10-25 22:40:20,625 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
 2015-10-25 22:40:20,626 - root - INFO - starting to parse season statistics for 2014
 2015-10-25 22:40:20,751 - root - INFO - finished parsing season_statistics for 2014
+2015-10-26 22:29:55,132 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:29:55,134 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:29:56,605 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:20,391 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:20,393 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:21,657 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:21,658 - root - INFO - starting to parse season statistics for quincy - acy - 2014 - NYK
+2015-10-26 22:30:21,771 - root - INFO - finished parsing season_statistics for 2014
+2015-10-26 22:30:30,486 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:30,488 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:32,379 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:30:32,380 - root - INFO - starting to parse season statistics for quincy - acy - 2014 - WAS
+2015-10-26 22:30:32,477 - root - INFO - finished parsing season_statistics for 2014
+2015-10-26 22:31:13,645 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:31:13,646 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:31:14,861 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:31:14,862 - root - INFO - starting to parse season statistics for quincy - acy - 2014 - WAS
+2015-10-26 22:31:14,960 - root - INFO - finished parsing season_statistics for 2014
+2015-10-26 22:31:19,398 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:31:19,399 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:31:20,774 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
+2015-10-26 22:31:20,775 - root - INFO - starting to parse season statistics for quincy - acy - 2014 - nyk
+2015-10-26 22:31:20,875 - root - INFO - finished parsing season_statistics for 2014

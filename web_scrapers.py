@@ -41,15 +41,29 @@ def return_json_encoded_box_scores_for_date(date):
     return json_encoded_box_scores
 
 
-def return_player_season_statistics(season_start_year):
+def return_all_player_season_statistics(season_start_year):
     generated_url = PlayerSeasonStatisticsUrlGenerator.generate_url(season_start_year=season_start_year)
     raw_player_season_statistics_html = PlayerSeasonStatisticsHtmlReturner.return_html(player_season_statistics_url=generated_url)
-    player_season_statistics = ParsedPlayerSeasonStatisticsReturner.return_player_season_statistics(raw_player_season_statistics_html, season_start_year)
+    player_season_statistics = ParsedPlayerSeasonStatisticsReturner.return_all_player_season_statistics(raw_player_season_statistics_html, season_start_year)
     return player_season_statistics
 
 
-def return_json_encoded_player_season_statistics(season_start_year):
+def return_json_encoded_all_player_season_statistics(season_start_year):
     generated_url = PlayerSeasonStatisticsUrlGenerator.generate_url(season_start_year=season_start_year)
     raw_player_season_statistics_html = PlayerSeasonStatisticsHtmlReturner.return_html(player_season_statistics_url=generated_url)
-    player_season_statistics = ParsedPlayerSeasonStatisticsReturner.return_json_encoded_player_season_statistics(raw_player_season_statistics_html, season_start_year)
+    player_season_statistics = ParsedPlayerSeasonStatisticsReturner.return_json_encoded_all_player_season_statistics(raw_player_season_statistics_html, season_start_year)
     return player_season_statistics
+
+
+def return_player_season_team_statistics(player_first_name, player_last_name, season_start_year, team_abbreviation):
+    generated_url = PlayerSeasonStatisticsUrlGenerator.generate_url(season_start_year=season_start_year)
+    raw_player_season_statistics_html = PlayerSeasonStatisticsHtmlReturner.return_html(player_season_statistics_url=generated_url)
+    player_season_team_statistics = ParsedPlayerSeasonStatisticsReturner.return_player_season_team_statistics(raw_player_season_statistics_html, player_first_name, player_last_name, season_start_year, team_abbreviation)
+    return player_season_team_statistics
+
+
+def return_json_encoded_player_season_team_statistics(player_first_name, player_last_name, season_start_year, team_abbreviation):
+    generated_url = PlayerSeasonStatisticsUrlGenerator.generate_url(season_start_year=season_start_year)
+    raw_player_season_statistics_html = PlayerSeasonStatisticsHtmlReturner.return_html(player_season_statistics_url=generated_url)
+    json_encoded_player_season_team_statistics = ParsedPlayerSeasonStatisticsReturner.return_json_encoded_player_season_team_statistics(raw_player_season_statistics_html, player_first_name, player_last_name, season_start_year, team_abbreviation)
+    return json_encoded_player_season_team_statistics
