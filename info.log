@@ -81,3 +81,86 @@
 2015-10-26 22:31:20,774 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2015_totals.html?lid=header_seasons
 2015-10-26 22:31:20,775 - root - INFO - starting to parse season statistics for quincy - acy - 2014 - nyk
 2015-10-26 22:31:20,875 - root - INFO - finished parsing season_statistics for 2014
+2015-12-29 10:50:00,101 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:50:00,102 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:50:01,170 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:50:01,172 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:50:01,237 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:51:43,513 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:51:43,513 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:51:44,507 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:51:44,508 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:51:44,571 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:51:52,004 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:51:52,004 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:51:53,022 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:51:53,022 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:51:53,087 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:52:19,564 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:19,565 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:20,699 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:20,700 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:52:20,763 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:52:27,076 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:27,076 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:28,077 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:28,078 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:52:28,136 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:52:50,283 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:50,284 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:51,177 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:52:51,178 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:52:51,234 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:55:10,751 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:55:10,752 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:55:11,888 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:55:11,889 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:55:11,958 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:55:16,469 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:55:16,470 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:55:17,361 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:55:17,362 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:55:17,435 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:57:18,111 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:57:18,112 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:57:19,093 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:57:19,094 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:57:19,158 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:58:18,714 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:18,714 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:19,726 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:19,727 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:58:19,800 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:58:22,236 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:22,237 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:24,777 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:24,778 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:58:24,841 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:58:56,193 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:56,194 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:57,124 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:58:57,125 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:58:57,191 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:59:19,616 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:59:19,617 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:59:20,577 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:59:20,577 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 10:59:20,641 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 10:59:37,264 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:59:37,265 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 10:59:38,203 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:04:23,247 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:04:23,248 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:04:24,239 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:04:24,247 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 11:04:24,318 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 11:05:49,265 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:05:49,266 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:05:50,480 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:05:50,481 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 11:05:50,567 - root - INFO - finished parsing season_statistics for 2015
+2015-12-29 11:10:41,764 - root - INFO - box score url: http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:10:41,765 - root - INFO - making call to http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:10:42,718 - root - INFO - received html for http://www.basketball-reference.com/leagues/NBA_2016_totals.html?lid=header_seasons
+2015-12-29 11:10:42,719 - root - INFO - starting to parse season statistics for 2015
+2015-12-29 11:10:42,810 - root - INFO - finished parsing season_statistics for 2015

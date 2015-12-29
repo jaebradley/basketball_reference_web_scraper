@@ -1,11 +1,9 @@
-import datetime
-import time
-import logging
 import json
+import logging
 
-from basketball_reference_web_scraper.setup_logging import setup_logging
-from basketball_reference_web_scraper.models.player_season_statistics import PlayerSeasonStatistics
 from basketball_reference_web_scraper.json_encoders.player_season_statistics import PlayerSeasonStatisticsJsonEncoder
+from basketball_reference_web_scraper.models.player_season_statistics import PlayerSeasonStatistics
+from basketball_reference_web_scraper.setup_logging import setup_logging
 
 
 class ParsedPlayerSeasonStatisticsReturner:
@@ -23,6 +21,14 @@ class ParsedPlayerSeasonStatisticsReturner:
             start = count
             stop = count + header_count
             player_season_statistics_list.append([player_season_statistics_element.text_content() for player_season_statistics_element in player_html[start:stop]])
+            count = stop
+
+        player_multiple_teams_html = player_season_statistics_html.xpath('//tr[@class="italic_text partial_table"]/td')
+        count = 0
+        while count < len(player_multiple_teams_html):
+            start = count
+            stop = count + header_count
+            player_season_statistics_list.append([player_season_statistics_element.text_content() for player_season_statistics_element in player_multiple_teams_html[start:stop]])
             count = stop
         return player_season_statistics_list
 
