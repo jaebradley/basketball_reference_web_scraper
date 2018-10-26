@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from client import get_season_schedule
+from http_client import get_season_schedule
 
 
 class TestGet_season_schedule(TestCase):
