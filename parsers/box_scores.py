@@ -2,7 +2,40 @@ import time
 import datetime
 from lxml import html
 
-from data import Location, Outcome
+from data import Location, Outcome, Team
+
+TEAM_ABBREVIATIONS_TO_TEAM = {
+    'ATL': Team.ATLANTA_HAWKS,
+    'BOS': Team.BOSTON_CELTICS,
+    'BRK': Team.BROOKLYN_NETS,
+    'CHI': Team.CHICAGO_BULLS,
+    'CHO': Team.CHARLOTTE_HORNETS,
+    'CLE': Team.CLEVELAND_CAVALIERS,
+    'DAL': Team.DALLAS_MAVERICKS,
+    'DEN': Team.DENVER_NUGGETS,
+    'DET': Team.DETROIT_PISTONS,
+    'GSW': Team.GOLDEN_STATE_WARRIORS,
+    'HOU': Team.HOUSTON_ROCKETS,
+    'IND': Team.INDIANA_PACERS,
+    'LAC': Team.LOS_ANGELES_CLIPPERS,
+    'LAL': Team.LOS_ANGELES_LAKERS,
+    'MEM': Team.MEMPHIS_GRIZZLIES,
+    'MIA': Team.MIAMI_HEAT,
+    'MIL': Team.MILWAUKEE_BUCKS,
+    'MIN': Team.MINNESOTA_TIMBERWOLVES,
+    'NOP': Team.NEW_ORLEANS_PELICANS,
+    'NYK': Team.NEW_YORK_KNICKS,
+    'OKC': Team.OKLAHOMA_CITY_THUNDER,
+    'ORL': Team.ORLANDO_MAGIC,
+    'PHI': Team.PHILADELPHIA_76ERS,
+    'PHO': Team.PHOENIX_SUNS,
+    'POR': Team.PORTLAND_TRAIL_BLAZERS,
+    'SAC': Team.SACRAMENTO_KINGS,
+    'SAS': Team.SAN_ANTONIO_SPURS,
+    'TOR': Team.TORONTO_RAPTORS,
+    'UTA': Team.UTAH_JAZZ,
+    'WAS': Team.WASHINGTON_WIZARDS
+}
 
 
 def parse_location(symbol):
@@ -34,9 +67,9 @@ def parse_seconds_played(formatted_playing_time):
 def parse_player_box_score(row):
     return {
         "name": str(row[1].text_content()),
-        "team": row[2].text_content(),
+        "team": TEAM_ABBREVIATIONS_TO_TEAM[row[2].text_content()],
         "location": parse_location(row[3].text_content()),
-        "opponent": row[4].text_content(),
+        "opponent": TEAM_ABBREVIATIONS_TO_TEAM[row[4].text_content()],
         "outcome": parse_outcome(row[5].text_content()),
         "seconds_played": int(parse_seconds_played(row[6].text_content())),
         "made_field_goals": int(row[7].text_content()),
