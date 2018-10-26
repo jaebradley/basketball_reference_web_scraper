@@ -1,17 +1,24 @@
 from enum import Enum
 
 
-class Location(Enum):
+class StrEnum(str, Enum):
+    """
+    Enum where members must be strs.
+    Used so that serializing to JSON is simpler
+    """
+
+
+class Location(StrEnum):
     HOME = "HOME"
     AWAY = "AWAY"
 
 
-class Outcome(Enum):
+class Outcome(StrEnum):
     WIN = "WIN"
     LOSS = "LOSS"
 
 
-class Team(Enum):
+class Team(StrEnum):
     ATLANTA_HAWKS = "ATLANTA HAWKS"
     BOSTON_CELTICS = "BOSTON CELTICS"
     BROOKLYN_NETS = "BROOKLYN NETS"
@@ -42,3 +49,7 @@ class Team(Enum):
     TORONTO_RAPTORS = "TORONTO RAPTORS"
     UTAH_JAZZ = "UTAH JAZZ"
     WASHINGTON_WIZARDS = "WASHINGTON WIZARDS"
+
+
+class OutputType(Enum):
+    JSON = "JSON"

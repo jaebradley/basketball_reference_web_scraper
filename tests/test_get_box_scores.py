@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from client import get_box_scores
+from http_client import get_box_scores
 
 
 class TestGet_box_scores(TestCase):
