@@ -50,4 +50,3 @@ def get_season_schedule(season_end_year):
         season_schedule.extend(schedule_for_month)
 
     return season_schedule
->>>>>>> implement season schedule

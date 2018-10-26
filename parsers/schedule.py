@@ -1,7 +1,13 @@
 from lxml import html
-
 import datetime
 import pytz
+
+from data import Team
+
+TEAM_NAME_TO_TEAM = {
+    member.value: member
+    for (_, member) in Team.__members__.items()
+}
 
 
 def parse_start_time(formatted_date, formatted_time_of_day):
@@ -30,9 +36,9 @@ def parse_game(row):
     start_time = parse_start_time(formatted_date=row[0].text_content(), formatted_time_of_day=row[1].text_content())
     return {
         "start_time": start_time,
-        "away_team": row[2].text_content(),
+        "away_team": TEAM_NAME_TO_TEAM[row[2].text_content().upper()],
         "away_team_score": int(row[3].text_content()),
-        "home_team": row[4].text_content(),
+        "home_team": TEAM_NAME_TO_TEAM[row[4].text_content().upper()],
         "home_team_score": int(row[5].text_content()),
     }
 
