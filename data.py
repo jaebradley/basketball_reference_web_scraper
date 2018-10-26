@@ -53,3 +53,4 @@ class Team(StrEnum):
 
 class OutputType(Enum):
     JSON = "JSON"
+    CSV = "CSV"
