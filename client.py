@@ -1,5 +1,6 @@
 import requests
 
+from errors import InvalidDate
 from parsers.box_scores import parse_box_score
 
 BASE_URL = 'http://www.basketball-reference.com'
@@ -13,8 +14,9 @@ def get_box_scores(day, month, year):
         year=year
     )
 
-    response = requests.get(url=url)
+    response = requests.get(url=url, allow_redirects=False)
 
-    response.raise_for_status()
+    if 200 <= response.status_code < 300:
+        return parse_box_score(response.content)
 
-    return parse_box_score(response.content)
+    raise InvalidDate(day=day, month=month, year=year)
