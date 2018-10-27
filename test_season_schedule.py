@@ -14,4 +14,4 @@ class TestSeason_schedule(TestCase):
         self.assertIsNotNone(result)
 
     def test_season_schedule_csv(self):
-        season_schedule(season_end_year=2018, output_type=OutputType.CSV, relative_file_path="./foo.csv")
+        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./foo.csv")
