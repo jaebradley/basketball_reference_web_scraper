@@ -41,7 +41,7 @@ default_json_options = {
 }
 
 
-def output(values, output_type, relative_file_path, encoder, csv_writer, json_options=None):
+def output(values, output_type, output_file_path, encoder, csv_writer, json_options=None):
     if output_type is None:
         return values
 
@@ -50,24 +50,24 @@ def output(values, output_type, relative_file_path, encoder, csv_writer, json_op
         return json.dumps(values, cls=encoder, **options)
 
     if output_type == OutputType.CSV:
-        if relative_file_path is None:
+        if output_file_path is None:
             raise ValueError("CSV output must contain a file path")
         else:
-            return csv_writer(rows=values, relative_file_path=relative_file_path)
+            return csv_writer(rows=values, output_file_path=output_file_path)
 
     raise UnknownOutputType(output_type)
 
 
-def box_scores_to_csv(rows, relative_file_path):
-    write_csv(rows=rows, fieldnames=box_score_fieldname, relative_file_path=relative_file_path)
+def box_scores_to_csv(rows, output_file_path):
+    write_csv(rows=rows, fieldnames=box_score_fieldname, output_file_path=output_file_path)
 
 
-def schedule_to_csv(rows, relative_file_path):
-    write_csv(rows=rows, fieldnames=game_fieldname, relative_file_path=relative_file_path)
+def schedule_to_csv(rows, output_file_path):
+    write_csv(rows=rows, fieldnames=game_fieldname, output_file_path=output_file_path)
 
 
-def write_csv(rows, fieldnames, relative_file_path):
-    with open(relative_file_path, "w", newline="") as csv_file:
+def write_csv(rows, fieldnames, output_file_path):
+    with open(output_file_path, "w", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:

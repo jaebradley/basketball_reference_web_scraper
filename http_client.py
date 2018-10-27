@@ -41,12 +41,12 @@ def season_schedule(season_end_year):
 
     response.raise_for_status()
 
-    season_schedule = parse_schedule(response.content)
+    season_schedule_values = parse_schedule(response.content)
     other_month_url_paths = parse_schedule_for_month_url_paths(response.content)
 
     for month_url_path in other_month_url_paths:
         url = '{BASE_URL}{month_url_path}'.format(BASE_URL=BASE_URL, month_url_path=month_url_path)
-        schedule_for_month = schedule_for_month(url=url)
-        season_schedule.extend(schedule_for_month)
+        monthly_schedule = schedule_for_month(url=url)
+        season_schedule_values.extend(monthly_schedule)
 
-    return season_schedule
+    return season_schedule_values
