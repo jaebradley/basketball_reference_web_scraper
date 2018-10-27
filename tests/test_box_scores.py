@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from http_client import box_scores
+from errors import InvalidDate
 
 
 class TestGet_box_scores(TestCase):
@@ -9,6 +10,4 @@ class TestGet_box_scores(TestCase):
         self.assertIsNotNone(result)
 
     def test_get_box_scores_for_day_that_does_not_exist(self):
-        result = box_scores(day=-1, month=1, year=2018)
-        self.assertIsNotNone(result)
-
+        self.assertRaises(InvalidDate, box_scores, day=-1, month=1, year=2018)

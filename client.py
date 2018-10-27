@@ -2,7 +2,7 @@ import http_client
 
 from output import box_scores_to_csv, schedule_to_csv
 from output import output
-from json_encoders import ScheduleEncoder
+from json_encoders import BasketballReferenceJSONEncoder
 
 
 def box_scores(day, month, year, output_type=None, output_file_path=None, json_options=None):
@@ -12,7 +12,7 @@ def box_scores(day, month, year, output_type=None, output_file_path=None, json_o
         output_type=output_type,
         output_file_path=output_file_path,
         csv_writer=box_scores_to_csv,
-        encoder=None,
+        encoder=BasketballReferenceJSONEncoder,
         json_options=json_options,
     )
 
@@ -24,7 +24,7 @@ def season_schedule(season_end_year, output_type=None, output_file_path=None, js
         output_type=output_type,
         output_file_path=output_file_path,
         csv_writer=schedule_to_csv,
-        encoder=ScheduleEncoder,
+        encoder=BasketballReferenceJSONEncoder,
         json_options=json_options,
     )
 
