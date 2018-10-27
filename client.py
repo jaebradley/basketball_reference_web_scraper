@@ -1,22 +1,30 @@
-import json
+from http_client import get_box_scores, get_season_schedule
 
-from http_client import get_box_scores
-from data import OutputType
-from errors import UnknownOutputType
-from output.box_scores import to_csv
+from output import box_scores_to_csv, schedule_to_csv
+from output import output
+from json_encoders import ScheduleEncoder
 
 
-def box_scores(day, month, year, output_type=None, relative_file_path=None):
+def box_scores(day, month, year, output_type=None, relative_file_path=None, json_options=None):
     values = get_box_scores(day=day, month=month, year=year)
-    if output_type is None:
-        return values
+    return output(
+        values=values,
+        output_type=output_type,
+        relative_file_path=relative_file_path,
+        csv_writer=box_scores_to_csv,
+        encoder=None,
+        json_options=json_options,
+    )
 
-    if output_type == OutputType.JSON:
-        return json.dumps(values, sort_keys=True, indent=4)
-    if output_type == OutputType.CSV:
-        if relative_file_path is not None:
-            return to_csv(relative_file_path=relative_file_path, box_scores=values)
-        else:
-            raise ValueError("CSV output must contain a file path")
 
-    raise UnknownOutputType(output_type)
+def season_schedule(season_end_year, output_type=None, relative_file_path=None, json_options=None):
+    values = get_season_schedule(season_end_year)
+    return output(
+        values=values,
+        output_type=output_type,
+        relative_file_path=relative_file_path,
+        csv_writer=schedule_to_csv,
+        encoder=ScheduleEncoder,
+        json_options=json_options,
+    )
+
