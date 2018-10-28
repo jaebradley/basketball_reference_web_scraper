@@ -1,7 +1,7 @@
 import csv
 import json
 
-from data import OutputType
+from data import OutputType, OutputWriteOption
 from errors import UnknownOutputType
 
 box_score_fieldname = [
@@ -41,9 +41,11 @@ default_json_options = {
 }
 
 
-def output(values, output_type, output_file_path, encoder, csv_writer, json_options=None):
+def output(values, output_type, output_file_path, encoder, csv_writer, output_write_option=None, json_options=None):
     if output_type is None:
         return values
+
+    write_option = OutputWriteOption.WRITE if output_write_option is None else output_write_option
 
     if output_type == OutputType.JSON:
         options = default_json_options if json_options is None else {**default_json_options, **json_options}
@@ -53,21 +55,21 @@ def output(values, output_type, output_file_path, encoder, csv_writer, json_opti
         if output_file_path is None:
             raise ValueError("CSV output must contain a file path")
         else:
-            return csv_writer(rows=values, output_file_path=output_file_path)
+            return csv_writer(rows=values, output_file_path=output_file_path, write_option=write_option)
 
     raise UnknownOutputType(output_type)
 
 
-def box_scores_to_csv(rows, output_file_path):
-    write_csv(rows=rows, fieldnames=box_score_fieldname, output_file_path=output_file_path)
+def box_scores_to_csv(rows, output_file_path, write_option):
+    write_csv(rows=rows, fieldnames=box_score_fieldname, output_file_path=output_file_path, write_option=write_option)
 
 
-def schedule_to_csv(rows, output_file_path):
-    write_csv(rows=rows, fieldnames=game_fieldname, output_file_path=output_file_path)
+def schedule_to_csv(rows, output_file_path, write_option):
+    write_csv(rows=rows, fieldnames=game_fieldname, output_file_path=output_file_path, write_option=write_option)
 
 
-def write_csv(rows, fieldnames, output_file_path):
-    with open(output_file_path, "w", newline="") as csv_file:
+def write_csv(rows, fieldnames, output_file_path, write_option):
+    with open(output_file_path, write_option.value, newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from client import season_schedule
-from data import OutputType
+from data import OutputType, OutputWriteOption
 
 
 class TestSeason_schedule(TestCase):
@@ -15,3 +15,6 @@ class TestSeason_schedule(TestCase):
 
     def test_season_schedule_csv(self):
         season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./foo.csv")
+
+    def test_season_schedule_csv_append(self):
+        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)

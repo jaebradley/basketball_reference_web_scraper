@@ -47,3 +47,10 @@ class Team(Enum):
 class OutputType(Enum):
     JSON = "JSON"
     CSV = "CSV"
+
+
+class OutputWriteOption(Enum):
+    WRITE = "w"
+    CREATE_AND_WRITE = "w+"
+    APPEND = "a"
+    APPEND_AND_WRITE = "a+"
