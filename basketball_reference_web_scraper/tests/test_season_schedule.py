@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from client import season_schedule
-from data import OutputType, OutputWriteOption
+from basketball_reference_web_scraper.client import season_schedule
+from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
 
 
 class TestSeason_schedule(TestCase):

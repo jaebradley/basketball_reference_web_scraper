@@ -1,8 +1,8 @@
 import requests
 
 from errors import InvalidDate
-from parsers.box_scores import parse_box_score
-from parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
+from basketball_reference_web_scraper.parsers import parse_box_score
+from basketball_reference_web_scraper.parsers import parse_schedule, parse_schedule_for_month_url_paths
 
 BASE_URL = 'https://www.basketball-reference.com'
 

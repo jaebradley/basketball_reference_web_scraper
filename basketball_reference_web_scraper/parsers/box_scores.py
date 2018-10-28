@@ -2,7 +2,7 @@ import time
 import datetime
 from lxml import html
 
-from data import Location, Outcome, Team
+from basketball_reference_web_scraper.data import Location, Outcome, Team
 
 TEAM_ABBREVIATIONS_TO_TEAM = {
     'ATL': Team.ATLANTA_HAWKS,
