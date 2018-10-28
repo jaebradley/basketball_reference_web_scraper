@@ -12,17 +12,20 @@ TEAM_NAME_TO_TEAM = {
 
 def parse_start_time(formatted_date, formatted_time_of_day):
     if formatted_time_of_day is not None and formatted_time_of_day not in ["", " "]:
-        # If start time is in PM, Basketball Reference appends a 'p' to the time of day
-        is_pm = formatted_time_of_day[-1:] == "p"
+        # Starting in 2018, the start times had a "p" or "a" appended to the end
+        # Between 2001 and 2017, the start times had a "pm" or "am"
+        is_prior_format = formatted_time_of_day[-2:] == "am" or formatted_time_of_day[-2:] == "pm"
 
-        # format times by removing last character (i.e. "p")
-        # and adding a "pm" / "am" so it can be parsed by datetime module
-        if is_pm:
-            combined_formatted_time = formatted_date + " " + formatted_time_of_day[:-1] + " pm"
+        # If format contains only "p" or "a" add an "m" so it can be parsed by datetime module
+        if is_prior_format:
+            combined_formatted_time = formatted_date + " " + formatted_time_of_day
         else:
-            combined_formatted_time = formatted_date + " " + formatted_time_of_day[:-1] + " am"
+            combined_formatted_time = formatted_date + " " + formatted_time_of_day + "m"
 
-        start_time = datetime.datetime.strptime(combined_formatted_time, "%a, %b %d, %Y %I:%M %p")
+        if is_prior_format:
+            start_time = datetime.datetime.strptime(combined_formatted_time, "%a, %b %d, %Y %I:%M %p")
+        else:
+            start_time = datetime.datetime.strptime(combined_formatted_time, "%a, %b %d, %Y %I:%M%p")
     else:
         start_time = datetime.datetime.strptime(formatted_date, "%a, %b %d, %Y")
 

@@ -59,18 +59,50 @@ def output(values, output_type, output_file_path, encoder, csv_writer, output_wr
 
     raise UnknownOutputType(output_type)
 
+# I wrote the explicit mapping of CSV values because there didn't seem to be a way of outputting the values of enums
+# without doing it this way
+
 
 def box_scores_to_csv(rows, output_file_path, write_option):
-    write_csv(rows=rows, fieldnames=box_score_fieldname, output_file_path=output_file_path, write_option=write_option)
+    with open(output_file_path, write_option.value, newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=box_score_fieldname)
+        writer.writeheader()
+        writer.writerows(
+            {
+                "name": row["name"],
+                "team": row["team"].value,
+                "location": row["location"].value,
+                "opponent": row["opponent"].value,
+                "outcome": row["outcome"].value,
+                "seconds_played": row["seconds_played"],
+                "made_field_goals": row["made_field_goals"],
+                "attempted_field_goals": row["attempted_field_goals"],
+                "made_three_point_field_goals": row["made_three_point_field_goals"],
+                "attempted_three_point_field_goals": row["attempted_three_point_field_goals"],
+                "made_free_throws": row["made_free_throws"],
+                "attempted_free_throws": row["attempted_free_throws"],
+                "offensive_rebounds": row["offensive_rebounds"],
+                "defensive_rebounds": row["defensive_rebounds"],
+                "assists": row["assists"],
+                "steals": row["steals"],
+                "blocks": row["blocks"],
+                "turnovers": row["turnovers"],
+                "personal_fouls": row["personal_fouls"],
+                "game_score": row["game_score"],
+            } for row in rows
+        )
 
 
 def schedule_to_csv(rows, output_file_path, write_option):
-    write_csv(rows=rows, fieldnames=game_fieldname, output_file_path=output_file_path, write_option=write_option)
-
-
-def write_csv(rows, fieldnames, output_file_path, write_option):
     with open(output_file_path, write_option.value, newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer = csv.DictWriter(csv_file, fieldnames=game_fieldname)
         writer.writeheader()
-        for row in rows:
-            writer.writerow(row)
+        writer.writerows(
+            {
+                "start_time": row["start_time"],
+                "away_team": row["away_team"].value,
+                "away_team_score": row["away_team_score"],
+                "home_team": row["home_team"].value,
+                "home_team_score": row["home_team_score"],
+            } for row in rows
+        )
