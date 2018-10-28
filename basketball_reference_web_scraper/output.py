@@ -1,7 +1,7 @@
 import csv
 import json
 
-from data import OutputType, OutputWriteOption
+from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
 from errors import UnknownOutputType
 
 box_score_fieldname = [

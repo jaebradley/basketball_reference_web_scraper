@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from client import box_scores
+from basketball_reference_web_scraper.client import box_scores
 from errors import InvalidDate
-from data import OutputType, OutputWriteOption
+from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
 
 
 class TestGet_box_scores(TestCase):
