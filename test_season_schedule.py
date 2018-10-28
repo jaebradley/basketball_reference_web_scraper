@@ -18,3 +18,6 @@ class TestSeason_schedule(TestCase):
 
     def test_season_schedule_csv_append(self):
         season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
+
+    def test_2017_season_schedule_csv_append(self):
+        season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
