@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from http_client import season_schedule
+from basketball_reference_web_scraper.http_client import season_schedule
 
 
 class TestGet_season_schedule(TestCase):
