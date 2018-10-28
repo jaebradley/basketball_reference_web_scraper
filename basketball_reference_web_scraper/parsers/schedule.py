@@ -14,6 +14,10 @@ def parse_start_time(formatted_date, formatted_time_of_day):
     if formatted_time_of_day is not None and formatted_time_of_day not in ["", " "]:
         # Starting in 2018, the start times had a "p" or "a" appended to the end
         # Between 2001 and 2017, the start times had a "pm" or "am"
+        #
+        # https://www.basketball-reference.com/leagues/NBA_2018_games.html
+        # vs.
+        # https://www.basketball-reference.com/leagues/NBA_2001_games.html
         is_prior_format = formatted_time_of_day[-2:] == "am" or formatted_time_of_day[-2:] == "pm"
 
         # If format contains only "p" or "a" add an "m" so it can be parsed by datetime module
