@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import Outcome, Location, Team
+from basketball_reference_web_scraper.data import Outcome, Team
 from basketball_reference_web_scraper.parsers import box_scores
 
 
