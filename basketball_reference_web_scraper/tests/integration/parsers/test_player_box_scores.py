@@ -50,6 +50,7 @@ class TestPlayerBoxScores(TestCase):
 
     def test_parses_new_orleans_hornets_for_box_scores_for_11_03_2003(self):
         parsed_box_score = box_scores.parse_player_box_scores(self.november_03_2003_daily_leaders)
+
         self.assertEqual(len(parsed_box_score), 145)
 
         pj_brown = parsed_box_score[51]
