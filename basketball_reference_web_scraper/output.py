@@ -2,7 +2,6 @@ import csv
 import json
 
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
-from errors import UnknownOutputType
 
 box_score_fieldname = [
     "name",
@@ -61,7 +60,7 @@ def output(values, output_type, output_file_path, encoder, csv_writer, output_wr
         else:
             return csv_writer(rows=values, output_file_path=output_file_path, write_option=write_option)
 
-    raise UnknownOutputType(output_type)
+    raise ValueError("Unknown output type: {output_type}".format(output_type=output_type))
 
 # I wrote the explicit mapping of CSV values because there didn't seem to be a way of outputting the values of enums
 # without doing it this way
