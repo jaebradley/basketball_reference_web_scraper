@@ -7,10 +7,3 @@ class InvalidDate(Exception):
                 day=day,
             )
         super().__init__(message)
-
-
-class UnknownOutputType(Exception):
-    def __init__(self, output_type):
-        message = "Output type {output_type} is invalid".format(output_type=output_type)
-
-        super().__init__(message)
