@@ -33,3 +33,11 @@ class TestClient(TestCase):
         )
 
         self.assertIsNotNone(january_first_box_scores)
+
+    def test_2018_player_season_totals(self):
+        now = datetime.now()
+        current_year = now.year
+
+        for year in range(2001, current_year + 1):
+            player_season_totals = client.player_season_totals(season_end_year=year)
+            self.assertIsNotNone(player_season_totals)
