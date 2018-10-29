@@ -9,6 +9,8 @@ TEAM_NAME_TO_TEAM = {
     for (_, member) in Team.__members__.items()
 }
 
+TEAM_NAME_TO_TEAM["NEW ORLEANS/OKLAHOMA CITY HORNETS"] = Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS
+
 
 def parse_start_time(formatted_date, formatted_time_of_day):
     if formatted_time_of_day is not None and formatted_time_of_day not in ["", " "]:
