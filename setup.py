@@ -29,4 +29,10 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    keywords=[
+        "NBA",
+        "Basketball",
+        "Basketball Reference",
+        "basketball-reference.com",
+    ],
 )
