@@ -1,22 +1,21 @@
 from unittest import TestCase
+import os
 
 from basketball_reference_web_scraper.data import Outcome, Team
 from basketball_reference_web_scraper.parsers import box_scores
 
+november_03_2003_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_03_2003_daily_leaders.html')
+november_03_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
+december_18_2015_daily_leaders_html = os.path.join(os.path.dirname(__file__), './12_18_2015_daily_leaders.html')
+january_01_2017_daily_leaders_html = os.path.join(os.path.dirname(__file__), './01_29_2017_daily_leaders.html')
+
 
 class TestBoxScores(TestCase):
     def setUp(self):
-        with open('./12_18_2015_daily_leaders.html', 'r') as december_18_2015_daily_leaders_html:
-            self.december_18_2015_daily_leaders = december_18_2015_daily_leaders_html.read()
-
-        with open('./01_29_2017_daily_leaders.html', 'r') as january_01_2017_daily_leaders_html:
-            self.january_01_2017_daily_leaders = january_01_2017_daily_leaders_html.read()
-
-        with open('./11_03_2003_daily_leaders.html', 'r') as november_03_2017_daily_leaders_html:
-            self.november_03_2017_daily_leaders = november_03_2017_daily_leaders_html.read()
-
-        with open('./11_01_2006_daily_leaders.html', 'r') as november_01_2006_daily_leaders_html:
-            self.november_03_2006_daily_leaders = november_01_2006_daily_leaders_html.read()
+        self.november_03_2006_daily_leaders = open(november_03_2006_daily_leaders_html).read()
+        self.december_18_2015_daily_leaders = open(december_18_2015_daily_leaders_html).read()
+        self.november_03_2003_daily_leaders = open(november_03_2003_daily_leaders_html).read()
+        self.january_01_2017_daily_leaders = open(january_01_2017_daily_leaders_html).read()
 
     def test_box_scores_for_12_18_2015(self):
         parsed_box_score = box_scores.parse_player_box_scores(self.december_18_2015_daily_leaders)
@@ -50,7 +49,7 @@ class TestBoxScores(TestCase):
         self.assertEqual(first_box_score["game_score"], 31.3)
 
     def test_parses_new_orleans_hornets_for_box_scores_for_11_03_2003(self):
-        parsed_box_score = box_scores.parse_player_box_scores(self.november_03_2017_daily_leaders)
+        parsed_box_score = box_scores.parse_player_box_scores(self.november_03_2003_daily_leaders)
         self.assertEqual(len(parsed_box_score), 145)
 
         pj_brown = parsed_box_score[51]

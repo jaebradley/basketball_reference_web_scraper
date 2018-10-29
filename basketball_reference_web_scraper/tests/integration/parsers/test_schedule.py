@@ -1,18 +1,19 @@
 from unittest import TestCase
 from datetime import datetime, timedelta
 import pytz
+import os
 
 from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.parsers import schedule
 
+october_2001_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2001_games-october.html')
+october_2018_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2018_games-october.html')
+
 
 class TestSchedule(TestCase):
     def setUp(self):
-        with open('./NBA_2001_games-october.html', 'r') as october_2001_schedule_html:
-            self.october_2001_html = october_2001_schedule_html.read()
-
-        with open('./NBA_2018_games-october.html', 'r') as october_2018_schedule_html:
-            self.october_2018_html = october_2018_schedule_html.read()
+        self.october_2001_html = open(october_2001_schedule_html).read()
+        self.october_2018_html = open(october_2018_schedule_html).read()
 
     def test_parse_october_2001_schedule_for_month_url_paths_(self):
         urls = schedule.parse_schedule_for_month_url_paths(self.october_2001_html)
