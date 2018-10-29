@@ -1,16 +1,17 @@
 from unittest import TestCase
+import os
 
 from basketball_reference_web_scraper.data import Team, Position
 from basketball_reference_web_scraper.parsers import players_season_totals
 
+season_2001_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2001_totals.html')
+season_2018_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2018_totals.html')
+
 
 class TestPlayersSeasonTotals(TestCase):
     def setUp(self):
-        with open('./NBA_2001_totals.html', 'r') as season_2001_totals_html:
-            self.season_2001_totals = season_2001_totals_html.read()
-
-        with open('./NBA_2018_totals.html', 'r') as season_2018_totals_html:
-            self.season_2018_totals = season_2018_totals_html.read()
+        self.season_2001_totals = open(season_2001_totals_html).read()
+        self.season_2018_totals = open(season_2018_totals_html).read()
 
     def test_2001_players_season_totals(self):
         parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2001_totals)
