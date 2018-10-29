@@ -1,5 +1,3 @@
-import time
-import datetime
 from lxml import html
 
 from basketball_reference_web_scraper.data import Location, Outcome, Team
@@ -48,7 +46,9 @@ TEAM_ABBREVIATIONS_TO_TEAM = {
 def parse_location(symbol):
     if symbol == "@":
         return Location.AWAY
-    return Location.HOME
+    elif symbol == "":
+        return Location.HOME
+    raise ValueError("Unknown symbol: {symbol}".format(symbol=symbol))
 
 
 def parse_outcome(symbol):
@@ -63,12 +63,16 @@ def parse_seconds_played(formatted_playing_time):
     if formatted_playing_time == "":
         return 0
 
-    parsed_time = time.strptime(formatted_playing_time, "%M:%S")
-    return datetime.timedelta(
-        hours=parsed_time.tm_hour,
-        minutes=parsed_time.tm_min,
-        seconds=parsed_time.tm_sec,
-    ).total_seconds()
+    # It seems like basketball reference formats everything in MM:SS
+    # even when the playing time is greater than 59 minutes, 59 seconds.
+    #
+    # Because of this, we can't use strptime / %M as valid values are 0-59.
+    # So have to parse time by splitting on ":" and assuming that
+    # the first part is the minute part and the second part is the seconds part
+    time_parts = formatted_playing_time.split(":")
+    minutes_played = time_parts[0]
+    seconds_played = time_parts[1]
+    return 60 * int(minutes_played) + int(seconds_played)
 
 
 def parse_player_box_score(row):
