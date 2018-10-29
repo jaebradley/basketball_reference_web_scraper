@@ -12,6 +12,12 @@ class TestBoxScores(TestCase):
         with open('./01_29_2017_daily_leaders.html', 'r') as january_01_2017_daily_leaders_html:
             self.january_01_2017_daily_leaders = january_01_2017_daily_leaders_html.read()
 
+        with open('./11_03_2003_daily_leaders.html', 'r') as november_03_2017_daily_leaders_html:
+            self.november_03_2017_daily_leaders = november_03_2017_daily_leaders_html.read()
+
+        with open('./11_01_2006_daily_leaders.html', 'r') as november_01_2006_daily_leaders_html:
+            self.november_03_2006_daily_leaders = november_01_2006_daily_leaders_html.read()
+
     def test_box_scores_for_12_18_2015(self):
         parsed_box_score = box_scores.parse_box_score(self.december_18_2015_daily_leaders)
         self.assertEqual(len(parsed_box_score), 250)
@@ -42,3 +48,21 @@ class TestBoxScores(TestCase):
         self.assertEqual(first_box_score["turnovers"], 3)
         self.assertEqual(first_box_score["personal_fouls"], 4)
         self.assertEqual(first_box_score["game_score"], 31.3)
+
+    def test_parses_new_orleans_hornets_for_box_scores_for_11_03_2003(self):
+        parsed_box_score = box_scores.parse_box_score(self.november_03_2017_daily_leaders)
+        self.assertEqual(len(parsed_box_score), 145)
+
+        pj_brown = parsed_box_score[51]
+
+        self.assertEqual(pj_brown["name"], "P.J. Brown")
+        self.assertEqual(pj_brown["team"], Team.NEW_ORLEANS_HORNETS)
+
+    def test_parses_new_orleans_oklahoma_city_hornets_for_box_scores_for_11_01_2006(self):
+        parsed_box_score = box_scores.parse_box_score(self.november_03_2006_daily_leaders)
+        self.assertEqual(len(parsed_box_score), 272)
+
+        chris_paul = parsed_box_score[10]
+
+        self.assertEqual(chris_paul["name"], "Chris Paul")
+        self.assertEqual(chris_paul["team"], Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS)
