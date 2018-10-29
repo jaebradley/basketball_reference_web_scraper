@@ -1,11 +1,8 @@
+from datetime import datetime
 from unittest import TestCase
 
-from datetime import datetime
-import logging
-
 import basketball_reference_web_scraper.client as client
-from basketball_reference_web_scraper.data import Outcome, Team
-from basketball_reference_web_scraper.parsers import box_scores
+from basketball_reference_web_scraper.data import OutputWriteOption, OutputType
 
 
 class TestClient(TestCase):
@@ -16,3 +13,23 @@ class TestClient(TestCase):
         for year in range(2001, current_year + 1):
             season_schedule = client.season_schedule(season_end_year=year)
             self.assertIsNotNone(season_schedule)
+
+    def test_output_json_box_scores_to_file(self):
+        client.box_scores(
+            day=1,
+            month=1,
+            year=2001,
+            output_type=OutputType.JSON,
+            output_file_path="./foo.json",
+            output_write_option=OutputWriteOption.WRITE
+        )
+
+    def test_output_json_box_scores_to_memory(self):
+        january_first_box_scores = client.box_scores(
+            day=1,
+            month=1,
+            year=2001,
+            output_type=OutputType.JSON,
+        )
+
+        self.assertIsNotNone(january_first_box_scores)
