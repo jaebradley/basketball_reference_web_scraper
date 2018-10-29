@@ -8,6 +8,7 @@ setuptools.setup(
     version="1.0.0",
     author="Jae Bradley",
     author_email="jae.b.bradley@gmail.com",
+    license="MIT",
     description="A client for the Basketball Reference web site that gets data via scraping",
     long_description=long_description,
     long_description_content_type="text/markdown",
