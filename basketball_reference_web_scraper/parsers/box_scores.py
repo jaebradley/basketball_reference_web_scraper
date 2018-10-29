@@ -1,48 +1,6 @@
 from lxml import html
 
-from basketball_reference_web_scraper.data import Location, Outcome, Team
-
-TEAM_ABBREVIATIONS_TO_TEAM = {
-    'ATL': Team.ATLANTA_HAWKS,
-    'BOS': Team.BOSTON_CELTICS,
-    'BRK': Team.BROOKLYN_NETS,
-    'CHI': Team.CHICAGO_BULLS,
-    'CHO': Team.CHARLOTTE_HORNETS,
-    'CLE': Team.CLEVELAND_CAVALIERS,
-    'DAL': Team.DALLAS_MAVERICKS,
-    'DEN': Team.DENVER_NUGGETS,
-    'DET': Team.DETROIT_PISTONS,
-    'GSW': Team.GOLDEN_STATE_WARRIORS,
-    'HOU': Team.HOUSTON_ROCKETS,
-    'IND': Team.INDIANA_PACERS,
-    'LAC': Team.LOS_ANGELES_CLIPPERS,
-    'LAL': Team.LOS_ANGELES_LAKERS,
-    'MEM': Team.MEMPHIS_GRIZZLIES,
-    'MIA': Team.MIAMI_HEAT,
-    'MIL': Team.MILWAUKEE_BUCKS,
-    'MIN': Team.MINNESOTA_TIMBERWOLVES,
-    'NOP': Team.NEW_ORLEANS_PELICANS,
-    'NYK': Team.NEW_YORK_KNICKS,
-    'OKC': Team.OKLAHOMA_CITY_THUNDER,
-    'ORL': Team.ORLANDO_MAGIC,
-    'PHI': Team.PHILADELPHIA_76ERS,
-    'PHO': Team.PHOENIX_SUNS,
-    'POR': Team.PORTLAND_TRAIL_BLAZERS,
-    'SAC': Team.SACRAMENTO_KINGS,
-    'SAS': Team.SAN_ANTONIO_SPURS,
-    'TOR': Team.TORONTO_RAPTORS,
-    'UTA': Team.UTAH_JAZZ,
-    'WAS': Team.WASHINGTON_WIZARDS,
-
-    # DEPRECATED TEAMS
-    'NJN': Team.NEW_JERSEY_NETS,
-    'NOH': Team.NEW_ORLEANS_HORNETS,
-    'NOK': Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
-    'CHA': Team.CHARLOTTE_BOBCATS,
-    'CHH': Team.CHARLOTTE_HORNETS,
-    'SEA': Team.SEATTLE_SUPERSONICS,
-    'VAN': Team.VANCOUVER_GRIZZLIES,
-}
+from basketball_reference_web_scraper.data import Location, Outcome, TEAM_ABBREVIATIONS_TO_TEAM
 
 
 def parse_location(symbol):
