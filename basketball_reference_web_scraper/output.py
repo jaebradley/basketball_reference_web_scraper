@@ -49,7 +49,11 @@ def output(values, output_type, output_file_path, encoder, csv_writer, output_wr
 
     if output_type == OutputType.JSON:
         options = default_json_options if json_options is None else {**default_json_options, **json_options}
-        return json.dumps(values, cls=encoder, **options)
+        if output_file_path is None:
+            return json.dumps(values, cls=encoder, **options)
+        else:
+            with open(output_file_path, write_option.value, newline="") as json_file:
+                return json.dump(values, json_file, cls=encoder, **options)
 
     if output_type == OutputType.CSV:
         if output_file_path is None:
