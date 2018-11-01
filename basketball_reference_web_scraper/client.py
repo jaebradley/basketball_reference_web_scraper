@@ -5,8 +5,8 @@ from basketball_reference_web_scraper.output import output
 from basketball_reference_web_scraper.json_encoders import BasketballReferenceJSONEncoder
 
 
-def box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
-    values = http_client.box_scores(day=day, month=month, year=year)
+def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
+    values = http_client.player_box_scores(day=day, month=month, year=year)
     return output(
         values=values,
         output_type=output_type,
