@@ -60,7 +60,7 @@ def parse_player_box_score(row):
     }
 
 
-def parse_box_score(page):
+def parse_player_box_scores(page):
     tree = html.fromstring(page)
     rows = tree.xpath('//table[@id="stats"]//tbody/tr[not(contains(@class, "thead"))]')
     return list(map(lambda row: parse_player_box_score(row), rows))

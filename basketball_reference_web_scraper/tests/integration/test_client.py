@@ -15,7 +15,7 @@ class TestClient(TestCase):
             self.assertIsNotNone(season_schedule)
 
     def test_output_json_box_scores_to_file(self):
-        client.box_scores(
+        client.player_box_scores(
             day=1,
             month=1,
             year=2001,
@@ -25,7 +25,7 @@ class TestClient(TestCase):
         )
 
     def test_output_json_box_scores_to_memory(self):
-        january_first_box_scores = client.box_scores(
+        january_first_box_scores = client.player_box_scores(
             day=1,
             month=1,
             year=2001,

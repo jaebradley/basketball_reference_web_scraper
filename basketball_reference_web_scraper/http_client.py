@@ -1,14 +1,14 @@
 import requests
 
 from errors import InvalidDate
-from basketball_reference_web_scraper.parsers.box_scores import parse_box_score
+from basketball_reference_web_scraper.parsers.box_scores import parse_player_box_scores
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
 from basketball_reference_web_scraper.parsers.player_season_totals import parse_player_season_totals
 
 BASE_URL = 'https://www.basketball-reference.com'
 
 
-def box_scores(day, month, year):
+def player_box_scores(day, month, year):
     url = '{BASE_URL}/friv/dailyleaders.cgi?month={month}&day={day}&year={year}'.format(
         BASE_URL=BASE_URL,
         day=day,
@@ -19,7 +19,7 @@ def box_scores(day, month, year):
     response = requests.get(url=url, allow_redirects=False)
 
     if 200 <= response.status_code < 300:
-        return parse_box_score(response.content)
+        return parse_player_box_scores(response.content)
 
     raise InvalidDate(day=day, month=month, year=year)
 
