@@ -15,7 +15,7 @@ Hopefully this means that if you'd like to use this library, you can by simply d
 pip install basketball_reference_web_scraper
 ```
 
-This library requires `Python 3` and only supports seasons after `2001`
+This library requires `Python 3` and only supports seasons after the `1999-2000` season
 
 ## Client
 
@@ -36,9 +36,9 @@ from basketball_reference_web_scraper.data import Team
 ## API
 
 This client has three methods
-* Getting player box scores by a date (`client.box_scores`)
+* Getting player box scores by a date (`client.player_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
-* Getting player totals for a season (`client.player_season_totals`)
+* Getting players totals for a season (`client.players_season_totals`)
 
 ### Data output
 
@@ -68,16 +68,16 @@ from basketball_reference_web_scraper import client
 from basketball_reference_web_scraper.data import OutputType
 
 # Get all player box scores for January 1st, 2017 
-client.box_scores(day=1, month=1, year=2017)
+client.player_box_scores(day=1, month=1, year=2017)
 
 # Get all player box scores for January 1st, 2017 in JSON format
-client.box_scores(day=1, month=1, year=2017, output_type=OutputType.JSON)
+client.player_box_scores(day=1, month=1, year=2017, output_type=OutputType.JSON)
 
 # Output all player box scores for January 1st, 2017 in JSON format to 1_1_2017_box_scores.json
-client.box_scores(day=1, month=1, year=2017, output_type=OutputType.JSON, output_file_path="./1_1_2017_box_scores.json")
+client.player_box_scores(day=1, month=1, year=2017, output_type=OutputType.JSON, output_file_path="./1_1_2017_box_scores.json")
 
 # Output all player box scores for January 1st, 2017 in JSON format to 1_1_2017_box_scores.csv
-client.box_scores(day=1, month=1, year=2017, output_type=OutputType.CSV, output_file_path="./1_1_2017_box_scores.csv")
+client.player_box_scores(day=1, month=1, year=2017, output_type=OutputType.CSV, output_file_path="./1_1_2017_box_scores.csv")
 ```
 
 ### Get season schedule
@@ -97,8 +97,8 @@ client.season_schedule(season_end_year=2018)
 from basketball_reference_web_scraper import client
 
 # Get 2017-2018 season totals for all players
-client.player_season_totals(season_end_year=2018)
+client.players_season_totals(season_end_year=2018)
 
-# The player_season_totals method also supports all output behavior previously described
+# The players_season_totals method also supports all output behavior previously described
 ```
 
