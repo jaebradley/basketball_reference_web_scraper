@@ -39,5 +39,5 @@ class TestClient(TestCase):
         current_year = now.year
 
         for year in range(2001, current_year + 1):
-            player_season_totals = client.player_season_totals(season_end_year=year)
+            player_season_totals = client.players_season_totals(season_end_year=year)
             self.assertIsNotNone(player_season_totals)

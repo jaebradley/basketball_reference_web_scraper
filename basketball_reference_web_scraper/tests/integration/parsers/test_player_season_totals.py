@@ -1,10 +1,10 @@
 from unittest import TestCase
 
 from basketball_reference_web_scraper.data import Team, Position
-from basketball_reference_web_scraper.parsers import player_season_totals
+from basketball_reference_web_scraper.parsers import players_season_totals
 
 
-class TestPlayerSeasonTotals(TestCase):
+class TestPlayersSeasonTotals(TestCase):
     def setUp(self):
         with open('./NBA_2001_totals.html', 'r') as season_2001_totals_html:
             self.season_2001_totals = season_2001_totals_html.read()
@@ -12,11 +12,11 @@ class TestPlayerSeasonTotals(TestCase):
         with open('./NBA_2018_totals.html', 'r') as season_2018_totals_html:
             self.season_2018_totals = season_2018_totals_html.read()
 
-    def test_2001_player_season_totals(self):
-        parsed_box_score = player_season_totals.parse_player_season_totals(self.season_2001_totals)
-        self.assertEqual(len(parsed_box_score), 490)
+    def test_2001_players_season_totals(self):
+        parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2001_totals)
+        self.assertEqual(len(parsed_season_totals), 490)
 
-        mahmoud_abdul_rauf = parsed_box_score[0]
+        mahmoud_abdul_rauf = parsed_season_totals[0]
 
         self.assertEqual(mahmoud_abdul_rauf["name"], "Mahmoud Abdul-Rauf")
         self.assertEqual(mahmoud_abdul_rauf["position"], Position.POINT_GUARD)
@@ -38,11 +38,11 @@ class TestPlayerSeasonTotals(TestCase):
         self.assertEqual(mahmoud_abdul_rauf["turnovers"], 26)
         self.assertEqual(mahmoud_abdul_rauf["personal_fouls"], 50)
 
-    def test_2018_player_season_totals(self):
-        parsed_box_score = player_season_totals.parse_player_season_totals(self.season_2018_totals)
-        self.assertEqual(len(parsed_box_score), 605)
+    def test_2018_players_season_totals(self):
+        parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2018_totals)
+        self.assertEqual(len(parsed_season_totals), 605)
 
-        alex_abrines = parsed_box_score[0]
+        alex_abrines = parsed_season_totals[0]
 
         self.assertEqual(alex_abrines["name"], "Alex Abrines")
         self.assertEqual(alex_abrines["position"], Position.SHOOTING_GUARD)
@@ -64,49 +64,49 @@ class TestPlayerSeasonTotals(TestCase):
         self.assertEqual(alex_abrines["turnovers"], 25)
         self.assertEqual(alex_abrines["personal_fouls"], 124)
 
-    def test_2018_omer_asik_player_season_totals(self):
-        parsed_box_score = player_season_totals.parse_player_season_totals(self.season_2018_totals)
+    def test_2018_omer_asik_season_totals(self):
+        parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2018_totals)
 
-        new_orleans_pelicans_omer_asik = parsed_box_score[22]
+        pelicans_omer_asik = parsed_season_totals[22]
 
-        self.assertEqual(new_orleans_pelicans_omer_asik["name"], "Omer Asik")
-        self.assertEqual(new_orleans_pelicans_omer_asik["position"], Position.CENTER)
-        self.assertEqual(new_orleans_pelicans_omer_asik["team"], Team.NEW_ORLEANS_PELICANS)
-        self.assertEqual(new_orleans_pelicans_omer_asik["games_played"], 14)
-        self.assertEqual(new_orleans_pelicans_omer_asik["games_started"], 0)
-        self.assertEqual(new_orleans_pelicans_omer_asik["minutes_played"], 121)
-        self.assertEqual(new_orleans_pelicans_omer_asik["made_field_goals"], 7)
-        self.assertEqual(new_orleans_pelicans_omer_asik["attempted_field_goals"], 16)
-        self.assertEqual(new_orleans_pelicans_omer_asik["made_three_point_field_goals"], 0)
-        self.assertEqual(new_orleans_pelicans_omer_asik["attempted_three_point_field_goals"], 0)
-        self.assertEqual(new_orleans_pelicans_omer_asik["made_free_throws"], 4)
-        self.assertEqual(new_orleans_pelicans_omer_asik["attempted_free_throws"], 12)
-        self.assertEqual(new_orleans_pelicans_omer_asik["offensive_rebounds"], 7)
-        self.assertEqual(new_orleans_pelicans_omer_asik["defensive_rebounds"], 30)
-        self.assertEqual(new_orleans_pelicans_omer_asik["assists"], 2)
-        self.assertEqual(new_orleans_pelicans_omer_asik["steals"], 1)
-        self.assertEqual(new_orleans_pelicans_omer_asik["blocks"], 2)
-        self.assertEqual(new_orleans_pelicans_omer_asik["turnovers"], 5)
-        self.assertEqual(new_orleans_pelicans_omer_asik["personal_fouls"], 14)
+        self.assertEqual(pelicans_omer_asik["name"], "Omer Asik")
+        self.assertEqual(pelicans_omer_asik["position"], Position.CENTER)
+        self.assertEqual(pelicans_omer_asik["team"], Team.NEW_ORLEANS_PELICANS)
+        self.assertEqual(pelicans_omer_asik["games_played"], 14)
+        self.assertEqual(pelicans_omer_asik["games_started"], 0)
+        self.assertEqual(pelicans_omer_asik["minutes_played"], 121)
+        self.assertEqual(pelicans_omer_asik["made_field_goals"], 7)
+        self.assertEqual(pelicans_omer_asik["attempted_field_goals"], 16)
+        self.assertEqual(pelicans_omer_asik["made_three_point_field_goals"], 0)
+        self.assertEqual(pelicans_omer_asik["attempted_three_point_field_goals"], 0)
+        self.assertEqual(pelicans_omer_asik["made_free_throws"], 4)
+        self.assertEqual(pelicans_omer_asik["attempted_free_throws"], 12)
+        self.assertEqual(pelicans_omer_asik["offensive_rebounds"], 7)
+        self.assertEqual(pelicans_omer_asik["defensive_rebounds"], 30)
+        self.assertEqual(pelicans_omer_asik["assists"], 2)
+        self.assertEqual(pelicans_omer_asik["steals"], 1)
+        self.assertEqual(pelicans_omer_asik["blocks"], 2)
+        self.assertEqual(pelicans_omer_asik["turnovers"], 5)
+        self.assertEqual(pelicans_omer_asik["personal_fouls"], 14)
 
-        chicago_omer_asik = parsed_box_score[23]
+        bulls_omer_asik = parsed_season_totals[23]
 
-        self.assertEqual(chicago_omer_asik["name"], "Omer Asik")
-        self.assertEqual(chicago_omer_asik["position"], Position.CENTER)
-        self.assertEqual(chicago_omer_asik["team"], Team.CHICAGO_BULLS)
-        self.assertEqual(chicago_omer_asik["games_played"], 4)
-        self.assertEqual(chicago_omer_asik["games_started"], 0)
-        self.assertEqual(chicago_omer_asik["minutes_played"], 61)
-        self.assertEqual(chicago_omer_asik["made_field_goals"], 2)
-        self.assertEqual(chicago_omer_asik["attempted_field_goals"], 6)
-        self.assertEqual(chicago_omer_asik["made_three_point_field_goals"], 0)
-        self.assertEqual(chicago_omer_asik["attempted_three_point_field_goals"], 0)
-        self.assertEqual(chicago_omer_asik["made_free_throws"], 0)
-        self.assertEqual(chicago_omer_asik["attempted_free_throws"], 1)
-        self.assertEqual(chicago_omer_asik["offensive_rebounds"], 2)
-        self.assertEqual(chicago_omer_asik["defensive_rebounds"], 8)
-        self.assertEqual(chicago_omer_asik["assists"], 1)
-        self.assertEqual(chicago_omer_asik["steals"], 1)
-        self.assertEqual(chicago_omer_asik["blocks"], 2)
-        self.assertEqual(chicago_omer_asik["turnovers"], 4)
-        self.assertEqual(chicago_omer_asik["personal_fouls"], 6)
+        self.assertEqual(bulls_omer_asik["name"], "Omer Asik")
+        self.assertEqual(bulls_omer_asik["position"], Position.CENTER)
+        self.assertEqual(bulls_omer_asik["team"], Team.CHICAGO_BULLS)
+        self.assertEqual(bulls_omer_asik["games_played"], 4)
+        self.assertEqual(bulls_omer_asik["games_started"], 0)
+        self.assertEqual(bulls_omer_asik["minutes_played"], 61)
+        self.assertEqual(bulls_omer_asik["made_field_goals"], 2)
+        self.assertEqual(bulls_omer_asik["attempted_field_goals"], 6)
+        self.assertEqual(bulls_omer_asik["made_three_point_field_goals"], 0)
+        self.assertEqual(bulls_omer_asik["attempted_three_point_field_goals"], 0)
+        self.assertEqual(bulls_omer_asik["made_free_throws"], 0)
+        self.assertEqual(bulls_omer_asik["attempted_free_throws"], 1)
+        self.assertEqual(bulls_omer_asik["offensive_rebounds"], 2)
+        self.assertEqual(bulls_omer_asik["defensive_rebounds"], 8)
+        self.assertEqual(bulls_omer_asik["assists"], 1)
+        self.assertEqual(bulls_omer_asik["steals"], 1)
+        self.assertEqual(bulls_omer_asik["blocks"], 2)
+        self.assertEqual(bulls_omer_asik["turnovers"], 4)
+        self.assertEqual(bulls_omer_asik["personal_fouls"], 6)
