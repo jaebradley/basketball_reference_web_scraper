@@ -1,18 +1,18 @@
 from unittest import TestCase
 import os
 
-from basketball_reference_web_scraper.data import Outcome, Team
+from basketball_reference_web_scraper.data import Team, Outcome
 from basketball_reference_web_scraper.parsers import box_scores
 
 november_03_2003_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_03_2003_daily_leaders.html')
-november_03_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
+november_01_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
 december_18_2015_daily_leaders_html = os.path.join(os.path.dirname(__file__), './12_18_2015_daily_leaders.html')
 january_01_2017_daily_leaders_html = os.path.join(os.path.dirname(__file__), './01_29_2017_daily_leaders.html')
 
 
-class TestBoxScores(TestCase):
+class TestPlayerBoxScores(TestCase):
     def setUp(self):
-        self.november_03_2006_daily_leaders = open(november_03_2006_daily_leaders_html).read()
+        self.november_01_2006_daily_leaders = open(november_01_2006_daily_leaders_html).read()
         self.december_18_2015_daily_leaders = open(december_18_2015_daily_leaders_html).read()
         self.november_03_2003_daily_leaders = open(november_03_2003_daily_leaders_html).read()
         self.january_01_2017_daily_leaders = open(january_01_2017_daily_leaders_html).read()
@@ -58,7 +58,7 @@ class TestBoxScores(TestCase):
         self.assertEqual(pj_brown["team"], Team.NEW_ORLEANS_HORNETS)
 
     def test_parses_new_orleans_oklahoma_city_hornets_for_box_scores_for_11_01_2006(self):
-        parsed_box_score = box_scores.parse_player_box_scores(self.november_03_2006_daily_leaders)
+        parsed_box_score = box_scores.parse_player_box_scores(self.november_01_2006_daily_leaders)
         self.assertEqual(len(parsed_box_score), 272)
 
         chris_paul = parsed_box_score[10]
