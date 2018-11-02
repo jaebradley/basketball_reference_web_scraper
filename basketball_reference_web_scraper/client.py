@@ -31,8 +31,8 @@ def season_schedule(season_end_year, output_type=None, output_file_path=None, ou
     )
 
 
-def player_season_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
-    values = http_client.player_season_totals(season_end_year)
+def players_season_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
+    values = http_client.players_season_totals(season_end_year)
     return output(
         values=values,
         output_type=output_type,
