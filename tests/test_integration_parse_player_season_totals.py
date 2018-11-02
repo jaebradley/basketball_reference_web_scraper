@@ -1,5 +1,5 @@
-from unittest import TestCase
 import os
+from unittest import TestCase
 
 from basketball_reference_web_scraper.data import Team, Position
 from basketball_reference_web_scraper.parsers import players_season_totals
