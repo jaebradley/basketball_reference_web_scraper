@@ -2,10 +2,10 @@ from unittest import TestCase
 
 from basketball_reference_web_scraper.client import player_box_scores
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
-from errors import InvalidDate
+from basketball_reference_web_scraper.errors import InvalidDate
 
 
-class TestGet_box_scores(TestCase):
+class TestPlayerBoxScores(TestCase):
     def test_get_box_scores(self):
         result = player_box_scores(day=1, month=1, year=2018)
         self.assertIsNotNone(result)
