@@ -1,5 +1,6 @@
-from unittest import TestCase
 from datetime import datetime, timedelta
+from unittest import TestCase
+
 import pytz
 
 from basketball_reference_web_scraper.parsers import schedule
