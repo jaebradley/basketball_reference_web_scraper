@@ -40,6 +40,12 @@ default_json_options = {
 }
 
 
+def merge_two_dicts(first, second):
+    combined = first.copy()
+    combined.update(second)
+    return combined
+
+
 def output(values, output_type, output_file_path, encoder, csv_writer, output_write_option=None, json_options=None):
     if output_type is None:
         return values
@@ -47,7 +53,7 @@ def output(values, output_type, output_file_path, encoder, csv_writer, output_wr
     write_option = OutputWriteOption.WRITE if output_write_option is None else output_write_option
 
     if output_type == OutputType.JSON:
-        options = default_json_options if json_options is None else {**default_json_options, **json_options}
+        options = default_json_options if json_options is None else merge_two_dicts(first=default_json_options, second=json_options)
         if output_file_path is None:
             return json.dumps(values, cls=encoder, **options)
         else:
