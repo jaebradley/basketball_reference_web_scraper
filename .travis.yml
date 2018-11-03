@@ -1,6 +1,5 @@
 language: python
 python:
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.5-dev"
@@ -11,4 +10,4 @@ install:
   - pip install -r requirements.txt
 script:
   - pip install -e .
-  - pytest
+  - pytest --cov=./
