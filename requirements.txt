@@ -2,12 +2,15 @@ atomicwrites==1.2.1
 attrs==18.2.0
 certifi==2018.10.15
 chardet==3.0.4
+codecov==2.0.15
+coverage==4.5.1
 idna==2.7
 lxml==4.2.5
 more-itertools==4.3.0
 pluggy==0.8.0
 py==1.7.0
 pytest==3.9.3
+pytest-cov==2.6.0
 pytz==2018.6
 requests==2.20.0
 six==1.11.0
