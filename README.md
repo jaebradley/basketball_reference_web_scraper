@@ -1,4 +1,9 @@
 # Basketball Reference Web Scraper
+
+[![Build Status](https://travis-ci.org/jaebradley/basketball_reference_web_scraper.svg?branch=master)](https://travis-ci.org/jaebradley/basketball_reference_web_scraper)
+[![PyPI version](https://badge.fury.io/py/basketball_reference_web_scraper.svg)](https://badge.fury.io/py/basketball_reference_web_scraper)
+[![codecov](https://codecov.io/gh/jaebradley/basketball_reference_web_scraper/branch/master/graph/badge.svg)](https://codecov.io/gh/jaebradley/basketball_reference_web_scraper)
+
 [Basketball Reference](http://www.basketball-reference.com) is a great site (especially for a basketball stats nut like me), and hopefully they don't get too pissed off at me for creating this.
 
 Basically, I created this repository as a utility for another project where I'm trying to estimate an NBA player's productivity as it relates to daily fantasy sports.  For that project, I need box score and scheduling information, which is provided by this utility. 
@@ -39,6 +44,8 @@ This client has three methods
 * Getting player box scores by a date (`client.player_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
 * Getting players totals for a season (`client.players_season_totals`)
+
+You can see all three methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
 
 ### Data output
 
