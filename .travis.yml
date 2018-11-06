@@ -11,3 +11,5 @@ install:
 script:
   - pip install -e .
   - pytest --cov=./
+after_success:
+  - codecov
