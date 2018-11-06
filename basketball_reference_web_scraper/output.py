@@ -34,6 +34,29 @@ game_fieldname = [
     "home_team_score",
 ]
 
+player_season_totals_fieldname = [
+    "name",
+    "position",
+    "age",
+    "team",
+    "games_played",
+    "games_started",
+    "minutes_played",
+    "made_field_goals",
+    "attempted_field_goals",
+    "made_three_point_field_goals",
+    "attempted_three_point_field_goals",
+    "made_free_throws",
+    "attempted_free_throws",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "personal_fouls",
+]
+
 default_json_options = {
     "sort_keys": True,
     "indent": 4,
@@ -113,5 +136,35 @@ def schedule_to_csv(rows, output_file_path, write_option):
                 "away_team_score": row["away_team_score"],
                 "home_team": row["home_team"].value,
                 "home_team_score": row["home_team_score"],
+            } for row in rows
+        )
+
+
+def players_season_totals_to_csv(rows, output_file_path, write_option):
+    with open(output_file_path, write_option.value, newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=player_season_totals_fieldname)
+        writer.writeheader()
+        writer.writerows(
+            {
+                "name": row["name"],
+                "position": row["position"],
+                "age": row["age"],
+                "team": row["team"],
+                "games_played": row["games_played"],
+                "games_started": row["games_started"],
+                "minutes_played": row["minutes_played"],
+                "made_field_goals": row["made_field_goals"],
+                "attempted_field_goals": row["attempted_field_goals"],
+                "made_three_point_field_goals": row["made_three_point_field_goals"],
+                "attempted_three_point_field_goals": row["attempted_three_point_field_goals"],
+                "made_free_throws": row["made_free_throws"],
+                "attempted_free_throws": row["attempted_free_throws"],
+                "offensive_rebounds": row["offensive_rebounds"],
+                "defensive_rebounds": row["defensive_rebounds"],
+                "assists": row["assists"],
+                "steals": row["steals"],
+                "blocks": row["blocks"],
+                "turnovers": row["turnovers"],
+                "personal_fouls": row["personal_fouls"],
             } for row in rows
         )
