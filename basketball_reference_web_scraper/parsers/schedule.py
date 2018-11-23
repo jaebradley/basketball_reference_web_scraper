@@ -46,9 +46,9 @@ def parse_game(row):
     return {
         "start_time": start_time,
         "away_team": TEAM_NAME_TO_TEAM[row[2].text_content().upper()],
-        "away_team_score": int(row[3].text_content()),
         "home_team": TEAM_NAME_TO_TEAM[row[4].text_content().upper()],
-        "home_team_score": int(row[5].text_content()),
+        "away_team_score": int(row[3].text_content()) if row[3].text_content() else None,
+        "home_team_score": int(row[5].text_content()) if row[5].text_content() else None,
     }
 
 
