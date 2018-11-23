@@ -6,7 +6,7 @@ from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, PO
 def parse_player_season_totals(row):
     return {
         "name": str(row[1].text_content()),
-        "position": POSITION_ABBREVIATIONS_TO_POSITION[row[2].text_content()],
+        "positions": parse_positions(row[2].text_content()),
         "age": int(row[3].text_content()),
         "team": TEAM_ABBREVIATIONS_TO_TEAM[row[4].text_content()],
         "games_played": int(row[5].text_content()),
@@ -42,3 +42,8 @@ def parse_players_season_totals(page):
         if row[4].text_content() != "TOT":
             totals.append(parse_player_season_totals(row))
     return totals
+
+
+def parse_positions(positions_content):
+    return list(map(lambda position_abbreviation: POSITION_ABBREVIATIONS_TO_POSITION[position_abbreviation],
+                    positions_content.split("-")))
