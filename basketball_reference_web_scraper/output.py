@@ -149,7 +149,7 @@ def players_season_totals_to_csv(rows, output_file_path, write_option):
                 "name": row["name"],
                 "positions": "-".join(map(lambda position: position.value, row["positions"])),
                 "age": row["age"],
-                "team": row["team"],
+                "team": row["team"].value,
                 "games_played": row["games_played"],
                 "games_started": row["games_started"],
                 "minutes_played": row["minutes_played"],
