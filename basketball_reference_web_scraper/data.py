@@ -70,10 +70,7 @@ class Position(Enum):
     SMALL_FORWARD = "SMALL FORWARD"
     POWER_FORWARD = "POWER FORWARD"
     CENTER = "CENTER"
-    FORWARD_GUARD = "FORWARD-GUARD"
     FORWARD = "FORWARD"
-    GUARD_FORWARD = "GUARD-FORWARD"
-    FORWARD_CENTER = "FORWARD-CENTER"
     GUARD = "GUARD"
 
 
@@ -125,9 +122,6 @@ POSITION_ABBREVIATIONS_TO_POSITION = {
     "SF": Position.SMALL_FORWARD,
     "PF": Position.POWER_FORWARD,
     "C": Position.CENTER,
-    "F-G": Position.FORWARD_GUARD,
     "F": Position.FORWARD,
-    "G-F": Position.GUARD_FORWARD,
-    "F-C": Position.FORWARD_CENTER,
     "G": Position.GUARD,
 }

@@ -36,7 +36,7 @@ game_fieldname = [
 
 player_season_totals_fieldname = [
     "name",
-    "position",
+    "positions",
     "age",
     "team",
     "games_played",
@@ -147,7 +147,7 @@ def players_season_totals_to_csv(rows, output_file_path, write_option):
         writer.writerows(
             {
                 "name": row["name"],
-                "position": row["position"],
+                "positions": "-".join(map(lambda position: position.value, row["positions"])),
                 "age": row["age"],
                 "team": row["team"],
                 "games_played": row["games_played"],

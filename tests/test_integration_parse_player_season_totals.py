@@ -6,12 +6,14 @@ from basketball_reference_web_scraper.parsers import players_season_totals
 
 season_2001_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2001_totals.html')
 season_2018_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2018_totals.html')
+season_2019_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2019_totals.html')
 
 
 class TestPlayersSeasonTotals(TestCase):
     def setUp(self):
         self.season_2001_totals = open(season_2001_totals_html).read()
         self.season_2018_totals = open(season_2018_totals_html).read()
+        self.season_2019_totals = open(season_2019_totals_html).read()
 
     def test_2001_players_season_totals(self):
         parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2001_totals)
@@ -20,7 +22,7 @@ class TestPlayersSeasonTotals(TestCase):
         mahmoud_abdul_rauf = parsed_season_totals[0]
 
         self.assertEqual(mahmoud_abdul_rauf["name"], "Mahmoud Abdul-Rauf")
-        self.assertEqual(mahmoud_abdul_rauf["position"], Position.POINT_GUARD)
+        self.assertEqual(mahmoud_abdul_rauf["positions"], [Position.POINT_GUARD])
         self.assertEqual(mahmoud_abdul_rauf["team"], Team.VANCOUVER_GRIZZLIES)
         self.assertEqual(mahmoud_abdul_rauf["games_played"], 41)
         self.assertEqual(mahmoud_abdul_rauf["games_started"], 0)
@@ -46,7 +48,7 @@ class TestPlayersSeasonTotals(TestCase):
         alex_abrines = parsed_season_totals[0]
 
         self.assertEqual(alex_abrines["name"], "Alex Abrines")
-        self.assertEqual(alex_abrines["position"], Position.SHOOTING_GUARD)
+        self.assertEqual(alex_abrines["positions"], [Position.SHOOTING_GUARD])
         self.assertEqual(alex_abrines["team"], Team.OKLAHOMA_CITY_THUNDER)
         self.assertEqual(alex_abrines["games_played"], 75)
         self.assertEqual(alex_abrines["games_started"], 8)
@@ -71,7 +73,7 @@ class TestPlayersSeasonTotals(TestCase):
         pelicans_omer_asik = parsed_season_totals[22]
 
         self.assertEqual(pelicans_omer_asik["name"], "Omer Asik")
-        self.assertEqual(pelicans_omer_asik["position"], Position.CENTER)
+        self.assertEqual(pelicans_omer_asik["positions"], [Position.CENTER])
         self.assertEqual(pelicans_omer_asik["team"], Team.NEW_ORLEANS_PELICANS)
         self.assertEqual(pelicans_omer_asik["games_played"], 14)
         self.assertEqual(pelicans_omer_asik["games_started"], 0)
@@ -93,7 +95,7 @@ class TestPlayersSeasonTotals(TestCase):
         bulls_omer_asik = parsed_season_totals[23]
 
         self.assertEqual(bulls_omer_asik["name"], "Omer Asik")
-        self.assertEqual(bulls_omer_asik["position"], Position.CENTER)
+        self.assertEqual(bulls_omer_asik["positions"], [Position.CENTER])
         self.assertEqual(bulls_omer_asik["team"], Team.CHICAGO_BULLS)
         self.assertEqual(bulls_omer_asik["games_played"], 4)
         self.assertEqual(bulls_omer_asik["games_started"], 0)
@@ -111,3 +113,28 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(bulls_omer_asik["blocks"], 2)
         self.assertEqual(bulls_omer_asik["turnovers"], 4)
         self.assertEqual(bulls_omer_asik["personal_fouls"], 6)
+
+    def test_2019_jimmy_butler_season_totals(self):
+        parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2019_totals)
+
+        philly_jimmy_butler = parsed_season_totals[72]
+
+        self.assertEqual(philly_jimmy_butler["name"], "Jimmy Butler")
+        self.assertEqual(philly_jimmy_butler["positions"], [Position.SHOOTING_GUARD])
+        self.assertEqual(philly_jimmy_butler["team"], Team.PHILADELPHIA_76ERS)
+        self.assertEqual(philly_jimmy_butler["games_played"], 5)
+        self.assertEqual(philly_jimmy_butler["games_started"], 5)
+        self.assertEqual(philly_jimmy_butler["minutes_played"], 175)
+        self.assertEqual(philly_jimmy_butler["made_field_goals"], 31)
+        self.assertEqual(philly_jimmy_butler["attempted_field_goals"], 63)
+        self.assertEqual(philly_jimmy_butler["made_three_point_field_goals"], 3)
+        self.assertEqual(philly_jimmy_butler["attempted_three_point_field_goals"], 10)
+        self.assertEqual(philly_jimmy_butler["made_free_throws"], 21)
+        self.assertEqual(philly_jimmy_butler["attempted_free_throws"], 25)
+        self.assertEqual(philly_jimmy_butler["offensive_rebounds"], 6)
+        self.assertEqual(philly_jimmy_butler["defensive_rebounds"], 13)
+        self.assertEqual(philly_jimmy_butler["assists"], 17)
+        self.assertEqual(philly_jimmy_butler["steals"], 9)
+        self.assertEqual(philly_jimmy_butler["blocks"], 3)
+        self.assertEqual(philly_jimmy_butler["turnovers"], 11)
+        self.assertEqual(philly_jimmy_butler["personal_fouls"], 12)
