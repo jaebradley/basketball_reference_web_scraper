@@ -47,8 +47,8 @@ def parse_game(row):
         awayteamscore=int(row[3].text_content())
         hometeamscore=int(row[5].text_content())
     except ValueError:
-        awayteamscore = 0
-        hometeamscore = 0
+        awayteamscore = None
+        hometeamscore = None
     return {
         "start_time": start_time,
         "away_team": TEAM_NAME_TO_TEAM[row[2].text_content().upper()],
