@@ -43,12 +43,18 @@ def parse_start_time(formatted_date, formatted_time_of_day):
 
 def parse_game(row):
     start_time = parse_start_time(formatted_date=row[0].text_content(), formatted_time_of_day=row[1].text_content())
+    try:
+        awayteamscore=int(row[3].text_content())
+        hometeamscore=int(row[5].text_content())
+    except ValueError:
+        awayteamscore = 0
+        hometeamscore = 0
     return {
         "start_time": start_time,
         "away_team": TEAM_NAME_TO_TEAM[row[2].text_content().upper()],
-        "away_team_score": int(row[3].text_content()),
+        "away_team_score": awayteamscore,
         "home_team": TEAM_NAME_TO_TEAM[row[4].text_content().upper()],
-        "home_team_score": int(row[5].text_content()),
+        "home_team_score": hometeamscore,
     }
 
 
