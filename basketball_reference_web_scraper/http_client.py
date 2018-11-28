@@ -18,7 +18,9 @@ def player_box_scores(day, month, year):
 
     response = requests.get(url=url, allow_redirects=False)
 
-    if 200 <= response.status_code < 300:
+    response.raise_for_status()
+
+    if response.status_code == requests.codes.ok:
         return parse_player_box_scores(response.content)
 
     raise InvalidDate(day=day, month=month, year=year)
