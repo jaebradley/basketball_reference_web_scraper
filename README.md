@@ -109,3 +109,12 @@ client.players_season_totals(season_end_year=2018)
 # The players_season_totals method also supports all output behavior previously described
 ```
 
+## Development
+
+There are currently two supported major versions - `V3` and `V4`.
+
+There are two branches, `v3` and `v4` for both of these major versions - these are the defacto "master" branches to use
+when making changes.
+
+`master` will reflect the latest major version branch.
+
