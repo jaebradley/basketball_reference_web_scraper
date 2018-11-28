@@ -35,3 +35,8 @@ class TestPlayerBoxScores(TestCase):
     def test_raises_invalid_date_for_404_response(self, mocked_http_client):
         mocked_http_client.player_box_scores.side_effect = HTTPError(response=mock.Mock(status_code=codes.not_found))
         self.assertRaises(InvalidDate, player_box_scores, day=1, month=1, year=2018)
+
+    @mock.patch("basketball_reference_web_scraper.client.http_client")
+    def test_raises_non_404_http_error(self, mocked_http_client):
+        mocked_http_client.player_box_scores.side_effect = HTTPError(response=mock.Mock(status_code=codes.server_error))
+        self.assertRaises(HTTPError, player_box_scores, day=1, month=1, year=2018)
