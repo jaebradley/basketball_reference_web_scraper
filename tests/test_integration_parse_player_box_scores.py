@@ -2,7 +2,7 @@ import os
 from unittest import TestCase
 
 from basketball_reference_web_scraper.data import Team, Outcome
-from basketball_reference_web_scraper.parsers import box_scores
+from basketball_reference_web_scraper.parsers.box_scores import players
 
 november_03_2003_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_03_2003_daily_leaders.html')
 november_01_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
@@ -18,12 +18,12 @@ class TestPlayerBoxScores(TestCase):
         self.january_01_2017_daily_leaders = open(january_01_2017_daily_leaders_html).read()
 
     def test_box_scores_for_12_18_2015(self):
-        parsed_box_score = box_scores.parse_player_box_scores(self.december_18_2015_daily_leaders)
+        parsed_box_score = players.parse_player_box_scores(self.december_18_2015_daily_leaders)
         self.assertEqual(len(parsed_box_score), 250)
 
     # Test for minutes played greater than or equal to 60 minutes
     def test_box_scores_for_01_01_2017(self):
-        parsed_box_score = box_scores.parse_player_box_scores(self.january_01_2017_daily_leaders)
+        parsed_box_score = players.parse_player_box_scores(self.january_01_2017_daily_leaders)
         self.assertEqual(len(parsed_box_score), 170)
 
         first_box_score = parsed_box_score[0]
@@ -49,7 +49,7 @@ class TestPlayerBoxScores(TestCase):
         self.assertEqual(first_box_score["game_score"], 31.3)
 
     def test_parses_new_orleans_hornets_for_box_scores_for_11_03_2003(self):
-        parsed_box_score = box_scores.parse_player_box_scores(self.november_03_2003_daily_leaders)
+        parsed_box_score = players.parse_player_box_scores(self.november_03_2003_daily_leaders)
 
         self.assertEqual(len(parsed_box_score), 145)
 
@@ -59,7 +59,7 @@ class TestPlayerBoxScores(TestCase):
         self.assertEqual(pj_brown["team"], Team.NEW_ORLEANS_HORNETS)
 
     def test_parses_new_orleans_oklahoma_city_hornets_for_box_scores_for_11_01_2006(self):
-        parsed_box_score = box_scores.parse_player_box_scores(self.november_01_2006_daily_leaders)
+        parsed_box_score = players.parse_player_box_scores(self.november_01_2006_daily_leaders)
         self.assertEqual(len(parsed_box_score), 272)
 
         chris_paul = parsed_box_score[10]
