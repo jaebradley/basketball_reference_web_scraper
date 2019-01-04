@@ -1,9 +1,12 @@
 from lxml import html
 
+from basketball_reference_web_scraper.data import TEAM_NAME_TO_TEAM
 
-def parse_team_total(team_total_footer):
-    cells = team_total_footer.xpath('tr/td')
+
+def parse_team_total(footer, team):
+    cells = footer.xpath('tr/td')
     return {
+        "team": team,
         "minutes_played": int(cells[0].text_content()),
         "made_field_goals": int(cells[1].text_content()),
         "attempted_field_goals": int(cells[2].text_content()),
@@ -23,10 +26,18 @@ def parse_team_total(team_total_footer):
 
 def parse_team_totals(page):
     tree = html.fromstring(page)
+    teams = [
+        TEAM_NAME_TO_TEAM[anchor.text_content().upper()]
+        for anchor in tree.xpath('//div[@class="scorebox"]//a[@itemprop="name"]')
+    ]
     tables = tree.xpath('//table[contains(@class, "stats_table")]')
-    team_totals = list()
-    for table in tables:
-        if "basic" in table.attrib["id"]:
-            for footer in table.xpath("tfoot"):
-                team_totals.append(footer)
-    return list(map(lambda team_total: parse_team_total(team_total), team_totals))
+    footers = [
+        footer
+        for table in tables
+        if "basic" in table.attrib["id"]
+        for footer in table.xpath("tfoot")
+    ]
+    return [
+        parse_team_total(footer=footer, team=teams[footers.index(footer)])
+        for footer in footers
+    ]
