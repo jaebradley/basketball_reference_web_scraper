@@ -70,7 +70,7 @@ def players_season_totals(season_end_year):
     return parse_players_season_totals(response.content)
 
 
-def team_totals(game_url_path):
+def team_box_score(game_url_path):
     url = "{BASE_URL}/{game_url_path}".format(BASE_URL=BASE_URL, game_url_path=game_url_path)
 
     response = requests.get(url=url)
@@ -89,12 +89,8 @@ def team_box_scores(day, month, year):
 
     game_url_paths = parse_game_url_paths(response.content)
 
-    totals = [
-        team_total
+    return [
+        box_score
         for game_url_path in game_url_paths
-        for team_total in team_totals(game_url_path=game_url_path)
+        for box_score in team_box_score(game_url_path=game_url_path)
     ]
-
-    return {
-        "totals": totals
-    }
