@@ -106,10 +106,9 @@ class TestClient(TestCase):
         schedule = client.season_schedule(season_end_year=2018)
         self.assertIsNotNone(schedule)
 
-    # TODO: @jaebradley there's an open PR that's fixing this broken test
-    # def test_2019_season_schedule(self):
-    #     schedule = client.season_schedule(season_end_year=2019)
-    #     self.assertIsNotNone(schedule)
+    def test_2019_season_schedule(self):
+        schedule = client.season_schedule(season_end_year=2019)
+        self.assertIsNotNone(schedule)
 
     def test_2001_player_season_totals(self):
         player_season_totals = client.players_season_totals(season_end_year=2001)
