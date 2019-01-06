@@ -1,7 +1,9 @@
 import requests
 
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.parsers.box_scores import parse_player_box_scores
+from basketball_reference_web_scraper.parsers.box_scores.players import parse_player_box_scores
+from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
+from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
 from basketball_reference_web_scraper.parsers.players_season_totals import parse_players_season_totals
 
@@ -66,3 +68,29 @@ def players_season_totals(season_end_year):
     response.raise_for_status()
 
     return parse_players_season_totals(response.content)
+
+
+def team_box_score(game_url_path):
+    url = "{BASE_URL}/{game_url_path}".format(BASE_URL=BASE_URL, game_url_path=game_url_path)
+
+    response = requests.get(url=url)
+
+    response.raise_for_status()
+
+    return parse_team_totals(response.content)
+
+
+def team_box_scores(day, month, year):
+    url = "{BASE_URL}/boxscores/".format(BASE_URL=BASE_URL)
+
+    response = requests.get(url=url, params={"day": day, "month": month, "year": year})
+
+    response.raise_for_status()
+
+    game_url_paths = parse_game_url_paths(response.content)
+
+    return [
+        box_score
+        for game_url_path in game_url_paths
+        for box_score in team_box_score(game_url_path=game_url_path)
+    ]

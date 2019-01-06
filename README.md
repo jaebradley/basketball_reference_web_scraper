@@ -40,12 +40,13 @@ from basketball_reference_web_scraper.data import Team
 
 ## API
 
-This client has three methods
+This client has four methods
 * Getting player box scores by a date (`client.player_box_scores`)
+* Getting team box scores by a date (`client.team_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
 * Getting players totals for a season (`client.players_season_totals`)
 
-You can see all three methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
+You can see all four methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
 
 ### Data output
 
@@ -85,6 +86,17 @@ client.player_box_scores(day=1, month=1, year=2017, output_type=OutputType.JSON,
 
 # Output all player box scores for January 1st, 2017 in JSON format to 1_1_2017_box_scores.csv
 client.player_box_scores(day=1, month=1, year=2017, output_type=OutputType.CSV, output_file_path="./1_1_2017_box_scores.csv")
+```
+
+### Get team box scores by date
+
+```python
+from basketball_reference_web_scraper import client
+
+# Get all team totals for January 1st, 2018
+client.team_box_scores(day=1, month=1, year=2018)
+
+# The team_box_scores method also supports all output behavior previously described
 ```
 
 ### Get season schedule

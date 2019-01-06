@@ -57,6 +57,24 @@ player_season_totals_fieldname = [
     "personal_fouls",
 ]
 
+team_box_score_fieldname = [
+    "team",
+    "minutes_played",
+    "made_field_goals",
+    "attempted_field_goals",
+    "made_three_point_field_goals",
+    "attempted_three_point_field_goals",
+    "made_free_throws",
+    "attempted_free_throws",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "personal_fouls",
+]
+
 default_json_options = {
     "sort_keys": True,
     "indent": 4,
@@ -152,6 +170,31 @@ def players_season_totals_to_csv(rows, output_file_path, write_option):
                 "team": row["team"].value,
                 "games_played": row["games_played"],
                 "games_started": row["games_started"],
+                "minutes_played": row["minutes_played"],
+                "made_field_goals": row["made_field_goals"],
+                "attempted_field_goals": row["attempted_field_goals"],
+                "made_three_point_field_goals": row["made_three_point_field_goals"],
+                "attempted_three_point_field_goals": row["attempted_three_point_field_goals"],
+                "made_free_throws": row["made_free_throws"],
+                "attempted_free_throws": row["attempted_free_throws"],
+                "offensive_rebounds": row["offensive_rebounds"],
+                "defensive_rebounds": row["defensive_rebounds"],
+                "assists": row["assists"],
+                "steals": row["steals"],
+                "blocks": row["blocks"],
+                "turnovers": row["turnovers"],
+                "personal_fouls": row["personal_fouls"],
+            } for row in rows
+        )
+
+
+def team_box_scores_to_csv(rows, output_file_path, write_option):
+    with open(output_file_path, write_option.value, newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=team_box_score_fieldname)
+        writer.writeheader()
+        writer.writerows(
+            {
+                "team": row["team"].value,
                 "minutes_played": row["minutes_played"],
                 "made_field_goals": row["made_field_goals"],
                 "attempted_field_goals": row["attempted_field_goals"],

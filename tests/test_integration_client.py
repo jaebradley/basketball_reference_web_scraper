@@ -186,3 +186,35 @@ class TestClient(TestCase):
     def test_2019_player_season_totals(self):
         player_season_totals = client.players_season_totals(season_end_year=2019)
         self.assertIsNotNone(player_season_totals)
+
+    def test_2018_01_01_team_box_scores(self):
+        team_box_scores = client.team_box_scores(day=1, month=1, year=2018)
+        self.assertIsNotNone(team_box_scores)
+
+    def test_2001_01_01_team_box_scores(self):
+        team_box_scores = client.team_box_scores(day=1, month=1, year=2001)
+        self.assertIsNotNone(team_box_scores)
+
+    def test_2004_01_02_team_box_scores(self):
+        team_box_scores = client.team_box_scores(day=2, month=1, year=2004)
+        self.assertIsNotNone(team_box_scores)
+
+    def test_2018_01_01_team_box_scores_json_box_scores_to_file(self):
+        client.team_box_scores(
+            day=1,
+            month=1,
+            year=2018,
+            output_type=OutputType.JSON,
+            output_file_path="./2018_01_01_team_box_scores.json",
+            output_write_option=OutputWriteOption.WRITE
+        )
+
+    def test_2018_01_01_team_box_scores_json_box_scores_to_memory(self):
+        january_first_box_scores = client.team_box_scores(
+            day=1,
+            month=1,
+            year=2018,
+            output_type=OutputType.JSON,
+        )
+
+        self.assertIsNotNone(january_first_box_scores)
