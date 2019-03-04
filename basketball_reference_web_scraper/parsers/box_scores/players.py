@@ -37,7 +37,7 @@ def parse_seconds_played(formatted_playing_time):
 
 def parse_player_box_score(row):
     return {
-        "slug": str(row[1].attrib["data-append-csv"]),
+        "slug": str(row[1].get("data-append-csv")),
         "name": str(row[1].text_content()),
         "team": TEAM_ABBREVIATIONS_TO_TEAM[row[2].text_content()],
         "location": parse_location(row[3].text_content()),
