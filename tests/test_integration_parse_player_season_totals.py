@@ -21,6 +21,7 @@ class TestPlayersSeasonTotals(TestCase):
 
         mahmoud_abdul_rauf = parsed_season_totals[0]
 
+        self.assertEqual(mahmoud_abdul_rauf["slug"], "abdulma02")
         self.assertEqual(mahmoud_abdul_rauf["name"], "Mahmoud Abdul-Rauf")
         self.assertEqual(mahmoud_abdul_rauf["positions"], [Position.POINT_GUARD])
         self.assertEqual(mahmoud_abdul_rauf["team"], Team.VANCOUVER_GRIZZLIES)
@@ -47,6 +48,7 @@ class TestPlayersSeasonTotals(TestCase):
 
         alex_abrines = parsed_season_totals[0]
 
+        self.assertEqual(alex_abrines["slug"], "abrinal01")
         self.assertEqual(alex_abrines["name"], "Alex Abrines")
         self.assertEqual(alex_abrines["positions"], [Position.SHOOTING_GUARD])
         self.assertEqual(alex_abrines["team"], Team.OKLAHOMA_CITY_THUNDER)
@@ -72,6 +74,7 @@ class TestPlayersSeasonTotals(TestCase):
 
         pelicans_omer_asik = parsed_season_totals[22]
 
+        self.assertEqual(pelicans_omer_asik["slug"], "asikom01")
         self.assertEqual(pelicans_omer_asik["name"], "Omer Asik")
         self.assertEqual(pelicans_omer_asik["positions"], [Position.CENTER])
         self.assertEqual(pelicans_omer_asik["team"], Team.NEW_ORLEANS_PELICANS)
@@ -94,6 +97,7 @@ class TestPlayersSeasonTotals(TestCase):
 
         bulls_omer_asik = parsed_season_totals[23]
 
+        self.assertEqual(pelicans_omer_asik["slug"], "asikom01")
         self.assertEqual(bulls_omer_asik["name"], "Omer Asik")
         self.assertEqual(bulls_omer_asik["positions"], [Position.CENTER])
         self.assertEqual(bulls_omer_asik["team"], Team.CHICAGO_BULLS)
@@ -119,6 +123,7 @@ class TestPlayersSeasonTotals(TestCase):
 
         philly_jimmy_butler = parsed_season_totals[72]
 
+        self.assertEqual(philly_jimmy_butler["slug"], "butleji01")
         self.assertEqual(philly_jimmy_butler["name"], "Jimmy Butler")
         self.assertEqual(philly_jimmy_butler["positions"], [Position.SHOOTING_GUARD])
         self.assertEqual(philly_jimmy_butler["team"], Team.PHILADELPHIA_76ERS)
