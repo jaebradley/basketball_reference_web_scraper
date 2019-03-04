@@ -28,6 +28,7 @@ class TestPlayerBoxScores(TestCase):
 
         first_box_score = parsed_box_score[0]
 
+        self.assertEqual(first_box_score["slug"], "millspa01")
         self.assertEqual(first_box_score["name"], "Paul Millsap")
         self.assertEqual(first_box_score["team"], Team.ATLANTA_HAWKS)
         self.assertEqual(first_box_score["opponent"], Team.NEW_YORK_KNICKS)
@@ -55,6 +56,7 @@ class TestPlayerBoxScores(TestCase):
 
         pj_brown = parsed_box_score[51]
 
+        self.assertEqual(pj_brown["slug"], "brownpj01")
         self.assertEqual(pj_brown["name"], "P.J. Brown")
         self.assertEqual(pj_brown["team"], Team.NEW_ORLEANS_HORNETS)
 
@@ -64,5 +66,6 @@ class TestPlayerBoxScores(TestCase):
 
         chris_paul = parsed_box_score[10]
 
+        self.assertEqual(chris_paul["slug"], "paulch01")
         self.assertEqual(chris_paul["name"], "Chris Paul")
         self.assertEqual(chris_paul["team"], Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS)
