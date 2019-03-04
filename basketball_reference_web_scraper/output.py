@@ -4,6 +4,7 @@ import json
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
 
 box_score_fieldname = [
+    "slug",
     "name",
     "team",
     "location",
@@ -35,6 +36,7 @@ game_fieldname = [
 ]
 
 player_season_totals_fieldname = [
+    "slug",
     "name",
     "positions",
     "age",
@@ -119,6 +121,7 @@ def box_scores_to_csv(rows, output_file_path, write_option):
         writer.writeheader()
         writer.writerows(
             {
+                "slug": row["slug"],
                 "name": row["name"],
                 "team": row["team"].value,
                 "location": row["location"].value,
@@ -164,6 +167,7 @@ def players_season_totals_to_csv(rows, output_file_path, write_option):
         writer.writeheader()
         writer.writerows(
             {
+                "slug": row["slug"],
                 "name": row["name"],
                 "positions": "-".join(map(lambda position: position.value, row["positions"])),
                 "age": row["age"],
