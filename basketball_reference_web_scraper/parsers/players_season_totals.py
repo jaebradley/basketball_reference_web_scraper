@@ -8,7 +8,7 @@ def parse_player_season_totals(row):
         "slug": str(row[1].get("data-append-csv")),
         "name": str(row[1].text_content()),
         "positions": parse_positions(row[2].text_content()),
-        "age": int(row[3].text_content()),
+        "age": int(row[3].text_content()) if row[3].text_content() else None,
         "team": TEAM_ABBREVIATIONS_TO_TEAM[row[4].text_content()],
         "games_played": int(row[5].text_content()),
         "games_started": int(row[6].text_content()),

@@ -7,6 +7,7 @@ from basketball_reference_web_scraper.parsers import players_season_totals
 season_2001_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2001_totals.html')
 season_2018_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2018_totals.html')
 season_2019_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2019_totals.html')
+season_2019_totals_with_jemerrio_jones_blank_age = os.path.join(os.path.dirname(__file__), './NBA_2019_totals_jemerrio_jones_blank_age.html')
 
 
 class TestPlayersSeasonTotals(TestCase):
@@ -14,6 +15,7 @@ class TestPlayersSeasonTotals(TestCase):
         self.season_2001_totals = open(season_2001_totals_html).read()
         self.season_2018_totals = open(season_2018_totals_html).read()
         self.season_2019_totals = open(season_2019_totals_html).read()
+        self.season_2019_totals_with_jemerrio_jones_blank_age = open(season_2019_totals_with_jemerrio_jones_blank_age).read()
 
     def test_2001_players_season_totals(self):
         parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2001_totals)
@@ -143,3 +145,31 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(philly_jimmy_butler["blocks"], 3)
         self.assertEqual(philly_jimmy_butler["turnovers"], 11)
         self.assertEqual(philly_jimmy_butler["personal_fouls"], 12)
+
+    def test_2019_jemerrio_jones_blank_age_season_totals(self):
+        parsed_season_totals = players_season_totals.parse_players_season_totals(self.season_2019_totals_with_jemerrio_jones_blank_age)
+
+        jemerrio_jones = parsed_season_totals[310]
+
+        self.assertEqual(jemerrio_jones["slug"], "jonesje01")
+        self.assertEqual(jemerrio_jones["name"], "Jemerrio Jones")
+        self.assertEqual(jemerrio_jones["position"], Position.SMALL_FORWARD)
+        self.assertIsNone(jemerrio_jones["age"])
+        self.assertEqual(jemerrio_jones["team"], Team.LOS_ANGELES_LAKERS)
+        self.assertEqual(jemerrio_jones["games_played"], 1)
+        self.assertEqual(jemerrio_jones["games_started"], 0)
+        self.assertEqual(jemerrio_jones["minutes_played"], 5)
+        self.assertEqual(jemerrio_jones["made_field_goals"], 1)
+        self.assertEqual(jemerrio_jones["attempted_field_goals"], 2)
+        self.assertEqual(jemerrio_jones["made_three_point_field_goals"], 0)
+        self.assertEqual(jemerrio_jones["attempted_three_point_field_goals"], 1)
+        self.assertEqual(jemerrio_jones["made_free_throws"], 0)
+        self.assertEqual(jemerrio_jones["attempted_free_throws"], 0)
+        self.assertEqual(jemerrio_jones["offensive_rebounds"], 1)
+        self.assertEqual(jemerrio_jones["defensive_rebounds"], 0)
+        self.assertEqual(jemerrio_jones["assists"], 0)
+        self.assertEqual(jemerrio_jones["steals"], 1)
+        self.assertEqual(jemerrio_jones["blocks"], 0)
+        self.assertEqual(jemerrio_jones["turnovers"], 0)
+        self.assertEqual(jemerrio_jones["personal_fouls"], 0)
+
