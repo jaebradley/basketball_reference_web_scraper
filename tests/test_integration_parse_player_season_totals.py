@@ -153,7 +153,7 @@ class TestPlayersSeasonTotals(TestCase):
 
         self.assertEqual(jemerrio_jones["slug"], "jonesje01")
         self.assertEqual(jemerrio_jones["name"], "Jemerrio Jones")
-        self.assertEqual(jemerrio_jones["position"], Position.SMALL_FORWARD)
+        self.assertEqual(jemerrio_jones["positions"], [Position.SMALL_FORWARD])
         self.assertIsNone(jemerrio_jones["age"])
         self.assertEqual(jemerrio_jones["team"], Team.LOS_ANGELES_LAKERS)
         self.assertEqual(jemerrio_jones["games_played"], 1)
