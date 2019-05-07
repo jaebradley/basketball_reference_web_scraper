@@ -1,6 +1,7 @@
 from lxml import html
 
 from basketball_reference_web_scraper.data import Location, Outcome, TEAM_ABBREVIATIONS_TO_TEAM
+from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 
 def parse_location(symbol):
@@ -39,25 +40,25 @@ def parse_player_box_score(row):
     return {
         "slug": str(row[1].get("data-append-csv")),
         "name": str(row[1].text_content()),
-        "team": TEAM_ABBREVIATIONS_TO_TEAM[row[2].text_content()],
+        "team": TEAM_ABBREVIATIONS_TO_TEAM.get(row[2].text_content()),
         "location": parse_location(row[3].text_content()),
-        "opponent": TEAM_ABBREVIATIONS_TO_TEAM[row[4].text_content()],
+        "opponent": TEAM_ABBREVIATIONS_TO_TEAM.get(row[4].text_content()),
         "outcome": parse_outcome(row[5].text_content()),
-        "seconds_played": int(parse_seconds_played(row[6].text_content())),
-        "made_field_goals": int(row[7].text_content()),
-        "attempted_field_goals": int(row[8].text_content()),
-        "made_three_point_field_goals": int(row[10].text_content()),
-        "attempted_three_point_field_goals": int(row[11].text_content()),
-        "made_free_throws": int(row[13].text_content()),
-        "attempted_free_throws": int(row[14].text_content()),
-        "offensive_rebounds": int(row[16].text_content()),
-        "defensive_rebounds": int(row[17].text_content()),
-        "assists": int(row[19].text_content()),
-        "steals": int(row[20].text_content()),
-        "blocks": int(row[21].text_content()),
-        "turnovers": int(row[22].text_content()),
-        "personal_fouls": int(row[23].text_content()),
-        "game_score": float(row[25].text_content()),
+        "seconds_played": parse_seconds_played(row[6].text_content()),
+        "made_field_goals": str_to_int(row[7].text_content()),
+        "attempted_field_goals": str_to_int(row[8].text_content()),
+        "made_three_point_field_goals": str_to_int(row[10].text_content()),
+        "attempted_three_point_field_goals": str_to_int(row[11].text_content()),
+        "made_free_throws": str_to_int(row[13].text_content()),
+        "attempted_free_throws": str_to_int(row[14].text_content()),
+        "offensive_rebounds": str_to_int(row[16].text_content()),
+        "defensive_rebounds": str_to_int(row[17].text_content()),
+        "assists": str_to_int(row[19].text_content()),
+        "steals": str_to_int(row[20].text_content()),
+        "blocks": str_to_int(row[21].text_content()),
+        "turnovers": str_to_int(row[22].text_content()),
+        "personal_fouls": str_to_int(row[23].text_content()),
+        "game_score": str_to_float(row[25].text_content()),
     }
 
 

@@ -1,26 +1,27 @@
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_NAME_TO_TEAM
+from basketball_reference_web_scraper.utilities import str_to_int
 
 
 def parse_team_total(footer, team):
     cells = footer.xpath('tr/td')
     return {
         "team": team,
-        "minutes_played": int(cells[0].text_content()),
-        "made_field_goals": int(cells[1].text_content()),
-        "attempted_field_goals": int(cells[2].text_content()),
-        "made_three_point_field_goals": int(cells[4].text_content()),
-        "attempted_three_point_field_goals": int(cells[5].text_content()),
-        "made_free_throws": int(cells[7].text_content()),
-        "attempted_free_throws": int(cells[8].text_content()),
-        "offensive_rebounds": int(cells[10].text_content()),
-        "defensive_rebounds": int(cells[11].text_content()),
-        "assists": int(cells[13].text_content()),
-        "steals": int(cells[14].text_content()),
-        "blocks": int(cells[15].text_content()),
-        "turnovers": int(cells[16].text_content()),
-        "personal_fouls": int(cells[17].text_content()),
+        "minutes_played": str_to_int(cells[0].text_content()),
+        "made_field_goals": str_to_int(cells[1].text_content()),
+        "attempted_field_goals": str_to_int(cells[2].text_content()),
+        "made_three_point_field_goals": str_to_int(cells[4].text_content()),
+        "attempted_three_point_field_goals": str_to_int(cells[5].text_content()),
+        "made_free_throws": str_to_int(cells[7].text_content()),
+        "attempted_free_throws": str_to_int(cells[8].text_content()),
+        "offensive_rebounds": str_to_int(cells[10].text_content()),
+        "defensive_rebounds": str_to_int(cells[11].text_content()),
+        "assists": str_to_int(cells[13].text_content()),
+        "steals": str_to_int(cells[14].text_content()),
+        "blocks": str_to_int(cells[15].text_content()),
+        "turnovers": str_to_int(cells[16].text_content()),
+        "personal_fouls": str_to_int(cells[17].text_content()),
     }
 
 

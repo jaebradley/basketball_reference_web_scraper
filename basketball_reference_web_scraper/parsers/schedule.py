@@ -3,6 +3,7 @@ import datetime
 import pytz
 
 from basketball_reference_web_scraper.data import Team
+from basketball_reference_web_scraper.utilities import str_to_int
 
 TEAM_NAME_TO_TEAM = {
     member.value: member
@@ -45,10 +46,10 @@ def parse_game(row):
     start_time = parse_start_time(formatted_date=row[0].text_content(), formatted_time_of_day=row[1].text_content())
     return {
         "start_time": start_time,
-        "away_team": TEAM_NAME_TO_TEAM[row[2].text_content().upper()],
-        "home_team": TEAM_NAME_TO_TEAM[row[4].text_content().upper()],
-        "away_team_score": int(row[3].text_content()) if row[3].text_content() else None,
-        "home_team_score": int(row[5].text_content()) if row[5].text_content() else None,
+        "away_team": TEAM_NAME_TO_TEAM.get(row[2].text_content().upper()),
+        "home_team": TEAM_NAME_TO_TEAM.get(row[4].text_content().upper()),
+        "away_team_score": str_to_int(row[3].text_content(), default=None),
+        "home_team_score": str_to_int(row[5].text_content(), default=None),
     }
 
 
