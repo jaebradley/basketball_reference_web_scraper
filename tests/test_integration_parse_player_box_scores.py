@@ -7,6 +7,7 @@ from basketball_reference_web_scraper.parsers.box_scores import players
 november_03_2003_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_03_2003_daily_leaders.html')
 november_01_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
 december_18_2015_daily_leaders_html = os.path.join(os.path.dirname(__file__), './12_18_2015_daily_leaders.html')
+december_12_2017_daily_leaders_html = os.path.join(os.path.dirname(__file__), './12_12_2017_daily_leaders.html')
 january_01_2017_daily_leaders_html = os.path.join(os.path.dirname(__file__), './01_29_2017_daily_leaders.html')
 
 
@@ -15,11 +16,22 @@ class TestPlayerBoxScores(TestCase):
         self.november_01_2006_daily_leaders = open(november_01_2006_daily_leaders_html).read()
         self.december_18_2015_daily_leaders = open(december_18_2015_daily_leaders_html).read()
         self.november_03_2003_daily_leaders = open(november_03_2003_daily_leaders_html).read()
+        self.december_12_2017_daily_leaders = open(december_12_2017_daily_leaders_html).read()
         self.january_01_2017_daily_leaders = open(january_01_2017_daily_leaders_html).read()
 
     def test_box_scores_for_12_18_2015(self):
         parsed_box_score = players.parse_player_box_scores(self.december_18_2015_daily_leaders)
         self.assertEqual(len(parsed_box_score), 250)
+
+    def test_box_scores_for_12_12_2017(self):
+        parsed_box_score = players.parse_player_box_scores(self.december_12_2017_daily_leaders)
+        self.assertEqual(len(parsed_box_score), 149)
+
+    def test_parses_blank_value_for_andrew_bogut_on_12_12_2017(self):
+        parsed_box_score = players.parse_player_box_scores(self.december_12_2017_daily_leaders)
+        andrew_bogut = parsed_box_score[128]
+        self.assertEqual(andrew_bogut["made_three_point_field_goals"], 0)
+        self.assertEqual(andrew_bogut["attempted_three_point_field_goals"], 0)
 
     # Test for minutes played greater than or equal to 60 minutes
     def test_box_scores_for_01_01_2017(self):

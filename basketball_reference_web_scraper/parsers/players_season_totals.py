@@ -1,6 +1,7 @@
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, POSITION_ABBREVIATIONS_TO_POSITION
+from basketball_reference_web_scraper.utilities import str_to_int
 
 
 def parse_player_season_totals(row):
@@ -8,24 +9,24 @@ def parse_player_season_totals(row):
         "slug": str(row[1].get("data-append-csv")),
         "name": str(row[1].text_content()),
         "positions": parse_positions(row[2].text_content()),
-        "age": int(row[3].text_content()) if row[3].text_content() else None,
-        "team": TEAM_ABBREVIATIONS_TO_TEAM[row[4].text_content()],
-        "games_played": int(row[5].text_content()),
-        "games_started": int(row[6].text_content()),
-        "minutes_played": int(row[7].text_content()),
-        "made_field_goals": int(row[8].text_content()),
-        "attempted_field_goals": int(row[9].text_content()),
-        "made_three_point_field_goals": int(row[11].text_content()),
-        "attempted_three_point_field_goals": int(row[12].text_content()),
-        "made_free_throws": int(row[18].text_content()),
-        "attempted_free_throws": int(row[19].text_content()),
-        "offensive_rebounds": int(row[21].text_content()),
-        "defensive_rebounds": int(row[22].text_content()),
-        "assists": int(row[24].text_content()),
-        "steals": int(row[25].text_content()),
-        "blocks": int(row[26].text_content()),
-        "turnovers": int(row[27].text_content()),
-        "personal_fouls": int(row[28].text_content()),
+        "age": str_to_int(row[3].text_content(), default=None),
+        "team": TEAM_ABBREVIATIONS_TO_TEAM.get(row[4].text_content()),
+        "games_played": str_to_int(row[5].text_content()),
+        "games_started": str_to_int(row[6].text_content()),
+        "minutes_played": str_to_int(row[7].text_content()),
+        "made_field_goals": str_to_int(row[8].text_content()),
+        "attempted_field_goals": str_to_int(row[9].text_content()),
+        "made_three_point_field_goals": str_to_int(row[11].text_content()),
+        "attempted_three_point_field_goals": str_to_int(row[12].text_content()),
+        "made_free_throws": str_to_int(row[18].text_content()),
+        "attempted_free_throws": str_to_int(row[19].text_content()),
+        "offensive_rebounds": str_to_int(row[21].text_content()),
+        "defensive_rebounds": str_to_int(row[22].text_content()),
+        "assists": str_to_int(row[24].text_content()),
+        "steals": str_to_int(row[25].text_content()),
+        "blocks": str_to_int(row[26].text_content()),
+        "turnovers": str_to_int(row[27].text_content()),
+        "personal_fouls": str_to_int(row[28].text_content()),
     }
 
 
@@ -46,5 +47,10 @@ def parse_players_season_totals(page):
 
 
 def parse_positions(positions_content):
-    return list(map(lambda position_abbreviation: POSITION_ABBREVIATIONS_TO_POSITION[position_abbreviation],
-                    positions_content.split("-")))
+    parsed_positions = list(
+        map(
+            lambda position_abbreviation: POSITION_ABBREVIATIONS_TO_POSITION.get(position_abbreviation),
+            positions_content.split("-")
+        )
+    )
+    return [position for position in parsed_positions if position is not None]
