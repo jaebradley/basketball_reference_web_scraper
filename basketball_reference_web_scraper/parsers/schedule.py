@@ -48,8 +48,8 @@ def parse_game(row):
         "start_time": start_time,
         "away_team": TEAM_NAME_TO_TEAM.get(row[2].text_content().upper()),
         "home_team": TEAM_NAME_TO_TEAM.get(row[4].text_content().upper()),
-        "away_team_score": str_to_int(row[3].text_content()),
-        "home_team_score": str_to_int(row[5].text_content()),
+        "away_team_score": str_to_int(row[3].text_content(), default=None),
+        "home_team_score": str_to_int(row[5].text_content(), default=None),
     }
 
 
