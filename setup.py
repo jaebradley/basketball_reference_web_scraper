@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="basketball_reference_web_scraper",
-    version="4.2.2",
+    version="4.2.3",
     author="Jae Bradley",
     author_email="jae.b.bradley@gmail.com",
     license="MIT",
@@ -22,7 +22,7 @@ setuptools.setup(
         "lxml==4.2.5",
         "pytz==2018.6",
         "requests==2.20.0",
-        "urllib3==1.25.2",
+        "urllib3==1.24.3",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
