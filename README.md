@@ -40,11 +40,12 @@ from basketball_reference_web_scraper.data import Team
 
 ## API
 
-This client has four methods
+This client has five methods
 * Getting player box scores by a date (`client.player_box_scores`)
 * Getting team box scores by a date (`client.team_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
 * Getting players totals for a season (`client.players_season_totals`)
+* Getting players advanced for a season (`client.players_season_advanced`)
 
 You can see all four methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
 
@@ -119,6 +120,17 @@ from basketball_reference_web_scraper import client
 client.players_season_totals(season_end_year=2018)
 
 # The players_season_totals method also supports all output behavior previously described
+```
+
+### Get season advanced for all players
+
+ ```python
+from basketball_reference_web_scraper import client
+
+# Get 2017-2018 season advanced for all players
+client.players_season_advanced(season_end_year=2018)
+
+# The players_season_advanced method also supports all output behavior previously described
 ```
 
 ## Development
