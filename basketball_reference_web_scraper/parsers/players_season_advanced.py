@@ -1,0 +1,60 @@
+from lxml import html
+
+from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, POSITION_ABBREVIATIONS_TO_POSITION
+from basketball_reference_web_scraper.utilities import str_to_int
+
+
+def parse_player_season_advanced(row):
+    return {
+        "slug": str(row[1].get("data-append-csv")),
+        "name": str(row[1].text_content()),
+        "positions": parse_positions(row[2].text_content()),
+        "age": str_to_int(row[3].text_content(), default=None),
+        "team": TEAM_ABBREVIATIONS_TO_TEAM.get(row[4].text_content()),
+        "games_played": str_to_int(row[5].text_content()),
+        "minutes_played": str_to_int(row[6].text_content()),
+        "player_efficiency_rating": row[7].text_content(),
+        "true_shooting_percentage": row[8].text_content(),
+        "three_point_attempt_rate": row[9].text_content(),
+        "free_throw_attempt_rate": row[10].text_content(),
+        "offensive_rebound_percentage": row[11].text_content(),
+        "defensive_rebound_percentage": row[12].text_content(),
+        "total_rebound_percentage": row[13].text_content(),
+        "assist_percentage": row[14].text_content(),
+        "steal_percentage": row[15].text_content(),
+        "block_percentage": row[16].text_content(),
+        "turnover_percentage": row[17].text_content(),
+        "usage_percentage": row[18].text_content(),
+        "offensive_win_shares": row[20].text_content(),
+        "defensive_win_shares": row[21].text_content(),
+        "win_shares": row[22].text_content(),
+        "win_shares_per_48_minutes": row[23].text_content(),
+        "offensive_box_plus/minus": row[25].text_content(),
+        "defensive_box_plus/minus": row[26].text_content(),
+        "box_plus/minus": row[27].text_content(),
+        "value_over_replacement_player": row[28].text_content(),
+    }
+
+
+def parse_players_season_advanced(page):
+    tree = html.fromstring(page)
+
+    rows = tree.xpath('//table[@id="advanced_stats"]/tbody/tr[contains(@class, "full_table") or contains(@class, "italic_text partial_table") and not(contains(@class, "rowSum"))]')
+    advanced = []
+    for row in rows:
+        # Basketball Reference includes a "total" row for players that got traded
+        # which is essentially a sum of all player team rows
+        # I want to avoid including those, so I check the "team" field value for "TOT"
+        if row[4].text_content() != "TOT":
+            advanced.append(parse_player_season_advanced(row))
+    return advanced
+
+
+def parse_positions(positions_content):
+    parsed_positions = list(
+        map(
+            lambda position_abbreviation: POSITION_ABBREVIATIONS_TO_POSITION.get(position_abbreviation),
+            positions_content.split("-")
+        )
+    )
+    return [position for position in parsed_positions if position is not None]
