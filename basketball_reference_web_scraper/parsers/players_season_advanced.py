@@ -1,7 +1,7 @@
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, POSITION_ABBREVIATIONS_TO_POSITION
-from basketball_reference_web_scraper.utilities import str_to_int
+from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 
 def parse_player_season_advanced(row):
@@ -13,26 +13,26 @@ def parse_player_season_advanced(row):
         "team": TEAM_ABBREVIATIONS_TO_TEAM.get(row[4].text_content()),
         "games_played": str_to_int(row[5].text_content()),
         "minutes_played": str_to_int(row[6].text_content()),
-        "player_efficiency_rating": row[7].text_content(),
-        "true_shooting_percentage": row[8].text_content(),
-        "three_point_attempt_rate": row[9].text_content(),
-        "free_throw_attempt_rate": row[10].text_content(),
-        "offensive_rebound_percentage": row[11].text_content(),
-        "defensive_rebound_percentage": row[12].text_content(),
-        "total_rebound_percentage": row[13].text_content(),
-        "assist_percentage": row[14].text_content(),
-        "steal_percentage": row[15].text_content(),
-        "block_percentage": row[16].text_content(),
-        "turnover_percentage": row[17].text_content(),
-        "usage_percentage": row[18].text_content(),
-        "offensive_win_shares": row[20].text_content(),
-        "defensive_win_shares": row[21].text_content(),
-        "win_shares": row[22].text_content(),
-        "win_shares_per_48_minutes": row[23].text_content(),
-        "offensive_box_plus/minus": row[25].text_content(),
-        "defensive_box_plus/minus": row[26].text_content(),
-        "box_plus/minus": row[27].text_content(),
-        "value_over_replacement_player": row[28].text_content(),
+        "player_efficiency_rating": str_to_float(row[7].text_content()),
+        "true_shooting_percentage": str_to_float(row[8].text_content()),
+        "three_point_attempt_rate": str_to_float(row[9].text_content()),
+        "free_throw_attempt_rate": str_to_float(row[10].text_content()),
+        "offensive_rebound_percentage": str_to_float(row[11].text_content()),
+        "defensive_rebound_percentage": str_to_float(row[12].text_content()),
+        "total_rebound_percentage": str_to_float(row[13].text_content()),
+        "assist_percentage": str_to_float(row[14].text_content()),
+        "steal_percentage": str_to_float(row[15].text_content()),
+        "block_percentage": str_to_float(row[16].text_content()),
+        "turnover_percentage": str_to_float(row[17].text_content()),
+        "usage_percentage": str_to_float(row[18].text_content()),
+        "offensive_win_shares": str_to_float(row[20].text_content()),
+        "defensive_win_shares": str_to_float(row[21].text_content()),
+        "win_shares": str_to_float(row[22].text_content()),
+        "win_shares_per_48_minutes": str_to_float(row[23].text_content()),
+        "offensive_box_plus_minus": str_to_float(row[25].text_content()),
+        "defensive_box_plus_minus": str_to_float(row[26].text_content()),
+        "box_plus_minus": str_to_float(row[27].text_content()),
+        "value_over_replacement_player": str_to_float(row[28].text_content()),
     }
 
 

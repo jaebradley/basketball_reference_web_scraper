@@ -83,9 +83,9 @@ player_season_advanced_fieldname = [
     "defensive_win_shares",
     "win_shares",
     "win_shares_per_48_minutes",
-    "offensive_box_plus/minus",
-    "defensive_box_plus/minus",
-    "box_plus/minus",
+    "offensive_box_plus_minus",
+    "defensive_box_plus_minus",
+    "box_plus_minus",
     "value_over_replacement_player",
 ]
 
@@ -251,9 +251,9 @@ def players_season_advanced_to_csv(rows, output_file_path, write_option):
                 "defensive_win_shares": row["defensive_win_shares"],
                 "win_shares": row["win_shares"],
                 "win_shares_per_48_minutes": row["win_shares_per_48_minutes"],
-                "offensive_box_plus/minus": row["offensive_box_plus/minus"],
-                "defensive_box_plus/minus": row["defensive_box_plus/minus"],
-                "box_plus/minus": row["box_plus/minus"],
+                "offensive_box_plus_minus": row["offensive_box_plus_minus"],
+                "defensive_box_plus_minus": row["defensive_box_plus_minus"],
+                "box_plus_minus": row["box_plus_minus"],
                 "value_over_replacement_player": row["value_over_replacement_player"],
             } for row in rows
         )
