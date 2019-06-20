@@ -45,9 +45,9 @@ This client has five methods
 * Getting team box scores by a date (`client.team_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
 * Getting players totals for a season (`client.players_season_totals`)
-* Getting players advanced season statistics for a season (`client.players_season_advanced`)
+* Getting players advanced season statistics for a season (`client.players_advanced_season_totals`)
 
-You can see all four methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
+You can see all methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
 
 ### Data output
 
@@ -128,9 +128,9 @@ client.players_season_totals(season_end_year=2018)
 from basketball_reference_web_scraper import client
 
 # Get 2017-2018 advanced season statistics for all players
-client.players_season_advanced(season_end_year=2018)
+client.players_advanced_season_totals(season_end_year=2018)
 
-# The players_season_advanced method also supports all output behavior previously described
+# The players_advanced_season_totals method also supports all output behavior previously described
 ```
 
 ## Development

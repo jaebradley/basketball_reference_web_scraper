@@ -59,7 +59,7 @@ player_season_totals_fieldname = [
     "personal_fouls",
 ]
 
-player_season_advanced_fieldname = [
+player_advanced_season_totals_fieldname = [
     "slug",
     "name",
     "positions",
@@ -222,9 +222,9 @@ def players_season_totals_to_csv(rows, output_file_path, write_option):
         )
 
 
-def players_season_advanced_to_csv(rows, output_file_path, write_option):
+def players_advanced_season_totals_to_csv(rows, output_file_path, write_option):
     with open(output_file_path, write_option.value, newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=player_season_advanced_fieldname)
+        writer = csv.DictWriter(csv_file, fieldnames=player_advanced_season_totals_fieldname)
         writer.writeheader()
         writer.writerows(
             {

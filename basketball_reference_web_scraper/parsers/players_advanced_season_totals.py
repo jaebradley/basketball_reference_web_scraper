@@ -1,10 +1,11 @@
 from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, POSITION_ABBREVIATIONS_TO_POSITION
+from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
+from basketball_reference_web_scraper.parsers.positions import parse_positions
 
 
-def parse_player_season_advanced(row):
+def parse_player_advanced_season_total(row):
     return {
         "slug": str(row[1].get("data-append-csv")),
         "name": str(row[1].text_content()),
@@ -36,7 +37,7 @@ def parse_player_season_advanced(row):
     }
 
 
-def parse_players_season_advanced(page):
+def parse_players_advanced_season_totals(page):
     tree = html.fromstring(page)
 
     rows = tree.xpath('//table[@id="advanced_stats"]/tbody/tr[contains(@class, "full_table") or contains(@class, "italic_text partial_table") and not(contains(@class, "rowSum"))]')
@@ -46,15 +47,5 @@ def parse_players_season_advanced(page):
         # which is essentially a sum of all player team rows
         # I want to avoid including those, so I check the "team" field value for "TOT"
         if row[4].text_content() != "TOT":
-            advanced.append(parse_player_season_advanced(row))
+            advanced.append(parse_player_advanced_season_total(row))
     return advanced
-
-
-def parse_positions(positions_content):
-    parsed_positions = list(
-        map(
-            lambda position_abbreviation: POSITION_ABBREVIATIONS_TO_POSITION.get(position_abbreviation),
-            positions_content.split("-")
-        )
-    )
-    return [position for position in parsed_positions if position is not None]
