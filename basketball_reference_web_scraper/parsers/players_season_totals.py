@@ -1,7 +1,8 @@
 from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, POSITION_ABBREVIATIONS_TO_POSITION
+from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM
 from basketball_reference_web_scraper.utilities import str_to_int
+from basketball_reference_web_scraper.parsers.positions import parse_positions
 
 
 def parse_player_season_totals(row):
@@ -45,12 +46,3 @@ def parse_players_season_totals(page):
             totals.append(parse_player_season_totals(row))
     return totals
 
-
-def parse_positions(positions_content):
-    parsed_positions = list(
-        map(
-            lambda position_abbreviation: POSITION_ABBREVIATIONS_TO_POSITION.get(position_abbreviation),
-            positions_content.split("-")
-        )
-    )
-    return [position for position in parsed_positions if position is not None]
