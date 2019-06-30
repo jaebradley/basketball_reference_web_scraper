@@ -1,7 +1,7 @@
 import requests
 
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.parsers.box_scores.play_by_play import parse_play_by_play
+from basketball_reference_web_scraper.parsers.box_scores.play_by_play import parse_play_by_plays
 from basketball_reference_web_scraper.parsers.box_scores.players import parse_player_box_scores
 from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
 from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
@@ -113,9 +113,11 @@ def team_box_scores(day, month, year):
 
 
 def play_by_play(home_team, day, month, year):
+
+    # the hard-coded `0` in the url assumes we always take the first match of the given date and team.
     url = "{BASE_URL}/boxscores/pbp/{year}{month}{day}0{team_abbr}.html".format(
         BASE_URL=BASE_URL, year=year, month=month, day=day, team_abbr=TEAM_TO_TEAM_ABBREVIATION[home_team]
     )
     response = requests.get(url=url)
     response.raise_for_status()
-    return parse_play_by_play(response.content)
+    return parse_play_by_plays(response.content)
