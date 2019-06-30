@@ -108,3 +108,7 @@ def team_box_scores(day, month, year):
         for game_url_path in game_url_paths
         for box_score in team_box_score(game_url_path=game_url_path)
     ]
+
+
+def play_by_play(home_team, day, month, year):
+    pass
