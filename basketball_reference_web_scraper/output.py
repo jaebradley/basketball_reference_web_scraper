@@ -107,6 +107,17 @@ team_box_score_fieldname = [
     "personal_fouls",
 ]
 
+play_by_play_fieldname = [
+    "q",
+    "min",
+    "sec",
+    "dsec",
+    "side",
+    "score_away",
+    "score_home",
+    "event"
+]
+
 default_json_options = {
     "sort_keys": True,
     "indent": 4,
@@ -280,5 +291,22 @@ def team_box_scores_to_csv(rows, output_file_path, write_option):
                 "blocks": row["blocks"],
                 "turnovers": row["turnovers"],
                 "personal_fouls": row["personal_fouls"],
+            } for row in rows
+        )
+
+def play_by_play_to_csv(rows, output_file_path, write_option):
+    with open(output_file_path, write_option.value, newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=play_by_play_fieldname)
+        writer.writeheader()
+        writer.writerows(
+            {
+                "q": row["q"],
+                "min": row["min"],
+                "sec": row["sec"],
+                "dsec": row["dsec"],
+                "side": row["side"],
+                "score_away": row["score_away"],
+                "score_home": row["score_home"],
+                "event": row["event"]
             } for row in rows
         )
