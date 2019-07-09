@@ -119,6 +119,13 @@ def merge_two_dicts(first, second):
     return combined
 
 
+def output(data, writer=None, writer_options=None):
+    if writer is None:
+        return data
+
+    return writer.write(data=data, output_file_path=writer_options["output_file_path"], mode=writer_options["mode"])
+
+
 def output(values, output_type, output_file_path, encoder, csv_writer, output_write_option=None, json_options=None):
     if output_type is None:
         return values
