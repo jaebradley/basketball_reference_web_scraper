@@ -4,10 +4,127 @@ import json
 from basketball_reference_web_scraper.data import OutputWriteOption
 from basketball_reference_web_scraper.utilities import merge_two_dicts
 
+# I wrote the explicit mapping of CSV values because there didn't seem to be a way of outputting the values of enums
+# without doing it this way
+
+
+BOX_SCORE_COLUMN_NAMES = [
+    "slug",
+    "name",
+    "team",
+    "location",
+    "opponent",
+    "outcome",
+    "seconds_played",
+    "made_field_goals",
+    "attempted_field_goals",
+    "made_three_point_field_goals",
+    "attempted_three_point_field_goals",
+    "made_free_throws",
+    "attempted_free_throws",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "personal_fouls",
+    "game_score",
+]
+
+SCHEDULE_COLUMN_NAMES = [
+    "team",
+    "minutes_played",
+    "made_field_goals",
+    "attempted_field_goals",
+    "made_three_point_field_goals",
+    "attempted_three_point_field_goals",
+    "made_free_throws",
+    "attempted_free_throws",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "personal_fouls",
+]
+
+PLAYER_SEASON_TOTALS_COLUMN_NAMES = [
+    "slug",
+    "name",
+    "positions",
+    "age",
+    "team",
+    "games_played",
+    "games_started",
+    "minutes_played",
+    "made_field_goals",
+    "attempted_field_goals",
+    "made_three_point_field_goals",
+    "attempted_three_point_field_goals",
+    "made_free_throws",
+    "attempted_free_throws",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "personal_fouls",
+]
+
+PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES = [
+    "slug",
+    "name",
+    "positions",
+    "age",
+    "team",
+    "games_played",
+    "minutes_played",
+    "player_efficiency_rating",
+    "true_shooting_percentage",
+    "three_point_attempt_rate",
+    "free_throw_attempt_rate",
+    "offensive_rebound_percentage",
+    "defensive_rebound_percentage",
+    "total_rebound_percentage",
+    "assist_percentage",
+    "steal_percentage",
+    "block_percentage",
+    "turnover_percentage",
+    "usage_percentage",
+    "offensive_win_shares",
+    "defensive_win_shares",
+    "win_shares",
+    "win_shares_per_48_minutes",
+    "offensive_box_plus_minus",
+    "defensive_box_plus_minus",
+    "box_plus_minus",
+    "value_over_replacement_player",
+]
+
+TEAM_BOX_SCORES_COLUMN_NAMES = [
+    "team",
+    "minutes_played",
+    "made_field_goals",
+    "attempted_field_goals",
+    "made_three_point_field_goals",
+    "attempted_three_point_field_goals",
+    "made_free_throws",
+    "attempted_free_throws",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "personal_fouls",
+]
+
 
 class WriteOptions:
-    def __init__(self, data, file_path, mode, custom_options):
-        self.data = data
+    def __init__(self, file_path=None, mode=None, custom_options=None):
         self.file_path = file_path
         self.mode = mode
         self.custom_options = custom_options
@@ -26,10 +143,12 @@ class JSONWriter:
         self.encoder = encoder
 
     def write(self, data, options):
-        output_options = self.DEFAULT_OPTIONS if options.custom_options is None else merge_two_dicts(
-            first=self.DEFAULT_OPTIONS,
-            second=options.custom_options
-        )
+        output_options = self.DEFAULT_OPTIONS \
+            if options.custom_options is None \
+            else merge_two_dicts(
+                first=self.DEFAULT_OPTIONS,
+                second=options.custom_options
+            )
 
         if options.should_write_to_file:
             with open(options.file_path, options.mode.value, newline="") as json_file:
@@ -59,189 +178,10 @@ class RowFormatter:
 
     def format(self, row_data):
         return {
-            field_name: row_data[field_name]
-            for field_name in self.data_field_names
-        }
-
-
-class BoxScoreRowFormatter(RowFormatter):
-    def __init__(self):
-        RowFormatter.__init__(
-            self,
-            data_field_names=[
-                "team",
-                "minutes_played",
-                "made_field_goals",
-                "attempted_field_goals",
-                "made_three_point_field_goals",
-                "attempted_three_point_field_goals",
-                "made_free_throws",
-                "attempted_free_throws",
-                "offensive_rebounds",
-                "defensive_rebounds",
-                "assists",
-                "steals",
-                "blocks",
-                "turnovers",
-                "personal_fouls",
-            ]
-        )
-
-    def format(self, row_data):
-        return {
             data_field_name: row_data[data_field_name].value
-            if data_field_name in ["team", "location", "opponent", "outcome"]
-            else row_data[data_field_name]
-            for data_field_name in self.data_field_names
-        }
-
-
-class ScheduleRowFormatter(RowFormatter):
-    def __init__(self):
-        RowFormatter.__init__(
-            self,
-            data_field_names=[
-                "start_time",
-                "away_team",
-                "home_team",
-                "away_team_score",
-                "home_team_score",
-            ]
-        )
-
-    def format(self, row_data):
-        return {
-            data_field_name: row_data[data_field_name].value
-            if data_field_name in ["away_team", "home_team"]
-            else row_data[data_field_name]
-            for data_field_name in self.data_field_names
-        }
-
-
-class PlayerSeasonTotalsRowFormatter(RowFormatter):
-    def __init__(self):
-        RowFormatter.__init__(
-            self,
-            data_field_names=[
-                "slug",
-                "name",
-                "positions",
-                "age",
-                "team",
-                "games_played",
-                "games_started",
-                "minutes_played",
-                "made_field_goals",
-                "attempted_field_goals",
-                "made_three_point_field_goals",
-                "attempted_three_point_field_goals",
-                "made_free_throws",
-                "attempted_free_throws",
-                "offensive_rebounds",
-                "defensive_rebounds",
-                "assists",
-                "steals",
-                "blocks",
-                "turnovers",
-                "personal_fouls",
-            ]
-        )
-
-    def format(self, row_data):
-        return {
-            data_field_name: "-".join(map(lambda position: position.value, row_data[data_field_name]))
+            if data_field_name in ["away_team", "home_team", "team", "location", "opponent", "outcome"]
+            else "-".join(map(lambda position: position.value, row_data[data_field_name]))
             if data_field_name == "positions"
-            else row_data[data_field_name].value if data_field_name == "team"
             else row_data[data_field_name]
             for data_field_name in self.data_field_names
         }
-
-
-class TeamBoxScoreRowFormatter(RowFormatter):
-    def __init__(self):
-        RowFormatter.__init__(
-            self,
-            data_field_names=[
-                "team",
-                "minutes_played",
-                "made_field_goals",
-                "attempted_field_goals",
-                "made_three_point_field_goals",
-                "attempted_three_point_field_goals",
-                "made_free_throws",
-                "attempted_free_throws",
-                "offensive_rebounds",
-                "defensive_rebounds",
-                "assists",
-                "steals",
-                "blocks",
-                "turnovers",
-                "personal_fouls",
-            ]
-        )
-
-    def format(self, row_data):
-        return {
-            data_field_name: row_data[data_field_name].value
-            if data_field_name == "team"
-            else row_data[data_field_name]
-            for data_field_name in self.data_field_names
-        }
-
-
-class BoxScoreCSVWriter(CSVWriter):
-    def __init__(self, option=OutputWriteOption.CREATE_AND_WRITE):
-        CSVWriter.__init__(
-            self,
-            column_names=[
-                "slug",
-                "name",
-                "team",
-                "location",
-                "opponent",
-                "outcome",
-                "seconds_played",
-                "made_field_goals",
-                "attempted_field_goals",
-                "made_three_point_field_goals",
-                "attempted_three_point_field_goals",
-                "made_free_throws",
-                "attempted_free_throws",
-                "offensive_rebounds",
-                "defensive_rebounds",
-                "assists",
-                "steals",
-                "blocks",
-                "turnovers",
-                "personal_fouls",
-                "game_score",
-            ],
-            row_formatter=BoxScoreRowFormatter(),
-            option=option,
-        )
-
-
-class ScheduleCSVWriter(CSVWriter):
-    def __init__(self, option=OutputWriteOption.CREATE_AND_WRITE):
-        CSVWriter.__init__(
-            self,
-            column_names=[
-                "team",
-                "minutes_played",
-                "made_field_goals",
-                "attempted_field_goals",
-                "made_three_point_field_goals",
-                "attempted_three_point_field_goals",
-                "made_free_throws",
-                "attempted_free_throws",
-                "offensive_rebounds",
-                "defensive_rebounds",
-                "assists",
-                "steals",
-                "blocks",
-                "turnovers",
-                "personal_fouls",
-            ],
-            row_formatter=ScheduleRowFormatter(),
-            option=option
-        )
