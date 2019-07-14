@@ -16,6 +16,9 @@ def output(values, output_type, output_file_path, csv_writer, output_write_optio
 
     if output_type == OutputType.CSV:
         options = WriteOptions(file_path=output_file_path, mode=write_option)
-        csv_writer.write(data=values, options=options)
+        if options.should_write_to_file():
+            csv_writer.write(data=values, options=options)
+        else:
+            raise ValueError("CSV output must contain a file path")
 
     raise ValueError("Unknown output type: {output_type}".format(output_type=output_type))
