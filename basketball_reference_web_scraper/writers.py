@@ -132,6 +132,13 @@ class WriteOptions:
     def should_write_to_file(self):
         return self.file_path is not None and self.mode is not None
 
+    def __eq__(self, other):
+        if isinstance(other, WriteOptions):
+            return self.file_path == other.file_path \
+                   and self.mode == other.mode \
+                   and self.custom_options == other.custom_options
+        return False
+
 
 class JSONWriter:
     DEFAULT_OPTIONS = {
