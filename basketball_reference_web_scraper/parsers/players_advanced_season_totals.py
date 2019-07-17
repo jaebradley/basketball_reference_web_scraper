@@ -1,8 +1,8 @@
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM
-from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 from basketball_reference_web_scraper.parsers.positions import parse_positions
+from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 
 def parse_player_advanced_season_total(row):

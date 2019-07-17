@@ -1,6 +1,6 @@
 from datetime import datetime
-from json import JSONEncoder
 from enum import Enum
+from json import JSONEncoder
 
 
 class BasketballReferenceJSONEncoder(JSONEncoder):
