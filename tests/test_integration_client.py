@@ -24,6 +24,16 @@ class TestClient(TestCase):
             output_write_option=OutputWriteOption.WRITE
         )
 
+    def test_output_csv_box_scores_to_file(self):
+        client.player_box_scores(
+            day=1,
+            month=1,
+            year=2001,
+            output_type=OutputType.CSV,
+            output_file_path="./foo.csv",
+            output_write_option=OutputWriteOption.WRITE
+        )
+
     def test_output_json_box_scores_to_memory(self):
         january_first_box_scores = client.player_box_scores(
             day=1,
@@ -217,3 +227,13 @@ class TestClient(TestCase):
         )
 
         self.assertIsNotNone(january_first_box_scores)
+
+    def test_2018_01_01_team_box_scores_csv_box_scores_to_file(self):
+        client.team_box_scores(
+            day=1,
+            month=1,
+            year=2018,
+            output_type=OutputType.CSV,
+            output_file_path="./2018_01_01_team_box_scores.csv",
+            output_write_option=OutputWriteOption.WRITE
+        )
