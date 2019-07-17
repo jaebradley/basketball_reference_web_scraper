@@ -1,7 +1,6 @@
 import csv
 import json
 
-from basketball_reference_web_scraper.data import OutputWriteOption
 from basketball_reference_web_scraper.utilities import merge_two_dicts
 
 # I wrote the explicit mapping of CSV values because there didn't seem to be a way of outputting the values of enums
