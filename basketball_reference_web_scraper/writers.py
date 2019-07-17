@@ -32,21 +32,11 @@ BOX_SCORE_COLUMN_NAMES = [
 ]
 
 SCHEDULE_COLUMN_NAMES = [
-    "team",
-    "minutes_played",
-    "made_field_goals",
-    "attempted_field_goals",
-    "made_three_point_field_goals",
-    "attempted_three_point_field_goals",
-    "made_free_throws",
-    "attempted_free_throws",
-    "offensive_rebounds",
-    "defensive_rebounds",
-    "assists",
-    "steals",
-    "blocks",
-    "turnovers",
-    "personal_fouls",
+    "start_time",
+    "away_team",
+    "away_team_score",
+    "home_team",
+    "home_team_score",
 ]
 
 PLAYER_SEASON_TOTALS_COLUMN_NAMES = [
