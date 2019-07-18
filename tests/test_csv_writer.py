@@ -59,7 +59,7 @@ class TestCSVWriter(TestCase):
                 mode=OutputWriteOption.WRITE
             )
         )
-        csv_dict_writer.writeheader.assert_called_once()
+        csv_dict_writer.writeheader.assert_called_once_with()
 
     @mock.patch("basketball_reference_web_scraper.writers.csv.DictWriter")
     def test_rows_are_written(self, mock_csv_dict_writer):
@@ -76,7 +76,7 @@ class TestCSVWriter(TestCase):
                 mode=OutputWriteOption.WRITE
             )
         )
-        csv_dict_writer.writerows.assert_called_once()
+        csv_dict_writer.writerows.assert_called_once_with()
         self.assertEqual(3, row_formatter.format.call_count)
         row_formatter.format.assert_has_calls(
             calls=[
