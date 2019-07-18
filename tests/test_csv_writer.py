@@ -76,7 +76,7 @@ class TestCSVWriter(TestCase):
                 mode=OutputWriteOption.WRITE
             )
         )
-        csv_dict_writer.writerows.assert_called_once_with()
+        csv_dict_writer.writerows.assert_called_once_with(mock.ANY)
         self.assertEqual(3, row_formatter.format.call_count)
         row_formatter.format.assert_has_calls(
             calls=[
