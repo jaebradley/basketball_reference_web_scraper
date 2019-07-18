@@ -21,7 +21,7 @@ class TestJSONWriter(TestCase):
         )
 
         self.writer.write(data=self.mock_data, options=options)
-        options.should_write_to_file.assert_called_once()
+        options.should_write_to_file.assert_called_once_with()
         json_dumps.assert_called_once_with(self.mock_data, cls=self.mock_encoder, sort_keys=True, indent=4)
 
     @mock.patch("basketball_reference_web_scraper.writers.json.dumps")
@@ -35,7 +35,7 @@ class TestJSONWriter(TestCase):
         )
 
         self.writer.write(data=self.mock_data, options=options)
-        options.should_write_to_file.assert_called_once()
+        options.should_write_to_file.assert_called_once_with()
         json_dumps.assert_called_once_with(
             self.mock_data,
             cls=self.mock_encoder,
@@ -57,7 +57,7 @@ class TestJSONWriter(TestCase):
             )
 
             self.writer.write(data=self.mock_data, options=options)
-            options.should_write_to_file.assert_called_once()
+            options.should_write_to_file.assert_called_once_with()
             mock_file.assert_called_once_with(file_path, OutputWriteOption.WRITE.value, newline="")
             json_dump.assert_called_once_with(
                 self.mock_data,
@@ -82,7 +82,7 @@ class TestJSONWriter(TestCase):
             )
 
             self.writer.write(data=self.mock_data, options=options)
-            options.should_write_to_file.assert_called_once()
+            options.should_write_to_file.assert_called_once_with()
             mock_file.assert_called_once_with(file_path, OutputWriteOption.WRITE.value, newline="")
             json_dump.assert_called_once_with(
                 self.mock_data,
