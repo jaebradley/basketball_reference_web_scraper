@@ -22,8 +22,10 @@ def parse_play_by_plays(page):
     quarter = 0
     result = []
     for row in table[0][1:]:
+        # quarters are partitioned by 6 column-spanned headers
         if row[0].get("colspan") == "6":
             quarter += 1
+        # some rules to avoid trying to parse other clutter
         elif row[1].get("colspan") != "5" and row[0].get("aria-label") != "Time":
             result.append(parse_play_by_play(row, quarter))
     return result
