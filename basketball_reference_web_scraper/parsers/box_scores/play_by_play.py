@@ -35,7 +35,7 @@ def parse_play_by_play(row, quarter):
     return {
         "quarter": quarter,
         "timestamp": parse_time(row[0].text_content()),
-        "side": str(location),
+        "side": location,
         "away_score": int(score[1]),
         "home_score": int(score[2]),
         "description": row[1].text_content().strip() if location == Location.AWAY else row[5].text_content().strip()
