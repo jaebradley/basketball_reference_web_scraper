@@ -1,8 +1,8 @@
 import re
+
 from lxml import html
 
 from basketball_reference_web_scraper.data import Location
-
 
 TIME_REGEX = "([0-9]+):([0-9]+)\.([0-9]+)"
 SCORE_REGEX = "([0-9]+)-([0-9]+)"
@@ -36,7 +36,7 @@ def parse_play_by_play(row, quarter):
         "quarter": quarter,
         "timestamp": parse_time(row[0].text_content()),
         "side": str(location),
-        "score_away": score[1],
-        "score_home": score[2],
+        "away_score": int(score[1]),
+        "home_score": int(score[2]),
         "description": row[1].text_content().strip() if location == Location.AWAY else row[5].text_content().strip()
     }

@@ -111,8 +111,8 @@ play_by_play_fieldname = [
     "quarter",
     "timestamp",
     "side",
-    "score_away",
-    "score_home",
+    "away_score",
+    "home_score",
     "description"
 ]
 
@@ -301,8 +301,8 @@ def play_by_play_to_csv(rows, output_file_path, write_option):
                 "quarter": row["quarter"],
                 "timestamp": row["timestamp"],
                 "side": row["side"],
-                "score_away": row["score_away"],
-                "score_home": row["score_home"],
+                "away_score": row["away_score"],
+                "home_score": row["home_score"],
                 "description": row["description"]
             } for row in rows
         )
