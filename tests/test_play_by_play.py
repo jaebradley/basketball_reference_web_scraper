@@ -6,6 +6,7 @@ from basketball_reference_web_scraper.client import play_by_play
 from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.errors import InvalidDate
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
+from basketball_reference_web_scraper.parsers.box_scores.play_by_play import parse_time
 
 class TestPlayByPlay(TestCase):
 
@@ -41,3 +42,10 @@ class TestPlayByPlay(TestCase):
     def test_raises_non_404_http_error(self, mocked_http_client):
         mocked_http_client.play_by_play.side_effect = HTTPError(response=mock.Mock(status_code=codes.server_error))
         self.assertRaises(HTTPError, play_by_play, home_team=Team.MILWAUKEE_BUCKS,  day=1, month=1, year=2018)
+
+    def test_parse_time(self):
+        self.assertEqual(parse_time("0:32.1"), 32.1)
+        self.assertEqual(parse_time("11:24.5"), 684.5)
+
+    def test_parse_invalid_time(self):
+        self.assertEqual(parse_time("11.24:5"), -1)

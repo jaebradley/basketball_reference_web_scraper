@@ -108,14 +108,12 @@ team_box_score_fieldname = [
 ]
 
 play_by_play_fieldname = [
-    "q",
-    "min",
-    "sec",
-    "dsec",
+    "quarter",
+    "timestamp",
     "side",
     "score_away",
     "score_home",
-    "event"
+    "description"
 ]
 
 default_json_options = {
@@ -300,13 +298,11 @@ def play_by_play_to_csv(rows, output_file_path, write_option):
         writer.writeheader()
         writer.writerows(
             {
-                "q": row["q"],
-                "min": row["min"],
-                "sec": row["sec"],
-                "dsec": row["dsec"],
+                "quarter": row["quarter"],
+                "timestamp": row["timestamp"],
                 "side": row["side"],
                 "score_away": row["score_away"],
                 "score_home": row["score_home"],
-                "event": row["event"]
+                "description": row["description"]
             } for row in rows
         )
