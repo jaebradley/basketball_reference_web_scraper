@@ -9,9 +9,9 @@ SCORE_REGEX = "([0-9]+)-([0-9]+)"
 
 
 def parse_time(time_str):
-    time_tuple = re.search(TIME_REGEX, time_str.strip())
-    if time_tuple:
-        return float(time_tuple[1]) * 60 + float(time_tuple[2]) + float(time_tuple[3]) / 10
+    time = re.search(TIME_REGEX, time_str.strip())
+    if time:
+        return float(time.group(1)) * 60 + float(time.group(2)) + float(time.group(3)) / 10
     else:
         return -1.0
 
@@ -38,7 +38,7 @@ def parse_play_by_play(row, quarter):
         "quarter": quarter,
         "timestamp": parse_time(row[0].text_content()),
         "side": location,
-        "away_score": int(score[1]),
-        "home_score": int(score[2]),
+        "away_score": int(score.group(1)),
+        "home_score": int(score.group(2)),
         "description": row[1].text_content().strip() if location == Location.AWAY else row[5].text_content().strip()
     }
