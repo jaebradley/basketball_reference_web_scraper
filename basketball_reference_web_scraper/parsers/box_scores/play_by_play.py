@@ -3,6 +3,7 @@ import re
 from lxml import html
 
 from basketball_reference_web_scraper.data import Location
+from basketball_reference_web_scraper.data import Team
 
 TIME_REGEX = "([0-9]+):([0-9]+)\.([0-9]+)"
 SCORE_REGEX = "([0-9]+)-([0-9]+)"
@@ -19,6 +20,8 @@ def parse_time(time_str):
 def parse_play_by_plays(page):
     tree = html.fromstring(page)
     table = tree.xpath('//table[@id="pbp"]')
+    away_team = Team[tree.xpath("//*[@id=\"content\"]/div[2]/div[1]/div[1]/strong/a")[0].text_content().upper()
+        .replace(" ", "_")]
     quarter = 0
     result = []
     for row in table[0][1:]:
@@ -28,7 +31,7 @@ def parse_play_by_plays(page):
         # some rules to avoid trying to parse other clutter
         elif row[1].get("colspan") != "5" and row[0].get("aria-label") != "Time":
             result.append(parse_play_by_play(row, quarter))
-    return result
+    return result, away_team
 
 
 def parse_play_by_play(row, quarter):

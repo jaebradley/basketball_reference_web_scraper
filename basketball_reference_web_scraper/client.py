@@ -1,12 +1,14 @@
+import os
+
 import requests
 
 from basketball_reference_web_scraper import http_client
-
 from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate
+from basketball_reference_web_scraper.json_encoders import BasketballReferenceJSONEncoder
 from basketball_reference_web_scraper.output import box_scores_to_csv, schedule_to_csv, players_season_totals_to_csv, \
     players_advanced_season_totals_to_csv, team_box_scores_to_csv, play_by_play_to_csv
 from basketball_reference_web_scraper.output import output
-from basketball_reference_web_scraper.json_encoders import BasketballReferenceJSONEncoder
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
 
 
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -110,10 +112,19 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
     )
 
 
+def _encode_teams_in_file_path(filepath, away_team, home_team):
+    if filepath:
+        splitted = os.path.splitext(filepath)
+        return splitted[0] + "_" + TEAM_TO_TEAM_ABBREVIATION[away_team] + "_" + TEAM_TO_TEAM_ABBREVIATION[home_team] \
+               + splitted[1]
+    else:
+        return None
+
+
 def play_by_play(home_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                  json_options=None):
     try:
-        values = http_client.play_by_play(home_team=home_team, day=day, month=month, year=year)
+        values, away_team = http_client.play_by_play(home_team=home_team, day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)
@@ -122,7 +133,7 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
     return output(
         values=values,
         output_type=output_type,
-        output_file_path=output_file_path,
+        output_file_path=_encode_teams_in_file_path(output_file_path, away_team, home_team),
         output_write_option=output_write_option,
         csv_writer=play_by_play_to_csv,
         encoder=BasketballReferenceJSONEncoder,
