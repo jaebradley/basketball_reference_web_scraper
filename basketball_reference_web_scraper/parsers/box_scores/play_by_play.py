@@ -17,21 +17,25 @@ def parse_time(time_str):
         return -1.0
 
 
-def parse_play_by_plays(page):
+def parse_play_by_plays(page, home_team):
     tree = html.fromstring(page)
     table = tree.xpath('//table[@id="pbp"]')
     away_team = Team[tree.xpath("//*[@id=\"content\"]/div[2]/div[1]/div[1]/strong/a")[0].text_content().upper()
         .replace(" ", "_")]
     quarter = 0
-    result = []
+    result = {
+        "away_team": away_team,
+        "home_team": home_team,
+        "plays": []
+    }
     for row in table[0][1:]:
         # quarters are partitioned by 6 column-spanned headers
         if row[0].get("colspan") == "6":
             quarter += 1
         # some rules to avoid trying to parse other clutter
         elif row[1].get("colspan") != "5" and row[0].get("aria-label") != "Time":
-            result.append(parse_play_by_play(row, quarter))
-    return result, away_team
+            result["plays"].append(parse_play_by_play(row, quarter))
+    return result
 
 
 def parse_play_by_play(row, quarter):

@@ -123,4 +123,4 @@ def play_by_play(home_team, day, month, year):
     )
     response = requests.get(url=url)
     response.raise_for_status()
-    return parse_play_by_plays(response.content)
+    return parse_play_by_plays(response.content, home_team)

@@ -25,10 +25,16 @@ class TestPlayByPlay(TestCase):
             play_by_play,
             home_team=Team.MILWAUKEE_BUCKS, day=-1, month=1, year=2018)
 
-    def test_get_box_scores_from_2003(self):
+    def test_get_box_scores_from_2003_csv(self):
         result = play_by_play(
             home_team=Team.TORONTO_RAPTORS, day=29, month=10, year=2003,
             output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
+
+    def test_get_box_scores_from_2003_json(self):
+        result = play_by_play(
+            home_team=Team.TORONTO_RAPTORS, day=29, month=10, year=2003,
+            output_type=OutputType.JSON, output_file_path="./foobar.json", output_write_option=OutputWriteOption.WRITE)
+
 
     def test_raises_invalid_date_for_nonexistent_dates(self):
         self.assertRaisesRegex(

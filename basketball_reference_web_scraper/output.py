@@ -304,5 +304,5 @@ def play_by_play_to_csv(rows, output_file_path, write_option):
                 "away_score": row["away_score"],
                 "home_score": row["home_score"],
                 "description": row["description"]
-            } for row in rows
+            } for row in rows["plays"]
         )
