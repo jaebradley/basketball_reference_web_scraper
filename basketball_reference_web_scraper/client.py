@@ -125,8 +125,6 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
                  json_options=None):
     try:
         values = http_client.play_by_play(home_team=home_team, day=day, month=month, year=year)
-        if output_type == OutputType.CSV:
-            output_file_path = _encode_teams_in_file_path(output_file_path, values["away_team"], home_team)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)
