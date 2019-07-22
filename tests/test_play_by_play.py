@@ -14,6 +14,10 @@ class TestPlayByPlay(TestCase):
         result = play_by_play(home_team=Team.MILWAUKEE_BUCKS, day=27, month=10, year=2018)
         self.assertIsNotNone(result)
 
+    def test_get_play_by_play_single_digit_month_and_day(self):
+        result = play_by_play(home_team=Team.DENVER_NUGGETS, day=1, month=1, year=2019)
+        self.assertIsNotNone(result)
+
     def test_get_play_by_play_for_day_that_does_not_exist(self):
         self.assertRaisesRegex(
             InvalidDate,

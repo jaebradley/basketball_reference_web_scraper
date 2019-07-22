@@ -114,9 +114,12 @@ def team_box_scores(day, month, year):
 
 def play_by_play(home_team, day, month, year):
 
+    add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
+
     # the hard-coded `0` in the url assumes we always take the first match of the given date and team.
     url = "{BASE_URL}/boxscores/pbp/{year}{month}{day}0{team_abbr}.html".format(
-        BASE_URL=BASE_URL, year=year, month=month, day=day, team_abbr=TEAM_TO_TEAM_ABBREVIATION[home_team]
+        BASE_URL=BASE_URL, year=year, month=add_0_if_needed(str(month)), day=add_0_if_needed(str(day)),
+        team_abbr=TEAM_TO_TEAM_ABBREVIATION[home_team]
     )
     response = requests.get(url=url)
     response.raise_for_status()
