@@ -112,15 +112,6 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
     )
 
 
-def _encode_teams_in_file_path(filepath, away_team, home_team):
-    if filepath:
-        splitted = os.path.splitext(filepath)
-        return splitted[0] + "_" + TEAM_TO_TEAM_ABBREVIATION[away_team] + "_" + TEAM_TO_TEAM_ABBREVIATION[home_team] \
-               + splitted[1]
-    else:
-        return None
-
-
 def play_by_play(home_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                  json_options=None):
     try:
