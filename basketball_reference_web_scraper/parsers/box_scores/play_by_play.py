@@ -1,7 +1,6 @@
 import re
 
 from lxml import html
-
 from basketball_reference_web_scraper.data import Location
 from basketball_reference_web_scraper.data import Team
 
@@ -18,7 +17,7 @@ def parse_time(time_str):
 
 
 def parse_play_by_plays(page, home_team):
-    tree = html.fromstring(page)
+    tree = html.fromstring(page.decode("utf-8", errors="replace"))
     table = tree.xpath('//table[@id="pbp"]')
     away_team = Team[tree.xpath("//*[@id=\"content\"]/div[2]/div[1]/div[1]/strong/a")[0].text_content().upper()
         .replace(" ", "_")]

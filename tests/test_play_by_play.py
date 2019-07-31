@@ -59,3 +59,7 @@ class TestPlayByPlay(TestCase):
 
     def test_parse_invalid_time(self):
         self.assertEqual(parse_time("11.24:5"), -1)
+
+    def test_non_unicode_matches(self):
+        result = play_by_play(home_team=Team.GOLDEN_STATE_WARRIORS, day=16, month=10, year=2018)
+        self.assertIsNotNone(result)
