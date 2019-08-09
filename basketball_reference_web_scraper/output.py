@@ -107,6 +107,15 @@ team_box_score_fieldname = [
     "personal_fouls",
 ]
 
+play_by_play_fieldname = [
+    "quarter",
+    "timestamp",
+    "side",
+    "away_score",
+    "home_score",
+    "description"
+]
+
 default_json_options = {
     "sort_keys": True,
     "indent": 4,
@@ -281,4 +290,19 @@ def team_box_scores_to_csv(rows, output_file_path, write_option):
                 "turnovers": row["turnovers"],
                 "personal_fouls": row["personal_fouls"],
             } for row in rows
+        )
+
+def play_by_play_to_csv(rows, output_file_path, write_option):
+    with open(output_file_path, write_option.value, newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=play_by_play_fieldname)
+        writer.writeheader()
+        writer.writerows(
+            {
+                "quarter": row["quarter"],
+                "timestamp": row["timestamp"],
+                "side": row["side"],
+                "away_score": row["away_score"],
+                "home_score": row["home_score"],
+                "description": row["description"]
+            } for row in rows["plays"]
         )
