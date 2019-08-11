@@ -74,6 +74,11 @@ class Position(Enum):
     GUARD = "GUARD"
 
 
+class PeriodType(Enum):
+    QUARTER = "QUARTER"
+    OVERTIME = "OVERTIME"
+
+
 TEAM_ABBREVIATIONS_TO_TEAM = {
     'ATL': Team.ATLANTA_HAWKS,
     'BOS': Team.BOSTON_CELTICS,

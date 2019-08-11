@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 
 import basketball_reference_web_scraper.client as client
-from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team
+from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
 
 
 class TestClient(TestCase):
@@ -255,5 +255,28 @@ class TestClient(TestCase):
             year=2018,
             output_type=OutputType.CSV,
             output_file_path="./2018_10_16_BOS_pbp.csv",
+            output_write_option=OutputWriteOption.WRITE,
+        )
+
+    def test_overtime_play_by_play(self):
+        play_by_play = client.play_by_play(
+            home_team=Team.PORTLAND_TRAIL_BLAZERS,
+            day=22,
+            month=10,
+            year=2018,
+        )
+        last_play = play_by_play[-1]
+        self.assertIsNotNone(last_play)
+        self.assertEqual(1, last_play["period"])
+        self.assertEqual(PeriodType.OVERTIME, last_play["period_type"])
+
+    def test_overtime_play_by_play_to_csv(self):
+        client.play_by_play(
+            home_team=Team.PORTLAND_TRAIL_BLAZERS,
+            day=22,
+            month=10,
+            year=2018,
+            output_type=OutputType.CSV,
+            output_file_path="./2018_10_22_POR_pbp.csv",
             output_write_option=OutputWriteOption.WRITE,
         )

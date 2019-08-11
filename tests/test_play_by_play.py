@@ -6,7 +6,7 @@ from basketball_reference_web_scraper.client import play_by_play
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
 from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.parsers.box_scores.play_by_play import parse_time
+from basketball_reference_web_scraper.parsers.play_by_play import parse_time
 
 
 class TestPlayByPlay(TestCase):

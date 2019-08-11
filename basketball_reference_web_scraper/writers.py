@@ -112,9 +112,10 @@ TEAM_BOX_SCORES_COLUMN_NAMES = [
 ]
 
 PLAY_BY_PLAY_COLUMN_NAMES = [
-    "quarter",
-    "timestamp",
-    "side",
+    "period",
+    "period_type",
+    "remaining_seconds_in_period",
+    "relevant_team",
     "away_team",
     "home_team",
     "away_score",
@@ -183,7 +184,16 @@ class RowFormatter:
     def format(self, row_data):
         return {
             data_field_name: row_data[data_field_name].value
-            if data_field_name in ["away_team", "home_team", "team", "location", "opponent", "outcome", "side"]
+            if data_field_name in [
+                "away_team",
+                "home_team",
+                "team",
+                "location",
+                "opponent",
+                "outcome",
+                "relevant_team",
+                "period_type",
+            ]
             else "-".join(map(lambda position: position.value, row_data[data_field_name]))
             if data_field_name == "positions"
             else row_data[data_field_name]
