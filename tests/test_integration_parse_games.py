@@ -1,5 +1,5 @@
-from unittest import TestCase
 import os
+from unittest import TestCase
 
 from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
 

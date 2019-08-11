@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 
 import basketball_reference_web_scraper.client as client
-from basketball_reference_web_scraper.data import OutputWriteOption, OutputType
+from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team
 
 
 class TestClient(TestCase):
@@ -236,4 +236,24 @@ class TestClient(TestCase):
             output_type=OutputType.CSV,
             output_file_path="./2018_01_01_team_box_scores.csv",
             output_write_option=OutputWriteOption.WRITE
+        )
+
+    def test_BOS_2018_10_16_play_by_play(self):
+        play_by_play = client.play_by_play(
+            home_team=Team.BOSTON_CELTICS,
+            day=16,
+            month=10,
+            year=2018,
+        )
+        self.assertIsNotNone(play_by_play)
+
+    def test_BOS_2018_10_16_play_by_play_csv_to_file(self):
+        client.play_by_play(
+            home_team=Team.BOSTON_CELTICS,
+            day=16,
+            month=10,
+            year=2018,
+            output_type=OutputType.CSV,
+            output_file_path="./2018_10_16_BOS_pbp.csv",
+            output_write_option=OutputWriteOption.WRITE,
         )
