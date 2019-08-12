@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 
 import basketball_reference_web_scraper.client as client
-from basketball_reference_web_scraper.data import OutputWriteOption, OutputType
+from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
 
 
 class TestClient(TestCase):
@@ -21,6 +21,16 @@ class TestClient(TestCase):
             year=2001,
             output_type=OutputType.JSON,
             output_file_path="./foo.json",
+            output_write_option=OutputWriteOption.WRITE
+        )
+
+    def test_output_csv_box_scores_to_file(self):
+        client.player_box_scores(
+            day=1,
+            month=1,
+            year=2001,
+            output_type=OutputType.CSV,
+            output_file_path="./foo.csv",
             output_write_option=OutputWriteOption.WRITE
         )
 
@@ -217,3 +227,56 @@ class TestClient(TestCase):
         )
 
         self.assertIsNotNone(january_first_box_scores)
+
+    def test_2018_01_01_team_box_scores_csv_box_scores_to_file(self):
+        client.team_box_scores(
+            day=1,
+            month=1,
+            year=2018,
+            output_type=OutputType.CSV,
+            output_file_path="./2018_01_01_team_box_scores.csv",
+            output_write_option=OutputWriteOption.WRITE
+        )
+
+    def test_BOS_2018_10_16_play_by_play(self):
+        play_by_play = client.play_by_play(
+            home_team=Team.BOSTON_CELTICS,
+            day=16,
+            month=10,
+            year=2018,
+        )
+        self.assertIsNotNone(play_by_play)
+
+    def test_BOS_2018_10_16_play_by_play_csv_to_file(self):
+        client.play_by_play(
+            home_team=Team.BOSTON_CELTICS,
+            day=16,
+            month=10,
+            year=2018,
+            output_type=OutputType.CSV,
+            output_file_path="./2018_10_16_BOS_pbp.csv",
+            output_write_option=OutputWriteOption.WRITE,
+        )
+
+    def test_overtime_play_by_play(self):
+        play_by_play = client.play_by_play(
+            home_team=Team.PORTLAND_TRAIL_BLAZERS,
+            day=22,
+            month=10,
+            year=2018,
+        )
+        last_play = play_by_play[-1]
+        self.assertIsNotNone(last_play)
+        self.assertEqual(1, last_play["period"])
+        self.assertEqual(PeriodType.OVERTIME, last_play["period_type"])
+
+    def test_overtime_play_by_play_to_csv(self):
+        client.play_by_play(
+            home_team=Team.PORTLAND_TRAIL_BLAZERS,
+            day=22,
+            month=10,
+            year=2018,
+            output_type=OutputType.CSV,
+            output_file_path="./2018_10_22_POR_pbp.csv",
+            output_write_option=OutputWriteOption.WRITE,
+        )
