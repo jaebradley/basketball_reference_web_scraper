@@ -133,6 +133,26 @@ client.players_advanced_season_totals(season_end_year=2018)
 # The players_advanced_season_totals method also supports all output behavior previously described
 ```
 
+### Get play-by-play data for a game
+
+The structure of the API is due to the unique URL pattern that Basketball Reference has for getting play-by-play data, 
+which depends on the date of the game and the home team.
+
+Example: `https://www.basketball-reference.com/boxscores/pbp/201810160BOS.html`
+
+```python
+from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import Team
+
+# Get play-by-play data for 2018-10-16 game played at the Boston Celtics
+play_by_play = client.play_by_play(
+    home_team=Team.BOSTON_CELTICS,
+    year=2018,
+    month=10,
+    day=16,
+)
+```
+
 ## Development
 
 There are currently two supported major versions - `V3` and `V4`.
@@ -141,4 +161,8 @@ There are two branches, `v3` and `v4` for both of these major versions - these a
 when making changes.
 
 `master` will reflect the latest major version branch.
+
+## Contributors
+
+Thanks to [@DaiJunyan](https://github.com/DaiJunyan) for their contributions!
 
