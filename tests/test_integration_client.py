@@ -280,3 +280,25 @@ class TestClient(TestCase):
             output_file_path="./2018_10_22_POR_pbp.csv",
             output_write_option=OutputWriteOption.WRITE,
         )
+
+    def test_BOS_2018_10_16_play_by_play_json_to_file(self):
+        client.play_by_play(
+            home_team=Team.BOSTON_CELTICS,
+            day=16,
+            month=10,
+            year=2018,
+            output_type=OutputType.JSON,
+            output_file_path="./2018_10_16_BOS_pbp.json",
+            output_write_option=OutputWriteOption.WRITE,
+        )
+
+    def test_overtime_play_by_play_to_json_file(self):
+        client.play_by_play(
+            home_team=Team.PORTLAND_TRAIL_BLAZERS,
+            day=22,
+            month=10,
+            year=2018,
+            output_type=OutputType.JSON,
+            output_file_path="./2018_10_22_POR_pbp.json",
+            output_write_option=OutputWriteOption.WRITE,
+        )
