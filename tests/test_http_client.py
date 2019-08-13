@@ -1,4 +1,5 @@
 from unittest import TestCase, mock
+
 from requests import codes
 
 from basketball_reference_web_scraper import http_client

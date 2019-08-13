@@ -1,6 +1,7 @@
-from lxml import html
 import datetime
+
 import pytz
+from lxml import html
 
 from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.utilities import str_to_int

@@ -1,8 +1,8 @@
-from unittest import TestCase
 import os
+from unittest import TestCase
 
-from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
 from basketball_reference_web_scraper.data import Team
+from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
 
 atlanta_box_score_2017_01_01_html = os.path.join(os.path.dirname(__file__), './201701010ATL.html')
 
