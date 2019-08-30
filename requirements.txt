@@ -6,7 +6,7 @@ codecov>=2.0.15
 coverage>=4.5.4
 idna>=2.8
 importlib-metadata>=0.19
-lxml>=4.2.5
+lxml==4.2.5
 more-itertools>=7.2.0
 packaging>=19.1
 pluggy>=0.12.0
