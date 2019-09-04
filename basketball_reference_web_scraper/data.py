@@ -12,6 +12,7 @@ class Outcome(Enum):
 
 
 class Team(Enum):
+    # Look at https://www.basketball-reference.com/teams/ for all teams
     ATLANTA_HAWKS = "ATLANTA HAWKS"
     BOSTON_CELTICS = "BOSTON CELTICS"
     BROOKLYN_NETS = "BROOKLYN NETS"
@@ -44,12 +45,38 @@ class Team(Enum):
     WASHINGTON_WIZARDS = "WASHINGTON WIZARDS"
 
     # DEPRECATED TEAMS
+    ANDERSON_PACKERS = "ANDERSON PACKERS"
+    BALTIMORE_BULLETS = "BALTIMORE BULLETS"
+    BUFFALO_BRAVES = "BUFFALO BRAVES"
+    CAPITAL_BULLETS = "CAPITAL BULLETS"
     CHARLOTTE_BOBCATS = "CHARLOTTE BOBCATS"
+    CHICAGO_PACKERS = "CHICAGO PACKERS"
+    CHICAGO_STAGS = "CHICAGO STAGS"
+    CHICAGO_ZEPHYRS = "CHICAGO ZEPHYRS"
+    CINCINNATI_ROYALS = "CINCINNATI ROYALS"
+    FORT_WAYNE_PISTONS = "FORT WAYNE PISTONS"
+    INDIANAPOLIS_OLYMPIANS = "INDIANAPOLIS OLYMPIANS"
+    KANSAS_CITY_KINGS = "KANSAS CITY KINGS"
+    KANSAS_CITY_OMAHA_KINGS = "KANSAS CITY-OMAHA KINGS"
+    MILWAUKEE_HAWKS = "MILWAUKEE HAWKS"
+    MINNEAPOLIS_LAKERS = "MINNEAPOLIS LAKERS"
     NEW_JERSEY_NETS = "NEW JERSEY NETS"
     NEW_ORLEANS_HORNETS = "NEW ORLEANS HORNETS"
     NEW_ORLEANS_OKLAHOMA_CITY_HORNETS = "NEW ORLEANS/OKLAHOMA CITY HORNETS"
+    PHILADELPHIA_WARRIORS = "PHILADELPHIA WARRIORS"
+    ROCHESTER_ROYALS = "ROCHESTER ROYALS"
+    SAN_DIEGO_CLIPPERS = "SAN DIEGO CLIPPERS"
+    SAN_DIEGO_ROCKETS = "SAN DIEGO ROCKETS"
+    SAN_FRANCISCO_WARRIORS = "SAN FRANCISCO WARRIORS"
     SEATTLE_SUPERSONICS = "SEATTLE SUPERSONICS"
+    SHEBOYGAN_RED_SKINS = "SHEBOYGAN RED SKINS"
+    ST_LOUIS_BOMBERS = "ST. LOUIS BOMBERS"
+    ST_LOUIS_HAWKS = "ST. LOUIS HAWKS"
+    SYRACUSE_NATIONALS = "SYRACUSE NATIONALS"
+    TRI_CITIES_BLACKHAWKS = "TRI-CITIES BLACKHAWKS"
     VANCOUVER_GRIZZLIES = "VANCOUVER GRIZZLIES"
+    WASHINGTON_CAPITOLS = "WASHINGTON CAPITOLS"
+    WATERLOO_HAWKS = "WATERLOO HAWKS"
 
 
 class OutputType(Enum):
@@ -112,13 +139,65 @@ TEAM_ABBREVIATIONS_TO_TEAM = {
     'WAS': Team.WASHINGTON_WIZARDS,
 
     # DEPRECATED TEAMS
+    # https://www.basketball-reference.com/teams/AND/1950.html
+    'AND': Team.ANDERSON_PACKERS,
+    # https://www.basketball-reference.com/teams/BLB/1950.html
+    'BLB': Team.BALTIMORE_BULLETS,
+    # https://www.basketball-reference.com/teams/BUF/1971.html
+    'BUF': Team.BUFFALO_BRAVES,
+    # https://www.basketball-reference.com/teams/CAP/1974.html
+    'CAP': Team.CAPITAL_BULLETS,
+    'CHA': Team.CHARLOTTE_BOBCATS,
+    'CHH': Team.CHARLOTTE_HORNETS,
+    # https://www.basketball-reference.com/teams/CHP/1962.html
+    'CHP': Team.CHICAGO_PACKERS,
+    # https://www.basketball-reference.com/teams/CHS/1950.html
+    'CHS': Team.CHICAGO_STAGS,
+    # https://www.basketball-reference.com/teams/CHZ/1963.html
+    'CHZ': Team.CHICAGO_ZEPHYRS,
+    # https://www.basketball-reference.com/teams/CIN/1971.html
+    'CIN': Team.CINCINNATI_ROYALS,
+    # https://www.basketball-reference.com/teams/FTW/1950.html
+    'FTW': Team.FORT_WAYNE_PISTONS,
+    # https://www.basketball-reference.com/teams/INO/1950.html
+    'INO': Team.INDIANAPOLIS_OLYMPIANS,
+    # https://www.basketball-reference.com/teams/KCK/1976.html
+    'KCK': Team.KANSAS_CITY_KINGS,
+    # https://www.basketball-reference.com/teams/KCO/1973.html
+    'KCO': Team.KANSAS_CITY_OMAHA_KINGS,
+    # https://www.basketball-reference.com/teams/MLH/1952.html
+    'MLH': Team.MILWAUKEE_HAWKS,
+    # https://www.basketball-reference.com/teams/MNL/1950.html
+    'MNL': Team.MINNEAPOLIS_LAKERS,
     'NJN': Team.NEW_JERSEY_NETS,
     'NOH': Team.NEW_ORLEANS_HORNETS,
     'NOK': Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
-    'CHA': Team.CHARLOTTE_BOBCATS,
-    'CHH': Team.CHARLOTTE_HORNETS,
+    # https://www.basketball-reference.com/teams/PHW/1950.html
+    'PHW': Team.PHILADELPHIA_WARRIORS,
+    # https://www.basketball-reference.com/teams/ROC/1950.html
+    'ROC': Team.ROCHESTER_ROYALS,
+    # https://www.basketball-reference.com/teams/SDC/1979.html
+    'SDC': Team.SAN_DIEGO_CLIPPERS,
+    # https://www.basketball-reference.com/teams/SDR/1971.html
+    'SDR': Team.SAN_DIEGO_ROCKETS,
+    # https://www.basketball-reference.com/teams/SFW/1971.html
+    'SFW': Team.SAN_FRANCISCO_WARRIORS,
     'SEA': Team.SEATTLE_SUPERSONICS,
+    # https://www.basketball-reference.com/teams/SHE/1950.html
+    'SHE': Team.SHEBOYGAN_RED_SKINS,
+    # https://www.basketball-reference.com/teams/STB/1950.html
+    'STB': Team.ST_LOUIS_BOMBERS,
+    # https://www.basketball-reference.com/teams/STL/1962.html
+    'STL': Team.ST_LOUIS_HAWKS,
+    # https://www.basketball-reference.com/teams/SYR/1950.html
+    'SYR': Team.SYRACUSE_NATIONALS,
+    # https://www.basketball-reference.com/teams/TRI/1950.html
+    'TRI': Team.TRI_CITIES_BLACKHAWKS,
     'VAN': Team.VANCOUVER_GRIZZLIES,
+    # https://www.basketball-reference.com/teams/WSC/1950.html
+    'WSC': Team.WASHINGTON_CAPITOLS,
+    # https://www.basketball-reference.com/teams/WAT/1950.html
+    'WAT': Team.WATERLOO_HAWKS,
 }
 
 TEAM_TO_TEAM_ABBREVIATION = {v: k for k, v in TEAM_ABBREVIATIONS_TO_TEAM.items()}
@@ -157,12 +236,38 @@ TEAM_NAME_TO_TEAM = {
     "WASHINGTON WIZARDS": Team.WASHINGTON_WIZARDS,
 
     # DEPRECATED TEAMS
+    "ANDERSON PACKERS": Team.ANDERSON_PACKERS,
+    "BALTIMORE BULLETS": Team.BALTIMORE_BULLETS,
+    "BUFFALO BRAVES": Team.BUFFALO_BRAVES,
+    "CAPITAL BULLETS": Team.CAPITAL_BULLETS,
     "CHARLOTTE BOBCATS": Team.CHARLOTTE_BOBCATS,
+    "CHICAGO PACKERS": Team.CHICAGO_PACKERS,
+    "CHICAGO STAGS": Team.CHICAGO_STAGS,
+    "CHICAGO ZEPHYRS": Team.CHICAGO_ZEPHYRS,
+    "CINCINNATI ROYALS": Team.CINCINNATI_ROYALS,
+    "FORT WAYNE PISTONS": Team.FORT_WAYNE_PISTONS,
+    "INDIANAPOLIS OLYMPIANS": Team.INDIANAPOLIS_OLYMPIANS,
+    "KANSAS CITY KINGS": Team.KANSAS_CITY_KINGS,
+    "KANSAS CITY-OMAHA KINGS": Team.KANSAS_CITY_OMAHA_KINGS,
+    "MILWAUKEE HAWKS": Team.MILWAUKEE_HAWKS,
+    "MINNEAPOLIS LAKERS": Team.MINNEAPOLIS_LAKERS,
     "NEW JERSEY NETS": Team.NEW_JERSEY_NETS,
     "NEW ORLEANS HORNETS": Team.NEW_ORLEANS_HORNETS,
     "NEW ORLEANS/OKLAHOMA CITY HORNETS": Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
+    "PHILADELPHIA WARRIORS": Team.PHILADELPHIA_WARRIORS,
+    "ROCHESTER ROYALS": Team.ROCHESTER_ROYALS,
+    "SAN DIEGO CLIPPERS": Team.SAN_DIEGO_CLIPPERS,
+    "SAN DIEGO ROCKETS": Team.SAN_DIEGO_ROCKETS,
+    "SAN FRANCISCO WARRIORS": Team.SAN_FRANCISCO_WARRIORS,
     "SEATTLE SUPERSONICS": Team.SEATTLE_SUPERSONICS,
+    "SHEBOYGAN RED SKINS": Team.SHEBOYGAN_RED_SKINS,
+    "ST. LOUIS BOMBERS": Team.ST_LOUIS_BOMBERS,
+    "ST. LOUIS HAWKS": Team.ST_LOUIS_HAWKS,
+    "SYRACUSE NATIONALS": Team.SYRACUSE_NATIONALS,
+    "TRI-CITIES BLACKHAWKS": Team.TRI_CITIES_BLACKHAWKS,
     "VANCOUVER GRIZZLIES": Team.VANCOUVER_GRIZZLIES,
+    "WASHINGTON CAPITOLS": Team.WASHINGTON_CAPITOLS,
+    "WATERLOO HAWKS": Team.WATERLOO_HAWKS,
 }
 
 POSITION_ABBREVIATIONS_TO_POSITION = {
