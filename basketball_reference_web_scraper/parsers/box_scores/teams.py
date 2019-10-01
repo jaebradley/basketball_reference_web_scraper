@@ -35,7 +35,7 @@ def parse_team_totals(page):
     footers = [
         footer
         for table in tables
-        if "basic" in table.attrib["id"]
+        if "game-basic" in table.attrib["id"]
         for footer in table.xpath("tfoot")
     ]
     return [
