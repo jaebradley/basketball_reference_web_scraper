@@ -1,3 +1,5 @@
+import re
+
 class PlayerSeasonTotalTable:
     def __init__(self, html):
         self.html = html
@@ -127,3 +129,103 @@ class PlayerSeasonTotalRow:
     def is_combined_totals(self):
         return self.html[4].text_content() == "TOT"
 
+
+class BoxScoresPage:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def statistics_tables(self):
+        return [
+            StatisticsTable(table_html)
+            for table_html in self.html.xpath('//table[contains(@class, "stats_table")]')
+        ]
+
+    @property
+    def basic_statistics_tables(self):
+        return [
+            table
+            for table in self.statistics_tables
+            if table.has_basic_statistics is True
+        ]
+
+
+class StatisticsTable:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def has_basic_statistics(self):
+        return 'game-basic' in self.html.attrib["id"]
+
+    @property
+    def team_abbreviation(self):
+        # Example id value is box-BOS-game-basic or box-BOS-game-advanced
+        match = re.match('^box-(.+)-game', self.html.attrib["id"])
+        return match.group(1)
+
+    @property
+    def team_totals(self):
+        # Team totals are stored as table footers
+        return TeamTotalRow(self.html.xpath('tfoot/tr/td'))
+
+
+class TeamTotalRow:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def minutes_played(self):
+        return self.html[0].text_content()
+
+    @property
+    def made_field_goals(self):
+        return self.html[1].text_content()
+
+    @property
+    def attempted_field_goals(self):
+        return self.html[2].text_content()
+
+    @property
+    def made_three_point_field_goals(self):
+        return self.html[4].text_content()
+
+    @property
+    def attempted_three_point_field_goals(self):
+        return self.html[5].text_content()
+
+    @property
+    def made_free_throws(self):
+        return self.html[7].text_content()
+
+    @property
+    def attempted_free_throws(self):
+        return self.html[8].text_content()
+
+    @property
+    def offensive_rebounds(self):
+        return self.html[10].text_content()
+
+    @property
+    def defensive_rebounds(self):
+        return self.html[11].text_content()
+
+    @property
+    def assists(self):
+        return self.html[13].text_content()
+
+    @property
+    def steals(self):
+        return self.html[14].text_content()
+
+    @property
+    def blocks(self):
+        return self.html[15].text_content()
+
+    @property
+    def turnovers(self):
+        return self.html[16].text_content()
+
+    @property
+    def personal_fouls(self):
+        return self.html[17].text_content()

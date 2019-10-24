@@ -2,14 +2,13 @@ import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.html import PlayerSeasonTotalTable
+from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage
 from basketball_reference_web_scraper.parser import PositionAbbreviationParser, TeamAbbreviationParser, \
-    PlayerSeasonTotalsParser
+    PlayerSeasonTotalsParser, TeamTotalsParser
 from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
 from basketball_reference_web_scraper.parsers.box_scores.players import parse_player_box_scores
-from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
 from basketball_reference_web_scraper.parsers.play_by_play import parse_play_by_plays
 from basketball_reference_web_scraper.parsers.players_advanced_season_totals import parse_players_advanced_season_totals
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
@@ -106,7 +105,16 @@ def team_box_score(game_url_path):
 
     response.raise_for_status()
 
-    return parse_team_totals(response.content)
+    page = BoxScoresPage(html.fromstring(response.content))
+    combined_team_totals = [
+        TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
+        for table in page.basic_statistics_tables
+    ]
+    parser = TeamTotalsParser(team_abbreviation_parser=TeamAbbreviationParser(
+        abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
+    ))
+
+    return parser.parse(combined_team_totals)
 
 
 def team_box_scores(day, month, year):
