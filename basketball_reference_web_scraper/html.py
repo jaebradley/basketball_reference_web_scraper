@@ -481,4 +481,4 @@ class PlayerBoxScoreRow:
 
     @property
     def game_score(self):
-        return self.html[26].text_content()
+        return self.html[25].text_content()
