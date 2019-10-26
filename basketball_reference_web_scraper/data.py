@@ -175,6 +175,19 @@ POSITION_ABBREVIATIONS_TO_POSITION = {
     "G": Position.GUARD,
 }
 
+
+LOCATION_ABBREVIATIONS_TO_POSITION = {
+    "": Location.HOME,
+    "@": Location.AWAY,
+}
+
+
+OUTCOME_ABBREVIATIONS_TO_OUTCOME = {
+    "W": Outcome.WIN,
+    "L": Outcome.LOSS,
+}
+
+
 class TeamTotal:
     def __init__(self, team_abbreviation, totals):
         self.team_abbreviation = team_abbreviation
