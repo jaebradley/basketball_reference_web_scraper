@@ -2,13 +2,14 @@ import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
+    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage
+from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage
 from basketball_reference_web_scraper.parser import PositionAbbreviationParser, TeamAbbreviationParser, \
-    PlayerSeasonTotalsParser, TeamTotalsParser
+    PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
+    SecondsPlayedParser, PlayerBoxScoresParser
 from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
-from basketball_reference_web_scraper.parsers.box_scores.players import parse_player_box_scores
 from basketball_reference_web_scraper.parsers.play_by_play import parse_play_by_plays
 from basketball_reference_web_scraper.parsers.players_advanced_season_totals import parse_players_advanced_season_totals
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
@@ -29,7 +30,20 @@ def player_box_scores(day, month, year):
     response.raise_for_status()
 
     if response.status_code == requests.codes.ok:
-        return parse_player_box_scores(response.content)
+        page = DailyLeadersPage(html=html.fromstring(response.content))
+        box_score_parser = PlayerBoxScoresParser(
+            team_abbreviation_parser=TeamAbbreviationParser(
+                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
+            ),
+            location_abbreviation_parser=LocationAbbreviationParser(
+                abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
+            ),
+            outcome_abbreviation_parser=OutcomeAbbreviationParser(
+                abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME
+            ),
+            seconds_played_parser=SecondsPlayedParser(),
+        )
+        return box_score_parser.parse(page.daily_leaders)
 
     raise InvalidDate(day=day, month=month, year=year)
 
