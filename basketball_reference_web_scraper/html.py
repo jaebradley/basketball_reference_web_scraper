@@ -1,6 +1,36 @@
 import re
 
 
+class PlayerAdvancedSeasonTotalsTable:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def rows_query(self):
+        return """
+            //table[@id="advanced_stats"]
+            /tbody
+            /tr[
+                contains(@class, "full_table") or 
+                contains(@class, "italic_text partial_table") 
+                and not(contains(@class, "rowSum"))
+            ]
+        """
+
+    @property
+    def rows(self):
+        player_advanced_season_totals_rows = []
+        for row_html in self.html.xpath(self.rows_query):
+            row = PlayerAdvancedSeasonTotalsRow(html=row_html)
+            if not row.is_combined_totals:
+                # Basketball Reference includes a "total" row for players that got traded
+                # which is essentially a sum of all player team rows
+                # I want to avoid including those, so I check the "team" field value for "TOT"
+                player_advanced_season_totals_rows.append(row)
+
+        return player_advanced_season_totals_rows
+
+
 class PlayerSeasonTotalTable:
     def __init__(self, html):
         self.html = html
@@ -32,6 +62,127 @@ class PlayerSeasonTotalTable:
                 player_season_totals_rows.append(row)
 
         return player_season_totals_rows
+
+
+class PlayerAdvancedSeasonTotalsRow:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def player_name_cell(self):
+        return self.html[1]
+
+    @property
+    def slug(self):
+        return self.player_name_cell.get('data-append-csv')
+
+    @property
+    def name(self):
+        return self.player_name_cell.text_content()
+
+    @property
+    def position_abbreviations(self):
+        return self.html[2].text_content()
+
+    @property
+    def age(self):
+        return self.html[3].text_content()
+
+    @property
+    def team_abbreviation(self):
+        return self.html[4].text_content()
+
+    @property
+    def games_played(self):
+        return self.html[5].text_content()
+
+    @property
+    def minutes_played(self):
+        return self.html[6].text_content()
+
+    @property
+    def player_efficiency_rating(self):
+        return self.html[7].text_content()
+
+    @property
+    def true_shooting_percentage(self):
+        return self.html[8].text_content()
+
+    @property
+    def three_point_attempt_rate(self):
+        return self.html[9].text_content()
+
+    @property
+    def free_throw_attempt_rate(self):
+        return self.html[10].text_content()
+
+    @property
+    def offensive_rebound_percentage(self):
+        return self.html[11].text_content()
+
+    @property
+    def defensive_rebound_percentage(self):
+        return self.html[12].text_content()
+
+    @property
+    def total_rebound_percentage(self):
+        return self.html[13].text_content()
+
+    @property
+    def assist_percentage(self):
+        return self.html[14].text_content()
+
+    @property
+    def steal_percentage(self):
+        return self.html[15].text_content()
+
+    @property
+    def block_percentage(self):
+        return self.html[16].text_content()
+
+    @property
+    def turnover_percentage(self):
+        return self.html[17].text_content()
+
+    @property
+    def usage_percentage(self):
+        return self.html[18].text_content()
+
+    @property
+    def offensive_win_shares(self):
+        return self.html[20].text_content()
+
+    @property
+    def defensive_win_shares(self):
+        return self.html[21].text_content()
+
+    @property
+    def win_shares(self):
+        return self.html[22].text_content()
+
+    @property
+    def win_shares_per_48_minutes(self):
+        return self.html[23].text_content()
+
+    @property
+    def offensive_plus_minus(self):
+        return self.html[25].text_content()
+
+    @property
+    def defensive_plus_minus(self):
+        return self.html[26].text_content()
+
+    @property
+    def plus_minus(self):
+        return self.html[27].text_content()
+
+    @property
+    def value_over_replacement_player(self):
+        return self.html[28].text_content()
+
+    @property
+    def is_combined_totals(self):
+        return self.team_abbreviation == "TOT"
 
 
 class PlayerSeasonTotalRow:

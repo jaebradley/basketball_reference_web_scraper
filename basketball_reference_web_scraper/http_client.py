@@ -5,13 +5,13 @@ from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSI
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
     LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage
+from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
+    PlayerAdvancedSeasonTotalsTable
 from basketball_reference_web_scraper.parser import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
-    SecondsPlayedParser, PlayerBoxScoresParser
+    SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser
 from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
 from basketball_reference_web_scraper.parsers.play_by_play import parse_play_by_plays
-from basketball_reference_web_scraper.parsers.players_advanced_season_totals import parse_players_advanced_season_totals
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
 
 BASE_URL = 'https://www.basketball-reference.com'
@@ -109,7 +109,17 @@ def players_advanced_season_totals(season_end_year):
 
     response.raise_for_status()
 
-    return parse_players_advanced_season_totals(response.content)
+    table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(response.content))
+    parser = PlayerAdvancedSeasonTotalsParser(
+        team_abbreviation_parser=TeamAbbreviationParser(
+            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
+        ),
+        position_abbreviation_parser=PositionAbbreviationParser(
+            abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
+        )
+    )
+
+    return parser.parse(table.rows)
 
 
 def team_box_score(game_url_path):
