@@ -58,7 +58,7 @@ def parse_player_box_score(row):
         "blocks": str_to_int(row[21].text_content()),
         "turnovers": str_to_int(row[22].text_content()),
         "personal_fouls": str_to_int(row[23].text_content()),
-        "game_score": str_to_float(row[25].text_content()),
+        "game_score": str_to_float(row[26].text_content()),
     }
 
 
