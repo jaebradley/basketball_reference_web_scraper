@@ -482,3 +482,67 @@ class PlayerBoxScoreRow:
     @property
     def game_score(self):
         return self.html[25].text_content()
+
+
+class PlayByPlayPage:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def table_query(self):
+        return '//table[@id="pbp]'
+
+    @property
+    def play_by_play_table(self):
+        return self.html.xpath(self.table_query)
+
+    @property
+    def away_team_name(self):
+        return self.html \
+            .xpath("//*[@id=\"content\"]/div[2]/div[1]/div[1]/strong/a")[0] \
+            .text_content()
+
+
+class PlayByPlayTable:
+    def __index__(self, html):
+        self.html = html
+
+    def rows(self):
+        return map(lambda row_html: PlayByPlayRow(html=row_html), self.html[0][1])
+
+
+class PlayByPlayRow:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def timestamp_cell(self):
+        return self.html[0]
+
+    @property
+    def timestamp(self):
+        return self.timestamp_cell.text_content().strip()
+
+    @property
+    def away_team_play_description(self):
+        return self.html[1].text_content().strip()
+
+    @property
+    def home_team_play_description(self):
+        return self.html[5].text_content().strip()
+
+    @property
+    def is_away_team_play(self):
+        return self.away_team_play_description() != ""
+
+    @property
+    def is_home_team_play(self):
+        return self.home_team_play_description() != ""
+
+    @property
+    def combined_score(self):
+        return self.html[3].text_content().strip()
+
+    @property
+    def is_start_of_period(self):
+        return self.timestamp_cell.get('colspan') == '6'

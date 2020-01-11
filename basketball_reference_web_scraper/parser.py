@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
+from basketball_reference_web_scraper.data import PeriodType
 
 
 class TeamAbbreviationParser:
@@ -65,6 +68,37 @@ class SecondsPlayedParser:
         minutes_played = time_parts[0]
         seconds_played = time_parts[1]
         return 60 * int(minutes_played) + int(seconds_played)
+
+
+class PeriodCountParser:
+    def __init__(self, regulation_periods_count):
+        self.regulation_periods_count = regulation_periods_count
+
+    def is_overtime(self, period_count):
+        return period_count > self.regulation_periods_count
+
+    def parse_period_number(self, period_count):
+        if self.is_overtime(period_count=period_count):
+            return period_count - self.regulation_periods_count
+
+        return period_count
+
+    def parse_period_type(self, period_count):
+        if self.is_overtime(period_count=period_count):
+            return PeriodType.OVERTIME
+
+        return PeriodType.QUARTER
+
+
+class PeriodTimestampParser:
+    def __init__(self, timestamp_format):
+        self.timestamp_format = timestamp_format
+
+    def to_seconds(self, timestamp):
+        dt = datetime.strptime(timestamp, self.timestamp_format)
+        return float(
+            (dt.minute * 60) + dt.second + (dt.microsecond / 100000)
+        )
 
 
 class PlayerAdvancedSeasonTotalsParser:
