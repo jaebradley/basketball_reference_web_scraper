@@ -497,16 +497,31 @@ class PlayByPlayPage:
         return self.html.xpath(self.table_query)
 
     @property
+    def team_names(self):
+        names = self.html \
+            .xpath(
+                "//*[@id=\"content\"]"
+                "//div[@class=\"scorebox\"]"
+                "//div[@itemprop=\"performer\"]"
+                "/a[@itemprop=\"name\"]"
+            )
+
+        return map(lambda name: name.text_content().strip(), names)
+
+    @property
     def away_team_name(self):
-        return self.html \
-            .xpath("//*[@id=\"content\"]/div[2]/div[1]/div[1]/strong/a")[0] \
-            .text_content()
+        return self.team_names[0]
+
+    @property
+    def home_team_name(self):
+        return self.team_names[1]
 
 
 class PlayByPlayTable:
-    def __index__(self, html):
+    def __init__(self, html):
         self.html = html
 
+    @property
     def rows(self):
         return map(lambda row_html: PlayByPlayRow(html=row_html), self.html[0][1])
 
@@ -533,11 +548,11 @@ class PlayByPlayRow:
 
     @property
     def is_away_team_play(self):
-        return self.away_team_play_description() != ""
+        return self.away_team_play_description != ""
 
     @property
     def is_home_team_play(self):
-        return self.home_team_play_description() != ""
+        return self.home_team_play_description != ""
 
     @property
     def combined_score(self):

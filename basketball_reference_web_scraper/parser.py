@@ -233,3 +233,28 @@ class PlayerBoxScoresParser:
                 "game_score": str_to_float(box_score.game_score),
             } for box_score in box_scores
         ]
+
+
+class PlayByPlaysParser:
+    def __init__(self, period_details_parser, period_timestamp_parser):
+        self.period_details_parser = period_details_parser
+        self.period_timestamp_parser = period_timestamp_parser
+        self.current_period = 0
+
+    def parse(self, play_by_plays, away_team, home_team):
+        result = []
+        for play_by_play in play_by_plays:
+            if play_by_play.is_start_of_period:
+                self.current_period += 1
+            elif play_by_play.is_not_end_of_period:
+                result.append(self.format_data(play_by_play=play_by_play))
+        return result
+
+    def format_data(self, play_by_play, away_team, home_team):
+        return {
+            "period": self.period_details_parser.parse_period_number(period_count=self.current_period),
+            "period_type": self.period_details_parser.parse_period_type(period_count=self.current_period),
+            "remaining_seconds_in_period": self.period_timestamp_parser.to_seconds(timestamp=play_by_play.timestamp),
+            "relevant_team": away_team if play_by_play.is_away_team_play else home_team,
+            
+        }
