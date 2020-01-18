@@ -1,7 +1,7 @@
 import requests
 
 from basketball_reference_web_scraper import http_client
-from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate
+from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayer
 from basketball_reference_web_scraper.output import output
 from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
     BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
@@ -15,6 +15,37 @@ def player_box_scores(day, month, year, output_type=None, output_file_path=None,
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)
+        else:
+            raise http_error
+    return output(
+        values=values,
+        output_type=output_type,
+        output_file_path=output_file_path,
+        output_write_option=output_write_option,
+        csv_writer=CSVWriter(
+            column_names=BOX_SCORE_COLUMN_NAMES,
+            row_formatter=RowFormatter(data_field_names=BOX_SCORE_COLUMN_NAMES)
+        ),
+        json_options=json_options,
+    )
+
+
+def player_season_box_scores(player_name, season_end_year, url_override='01', output_type=None, output_file_path=None, output_write_option=None,
+                             json_options=None):
+
+    # TODO (url_override hax):
+    # the bballref url link for a player's season box score contains:
+    #    <first 5 letters of last name><first 2 letters of first name><duplication id>
+    # the duplication id defaults to 01, but if there are two or more players that
+    # have similar names (e.g. Jabari Brown and Jaylen Brown are both brownja),
+    # then the duplication id is what sets them apart (i.e. brownja01 & brownja02).
+    # allow the user to manually pass this in for now until we can find a better
+    # method of resolving the correct id.
+    try:
+        values = http_client.player_season_box_scores(player_name, season_end_year, url_override)
+    except requests.exceptions.HTTPError as http_error:
+        if http_error.response.status_code == requests.codes.internal_server_error:
+            raise InvalidPlayer(player_name)
         else:
             raise http_error
     return output(

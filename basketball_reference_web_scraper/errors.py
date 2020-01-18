@@ -13,3 +13,9 @@ class InvalidSeason(Exception):
     def __init__(self, season_end_year):
         message = "Season end year of {season_end_year} is invalid".format(season_end_year=season_end_year)
         super().__init__(message)
+
+
+class InvalidPlayer(Exception):
+    def __init__(self, player):
+        message = "Player \"{player}\" is invalid".format(player=player)
+        super().__init__(message)
