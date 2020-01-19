@@ -490,23 +490,28 @@ class PlayByPlayPage:
 
     @property
     def table_query(self):
-        return '//table[@id="pbp]'
+        return '//table[@id="pbp"]'
+
+    @property
+    def team_names_query(self):
+        return \
+            '//*[@id="content"]' \
+            '//div[@class="scorebox"]' \
+            '//div[@itemprop="performer"]' \
+            '//a[@itemprop="name"]'
 
     @property
     def play_by_play_table(self):
-        return self.html.xpath(self.table_query)
+        return PlayByPlayTable(html=self.html.xpath(self.table_query)[0])
 
     @property
     def team_names(self):
-        names = self.html \
-            .xpath(
-                "//*[@id=\"content\"]"
-                "//div[@class=\"scorebox\"]"
-                "//div[@itemprop=\"performer\"]"
-                "/a[@itemprop=\"name\"]"
-            )
+        names = self.html.xpath(self.team_names_query)
 
-        return map(lambda name: name.text_content().strip(), names)
+        return [
+            name.text_content()
+            for name in names
+        ]
 
     @property
     def away_team_name(self):
@@ -523,7 +528,11 @@ class PlayByPlayTable:
 
     @property
     def rows(self):
-        return map(lambda row_html: PlayByPlayRow(html=row_html), self.html[0][1])
+        return [
+            PlayByPlayRow(html=row_html)
+            # Ignore first row in table
+            for row_html in self.html[1:]
+        ]
 
 
 class PlayByPlayRow:
@@ -555,9 +564,19 @@ class PlayByPlayRow:
         return self.home_team_play_description != ""
 
     @property
-    def combined_score(self):
+    def formatted_scores(self):
         return self.html[3].text_content().strip()
 
     @property
     def is_start_of_period(self):
         return self.timestamp_cell.get('colspan') == '6'
+
+    @property
+    def has_play_by_play_data(self):
+        # TODO: @jaebradley refactor this to be slightly clearer
+        # Need to avoid rows that indicate start of period
+        # Or denote tipoff / end of period (colspan = 5)
+        # Or are one of the table headers for each period group (aria-label = Time)
+        return not self.is_start_of_period \
+               and self.html[1].get('colspan') != '5' \
+               and self.timestamp_cell.get('aria-label') != 'Time'
