@@ -3,18 +3,20 @@ from lxml import html
 
 from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
-    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME
+    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, Team
 from basketball_reference_web_scraper.errors import InvalidDate
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
-    PlayerAdvancedSeasonTotalsTable
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage
 from basketball_reference_web_scraper.parser import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
-    SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser
+    SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
+    PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser
 from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
-from basketball_reference_web_scraper.parsers.play_by_play import parse_play_by_plays
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
 
 BASE_URL = 'https://www.basketball-reference.com'
+PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
+PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
 
 
 def player_box_scores(day, month, year):
@@ -158,7 +160,6 @@ def team_box_scores(day, month, year):
 
 
 def play_by_play(home_team, day, month, year):
-
     add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
 
     # the hard-coded `0` in the url assumes we always take the first match of the given date and team.
@@ -168,4 +169,15 @@ def play_by_play(home_team, day, month, year):
     )
     response = requests.get(url=url)
     response.raise_for_status()
-    return parse_play_by_plays(response.content, home_team)
+    page = PlayByPlayPage(html=html.fromstring(response.content))
+
+    play_by_plays_parser = PlayByPlaysParser(
+        period_details_parser=PeriodDetailsParser(regulation_periods_count=4),
+        period_timestamp_parser=PeriodTimestampParser(timestamp_format=PLAY_BY_PLAY_TIMESTAMP_FORMAT),
+        scores_parser=ScoresParser(scores_regex=PLAY_BY_PLAY_SCORES_REGEX))
+
+    team_name_parser = TeamNameParser(teams=Team)
+
+    return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.rows,
+                                      away_team=team_name_parser.parse_team_name(team_name=page.away_team_name),
+                                      home_team=team_name_parser.parse_team_name(page.home_team_name))

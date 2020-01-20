@@ -482,3 +482,101 @@ class PlayerBoxScoreRow:
     @property
     def game_score(self):
         return self.html[26].text_content()
+
+
+class PlayByPlayPage:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def table_query(self):
+        return '//table[@id="pbp"]'
+
+    @property
+    def team_names_query(self):
+        return \
+            '//*[@id="content"]' \
+            '//div[@class="scorebox"]' \
+            '//div[@itemprop="performer"]' \
+            '//a[@itemprop="name"]'
+
+    @property
+    def play_by_play_table(self):
+        return PlayByPlayTable(html=self.html.xpath(self.table_query)[0])
+
+    @property
+    def team_names(self):
+        names = self.html.xpath(self.team_names_query)
+
+        return [
+            name.text_content()
+            for name in names
+        ]
+
+    @property
+    def away_team_name(self):
+        return self.team_names[0]
+
+    @property
+    def home_team_name(self):
+        return self.team_names[1]
+
+
+class PlayByPlayTable:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def rows(self):
+        return [
+            PlayByPlayRow(html=row_html)
+            # Ignore first row in table
+            for row_html in self.html[1:]
+        ]
+
+
+class PlayByPlayRow:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def timestamp_cell(self):
+        return self.html[0]
+
+    @property
+    def timestamp(self):
+        return self.timestamp_cell.text_content().strip()
+
+    @property
+    def away_team_play_description(self):
+        return self.html[1].text_content().strip()
+
+    @property
+    def home_team_play_description(self):
+        return self.html[5].text_content().strip()
+
+    @property
+    def is_away_team_play(self):
+        return self.away_team_play_description != ""
+
+    @property
+    def is_home_team_play(self):
+        return self.home_team_play_description != ""
+
+    @property
+    def formatted_scores(self):
+        return self.html[3].text_content().strip()
+
+    @property
+    def is_start_of_period(self):
+        return self.timestamp_cell.get('colspan') == '6'
+
+    @property
+    def has_play_by_play_data(self):
+        # TODO: @jaebradley refactor this to be slightly clearer
+        # Need to avoid rows that indicate start of period
+        # Or denote tipoff / end of period (colspan = 5)
+        # Or are one of the table headers for each period group (aria-label = Time)
+        return not self.is_start_of_period \
+               and self.html[1].get('colspan') != '5' \
+               and self.timestamp_cell.get('aria-label') != 'Time'
