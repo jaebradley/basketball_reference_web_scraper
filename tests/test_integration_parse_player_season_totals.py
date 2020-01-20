@@ -1,5 +1,6 @@
 import os
 from unittest import TestCase
+
 from lxml import html
 
 from basketball_reference_web_scraper.data import Team, Position, POSITION_ABBREVIATIONS_TO_POSITION, \

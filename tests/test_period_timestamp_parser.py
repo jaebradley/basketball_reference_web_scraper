@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.parser import PeriodTimestampParser
 from basketball_reference_web_scraper.http_client import PLAY_BY_PLAY_TIMESTAMP_FORMAT
+from basketball_reference_web_scraper.parser import PeriodTimestampParser
 
 
 class TestPeriodTimestampParser(TestCase):

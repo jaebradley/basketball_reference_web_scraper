@@ -1,8 +1,8 @@
-from datetime import datetime
 import re
+from datetime import datetime
 
-from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 from basketball_reference_web_scraper.data import PeriodType
+from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 
 class TeamAbbreviationParser:
