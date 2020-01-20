@@ -1,17 +1,24 @@
 import os
 from unittest import TestCase
 
-from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
+from lxml import html
+
+from basketball_reference_web_scraper.html import DailyBoxScoresPage
 
 january_01_2017_html = os.path.join(os.path.dirname(__file__), './01_01_2017_box_scores.html')
 
 
-class TestParseGameUrls(TestCase):
+class TestDailyBoxScoresPage(TestCase):
     def setUp(self):
-        self.january_01_2017_box_scores = open(january_01_2017_html).read()
+        self.january_01_2017_box_scores_file = open(january_01_2017_html)
+        self.january_01_2017_box_scores = self.january_01_2017_box_scores_file.read()
+
+    def tearDown(self):
+        self.january_01_2017_box_scores_file.close()
 
     def test_parse_urls(self):
-        urls = parse_game_url_paths(self.january_01_2017_box_scores)
+        page = DailyBoxScoresPage(html=html.fromstring(self.january_01_2017_box_scores))
+        urls = page.game_url_paths
         self.assertEqual(len(urls), 5)
         self.assertEqual(urls[0], '/boxscores/201701010ATL.html')
         self.assertEqual(urls[1], '/boxscores/201701010IND.html')

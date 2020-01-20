@@ -580,3 +580,17 @@ class PlayByPlayRow:
         return not self.is_start_of_period \
                and self.html[1].get('colspan') != '5' \
                and self.timestamp_cell.get('aria-label') != 'Time'
+
+
+class DailyBoxScoresPage:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def game_url_paths_query(self):
+        return '//td[contains(@class, "gamelink")]/a'
+
+    @property
+    def game_url_paths(self):
+        game_links = self.html.xpath(self.game_url_paths_query)
+        return [game_link.attrib['href'] for game_link in game_links]
