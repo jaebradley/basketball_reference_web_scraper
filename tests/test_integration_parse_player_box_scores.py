@@ -1,14 +1,15 @@
 import os
 from unittest import TestCase
+
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, LOCATION_ABBREVIATIONS_TO_POSITION, \
     OUTCOME_ABBREVIATIONS_TO_OUTCOME
 from basketball_reference_web_scraper.data import Team, Outcome
+from basketball_reference_web_scraper.html import DailyLeadersPage
 from basketball_reference_web_scraper.parser import TeamAbbreviationParser, \
     LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser
-from basketball_reference_web_scraper.html import DailyLeadersPage
 
 november_03_2003_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_03_2003_daily_leaders.html')
 november_01_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
