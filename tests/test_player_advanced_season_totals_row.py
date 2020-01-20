@@ -25,7 +25,7 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         player_name_cell.get = MagicMock(return_value=slug)
 
         self.assertEqual(row.slug, slug)
-        mock_player_name_cell.assert_called_once()
+        mock_player_name_cell.assert_called_once_with()
         player_name_cell.get.assert_called_once_with('data-append-csv')
 
     @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
@@ -37,8 +37,8 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         player_name_cell.text_content = MagicMock(return_value=name)
 
         self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).name, name)
-        mock_player_name_cell.assert_called_once()
-        player_name_cell.text_content.assert_called_once()
+        mock_player_name_cell.assert_called_once_with()
+        player_name_cell.text_content.assert_called_once_with()
 
     def test_position_abbreviations(self):
         position_abbreviations = MagicMock()
