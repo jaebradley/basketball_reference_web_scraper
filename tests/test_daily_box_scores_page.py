@@ -16,6 +16,10 @@ class TestDailyBoxScoresPage(TestCase):
     def tearDown(self):
         self.january_01_2017_box_scores_file.close()
 
+    def test_game_url_paths_query(self):
+        page = DailyBoxScoresPage(html=html.fromstring(self.january_01_2017_box_scores))
+        self.assertEqual(page.game_url_paths_query, '//td[contains(@class, "gamelink")]/a')
+
     def test_parse_urls(self):
         page = DailyBoxScoresPage(html=html.fromstring(self.january_01_2017_box_scores))
         urls = page.game_url_paths
