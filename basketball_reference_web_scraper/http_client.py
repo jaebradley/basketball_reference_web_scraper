@@ -6,12 +6,11 @@ from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEA
     LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, Team
 from basketball_reference_web_scraper.errors import InvalidDate
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage
 from basketball_reference_web_scraper.parser import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser
-from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
 from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
 
 BASE_URL = 'https://www.basketball-reference.com'
@@ -150,11 +149,11 @@ def team_box_scores(day, month, year):
 
     response.raise_for_status()
 
-    game_url_paths = parse_game_url_paths(response.content)
+    page = DailyBoxScoresPage(html=html.fromstring(response.content))
 
     return [
         box_score
-        for game_url_path in game_url_paths
+        for game_url_path in page.game_url_paths
         for box_score in team_box_score(game_url_path=game_url_path)
     ]
 
