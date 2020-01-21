@@ -1,8 +1,13 @@
 import os
 from unittest import TestCase
 
+from lxml import html
+
+from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
 from basketball_reference_web_scraper.data import Team
-from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
+from basketball_reference_web_scraper.html import BoxScoresPage
+from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
+    TeamTotalsParser
 
 atlanta_box_score_2017_01_01_html = os.path.join(os.path.dirname(__file__), './201701010ATL.html')
 
@@ -10,14 +15,22 @@ atlanta_box_score_2017_01_01_html = os.path.join(os.path.dirname(__file__), './2
 class TestParseTeams(TestCase):
     def setUp(self):
         self.atlanta_box_score_2017_01_01 = open(atlanta_box_score_2017_01_01_html).read()
+        self.team_abbreviation_parser = TeamAbbreviationParser(
+            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
+        )
+        self.page = BoxScoresPage(html.fromstring(self.atlanta_box_score_2017_01_01))
+        self.combined_team_totals = [
+            TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
+            for table in self.page.basic_statistics_tables
+        ]
+        self.parser = TeamTotalsParser(team_abbreviation_parser=self.team_abbreviation_parser)
+        self.team_totals = self.parser.parse(self.combined_team_totals)
 
     def test_parse_two_team_totals(self):
-        team_totals = parse_team_totals(self.atlanta_box_score_2017_01_01)
-        self.assertEqual(len(team_totals), 2)
+        self.assertEqual(len(self.team_totals), 2)
 
     def test_parse_san_antonio_team_totals(self):
-        team_totals = parse_team_totals(self.atlanta_box_score_2017_01_01)
-        sas_team_totals = team_totals[0]
+        sas_team_totals = self.team_totals[0]
         self.assertEqual(sas_team_totals["team"], Team.SAN_ANTONIO_SPURS)
         self.assertEqual(sas_team_totals["minutes_played"], 265)
         self.assertEqual(sas_team_totals["made_field_goals"], 42)
@@ -35,8 +48,7 @@ class TestParseTeams(TestCase):
         self.assertEqual(sas_team_totals["personal_fouls"], 21)
 
     def test_parse_atlanta_team_totals(self):
-        team_totals = parse_team_totals(self.atlanta_box_score_2017_01_01)
-        atl_team_totals = team_totals[1]
+        atl_team_totals = self.team_totals[1]
         self.assertEqual(atl_team_totals["team"], Team.ATLANTA_HAWKS)
         self.assertEqual(atl_team_totals["minutes_played"], 265)
         self.assertEqual(atl_team_totals["made_field_goals"], 42)

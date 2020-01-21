@@ -174,3 +174,77 @@ POSITION_ABBREVIATIONS_TO_POSITION = {
     "F": Position.FORWARD,
     "G": Position.GUARD,
 }
+
+
+LOCATION_ABBREVIATIONS_TO_POSITION = {
+    "": Location.HOME,
+    "@": Location.AWAY,
+}
+
+
+OUTCOME_ABBREVIATIONS_TO_OUTCOME = {
+    "W": Outcome.WIN,
+    "L": Outcome.LOSS,
+}
+
+
+class TeamTotal:
+    def __init__(self, team_abbreviation, totals):
+        self.team_abbreviation = team_abbreviation
+        self.totals = totals
+
+    @property
+    def minutes_played(self):
+        return self.totals.minutes_played
+
+    @property
+    def made_field_goals(self):
+        return self.totals.made_field_goals
+
+    @property
+    def attempted_field_goals(self):
+        return self.totals.attempted_field_goals
+
+    @property
+    def made_three_point_field_goals(self):
+        return self.totals.made_three_point_field_goals
+
+    @property
+    def attempted_three_point_field_goals(self):
+        return self.totals.attempted_three_point_field_goals
+
+    @property
+    def made_free_throws(self):
+        return self.totals.made_free_throws
+
+    @property
+    def attempted_free_throws(self):
+        return self.totals.attempted_free_throws
+
+    @property
+    def offensive_rebounds(self):
+        return self.totals.offensive_rebounds
+
+    @property
+    def defensive_rebounds(self):
+        return self.totals.defensive_rebounds
+
+    @property
+    def assists(self):
+        return self.totals.assists
+
+    @property
+    def steals(self):
+        return self.totals.steals
+
+    @property
+    def blocks(self):
+        return self.totals.blocks
+
+    @property
+    def turnovers(self):
+        return self.totals.turnovers
+
+    @property
+    def personal_fouls(self):
+        return self.totals.personal_fouls

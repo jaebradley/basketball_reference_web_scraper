@@ -196,6 +196,11 @@ class TestClient(TestCase):
         player_season_totals = client.players_season_totals(season_end_year=2019)
         self.assertIsNotNone(player_season_totals)
 
+    def test_2019_player_advanced_season_totals(self):
+        player_season_totals = client.players_advanced_season_totals(season_end_year=2019)
+        self.assertIsNotNone(player_season_totals)
+        self.assertTrue(len(player_season_totals) > 0)
+
     def test_2018_01_01_team_box_scores(self):
         team_box_scores = client.team_box_scores(day=1, month=1, year=2018)
         self.assertIsNotNone(team_box_scores)

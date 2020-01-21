@@ -1,19 +1,32 @@
 import os
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import Team, Position
-from basketball_reference_web_scraper.parsers import players_advanced_season_totals
+from lxml import html
+
+from basketball_reference_web_scraper.data import Team, Position, TEAM_ABBREVIATIONS_TO_TEAM, \
+    POSITION_ABBREVIATIONS_TO_POSITION
+from basketball_reference_web_scraper.html import PlayerAdvancedSeasonTotalsTable
+from basketball_reference_web_scraper.parsers import PlayerAdvancedSeasonTotalsParser, PositionAbbreviationParser, \
+    TeamAbbreviationParser
 
 season_2019_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2019_advanced_totals.html')
 
 
-class TestPlayersSeasonTotals(TestCase):
+class TestPlayersAdvancedSeasonTotals(TestCase):
     def setUp(self):
-
         self.season_2019_totals = open(season_2019_totals_html).read()
+        self.parser = PlayerAdvancedSeasonTotalsParser(
+            position_abbreviation_parser=PositionAbbreviationParser(
+                abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
+            ),
+            team_abbreviation_parser=TeamAbbreviationParser(
+                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
+            ),
+        )
+        self.season_2019_totals_table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(self.season_2019_totals))
 
     def test_2019_jimmy_butler_season_totals(self):
-        parsed_season_totals = players_advanced_season_totals.parse_players_advanced_season_totals(self.season_2019_totals)
+        parsed_season_totals = self.parser.parse(totals=self.season_2019_totals_table.rows)
 
         philly_jimmy_butler = parsed_season_totals[94]
 

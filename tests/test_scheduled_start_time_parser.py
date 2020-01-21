@@ -3,12 +3,12 @@ from unittest import TestCase
 
 import pytz
 
-from basketball_reference_web_scraper.parsers import schedule
+from basketball_reference_web_scraper.parsers import ScheduledStartTimeParser
 
 
-class TestSchedule(TestCase):
+class TestScheduledStartTimeParser(TestCase):
     def test_correctly_parses_time_for_current_pm_formatting(self):
-        parsed_start_time = schedule.parse_start_time(
+        parsed_start_time = ScheduledStartTimeParser().parse_start_time(
             formatted_date="Tue, Oct 17, 2017",
             formatted_time_of_day="8:01p"
         )
@@ -19,7 +19,7 @@ class TestSchedule(TestCase):
         self.assertTrue(abs(parsed_start_time - expected_datetime) < timedelta(seconds=1))
 
     def test_correctly_parses_time_for_current_am_formatting(self):
-        parsed_start_time = schedule.parse_start_time(
+        parsed_start_time = ScheduledStartTimeParser().parse_start_time(
             formatted_date="Tue, Oct 17, 2017",
             formatted_time_of_day="8:01a"
         )
@@ -30,7 +30,7 @@ class TestSchedule(TestCase):
         self.assertTrue(abs(parsed_start_time - expected_datetime) < timedelta(seconds=1))
 
     def test_correctly_parses_time_for_previous_pm_formatting(self):
-        parsed_start_time = schedule.parse_start_time(
+        parsed_start_time = ScheduledStartTimeParser().parse_start_time(
             formatted_date="Tue, Oct 17, 2017",
             formatted_time_of_day="7:30 pm"
         )
@@ -41,7 +41,7 @@ class TestSchedule(TestCase):
         self.assertTrue(abs(parsed_start_time - expected_datetime) < timedelta(seconds=1))
 
     def test_correctly_parses_time_for_previous_am_formatting(self):
-        parsed_start_time = schedule.parse_start_time(
+        parsed_start_time = ScheduledStartTimeParser().parse_start_time(
             formatted_date="Tue, Oct 17, 2017",
             formatted_time_of_day="7:30 am"
         )

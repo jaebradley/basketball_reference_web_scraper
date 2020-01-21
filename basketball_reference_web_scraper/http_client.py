@@ -1,16 +1,21 @@
 import requests
+from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
+from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
+    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM
 from basketball_reference_web_scraper.errors import InvalidDate
-from basketball_reference_web_scraper.parsers.box_scores.games import parse_game_url_paths
-from basketball_reference_web_scraper.parsers.play_by_play import parse_play_by_plays
-from basketball_reference_web_scraper.parsers.box_scores.players import parse_player_box_scores
-from basketball_reference_web_scraper.parsers.box_scores.teams import parse_team_totals
-from basketball_reference_web_scraper.parsers.players_advanced_season_totals import parse_players_advanced_season_totals
-from basketball_reference_web_scraper.parsers.players_season_totals import parse_players_season_totals
-from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
+from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage
+from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
+    PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
+    SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
+    PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
+    ScheduledGamesParser
 
 BASE_URL = 'https://www.basketball-reference.com'
+PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
+PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
 
 
 def player_box_scores(day, month, year):
@@ -26,7 +31,20 @@ def player_box_scores(day, month, year):
     response.raise_for_status()
 
     if response.status_code == requests.codes.ok:
-        return parse_player_box_scores(response.content)
+        page = DailyLeadersPage(html=html.fromstring(response.content))
+        box_score_parser = PlayerBoxScoresParser(
+            team_abbreviation_parser=TeamAbbreviationParser(
+                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
+            ),
+            location_abbreviation_parser=LocationAbbreviationParser(
+                abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
+            ),
+            outcome_abbreviation_parser=OutcomeAbbreviationParser(
+                abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME
+            ),
+            seconds_played_parser=SecondsPlayedParser(),
+        )
+        return box_score_parser.parse(page.daily_leaders)
 
     raise InvalidDate(day=day, month=month, year=year)
 
@@ -36,7 +54,12 @@ def schedule_for_month(url):
 
     response.raise_for_status()
 
-    return parse_schedule(response.content)
+    page = SchedulePage(html=html.fromstring(html=response.content))
+    parser = ScheduledGamesParser(
+        start_time_parser=ScheduledStartTimeParser(),
+        team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
+    )
+    return parser.parse_games(games=page.rows)
 
 
 def season_schedule(season_end_year):
@@ -49,10 +72,14 @@ def season_schedule(season_end_year):
 
     response.raise_for_status()
 
-    season_schedule_values = parse_schedule(response.content)
-    other_month_url_paths = parse_schedule_for_month_url_paths(response.content)
+    page = SchedulePage(html=html.fromstring(html=response.content))
+    parser = ScheduledGamesParser(
+        start_time_parser=ScheduledStartTimeParser(),
+        team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
+    )
+    season_schedule_values = parser.parse_games(games=page.rows)
 
-    for month_url_path in other_month_url_paths:
+    for month_url_path in page.other_months_schedule_urls:
         url = '{BASE_URL}{month_url_path}'.format(BASE_URL=BASE_URL, month_url_path=month_url_path)
         monthly_schedule = schedule_for_month(url=url)
         season_schedule_values.extend(monthly_schedule)
@@ -70,7 +97,16 @@ def players_season_totals(season_end_year):
 
     response.raise_for_status()
 
-    return parse_players_season_totals(response.content)
+    table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
+    parser = PlayerSeasonTotalsParser(
+        position_abbreviation_parser=PositionAbbreviationParser(
+            abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
+        ),
+        team_abbreviation_parser=TeamAbbreviationParser(
+            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
+        )
+    )
+    return parser.parse(table.rows)
 
 
 def players_advanced_season_totals(season_end_year):
@@ -83,7 +119,17 @@ def players_advanced_season_totals(season_end_year):
 
     response.raise_for_status()
 
-    return parse_players_advanced_season_totals(response.content)
+    table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(response.content))
+    parser = PlayerAdvancedSeasonTotalsParser(
+        team_abbreviation_parser=TeamAbbreviationParser(
+            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
+        ),
+        position_abbreviation_parser=PositionAbbreviationParser(
+            abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
+        )
+    )
+
+    return parser.parse(table.rows)
 
 
 def team_box_score(game_url_path):
@@ -93,7 +139,16 @@ def team_box_score(game_url_path):
 
     response.raise_for_status()
 
-    return parse_team_totals(response.content)
+    page = BoxScoresPage(html.fromstring(response.content))
+    combined_team_totals = [
+        TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
+        for table in page.basic_statistics_tables
+    ]
+    parser = TeamTotalsParser(team_abbreviation_parser=TeamAbbreviationParser(
+        abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
+    ))
+
+    return parser.parse(combined_team_totals)
 
 
 def team_box_scores(day, month, year):
@@ -103,17 +158,16 @@ def team_box_scores(day, month, year):
 
     response.raise_for_status()
 
-    game_url_paths = parse_game_url_paths(response.content)
+    page = DailyBoxScoresPage(html=html.fromstring(response.content))
 
     return [
         box_score
-        for game_url_path in game_url_paths
+        for game_url_path in page.game_url_paths
         for box_score in team_box_score(game_url_path=game_url_path)
     ]
 
 
 def play_by_play(home_team, day, month, year):
-
     add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
 
     # the hard-coded `0` in the url assumes we always take the first match of the given date and team.
@@ -123,4 +177,15 @@ def play_by_play(home_team, day, month, year):
     )
     response = requests.get(url=url)
     response.raise_for_status()
-    return parse_play_by_plays(response.content, home_team)
+    page = PlayByPlayPage(html=html.fromstring(response.content))
+
+    play_by_plays_parser = PlayByPlaysParser(
+        period_details_parser=PeriodDetailsParser(regulation_periods_count=4),
+        period_timestamp_parser=PeriodTimestampParser(timestamp_format=PLAY_BY_PLAY_TIMESTAMP_FORMAT),
+        scores_parser=ScoresParser(scores_regex=PLAY_BY_PLAY_SCORES_REGEX))
+
+    team_name_parser = TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM)
+
+    return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.rows,
+                                      away_team=team_name_parser.parse_team_name(team_name=page.away_team_name),
+                                      home_team=team_name_parser.parse_team_name(team_name=page.home_team_name))
