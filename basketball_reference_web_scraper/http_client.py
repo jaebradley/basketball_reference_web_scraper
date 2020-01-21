@@ -3,15 +3,15 @@ from lxml import html
 
 from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
-    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, Team
+    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM
 from basketball_reference_web_scraper.errors import InvalidDate
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage
 from basketball_reference_web_scraper.parser import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
-    PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser
-from basketball_reference_web_scraper.parsers.schedule import parse_schedule, parse_schedule_for_month_url_paths
+    PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
+    ScheduledGamesParser
 
 BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
@@ -54,7 +54,12 @@ def schedule_for_month(url):
 
     response.raise_for_status()
 
-    return parse_schedule(response.content)
+    page = SchedulePage(html=html.fromstring(html=response.content))
+    parser = ScheduledGamesParser(
+        start_time_parser=ScheduledStartTimeParser(),
+        team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
+    )
+    return parser.parse_games(games=page.rows)
 
 
 def season_schedule(season_end_year):
@@ -67,10 +72,14 @@ def season_schedule(season_end_year):
 
     response.raise_for_status()
 
-    season_schedule_values = parse_schedule(response.content)
-    other_month_url_paths = parse_schedule_for_month_url_paths(response.content)
+    page = SchedulePage(html=html.fromstring(html=response.content))
+    parser = ScheduledGamesParser(
+        start_time_parser=ScheduledStartTimeParser(),
+        team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
+    )
+    season_schedule_values = parser.parse_games(games=page.rows)
 
-    for month_url_path in other_month_url_paths:
+    for month_url_path in page.other_months_schedule_urls:
         url = '{BASE_URL}{month_url_path}'.format(BASE_URL=BASE_URL, month_url_path=month_url_path)
         monthly_schedule = schedule_for_month(url=url)
         season_schedule_values.extend(monthly_schedule)
@@ -175,8 +184,8 @@ def play_by_play(home_team, day, month, year):
         period_timestamp_parser=PeriodTimestampParser(timestamp_format=PLAY_BY_PLAY_TIMESTAMP_FORMAT),
         scores_parser=ScoresParser(scores_regex=PLAY_BY_PLAY_SCORES_REGEX))
 
-    team_name_parser = TeamNameParser(teams=Team)
+    team_name_parser = TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM)
 
     return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.rows,
                                       away_team=team_name_parser.parse_team_name(team_name=page.away_team_name),
-                                      home_team=team_name_parser.parse_team_name(page.home_team_name))
+                                      home_team=team_name_parser.parse_team_name(team_name=page.home_team_name))
