@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import pytz
 
-from basketball_reference_web_scraper.parser import ScheduledStartTimeParser
+from basketball_reference_web_scraper.parsers import ScheduledStartTimeParser
 
 
 class TestScheduledStartTimeParser(TestCase):

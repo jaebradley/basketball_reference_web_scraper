@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from basketball_reference_web_scraper.data import Location, LOCATION_ABBREVIATIONS_TO_POSITION
-from basketball_reference_web_scraper.parser import LocationAbbreviationParser
+from basketball_reference_web_scraper.parsers import LocationAbbreviationParser
 
 
 class TestLocationAbbreviationParser(TestCase):

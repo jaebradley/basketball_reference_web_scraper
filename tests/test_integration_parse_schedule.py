@@ -7,7 +7,7 @@ from lxml import html
 
 from basketball_reference_web_scraper.data import Team, TEAM_NAME_TO_TEAM
 from basketball_reference_web_scraper.html import SchedulePage
-from basketball_reference_web_scraper.parser import ScheduledGamesParser, TeamNameParser, ScheduledStartTimeParser
+from basketball_reference_web_scraper.parsers import ScheduledGamesParser, TeamNameParser, ScheduledStartTimeParser
 
 october_2001_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2001_games-october.html')
 october_2018_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2018_games-october.html')

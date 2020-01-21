@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.parser import SecondsPlayedParser
+from basketball_reference_web_scraper.parsers import SecondsPlayedParser
 
 
 class TestSecondsPlayedParser(TestCase):

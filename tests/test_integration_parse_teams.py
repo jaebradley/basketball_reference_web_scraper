@@ -6,7 +6,7 @@ from lxml import html
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
 from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.html import BoxScoresPage
-from basketball_reference_web_scraper.parser import TeamAbbreviationParser, \
+from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
     TeamTotalsParser
 
 atlanta_box_score_2017_01_01_html = os.path.join(os.path.dirname(__file__), './201701010ATL.html')
