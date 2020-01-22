@@ -634,6 +634,11 @@ class ScheduleRow:
     def __init__(self, html):
         self.html = html
 
+    def __eq__(self, other):
+        if isinstance(other, ScheduleRow):
+            return self.html == other.html
+        return False
+
     @property
     def start_date(self):
         return self.html[0].text_content()
