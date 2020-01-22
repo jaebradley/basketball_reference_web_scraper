@@ -54,7 +54,7 @@ class PlayerSeasonTotalTable:
     def rows(self):
         player_season_totals_rows = []
         for row_html in self.html.xpath(self.rows_query):
-            row = PlayerSeasonTotalRow(html=row_html)
+            row = PlayerSeasonTotalsRow(html=row_html)
             # Basketball Reference includes a "total" row for players that got traded
             # which is essentially a sum of all player team rows
             # I want to avoid including those, so I check the "team" field value for "TOT"
@@ -185,7 +185,7 @@ class PlayerAdvancedSeasonTotalsRow:
         return self.team_abbreviation == "TOT"
 
 
-class PlayerSeasonTotalRow:
+class PlayerSeasonTotalsRow:
     def __init__(self, html):
         self.html = html
 
@@ -279,7 +279,7 @@ class PlayerSeasonTotalRow:
 
     @property
     def is_combined_totals(self):
-        return self.html[4].text_content() == "TOT"
+        return self.team_abbreviation == "TOT"
 
 
 class BoxScoresPage:
