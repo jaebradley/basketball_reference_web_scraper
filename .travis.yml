@@ -6,10 +6,11 @@ python:
   - "3.6"
   - "3.6-dev"
   - "3.7-dev"
+before_install:
+  - pip install codecov
 install:
   - pip install -r requirements.txt
 script:
-  - pip install -e .
-  - pytest --cov=./
+  - coverage run -m unittest discover
 after_success:
   - codecov
