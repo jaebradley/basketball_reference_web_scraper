@@ -6,10 +6,13 @@ python:
   - "3.6"
   - "3.6-dev"
   - "3.7-dev"
+before_install:
+  # Update pip to latest version as some builds will fail without this
+  - pip install -U pip
+  - pip install codecov
 install:
   - pip install -r requirements.txt
 script:
-  - pip install -e .
-  - pytest --cov=./
+  - coverage run -m unittest tests
 after_success:
   - codecov
