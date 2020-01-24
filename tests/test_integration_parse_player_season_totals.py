@@ -1,6 +1,7 @@
 import os
 from unittest import TestCase
 
+import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import Team, Position, POSITION_ABBREVIATIONS_TO_POSITION, \
@@ -9,18 +10,25 @@ from basketball_reference_web_scraper.html import PlayerSeasonTotalTable
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser
 
-season_2001_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2001_totals.html')
-season_2018_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2018_totals.html')
-season_2019_totals_html = os.path.join(os.path.dirname(__file__), './NBA_2019_totals.html')
-season_2019_totals_with_jemerrio_jones_blank_age = os.path.join(os.path.dirname(__file__), './NBA_2019_totals_jemerrio_jones_blank_age.html')
-
 
 class TestPlayersSeasonTotals(TestCase):
     def setUp(self):
-        self.season_2001_totals = open(season_2001_totals_html).read()
-        self.season_2018_totals = open(season_2018_totals_html).read()
-        self.season_2019_totals = open(season_2019_totals_html).read()
-        self.season_2019_totals_with_jemerrio_jones_blank_age = open(season_2019_totals_with_jemerrio_jones_blank_age).read()
+        self.season_2001_totals = requests.get(
+            'https://www.basketball-reference.com/leagues/NBA_2001_totals.html'
+        ).text
+        self.season_2018_totals = requests.get(
+            'https://www.basketball-reference.com/leagues/NBA_2018_totals.html'
+        ).text
+        self.season_2019_totals = requests.get(
+            'https://www.basketball-reference.com/leagues/NBA_2019_totals.html'
+        ).text
+        self.jemerrio_jones_blank_age_2019_totals_file = open(
+            os.path.join(
+                os.path.dirname(__file__),
+                './NBA_2019_totals_jemerrio_jones_blank_age.html',
+            )
+        )
+        self.jemerrio_jones_with_a_blank_age_2019_totals = self.jemerrio_jones_blank_age_2019_totals_file.read()
         self.parser = PlayerSeasonTotalsParser(
             position_abbreviation_parser=PositionAbbreviationParser(
                 abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
@@ -66,7 +74,7 @@ class TestPlayersSeasonTotals(TestCase):
         alex_abrines = parsed_season_totals[0]
 
         self.assertEqual(alex_abrines["slug"], "abrinal01")
-        self.assertEqual(alex_abrines["name"], "Alex Abrines")
+        self.assertEqual(alex_abrines["name"], "Álex Abrines")
         self.assertEqual(alex_abrines["positions"], [Position.SHOOTING_GUARD])
         self.assertEqual(alex_abrines["team"], Team.OKLAHOMA_CITY_THUNDER)
         self.assertEqual(alex_abrines["games_played"], 75)
@@ -93,7 +101,7 @@ class TestPlayersSeasonTotals(TestCase):
         pelicans_omer_asik = parsed_season_totals[22]
 
         self.assertEqual(pelicans_omer_asik["slug"], "asikom01")
-        self.assertEqual(pelicans_omer_asik["name"], "Omer Asik")
+        self.assertEqual(pelicans_omer_asik["name"], "Ömer Aşık")
         self.assertEqual(pelicans_omer_asik["positions"], [Position.CENTER])
         self.assertEqual(pelicans_omer_asik["team"], Team.NEW_ORLEANS_PELICANS)
         self.assertEqual(pelicans_omer_asik["games_played"], 14)
@@ -116,7 +124,7 @@ class TestPlayersSeasonTotals(TestCase):
         bulls_omer_asik = parsed_season_totals[23]
 
         self.assertEqual(pelicans_omer_asik["slug"], "asikom01")
-        self.assertEqual(bulls_omer_asik["name"], "Omer Asik")
+        self.assertEqual(bulls_omer_asik["name"], "Ömer Aşık")
         self.assertEqual(bulls_omer_asik["positions"], [Position.CENTER])
         self.assertEqual(bulls_omer_asik["team"], Team.CHICAGO_BULLS)
         self.assertEqual(bulls_omer_asik["games_played"], 4)
@@ -140,31 +148,31 @@ class TestPlayersSeasonTotals(TestCase):
         table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2019_totals))
         parsed_season_totals = self.parser.parse(table.rows)
 
-        philly_jimmy_butler = parsed_season_totals[72]
+        philly_jimmy_butler = parsed_season_totals[94]
 
         self.assertEqual(philly_jimmy_butler["slug"], "butleji01")
         self.assertEqual(philly_jimmy_butler["name"], "Jimmy Butler")
-        self.assertEqual(philly_jimmy_butler["positions"], [Position.SHOOTING_GUARD])
+        self.assertEqual(philly_jimmy_butler["positions"], [Position.SMALL_FORWARD])
         self.assertEqual(philly_jimmy_butler["team"], Team.PHILADELPHIA_76ERS)
-        self.assertEqual(philly_jimmy_butler["games_played"], 5)
-        self.assertEqual(philly_jimmy_butler["games_started"], 5)
-        self.assertEqual(philly_jimmy_butler["minutes_played"], 175)
-        self.assertEqual(philly_jimmy_butler["made_field_goals"], 31)
-        self.assertEqual(philly_jimmy_butler["attempted_field_goals"], 63)
-        self.assertEqual(philly_jimmy_butler["made_three_point_field_goals"], 3)
-        self.assertEqual(philly_jimmy_butler["attempted_three_point_field_goals"], 10)
-        self.assertEqual(philly_jimmy_butler["made_free_throws"], 21)
-        self.assertEqual(philly_jimmy_butler["attempted_free_throws"], 25)
-        self.assertEqual(philly_jimmy_butler["offensive_rebounds"], 6)
-        self.assertEqual(philly_jimmy_butler["defensive_rebounds"], 13)
-        self.assertEqual(philly_jimmy_butler["assists"], 17)
-        self.assertEqual(philly_jimmy_butler["steals"], 9)
-        self.assertEqual(philly_jimmy_butler["blocks"], 3)
-        self.assertEqual(philly_jimmy_butler["turnovers"], 11)
-        self.assertEqual(philly_jimmy_butler["personal_fouls"], 12)
+        self.assertEqual(philly_jimmy_butler["games_played"], 55)
+        self.assertEqual(philly_jimmy_butler["games_started"], 55)
+        self.assertEqual(philly_jimmy_butler["minutes_played"], 1824)
+        self.assertEqual(philly_jimmy_butler["made_field_goals"], 344)
+        self.assertEqual(philly_jimmy_butler["attempted_field_goals"], 747)
+        self.assertEqual(philly_jimmy_butler["made_three_point_field_goals"], 50)
+        self.assertEqual(philly_jimmy_butler["attempted_three_point_field_goals"], 148)
+        self.assertEqual(philly_jimmy_butler["made_free_throws"], 264)
+        self.assertEqual(philly_jimmy_butler["attempted_free_throws"], 304)
+        self.assertEqual(philly_jimmy_butler["offensive_rebounds"], 105)
+        self.assertEqual(philly_jimmy_butler["defensive_rebounds"], 185)
+        self.assertEqual(philly_jimmy_butler["assists"], 220)
+        self.assertEqual(philly_jimmy_butler["steals"], 99)
+        self.assertEqual(philly_jimmy_butler["blocks"], 29)
+        self.assertEqual(philly_jimmy_butler["turnovers"], 81)
+        self.assertEqual(philly_jimmy_butler["personal_fouls"], 93)
 
     def test_2019_jemerrio_jones_blank_age_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2019_totals_with_jemerrio_jones_blank_age))
+        table = PlayerSeasonTotalTable(html=html.fromstring(self.jemerrio_jones_blank_age_2019_totals_file))
         parsed_season_totals = self.parser.parse(table.rows)
 
         jemerrio_jones = parsed_season_totals[310]
@@ -190,4 +198,3 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(jemerrio_jones["blocks"], 0)
         self.assertEqual(jemerrio_jones["turnovers"], 0)
         self.assertEqual(jemerrio_jones["personal_fouls"], 0)
-
