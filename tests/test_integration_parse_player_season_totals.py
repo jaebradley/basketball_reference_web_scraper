@@ -38,6 +38,9 @@ class TestPlayersSeasonTotals(TestCase):
             )
         )
 
+    def tearDown(self):
+        self.jemerrio_jones_blank_age_2019_totals_file.close()
+
     def test_2001_players_season_totals(self):
         table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2001_totals))
         parsed_season_totals = self.parser.parse(table.rows)
@@ -172,7 +175,7 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(philly_jimmy_butler["personal_fouls"], 93)
 
     def test_2019_jemerrio_jones_blank_age_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.jemerrio_jones_blank_age_2019_totals_file))
+        table = PlayerSeasonTotalTable(html=html.fromstring(self.jemerrio_jones_with_a_blank_age_2019_totals))
         parsed_season_totals = self.parser.parse(table.rows)
 
         jemerrio_jones = parsed_season_totals[310]
