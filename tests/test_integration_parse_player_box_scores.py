@@ -1,6 +1,6 @@
-import os
 from unittest import TestCase
 
+import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, LOCATION_ABBREVIATIONS_TO_POSITION, \
@@ -11,20 +11,24 @@ from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
     LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser
 
-november_03_2003_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_03_2003_daily_leaders.html')
-november_01_2006_daily_leaders_html = os.path.join(os.path.dirname(__file__), './11_01_2006_daily_leaders.html')
-december_18_2015_daily_leaders_html = os.path.join(os.path.dirname(__file__), './12_18_2015_daily_leaders.html')
-december_12_2017_daily_leaders_html = os.path.join(os.path.dirname(__file__), './12_12_2017_daily_leaders.html')
-january_01_2017_daily_leaders_html = os.path.join(os.path.dirname(__file__), './01_29_2017_daily_leaders.html')
-
 
 class TestPlayerBoxScores(TestCase):
     def setUp(self):
-        self.november_01_2006_daily_leaders = open(november_01_2006_daily_leaders_html).read()
-        self.december_18_2015_daily_leaders = open(december_18_2015_daily_leaders_html).read()
-        self.november_03_2003_daily_leaders = open(november_03_2003_daily_leaders_html).read()
-        self.december_12_2017_daily_leaders = open(december_12_2017_daily_leaders_html).read()
-        self.january_01_2017_daily_leaders = open(january_01_2017_daily_leaders_html).read()
+        self.november_01_2006_daily_leaders = requests.get(
+            'https://www.basketball-reference.com/friv/dailyleaders.fcgi?month=11&day=1&year=2006'
+        ).text
+        self.december_18_2015_daily_leaders = requests.get(
+            'https://www.basketball-reference.com/friv/dailyleaders.fcgi?month=12&day=18&year=2015'
+        ).text
+        self.november_03_2003_daily_leaders = requests.get(
+            'https://www.basketball-reference.com/friv/dailyleaders.fcgi?month=11&day=03&year=2003'
+        ).text
+        self.december_12_2017_daily_leaders = requests.get(
+            'https://www.basketball-reference.com/friv/dailyleaders.fcgi?month=12&day=12&year=2017'
+        ).text
+        self.january_29_2017_daily_leaders = requests.get(
+            'https://www.basketball-reference.com/friv/dailyleaders.fcgi?month=1&day=29&year=2017'
+        ).text
         self.team_abbreviation_parser = TeamAbbreviationParser(
             abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
         )
@@ -61,7 +65,7 @@ class TestPlayerBoxScores(TestCase):
 
     # Test for minutes played greater than or equal to 60 minutes
     def test_box_scores_for_01_01_2017(self):
-        page = DailyLeadersPage(html=html.fromstring(self.january_01_2017_daily_leaders))
+        page = DailyLeadersPage(html=html.fromstring(self.january_29_2017_daily_leaders))
         parsed_box_score = self.player_box_scores_parser.parse(page.daily_leaders)
         self.assertEqual(len(parsed_box_score), 170)
 

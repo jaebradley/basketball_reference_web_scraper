@@ -3,46 +3,43 @@ from datetime import datetime, timedelta
 from unittest import TestCase
 
 import pytz
+import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import Team, TEAM_NAME_TO_TEAM
 from basketball_reference_web_scraper.html import SchedulePage
 from basketball_reference_web_scraper.parsers import ScheduledGamesParser, TeamNameParser, ScheduledStartTimeParser
 
-october_2001_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2001_games-october.html')
-october_2018_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2018_games-october.html')
-april_2019_schedule_html = os.path.join(os.path.dirname(__file__), './NBA_2019_games-april.html')
-
 
 class TestScheduleParser(TestCase):
     def setUp(self):
-        self.october_2001_html_file = open(october_2001_schedule_html)
-        self.october_2018_html_file = open(october_2018_schedule_html)
-        self.april_2019_html_file = open(april_2019_schedule_html)
-        self.october_2001_html = self.october_2001_html_file.read()
-        self.october_2018_html = self.october_2018_html_file.read()
-        self.april_2019_html = self.april_2019_html_file.read()
+        self.october_2001_html = requests.get(
+            'https://www.basketball-reference.com/leagues/NBA_2001_games.html'
+        ).text
+        self.october_2018_html = requests.get(
+            'https://www.basketball-reference.com/leagues/NBA_2018_games-october.html'
+        ).text
+        self.schedule_with_future_games_html_file = open(os.path.join(os.path.dirname(__file__), './NBA_2019_games-april.html'))
+        self.schedule_with_future_games_html = self.schedule_with_future_games_html_file.read()
         self.parser = ScheduledGamesParser(
             start_time_parser=ScheduledStartTimeParser(),
             team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
         )
 
     def tearDown(self):
-        self.october_2001_html_file.close()
-        self.october_2018_html_file.close()
-        self.april_2019_html_file.close()
+        self.schedule_with_future_games_html_file.close()
 
     def test_parse_october_2001_schedule_for_month_url_paths_(self):
         page = SchedulePage(html=html.fromstring(self.october_2001_html))
         expected_urls = [
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-november.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-december.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-january.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-february.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-march.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-april.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-may.html",
-            "https://www.basketball-reference.com/leagues/NBA_2001_games-june.html",
+            "/leagues/NBA_2001_games-november.html",
+            "/leagues/NBA_2001_games-december.html",
+            "/leagues/NBA_2001_games-january.html",
+            "/leagues/NBA_2001_games-february.html",
+            "/leagues/NBA_2001_games-march.html",
+            "/leagues/NBA_2001_games-april.html",
+            "/leagues/NBA_2001_games-may.html",
+            "/leagues/NBA_2001_games-june.html",
         ]
         self.assertEqual(page.other_months_schedule_urls, expected_urls)
 
@@ -67,7 +64,7 @@ class TestScheduleParser(TestCase):
         self.assertEqual(len(parsed_schedule), 104)
 
     def test_parse_future_game(self):
-        page = SchedulePage(html=html.fromstring(self.april_2019_html))
+        page = SchedulePage(html=html.fromstring(self.schedule_with_future_games_html))
         parsed_schedule = self.parser.parse_games(games=page.rows)
         first_game = parsed_schedule[0]
         expected_first_game_start_time = pytz.timezone("US/Eastern") \

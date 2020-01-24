@@ -1,6 +1,6 @@
-import os
 from unittest import TestCase
 
+import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
@@ -9,12 +9,12 @@ from basketball_reference_web_scraper.html import BoxScoresPage
 from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
     TeamTotalsParser
 
-atlanta_box_score_2017_01_01_html = os.path.join(os.path.dirname(__file__), './201701010ATL.html')
-
 
 class TestParseTeams(TestCase):
     def setUp(self):
-        self.atlanta_box_score_2017_01_01 = open(atlanta_box_score_2017_01_01_html).read()
+        self.atlanta_box_score_2017_01_01 = requests.get(
+            'https://www.basketball-reference.com/boxscores/201701010ATL.html'
+        ).text
         self.team_abbreviation_parser = TeamAbbreviationParser(
             abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
         )
