@@ -3,15 +3,15 @@ from lxml import html
 
 from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
-    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM
+    LOCATION_ABBREVIATIONS_TO_POSITION, OutcomeAbbreviationsToOutcome, TEAM_NAME_TO_TEAM
 from basketball_reference_web_scraper.errors import InvalidDate
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, PlayerSeasonBoxScoresPage
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
-    ScheduledGamesParser
+    ScheduledGamesParser, PlayerSeasonBoxScoresParser
 
 BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
@@ -40,13 +40,46 @@ def player_box_scores(day, month, year):
                 abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
             ),
             outcome_abbreviation_parser=OutcomeAbbreviationParser(
-                abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME
+                abbreviations_to_outcomes=OutcomeAbbreviationsToOutcome
             ),
             seconds_played_parser=SecondsPlayedParser(),
         )
         return box_score_parser.parse(page.daily_leaders)
 
     raise InvalidDate(day=day, month=month, year=year)
+
+
+def player_season_box_scores(player_name, season_end_year, url_override='01'):
+    # bbref has a bug in their URL compilation specifically for Clint Capela.
+    # Instead of /gamelog/capelcl01, the URL is /gamelog/capelca01. To get
+    # around this issue, manually change the player name for the web request.
+    if player_name == 'Clint Capela':
+        player_name = 'Caint Capela'
+
+    # remove apostrophes (e.g. D'Angelo) and make lowercase
+    player_name = player_name.replace("'", '').lower().split(' ')
+
+    url = '{}/players/{}/{}{}{}/gamelog/{}'.format(
+        BASE_URL, player_name[1][0], player_name[1][:5], player_name[0][:2], url_override, season_end_year
+    )
+
+    response = requests.get(url=url, allow_redirects=False)
+    response.raise_for_status()
+
+    page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
+    parser = PlayerSeasonBoxScoresParser(
+        team_abbreviation_parser=TeamAbbreviationParser(
+            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
+        ),
+        location_abbreviation_parser=LocationAbbreviationParser(
+            abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
+        ),
+        outcome_abbreviation_parser=OutcomeAbbreviationParser(
+            abbreviations_to_outcomes=OutcomeAbbreviationsToOutcome
+        ),
+        seconds_played_parser=SecondsPlayedParser(),
+    )
+    return parser.parse(page.season_box_scores)
 
 
 def schedule_for_month(url):
