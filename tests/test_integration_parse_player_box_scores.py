@@ -4,7 +4,7 @@ import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, LOCATION_ABBREVIATIONS_TO_POSITION, \
-    OutcomeAbbreviationsToOutcome
+    OUTCOME_ABBREVIATIONS_TO_OUTCOME
 from basketball_reference_web_scraper.data import Team, Outcome
 from basketball_reference_web_scraper.html import DailyLeadersPage
 from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
@@ -36,7 +36,7 @@ class TestPlayerBoxScores(TestCase):
             abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
         )
         self.outcome_abbreviation_parser = OutcomeAbbreviationParser(
-            abbreviations_to_outcomes=OutcomeAbbreviationsToOutcome
+            abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME
         )
         self.seconds_played_parser = SecondsPlayedParser()
         self.player_box_scores_parser = PlayerBoxScoresParser(

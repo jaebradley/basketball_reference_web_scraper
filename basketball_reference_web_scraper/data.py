@@ -187,19 +187,6 @@ OUTCOME_ABBREVIATIONS_TO_OUTCOME = {
     "L": Outcome.LOSS,
 }
 
-# some pages will have "W (+17)" to indicate how close
-# the game was. we just need the W/L part.
-class OutcomeAbbreviationsToOutcome:
-    @staticmethod
-    def get(outcome_abbrev):
-        if outcome_abbrev.startswith("W"):
-            return Outcome.WIN
-
-        if outcome_abbrev.startswith("L"):
-            return Outcome.LOSS
-
-        return None
-
 
 class TeamTotal:
     def __init__(self, team_abbreviation, totals):
