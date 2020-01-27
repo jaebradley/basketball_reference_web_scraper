@@ -1,4 +1,3 @@
-from lxml.html import HtmlElement
 import re
 
 
@@ -401,23 +400,57 @@ class PlayerSeasonBoxScoresPage:
         self.html = html
 
     @property
-    def season_box_scores(self):
+    def regular_season_box_scores_table_query(self):
+        return '//table[@id="pgl_basic"]'
+
+    @property
+    def regular_season_box_scores_table(self):
+        matching_tables = self.html.xpath(self.regular_season_box_scores_table_query)
+
+        if len(matching_tables) != 1:
+            return None
+
+        return RegularSeasonPlayerBoxScoresTable(html=matching_tables[0])
+
+
+class PlayerSeasonBoxScoresTable:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def rows_query(self):
+        raise NotImplementedError()
+
+    @property
+    def rows(self):
         return [
-            PlayerSeasonBoxScoresRow(row_html)
-            for row_html in self.html.xpath('//table[@id="pgl_basic"]//tbody/tr[not(contains(@class, "thead"))]')
+            PlayerSeasonBoxScoresRow(html=row_html)
+            for row_html in self.html.xpath(self.rows_query)
         ]
+
+
+class RegularSeasonPlayerBoxScoresTable(PlayerSeasonBoxScoresTable):
+    @property
+    def rows_query(self):
+        # Every 20 rows, there's a row that has the column header values - those should be ignored
+        return '//tbody' \
+               '/tr[not(contains(@class, "thead"))]'
 
 
 class PlayerSeasonBoxScoresRow:
     def __init__(self, html):
         self.html = html
-        if len(html) < 10:
-            self.inactive = True
-            self.html.append(HtmlElement("00:00")) # playing_time
-            for _ in range(20): # the rest
-                self.html.append(HtmlElement("0"))
-        else:
-            self.inactive = False
+
+    def __eq__(self, other):
+        if isinstance(other, PlayerSeasonBoxScoresRow):
+            return self.html == other.html
+        return False
+
+    @property
+    def is_active(self):
+        # When a player is not active (for a reason like "Inactive", "Did Not Play", "Did Not Dress")
+        # the game played counter is blank (and a "reason" column will exist)
+        return self.html[1].text_content() != ""
 
     @property
     def date(self):

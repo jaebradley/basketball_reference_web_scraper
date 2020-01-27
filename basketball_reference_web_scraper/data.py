@@ -182,6 +182,11 @@ LOCATION_ABBREVIATIONS_TO_POSITION = {
 }
 
 
+OUTCOME_ABBREVIATIONS_TO_OUTCOME = {
+    "W": Outcome.WIN,
+    "L": Outcome.LOSS,
+}
+
 # some pages will have "W (+17)" to indicate how close
 # the game was. we just need the W/L part.
 class OutcomeAbbreviationsToOutcome:

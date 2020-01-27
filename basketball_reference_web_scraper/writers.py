@@ -6,10 +6,7 @@ from basketball_reference_web_scraper.utilities import merge_two_dicts
 # I wrote the explicit mapping of CSV values because there didn't seem to be a way of outputting the values of enums
 # without doing it this way
 
-
-BOX_SCORE_COLUMN_NAMES = [
-    "slug",
-    "name",
+SHARED_COLUMN_NAMES = [
     "team",
     "location",
     "opponent",
@@ -30,6 +27,10 @@ BOX_SCORE_COLUMN_NAMES = [
     "personal_fouls",
     "game_score",
 ]
+
+BOX_SCORE_COLUMN_NAMES = ["slug", "name"] + SHARED_COLUMN_NAMES
+
+PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = ["date"] + SHARED_COLUMN_NAMES
 
 SCHEDULE_COLUMN_NAMES = [
     "start_time",
