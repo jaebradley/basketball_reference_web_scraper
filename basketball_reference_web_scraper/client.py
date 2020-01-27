@@ -1,11 +1,12 @@
 import requests
 
 from basketball_reference_web_scraper import http_client
-from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate
+from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.output import output
 from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
     BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
-    PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES
+    PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES, \
+    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES
 
 
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -25,6 +26,33 @@ def player_box_scores(day, month, year, output_type=None, output_file_path=None,
         csv_writer=CSVWriter(
             column_names=BOX_SCORE_COLUMN_NAMES,
             row_formatter=RowFormatter(data_field_names=BOX_SCORE_COLUMN_NAMES)
+        ),
+        json_options=json_options,
+    )
+
+
+def regular_season_player_box_scores(player_identifier, season_end_year, output_type=None, output_file_path=None,
+                                     output_write_option=None, json_options=None):
+
+    try:
+        values = http_client.regular_season_player_box_scores(
+            player_identifier=player_identifier,
+            season_end_year=season_end_year,
+        )
+    except requests.exceptions.HTTPError as http_error:
+        if http_error.response.status_code == requests.codes.internal_server_error \
+                or http_error.response.status_code == requests.codes.not_found:
+            raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
+        else:
+            raise http_error
+    return output(
+        values=values,
+        output_type=output_type,
+        output_file_path=output_file_path,
+        output_write_option=output_write_option,
+        csv_writer=CSVWriter(
+            column_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES,
+            row_formatter=RowFormatter(data_field_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES)
         ),
         json_options=json_options,
     )
