@@ -40,7 +40,7 @@ from basketball_reference_web_scraper.data import Team
 
 ## API
 
-This client has five methods
+This client has six methods
 * Getting player box scores by a date (`client.player_box_scores`)
 * Getting team box scores by a date (`client.team_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
