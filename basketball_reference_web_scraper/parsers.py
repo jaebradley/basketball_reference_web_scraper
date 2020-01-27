@@ -371,7 +371,7 @@ class PlayerSeasonBoxScoresParser:
     def parse(self, box_scores):
         return [
             {
-                "date": date.fromisoformat(str(box_score.date)),
+                "date": datetime.strptime(str(box_score.date), "%Y-%m-%d").date(),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
                 "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),

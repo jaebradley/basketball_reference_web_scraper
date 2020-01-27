@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import date, datetime
 from unittest import TestCase, mock
 
 from requests import HTTPError, codes
@@ -22,7 +22,7 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
 
     def test_get_first_20202_regular_season_box_score_for_russell_westbrook(self):
         result = regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2020)
-        self.assertEqual(date.fromisoformat("2019-10-24"), result[0]["date"])
+        self.assertEqual(datetime.strptime("2019-10-24", "%Y-%m-%d").date(), result[0]["date"])
         self.assertEqual(Team.HOUSTON_ROCKETS, result[0]["team"])
         self.assertEqual(Outcome.LOSS, result[0]["outcome"])
         self.assertEqual(1972, result[0]["seconds_played"])
@@ -72,7 +72,7 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
         results = regular_season_player_box_scores(player_identifier="brownja01", season_end_year=2015)
         self.assertIsNotNone(results)
         self.assertEqual(19, len(results))
-        self.assertEqual(date.fromisoformat("2015-03-12"), results[0]["date"])
+        self.assertEqual(datetime.strptime("2015-03-12", "%Y-%m-%d").date(), results[0]["date"])
 
     def test_outputting_2019_regular_season_box_scores_for_avery_bradley_as_json(self):
         results = regular_season_player_box_scores(
