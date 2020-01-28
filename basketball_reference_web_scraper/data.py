@@ -248,3 +248,7 @@ class TeamTotal:
     @property
     def personal_fouls(self):
         return self.totals.personal_fouls
+
+    @property
+    def points(self):
+        return self.totals.points

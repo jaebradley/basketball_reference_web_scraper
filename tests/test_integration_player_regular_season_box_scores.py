@@ -1,5 +1,5 @@
 import json
-from datetime import date, datetime
+from datetime import datetime
 from unittest import TestCase, mock
 
 from requests import HTTPError, codes
