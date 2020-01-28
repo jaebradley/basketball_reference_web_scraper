@@ -382,6 +382,10 @@ class TeamTotalRow:
     def personal_fouls(self):
         return self.html[17].text_content()
 
+    @property
+    def points(self):
+        return self.html[18].text_content()
+
 
 class DailyLeadersPage:
     def __init__(self, html):

@@ -183,7 +183,10 @@ def team_box_score(game_url_path):
         abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
     ))
 
-    return parser.parse(combined_team_totals)
+    return parser.parse(
+        first_team_totals=combined_team_totals[0],
+        second_team_totals=combined_team_totals[1],
+    )
 
 
 def team_box_scores(day, month, year):
