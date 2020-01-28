@@ -35,7 +35,7 @@ class TestParseTeams(TestCase):
     def test_parse_san_antonio_team_totals(self):
         sas_team_totals = self.team_totals[0]
         self.assertEqual(sas_team_totals["team"], Team.SAN_ANTONIO_SPURS)
-        self.assertEqual(sas_team_totals["outcome"], Outcome.WIN)
+        self.assertEqual(sas_team_totals["outcome"], Outcome.LOSS)
         self.assertEqual(sas_team_totals["minutes_played"], 265)
         self.assertEqual(sas_team_totals["made_field_goals"], 42)
         self.assertEqual(sas_team_totals["attempted_field_goals"], 90)
@@ -55,7 +55,7 @@ class TestParseTeams(TestCase):
     def test_parse_atlanta_team_totals(self):
         atl_team_totals = self.team_totals[1]
         self.assertEqual(atl_team_totals["team"], Team.ATLANTA_HAWKS)
-        self.assertEqual(atl_team_totals["outcome"], Outcome.LOSS)
+        self.assertEqual(atl_team_totals["outcome"], Outcome.WIN)
         self.assertEqual(atl_team_totals["minutes_played"], 265)
         self.assertEqual(atl_team_totals["made_field_goals"], 42)
         self.assertEqual(atl_team_totals["attempted_field_goals"], 92)
