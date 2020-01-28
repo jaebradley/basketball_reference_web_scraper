@@ -295,6 +295,7 @@ class PlayerSeasonTotalsParser:
                 "blocks": str_to_int(total.blocks),
                 "turnovers": str_to_int(total.turnovers),
                 "personal_fouls": str_to_int(total.personal_fouls),
+                "points": str_to_int(total.points),
             } for total in totals
         ]
 

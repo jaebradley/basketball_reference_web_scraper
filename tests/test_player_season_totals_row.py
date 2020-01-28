@@ -229,6 +229,16 @@ class TestPlayerSeasonTotalsRow(TestCase):
         self.html.__getitem__.assert_called_once_with(28)
         personal_fouls_cell.text_content.assert_called_once_with()
 
+    def test_points(self):
+        points = "some points"
+        points_cell = MagicMock()
+        points_cell.text_content = MagicMock(return_value=points)
+        self.html.__getitem__ = MagicMock(return_value=points_cell)
+
+        self.assertEqual(PlayerSeasonTotalsRow(html=self.html).points, points)
+        self.html.__getitem__.assert_called_once_with(29)
+        points_cell.text_content.assert_called_once_with()
+
     @patch.object(PlayerSeasonTotalsRow, 'team_abbreviation', new_callable=PropertyMock)
     def test_is_combined_totals_when_team_abbreviation_is_tot(self, mocked_team_abbreviation):
         mocked_team_abbreviation.return_value = "TOT"

@@ -278,6 +278,10 @@ class PlayerSeasonTotalsRow:
         return self.html[28].text_content()
 
     @property
+    def points(self):
+        return self.html[29].text_content()
+
+    @property
     def is_combined_totals(self):
         return self.team_abbreviation == "TOT"
 
