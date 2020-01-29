@@ -227,3 +227,9 @@ def play_by_play(home_team, day, month, year):
     return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.rows,
                                       away_team=team_name_parser.parse_team_name(team_name=page.away_team_name),
                                       home_team=team_name_parser.parse_team_name(team_name=page.home_team_name))
+
+
+def search(term):
+    response = requests.get(url="{BASE_URL}/search/search.fcgi".format(BASE_URL=BASE_URL), params={"search": term})
+
+    response.raise_for_status()

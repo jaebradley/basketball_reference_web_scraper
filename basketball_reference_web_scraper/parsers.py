@@ -206,6 +206,35 @@ class ScheduledStartTimeParser:
         return localized_start_time.astimezone(self.time_zone)
 
 
+class SearchResultNameParser:
+    def __init__(self, search_result_name_regex, result_name_regex_group_name='name'):
+        self.search_result_name_regex = search_result_name_regex
+        self.result_name_regex_group_name = result_name_regex_group_name
+
+    def parse(self, search_result_name):
+        return re.search(self.search_result_name_regex, search_result_name) \
+                 .group(self.result_name_regex_group_name)
+
+
+class ResourceLocationParser:
+    def __init__(self,
+                 resource_location_regex,
+                 resource_type_regex_group_name="resource_type",
+                 resource_identifier_regex_group_name="resource_identifier"):
+        self.resource_location_regex = resource_location_regex
+        self.resource_type_regex_group_name = resource_type_regex_group_name
+        self.resource_identifier_regex_group_name = resource_identifier_regex_group_name
+
+    def search(self, resource_location):
+        return re.search(self.resource_location_regex, resource_location)
+
+    def parse_resource_type(self, resource_location):
+        return self.search(resource_location=resource_location).group(self.resource_type_regex_group_name)
+
+    def parse_resource_identifier(self, resource_location):
+        return self.search(resource_location=resource_location).group(self.resource_identifier_regex_group_name)
+
+
 class ScheduledGamesParser:
     def __init__(self, start_time_parser, team_name_parser):
         self.start_time_parser = start_time_parser
@@ -454,4 +483,20 @@ class PlayByPlaysParser:
             "description": play_by_play.away_team_play_description
             if play_by_play.is_away_team_play
             else play_by_play.home_team_play_description,
+        }
+
+
+class SearchResultsParser:
+    def __init__(self, search_result_name_parser, search_result_identifier_parser):
+        self.search_result_name_parser = search_result_name_parser
+        self.search_result_identifier_parser = search_result_identifier_parser
+
+    def parse(self, results):
+        return {
+            "players": [
+                {
+                    "name": self.search_result_name_parser.parse(search_result_name=result.resource_name),
+                    "identifier": self.search_result_identifier_parser.parse(search_result_location=result.resource_location)
+                } for result in results.nba_aba_baa_players
+            ]
         }

@@ -816,3 +816,32 @@ class ScheduleRow:
     @property
     def home_team_score(self):
         return self.html[5].text_content()
+
+
+class SearchPage:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def nba_aba_baa_players(self):
+        return [
+            SearchResult(html=result_html)
+            for result_html in self.html.xpath('//div[@id="searches"]/div[@id="players"]/div[@class="search-item"]')
+        ]
+
+
+class SearchResult:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def resource_link(self):
+        return self.html.xpath('/div[@class="search-item-name"]/a')
+
+    @property
+    def resource_location(self):
+        return self.resource_link.attrib["href"]
+
+    @property
+    def resource_name(self):
+        return self.resource_link.text_content()
