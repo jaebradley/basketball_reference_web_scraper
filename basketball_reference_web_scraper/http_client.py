@@ -1,21 +1,24 @@
 import requests
 from lxml import html
 
-from basketball_reference_web_scraper.data import POSITION_ABBREVIATIONS_TO_POSITION
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
-    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM
+    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM, \
+    POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, PlayerSeasonBoxScoresPage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, PlayerSeasonBoxScoresPage, \
+    SearchPage
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
-    ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser
+    ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
+    ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser
 
 BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
 PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
+SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '\/(?P<resource_type>.+)\/.+\/(?P<resource_identifier>.+).html'
 
 
 def player_box_scores(day, month, year):
@@ -81,7 +84,7 @@ def regular_season_player_box_scores(player_identifier, season_end_year):
         ),
         seconds_played_parser=SecondsPlayedParser(),
     )
-    return parser.parse(box_scores=page.regular_season_box_scores_table.rows)
+    return parser.parse(box_scores=page.regular_season_box_scores_table.format_rows)
 
 
 def schedule_for_month(url):
@@ -224,7 +227,7 @@ def play_by_play(home_team, day, month, year):
 
     team_name_parser = TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM)
 
-    return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.rows,
+    return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.format_rows,
                                       away_team=team_name_parser.parse_team_name(team_name=page.away_team_name),
                                       home_team=team_name_parser.parse_team_name(team_name=page.home_team_name))
 
@@ -233,3 +236,15 @@ def search(term):
     response = requests.get(url="{BASE_URL}/search/search.fcgi".format(BASE_URL=BASE_URL), params={"search": term})
 
     response.raise_for_status()
+
+    page = SearchPage(html=html.fromstring(response.content))
+
+    parser = SearchResultsParser(
+        search_result_name_parser=SearchResultNameParser(),
+        search_result_location_parser=ResourceLocationParser(
+            resource_location_regex=SEARCH_RESULT_RESOURCE_LOCATION_REGEX,
+        ),
+        league_abbreviation_parser=LeagueAbbreviationParser(abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE),
+    )
+
+    return parser.parse(nba_aba_baa_players=page.nba_aba_baa_players)

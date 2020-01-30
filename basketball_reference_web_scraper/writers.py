@@ -124,6 +124,12 @@ PLAY_BY_PLAY_COLUMN_NAMES = [
     "description",
 ]
 
+SEARCH_RESULTS_COLUMN_NAMES = [
+    "name",
+    "identifier",
+    "league",
+]
+
 
 class WriteOptions:
     def __init__(self, file_path=None, mode=None, custom_options=None):
@@ -171,11 +177,22 @@ class CSVWriter:
         self.column_names = column_names
         self.row_formatter = row_formatter
 
+    def format_rows(self, data):
+        return [self.row_formatter.format(row_data) for row_data in data]
+
     def write(self, data, options):
         with open(options.file_path, options.mode.value, newline="") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=self.column_names)
             writer.writeheader()
-            writer.writerows([self.row_formatter.format(row_data) for row_data in data])
+            writer.writerows(self.format_rows(data=data))
+
+
+class SearchResultsCSVWriter(CSVWriter):
+    def format_rows(self, data):
+        return [
+            self.row_formatter.format(row_data)
+            for row_data in data["players"]
+        ]
 
 
 class RowFormatter:

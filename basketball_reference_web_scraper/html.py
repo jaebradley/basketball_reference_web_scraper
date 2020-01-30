@@ -825,7 +825,7 @@ class SearchPage:
     @property
     def nba_aba_baa_players(self):
         return [
-            SearchResult(html=result_html)
+            PlayerSearchResult(html=result_html)
             for result_html in self.html.xpath('//div[@id="searches"]/div[@id="players"]/div[@class="search-item"]')
         ]
 
@@ -836,7 +836,7 @@ class SearchResult:
 
     @property
     def resource_link(self):
-        return self.html.xpath('/div[@class="search-item-name"]/a')
+        return self.html.xpath('./div[@class="search-item-name"]//a')[0]
 
     @property
     def resource_location(self):
@@ -845,3 +845,13 @@ class SearchResult:
     @property
     def resource_name(self):
         return self.resource_link.text_content()
+
+
+class PlayerSearchResult(SearchResult):
+    @property
+    def league_abbreviation_query(self):
+        return'./div[@class="search-item-league"]'
+
+    @property
+    def league_abbreviations(self):
+        return self.html.xpath(self.league_abbreviation_query)[0].text_content()
