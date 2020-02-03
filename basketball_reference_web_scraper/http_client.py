@@ -237,6 +237,8 @@ def search(term):
 
     response.raise_for_status()
 
+    player_results = []
+
     page = SearchPage(html=html.fromstring(response.content))
 
     parser = SearchResultsParser(
@@ -247,4 +249,24 @@ def search(term):
         league_abbreviation_parser=LeagueAbbreviationParser(abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE),
     )
 
-    return parser.parse(nba_aba_baa_players=page.nba_aba_baa_players)
+    parsed_results = parser.parse(nba_aba_baa_players=page.nba_aba_baa_players)
+    player_results += parsed_results["players"]
+
+    while page.nba_aba_baa_players_pagination_url is not None:
+        response = requests.get(
+            url="{BASE_URL}/search/{pagination_url}".format(
+                BASE_URL=BASE_URL,
+                pagination_url=page.nba_aba_baa_players_pagination_url
+            )
+        )
+
+        response.raise_for_status()
+
+        page = SearchPage(html=html.fromstring(response.content))
+
+        parsed_results = parser.parse(nba_aba_baa_players=page.nba_aba_baa_players)
+        player_results += parsed_results["players"]
+
+    return {
+        "players": player_results
+    }
