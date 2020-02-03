@@ -24,22 +24,35 @@ class TestSearch(TestCase):
                 {
                     "name": "Kobe Bryant",
                     "identifier": "bryanko01",
-                    "leagues": [League.NATIONAL_BASKETBALL_ASSOCIATION]
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION}
                 },
                 {
                     "name": "Ruben Patterson",
                     "identifier": "patteru01",
-                    "leagues": [League.NATIONAL_BASKETBALL_ASSOCIATION]
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION}
                 },
                 {
                     "name": "Dion Waiters",
                     "identifier": "waitedi01",
-                    "leagues": [League.NATIONAL_BASKETBALL_ASSOCIATION]
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION}
                 },
                 {
                     "name": "Oleksandr Kobets",
                     "identifier": "kobetol01",
-                    "leagues": []
+                    "leagues": set()
+                }
+            ],
+            results["players"]
+        )
+
+    def test_exact_search_result(self):
+        results = client.search(term="kobe bryant")
+        self.assertEqual(
+            [
+                {
+                    "name": "Kobe Bryant",
+                    "identifier": "bryanko01",
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION}
                 }
             ],
             results["players"]

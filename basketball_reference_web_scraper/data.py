@@ -264,3 +264,10 @@ class TeamTotal:
     @property
     def points(self):
         return self.totals.points
+
+
+class PlayerData:
+    def __init__(self, name, resource_location, league_abbreviations):
+        self.name = name
+        self.resource_location = resource_location
+        self.league_abbreviations = set(league_abbreviations)
