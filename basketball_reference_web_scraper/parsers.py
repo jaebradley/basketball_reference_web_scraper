@@ -523,9 +523,31 @@ class SearchResultsParser:
                     "identifier": self.search_result_location_parser.parse_resource_identifier(
                         resource_location=result.resource_location
                     ),
-                    "leagues": self.league_abbreviation_parser.from_abbreviations(
-                        abbreviations=result.league_abbreviations
+                    "leagues": set(
+                        self.league_abbreviation_parser.from_abbreviations(
+                            abbreviations=result.league_abbreviations
+                        )
                     ),
                 } for result in nba_aba_baa_players
             ]
+        }
+
+
+class PlayerDataParser:
+    def __init__(self, search_result_location_parser, league_abbreviation_parser):
+        self.search_result_location_parser = search_result_location_parser
+        self.league_abbreviation_parser = league_abbreviation_parser
+
+    def parse(self, player):
+        return {
+            "name": player.name,
+            "identifier": self.search_result_location_parser.parse_resource_identifier(
+                resource_location=player.resource_location
+            ),
+            "leagues": set(
+                (
+                    self.league_abbreviation_parser.from_abbreviation(abbreviation=abbreviation)
+                    for abbreviation in player.league_abbreviations
+                )
+            )
         }
