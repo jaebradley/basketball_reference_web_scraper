@@ -84,7 +84,7 @@ def regular_season_player_box_scores(player_identifier, season_end_year):
         ),
         seconds_played_parser=SecondsPlayedParser(),
     )
-    return parser.parse(box_scores=page.regular_season_box_scores_table.format_rows)
+    return parser.parse(box_scores=page.regular_season_box_scores_table.rows)
 
 
 def schedule_for_month(url):
@@ -227,7 +227,7 @@ def play_by_play(home_team, day, month, year):
 
     team_name_parser = TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM)
 
-    return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.format_rows,
+    return play_by_plays_parser.parse(play_by_plays=page.play_by_play_table.rows,
                                       away_team=team_name_parser.parse_team_name(team_name=page.away_team_name),
                                       home_team=team_name_parser.parse_team_name(team_name=page.home_team_name))
 
