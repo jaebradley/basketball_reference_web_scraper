@@ -8,7 +8,7 @@ from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 PLAYER_SEASON_BOX_SCORES_GAME_DATE_FORMAT = '%Y-%m-%d'
 PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX = '(?P<outcome_abbreviation>W|L) \((?P<margin_of_victory>[^)]+)\)'
-SEARCH_RESULT_NAME_REGEX = '(?P<name>.+) (.+)'
+SEARCH_RESULT_NAME_REGEX = '(?P<name>^[^\(]+)'
 
 
 class TeamAbbreviationParser:
@@ -72,12 +72,13 @@ class LeagueAbbreviationParser:
         return league
 
     def from_abbreviations(self, abbreviations):
-        return list(
-            map(
-                lambda league_abbreviation: self.from_abbreviation(league_abbreviation),
-                abbreviations.split("/")
-            )
-        )
+        if abbreviations is None:
+            return []
+
+        return [
+            self.from_abbreviation(abbreviation=league_abbreviation)
+            for league_abbreviation in abbreviations.split("/")
+        ]
 
 
 class PlayerBoxScoreOutcomeParser:
@@ -234,7 +235,8 @@ class SearchResultNameParser:
 
     def parse(self, search_result_name):
         return re.search(self.search_result_name_regex, search_result_name) \
-            .group(self.result_name_regex_group_name)
+            .group(self.result_name_regex_group_name) \
+            .strip()
 
 
 class ResourceLocationParser:
@@ -518,10 +520,12 @@ class SearchResultsParser:
             "players": [
                 {
                     "name": self.search_result_name_parser.parse(search_result_name=result.resource_name),
-                    "identifier": self.search_result_location_parser
-                                      .parse_resource_identifier(resource_location=result.resource_location),
-                    "leagues": self.league_abbreviation_parser
-                                   .from_abbreviations(abbreviations=result.league_abbreviations),
+                    "identifier": self.search_result_location_parser.parse_resource_identifier(
+                        resource_location=result.resource_location
+                    ),
+                    "leagues": self.league_abbreviation_parser.from_abbreviations(
+                        abbreviations=result.league_abbreviations
+                    ),
                 } for result in nba_aba_baa_players
             ]
         }

@@ -753,7 +753,7 @@ class DailyBoxScoresPage:
 class SchedulePage:
     def __init__(self, html):
         self.html = html
-    
+
     @property
     def other_months_schedule_links_query(self):
         return '//div[@id="content"]' \
@@ -823,10 +823,47 @@ class SearchPage:
         self.html = html
 
     @property
+    def nba_aba_baa_players_content_query(self):
+        return '//div[@id="searches"]/div[@id="players"]'
+
+    @property
+    def nba_aba_baa_players_pagination_links(self):
+        return self.html.xpath(
+            '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-pagination"]/a'.format(
+                NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
+            )
+        )
+
+    @property
+    def has_more_nba_aba_baa_players_search_results(self):
+        return self.nba_aba_baa_players_pagination_url is not None
+
+    @property
+    def nba_aba_baa_players_pagination_url(self):
+        links = self.nba_aba_baa_players_pagination_links
+
+        if len(links) <= 0:
+            return None
+
+        first_link = links[0]
+
+        if len(links) == 1:
+            if first_link.text_content() == 'Previous 100 Results':
+                return None
+
+            return first_link.attrib["href"]
+
+        return links[1].attrib["href"]
+
+    @property
     def nba_aba_baa_players(self):
         return [
             PlayerSearchResult(html=result_html)
-            for result_html in self.html.xpath('//div[@id="searches"]/div[@id="players"]/div[@class="search-item"]')
+            for result_html in self.html.xpath(
+                '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-item"]'.format(
+                    NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
+                )
+            )
         ]
 
 
@@ -854,4 +891,8 @@ class PlayerSearchResult(SearchResult):
 
     @property
     def league_abbreviations(self):
-        return self.html.xpath(self.league_abbreviation_query)[0].text_content()
+        abbreviations = self.html.xpath(self.league_abbreviation_query)
+        if len(abbreviations) > 0:
+            return abbreviations[0].text_content()
+
+        return None
