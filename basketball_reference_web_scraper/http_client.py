@@ -233,13 +233,16 @@ def play_by_play(home_team, day, month, year):
 
 
 def search(term):
-    response = requests.get(url="{BASE_URL}/search/search.fcgi".format(BASE_URL=BASE_URL), params={"search": term})
+    response = requests.get(
+        url="{BASE_URL}/search/search.fcgi".format(BASE_URL=BASE_URL),
+        params={"search": term}
+    )
 
     response.raise_for_status()
 
     player_results = []
 
-    if response.url.startswith("https://www.basketball-reference.com/search/search.fcgi"):
+    if response.url.startswith("{BASE_URL}/search/search.fcgi".format(BASE_URL=BASE_URL)):
         page = SearchPage(html=html.fromstring(response.content))
 
         parser = SearchResultsParser(
@@ -247,7 +250,9 @@ def search(term):
             search_result_location_parser=ResourceLocationParser(
                 resource_location_regex=SEARCH_RESULT_RESOURCE_LOCATION_REGEX,
             ),
-            league_abbreviation_parser=LeagueAbbreviationParser(abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE),
+            league_abbreviation_parser=LeagueAbbreviationParser(
+                abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE,
+            ),
         )
 
         parsed_results = parser.parse(nba_aba_baa_players=page.nba_aba_baa_players)
@@ -268,7 +273,7 @@ def search(term):
             parsed_results = parser.parse(nba_aba_baa_players=page.nba_aba_baa_players)
             player_results += parsed_results["players"]
 
-    elif response.url.startswith("https://www.basketball-reference.com/players"):
+    elif response.url.startswith("{BASE_URL}/players".format(BASE_URL=BASE_URL)):
         page = PlayerPage(html=html.fromstring(response.content))
         data = PlayerData(
             name=page.name,

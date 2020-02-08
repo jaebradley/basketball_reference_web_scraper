@@ -872,26 +872,46 @@ class SearchResult:
         self.html = html
 
     @property
+    def resource_link_query(self):
+        return './div[@class="search-item-name"]//a'
+
+    @property
     def resource_link(self):
-        return self.html.xpath('./div[@class="search-item-name"]//a')[0]
+        links = self.html.xpath(self.resource_link_query)
+
+        if len(links) > 0:
+            return links[0]
+
+        return None
 
     @property
     def resource_location(self):
-        return self.resource_link.attrib["href"]
+        link = self.resource_link
+
+        if link is None:
+            return None
+
+        return link.attrib["href"]
 
     @property
     def resource_name(self):
-        return self.resource_link.text_content()
+        link = self.resource_link
+
+        if link is None:
+            return None
+
+        return link.text_content()
 
 
 class PlayerSearchResult(SearchResult):
     @property
     def league_abbreviation_query(self):
-        return'./div[@class="search-item-league"]'
+        return './div[@class="search-item-league"]'
 
     @property
     def league_abbreviations(self):
         abbreviations = self.html.xpath(self.league_abbreviation_query)
+        
         if len(abbreviations) > 0:
             return abbreviations[0].text_content()
 
