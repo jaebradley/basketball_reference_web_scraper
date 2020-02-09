@@ -936,6 +936,11 @@ class PlayerPageTotalsRow:
 
         return None
 
+    def __eq__(self, other):
+        if isinstance(other, PlayerPageTotalsRow):
+            return self.html == other.html
+        return False
+
 
 class PlayerPageTotalsTable:
     def __init__(self, html):
