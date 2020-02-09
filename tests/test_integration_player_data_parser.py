@@ -50,7 +50,7 @@ class TestPlayerDataParser(TestCase):
             player=PlayerData(
                 name="jaebaebae",
                 resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["NBA"]
+                league_abbreviations=["ABA"]
             )
         )
         self.assertEqual(parsed_player["leagues"], {League.AMERICAN_BASKETBALL_ASSOCIATION})
@@ -60,7 +60,7 @@ class TestPlayerDataParser(TestCase):
             player=PlayerData(
                 name="jaebaebae",
                 resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["NBA"]
+                league_abbreviations=["BAA"]
             )
         )
         self.assertEqual(parsed_player["leagues"], {League.BASKETBALL_ASSOCIATION_OF_AMERICA})
