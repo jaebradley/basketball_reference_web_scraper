@@ -30,3 +30,22 @@ class TestPlayerPageTotalsTable(TestCase):
             ]
         )
         html.xpath.assert_called_once_with('.//tbody/tr')
+
+    def test_different_class_is_not_equal(self):
+        self.assertNotEqual(
+            PlayerPageTotalsTable(html=MagicMock()),
+            "jaebaebae"
+        )
+
+    def test_different_html_but_same_class_is_not_equal(self):
+        self.assertNotEqual(
+            PlayerPageTotalsTable(html=MagicMock()),
+            PlayerPageTotalsTable(html=MagicMock())
+        )
+
+    def test_same_html_and_same_class_is_equal(self):
+        html = MagicMock()
+        self.assertEqual(
+            PlayerPageTotalsTable(html=html),
+            PlayerPageTotalsTable(html=html),
+        )

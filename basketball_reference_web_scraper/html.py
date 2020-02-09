@@ -953,6 +953,11 @@ class PlayerPageTotalsTable:
             for row_html in self.html.xpath('.//tbody/tr')
         ]
 
+    def __eq__(self, other):
+        if isinstance(other, PlayerPageTotalsTable):
+            return self.html == other.html
+        return False
+
 
 class PlayerPage:
     def __init__(self, html):
