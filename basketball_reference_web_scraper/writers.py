@@ -127,7 +127,7 @@ PLAY_BY_PLAY_COLUMN_NAMES = [
 SEARCH_RESULTS_COLUMN_NAMES = [
     "name",
     "identifier",
-    "league",
+    "leagues",
 ]
 
 
@@ -190,7 +190,7 @@ class CSVWriter:
 class SearchResultsCSVWriter(CSVWriter):
     def format_rows(self, data):
         return [
-            self.row_formatter.format(row_data)
+            self.row_formatter.format(row_data=row_data)
             for row_data in data["players"]
         ]
 
@@ -199,21 +199,32 @@ class RowFormatter:
     def __init__(self, data_field_names):
         self.data_field_names = data_field_names
 
+    @staticmethod
+    def format_field_data(field_name, field_data):
+        if field_name in [
+            "away_team",
+            "home_team",
+            "team",
+            "location",
+            "opponent",
+            "outcome",
+            "relevant_team",
+            "period_type",
+            "leagues",
+        ]:
+            if isinstance(field_data, set):
+                return "-".join(map(lambda data: data.value, list(field_data)))
+            return field_data.value
+        elif field_name == "positions":
+            return "-".join(map(lambda position: position.value, field_data))
+        else:
+            return field_data
+
     def format(self, row_data):
         return {
-            data_field_name: row_data[data_field_name].value
-            if data_field_name in [
-                "away_team",
-                "home_team",
-                "team",
-                "location",
-                "opponent",
-                "outcome",
-                "relevant_team",
-                "period_type",
-            ]
-            else "-".join(map(lambda position: position.value, row_data[data_field_name]))
-            if data_field_name == "positions"
-            else row_data[data_field_name]
+            data_field_name: self.format_field_data(
+                field_name=data_field_name,
+                field_data=row_data[data_field_name],
+            )
             for data_field_name in self.data_field_names
         }
