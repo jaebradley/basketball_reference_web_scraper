@@ -67,7 +67,7 @@ class LeagueAbbreviationParser:
     def from_abbreviation(self, abbreviation):
         league = self.abbreviations_to_league.get(abbreviation)
         if league is None:
-            raise ValueError("Unknown league abbreviation: ${abbreviation}".format(abbreviation=abbreviation))
+            raise ValueError("Unknown league abbreviation: {abbreviation}".format(abbreviation=abbreviation))
 
         return league
 

@@ -18,7 +18,7 @@ from basketball_reference_web_scraper.parsers import PositionAbbreviationParser,
 BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
 PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
-SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+)\/.+\/(?P<resource_identifier>.+).html'
+SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html'
 
 
 def player_box_scores(day, month, year):

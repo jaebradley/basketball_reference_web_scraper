@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from basketball_reference_web_scraper import client
-from basketball_reference_web_scraper.data import League
+from basketball_reference_web_scraper.data import League, OutputType, OutputWriteOption
 
 
 class TestSearch(TestCase):
@@ -56,4 +56,24 @@ class TestSearch(TestCase):
                 }
             ],
             results["players"]
+        )
+
+    def test_large_search_pagination(self):
+        results = client.search(term="a")
+        self.assertGreaterEqual(len(results["players"]), 960)
+
+    def test_output_to_json(self):
+        client.search(
+            term="ko",
+            output_type=OutputType.JSON,
+            output_file_path="./ko-search.json",
+            output_write_option=OutputWriteOption.WRITE,
+        )
+
+    def test_output_to_csv(self):
+        client.search(
+            term="ko",
+            output_type=OutputType.CSV,
+            output_file_path="./ko-search.csv",
+            output_write_option=OutputWriteOption.WRITE,
         )
