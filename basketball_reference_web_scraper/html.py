@@ -827,16 +827,20 @@ class SearchPage:
         return '//div[@id="searches"]/div[@id="players"]'
 
     @property
-    def nba_aba_baa_players_pagination_links(self):
-        return self.html.xpath(
-            '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-pagination"]/a'.format(
-                NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
-            )
+    def nba_aba_baa_players_pagination_links_query(self):
+        return '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-pagination"]/a'.format(
+            NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
         )
 
     @property
-    def has_more_nba_aba_baa_players_search_results(self):
-        return self.nba_aba_baa_players_pagination_url is not None
+    def nba_aba_baa_player_search_items_query(self):
+        return '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-item"]'.format(
+            NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
+        )
+
+    @property
+    def nba_aba_baa_players_pagination_links(self):
+        return self.html.xpath(self.nba_aba_baa_players_pagination_links_query)
 
     @property
     def nba_aba_baa_players_pagination_url(self):
@@ -859,11 +863,7 @@ class SearchPage:
     def nba_aba_baa_players(self):
         return [
             PlayerSearchResult(html=result_html)
-            for result_html in self.html.xpath(
-                '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-item"]'.format(
-                    NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
-                )
-            )
+            for result_html in self.html.xpath(self.nba_aba_baa_player_search_items_query)
         ]
 
 
@@ -901,6 +901,11 @@ class SearchResult:
             return None
 
         return link.text_content()
+
+    def __eq__(self, other):
+        if isinstance(other, SearchResult):
+            return self.html == other.html
+        return False
 
 
 class PlayerSearchResult(SearchResult):

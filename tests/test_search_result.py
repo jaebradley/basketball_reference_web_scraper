@@ -67,3 +67,23 @@ class TestSearchResult(TestCase):
             "some content"
         )
         link.text_content.assert_called_once_with()
+
+    def test_different_class_is_not_equal(self):
+        self.assertNotEqual(
+            SearchResult(html=MagicMock()),
+            "jaebaebae"
+        )
+
+    def test_different_html_but_same_class_is_not_equal(self):
+        self.assertNotEqual(
+            SearchResult(html=MagicMock()),
+            SearchResult(html=MagicMock())
+        )
+
+    def test_same_html_and_same_class_is_equal(self):
+        html = MagicMock()
+        self.assertEqual(
+            SearchResult(html=html),
+            SearchResult(html=html),
+        )
+
