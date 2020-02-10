@@ -42,13 +42,14 @@ from basketball_reference_web_scraper.data import Team
 
 ## API
 
-This client has six methods
+This client has seven methods
 * Getting player box scores by a date (`client.player_box_scores`)
 * Getting team box scores by a date (`client.team_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
 * Getting players totals for a season (`client.players_season_totals`)
 * Getting players advanced season statistics for a season (`client.players_advanced_season_totals`)
 * Getting regular season box scores for a given player and season (`client.regular_season_player_box_scores`)
+* Searching (`client.search`)
 
 You can see all methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
 
@@ -162,7 +163,7 @@ play_by_play = client.play_by_play(
 from basketball_reference_web_scraper import client
 
 # Get regular season box scores for Russell Westbrook for the 2018-2019 season
-client.regular_season_player_box_score(
+client.regular_season_player_box_scores(
   player_identifier="westbru01",
   season_end_year=2019,
 )
@@ -173,6 +174,17 @@ client.regular_season_player_box_score(
 The `player_identifier` is Basketball Reference's unique identifier for each player. In the case of Russell Westbrook,
 his `player_identifier` is `westbru01` (you can see this from his player page URL: 
 `https://www.basketball-reference.com/players/w/westbru01/gamelog/2020`)
+
+### Search 
+
+```python
+from basketball_reference_web_scraper import client
+
+# Get all results that match "Ko"
+client.search(term="Ko")
+
+# The search method supports all output behavior previously described
+```
 
 ## Development
 

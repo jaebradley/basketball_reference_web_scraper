@@ -6,7 +6,7 @@ from basketball_reference_web_scraper.output import output
 from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
     BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
     PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES, \
-    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES
+    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SearchResultsCSVWriter, SEARCH_RESULTS_COLUMN_NAMES
 
 
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -164,6 +164,21 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
         csv_writer=CSVWriter(
             column_names=PLAY_BY_PLAY_COLUMN_NAMES,
             row_formatter=RowFormatter(data_field_names=PLAY_BY_PLAY_COLUMN_NAMES)
+        ),
+        json_options=json_options,
+    )
+
+
+def search(term, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
+    values = http_client.search(term=term)
+    return output(
+        values=values,
+        output_type=output_type,
+        output_file_path=output_file_path,
+        output_write_option=output_write_option,
+        csv_writer=SearchResultsCSVWriter(
+            column_names=SEARCH_RESULTS_COLUMN_NAMES,
+            row_formatter=RowFormatter(data_field_names=SEARCH_RESULTS_COLUMN_NAMES),
         ),
         json_options=json_options,
     )

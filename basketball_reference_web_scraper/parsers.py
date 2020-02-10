@@ -8,6 +8,7 @@ from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 PLAYER_SEASON_BOX_SCORES_GAME_DATE_FORMAT = '%Y-%m-%d'
 PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX = '(?P<outcome_abbreviation>W|L) \((?P<margin_of_victory>[^)]+)\)'
+SEARCH_RESULT_NAME_REGEX = '(?P<name>^[^\(]+)'
 
 
 class TeamAbbreviationParser:
@@ -57,6 +58,27 @@ class OutcomeAbbreviationParser:
             raise ValueError("Unknown symbol: {outcome}".format(outcome=outcome))
 
         return outcome
+
+
+class LeagueAbbreviationParser:
+    def __init__(self, abbreviations_to_league):
+        self.abbreviations_to_league = abbreviations_to_league
+
+    def from_abbreviation(self, abbreviation):
+        league = self.abbreviations_to_league.get(abbreviation)
+        if league is None:
+            raise ValueError("Unknown league abbreviation: {abbreviation}".format(abbreviation=abbreviation))
+
+        return league
+
+    def from_abbreviations(self, abbreviations):
+        if abbreviations is None:
+            return []
+
+        return [
+            self.from_abbreviation(abbreviation=league_abbreviation)
+            for league_abbreviation in abbreviations.split("/")
+        ]
 
 
 class PlayerBoxScoreOutcomeParser:
@@ -204,6 +226,36 @@ class ScheduledStartTimeParser:
         est = pytz.timezone("US/Eastern")
         localized_start_time = est.localize(start_time)
         return localized_start_time.astimezone(self.time_zone)
+
+
+class SearchResultNameParser:
+    def __init__(self, search_result_name_regex=SEARCH_RESULT_NAME_REGEX, result_name_regex_group_name="name"):
+        self.search_result_name_regex = search_result_name_regex
+        self.result_name_regex_group_name = result_name_regex_group_name
+
+    def parse(self, search_result_name):
+        return re.search(self.search_result_name_regex, search_result_name) \
+            .group(self.result_name_regex_group_name) \
+            .strip()
+
+
+class ResourceLocationParser:
+    def __init__(self,
+                 resource_location_regex,
+                 resource_type_regex_group_name="resource_type",
+                 resource_identifier_regex_group_name="resource_identifier"):
+        self.resource_location_regex = resource_location_regex
+        self.resource_type_regex_group_name = resource_type_regex_group_name
+        self.resource_identifier_regex_group_name = resource_identifier_regex_group_name
+
+    def search(self, resource_location):
+        return re.search(self.resource_location_regex, resource_location)
+
+    def parse_resource_type(self, resource_location):
+        return self.search(resource_location=resource_location).group(self.resource_type_regex_group_name)
+
+    def parse_resource_identifier(self, resource_location):
+        return self.search(resource_location=resource_location).group(self.resource_identifier_regex_group_name)
 
 
 class ScheduledGamesParser:
@@ -454,4 +506,48 @@ class PlayByPlaysParser:
             "description": play_by_play.away_team_play_description
             if play_by_play.is_away_team_play
             else play_by_play.home_team_play_description,
+        }
+
+
+class SearchResultsParser:
+    def __init__(self, search_result_name_parser, search_result_location_parser, league_abbreviation_parser):
+        self.search_result_name_parser = search_result_name_parser
+        self.search_result_location_parser = search_result_location_parser
+        self.league_abbreviation_parser = league_abbreviation_parser
+
+    def parse(self, nba_aba_baa_players):
+        return {
+            "players": [
+                {
+                    "name": self.search_result_name_parser.parse(search_result_name=result.resource_name),
+                    "identifier": self.search_result_location_parser.parse_resource_identifier(
+                        resource_location=result.resource_location
+                    ),
+                    "leagues": set(
+                        self.league_abbreviation_parser.from_abbreviations(
+                            abbreviations=result.league_abbreviations
+                        )
+                    ),
+                } for result in nba_aba_baa_players
+            ]
+        }
+
+
+class PlayerDataParser:
+    def __init__(self, search_result_location_parser, league_abbreviation_parser):
+        self.search_result_location_parser = search_result_location_parser
+        self.league_abbreviation_parser = league_abbreviation_parser
+
+    def parse(self, player):
+        return {
+            "name": player.name,
+            "identifier": self.search_result_location_parser.parse_resource_identifier(
+                resource_location=player.resource_location
+            ),
+            "leagues": set(
+                (
+                    self.league_abbreviation_parser.from_abbreviation(abbreviation=abbreviation)
+                    for abbreviation in player.league_abbreviations
+                )
+            )
         }

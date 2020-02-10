@@ -79,6 +79,12 @@ class PeriodType(Enum):
     OVERTIME = "OVERTIME"
 
 
+class League(Enum):
+    NATIONAL_BASKETBALL_ASSOCIATION = "NATIONAL_BASKETBALL_ASSOCIATION"
+    AMERICAN_BASKETBALL_ASSOCIATION = "AMERICAN_BASKETBALL_ASSOCIATION"
+    BASKETBALL_ASSOCIATION_OF_AMERICA = "BASKETBALL_ASSOCIATION_OF_AMERICA"
+
+
 TEAM_ABBREVIATIONS_TO_TEAM = {
     'ATL': Team.ATLANTA_HAWKS,
     'BOS': Team.BOSTON_CELTICS,
@@ -187,6 +193,12 @@ OUTCOME_ABBREVIATIONS_TO_OUTCOME = {
     "L": Outcome.LOSS,
 }
 
+LEAGUE_ABBREVIATIONS_TO_LEAGUE = {
+    "NBA": League.NATIONAL_BASKETBALL_ASSOCIATION,
+    "ABA": League.AMERICAN_BASKETBALL_ASSOCIATION,
+    "BAA": League.BASKETBALL_ASSOCIATION_OF_AMERICA,
+}
+
 
 class TeamTotal:
     def __init__(self, team_abbreviation, totals):
@@ -252,3 +264,10 @@ class TeamTotal:
     @property
     def points(self):
         return self.totals.points
+
+
+class PlayerData:
+    def __init__(self, name, resource_location, league_abbreviations):
+        self.name = name
+        self.resource_location = resource_location
+        self.league_abbreviations = set(league_abbreviations)

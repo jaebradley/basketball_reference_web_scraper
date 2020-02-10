@@ -11,5 +11,8 @@ class BasketballReferenceJSONEncoder(JSONEncoder):
         if isinstance(obj, Enum):
             return obj.value
 
+        if isinstance(obj, set):
+            return list(obj)
+
         return JSONEncoder.default(self, obj)
 
