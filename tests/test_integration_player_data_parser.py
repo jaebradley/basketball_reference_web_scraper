@@ -1,9 +1,8 @@
 from unittest import TestCase
 
-
+from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData, League
 from basketball_reference_web_scraper.http_client import SEARCH_RESULT_RESOURCE_LOCATION_REGEX
 from basketball_reference_web_scraper.parsers import PlayerDataParser, ResourceLocationParser, LeagueAbbreviationParser
-from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData, League
 
 
 class TestPlayerDataParser(TestCase):

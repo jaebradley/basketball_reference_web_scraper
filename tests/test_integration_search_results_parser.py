@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
 
-from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData, League
+from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, League
 from basketball_reference_web_scraper.http_client import SEARCH_RESULT_RESOURCE_LOCATION_REGEX
 from basketball_reference_web_scraper.parsers import SearchResultsParser, SearchResultNameParser, \
     ResourceLocationParser, LeagueAbbreviationParser
