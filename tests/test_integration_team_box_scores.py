@@ -1,10 +1,30 @@
 from unittest import TestCase
+from unittest.mock import patch, MagicMock
+
+import requests
+from requests.exceptions import HTTPError
 
 import basketball_reference_web_scraper.client as client
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, Outcome
+from basketball_reference_web_scraper.errors import InvalidDate
 
 
 class TestTeamBoxScores(TestCase):
+
+    @patch('basketball_reference_web_scraper.http_client.team_box_scores')
+    def test_invalid_date_error_raised_for_unknown_date(self, mocked_http_team_box_scores):
+        mocked_http_team_box_scores.side_effect = HTTPError(
+            response=MagicMock(status_code=requests.codes.not_found)
+        )
+        self.assertRaisesRegex(
+            InvalidDate,
+            "Date with year set to jae, month set to bae, and day set to bae is invalid",
+            client.team_box_scores,
+            day="bae",
+            month="bae",
+            year="jae"
+        )
+
     def test_2018_01_01_team_box_scores(self):
         team_box_scores = client.team_box_scores(day=1, month=1, year=2018)
         self.assertIsNotNone(team_box_scores)
@@ -76,4 +96,3 @@ class TestTeamBoxScores(TestCase):
         self.assertEqual(Team.TORONTO_RAPTORS, raptors_box_score["team"])
         self.assertEqual(Outcome.WIN, raptors_box_score["outcome"])
         self.assertEqual(130, raptors_box_score["points"])
-
