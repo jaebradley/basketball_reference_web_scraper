@@ -4,3 +4,6 @@
 build/
 dist/
 *egg-info/
+
+# Don't commit files from integration test output
+tests/integration/output

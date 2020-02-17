@@ -19,7 +19,10 @@ class TestScheduleParser(TestCase):
         self.october_2018_html = requests.get(
             'https://www.basketball-reference.com/leagues/NBA_2018_games-october.html'
         ).text
-        self.schedule_with_future_games_html_file = open(os.path.join(os.path.dirname(__file__), './NBA_2019_games-april.html'))
+        self.schedule_with_future_games_html_file = open(
+            os.path.join(os.path.dirname(__file__),
+                         './files/NBA_2019_games-april.html')
+        )
         self.schedule_with_future_games_html = self.schedule_with_future_games_html_file.read()
         self.parser = ScheduledGamesParser(
             start_time_parser=ScheduledStartTimeParser(),

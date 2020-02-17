@@ -1,5 +1,6 @@
 from datetime import datetime
 from unittest import TestCase
+import os
 
 import basketball_reference_web_scraper.client as client
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
@@ -15,22 +16,30 @@ class TestClient(TestCase):
             self.assertIsNotNone(season_schedule)
 
     def test_output_json_box_scores_to_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.json",
+        )
         client.player_box_scores(
             day=1,
             month=1,
             year=2001,
             output_type=OutputType.JSON,
-            output_file_path="./foo.json",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE
         )
 
     def test_output_csv_box_scores_to_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.csv",
+        )
         client.player_box_scores(
             day=1,
             month=1,
             year=2001,
             output_type=OutputType.CSV,
-            output_file_path="./foo.csv",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE
         )
 
@@ -135,13 +144,17 @@ class TestClient(TestCase):
         self.assertIsNotNone(play_by_play)
 
     def test_BOS_2018_10_16_play_by_play_csv_to_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/2018_10_16_BOS_pbp.csv",
+        )
         client.play_by_play(
             home_team=Team.BOSTON_CELTICS,
             day=16,
             month=10,
             year=2018,
             output_type=OutputType.CSV,
-            output_file_path="./2018_10_16_BOS_pbp.csv",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
 
@@ -158,34 +171,46 @@ class TestClient(TestCase):
         self.assertEqual(PeriodType.OVERTIME, last_play["period_type"])
 
     def test_overtime_play_by_play_to_csv(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/2018_10_22_POR_pbp.csv",
+        )
         client.play_by_play(
             home_team=Team.PORTLAND_TRAIL_BLAZERS,
             day=22,
             month=10,
             year=2018,
             output_type=OutputType.CSV,
-            output_file_path="./2018_10_22_POR_pbp.csv",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
 
     def test_BOS_2018_10_16_play_by_play_json_to_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/2018_10_16_BOS_pbp.json",
+        )
         client.play_by_play(
             home_team=Team.BOSTON_CELTICS,
             day=16,
             month=10,
             year=2018,
             output_type=OutputType.JSON,
-            output_file_path="./2018_10_16_BOS_pbp.json",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
 
     def test_overtime_play_by_play_to_json_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/2018_10_22_POR_pbp.json",
+        )
         client.play_by_play(
             home_team=Team.PORTLAND_TRAIL_BLAZERS,
             day=22,
             month=10,
             year=2018,
             output_type=OutputType.JSON,
-            output_file_path="./2018_10_22_POR_pbp.json",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )

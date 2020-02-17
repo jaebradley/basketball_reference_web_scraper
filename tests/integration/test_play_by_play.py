@@ -1,4 +1,5 @@
 from unittest import TestCase, mock
+import os
 
 from requests import HTTPError, codes
 
@@ -25,14 +26,22 @@ class TestPlayByPlay(TestCase):
             home_team=Team.MILWAUKEE_BUCKS, day=-1, month=1, year=2018)
 
     def test_get_box_scores_from_2003_csv(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.csv",
+        )
         result = play_by_play(
             home_team=Team.TORONTO_RAPTORS, day=29, month=10, year=2003,
-            output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
+            output_type=OutputType.CSV, output_file_path=output_file_path, output_write_option=OutputWriteOption.WRITE)
 
     def test_get_box_scores_from_2003_json(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foobar.json",
+        )
         result = play_by_play(
             home_team=Team.TORONTO_RAPTORS, day=29, month=10, year=2003,
-            output_type=OutputType.JSON, output_file_path="./foobar.json", output_write_option=OutputWriteOption.WRITE)
+            output_type=OutputType.JSON, output_file_path=output_file_path, output_write_option=OutputWriteOption.WRITE)
 
     def test_raises_invalid_date_for_nonexistent_dates(self):
         self.assertRaisesRegex(

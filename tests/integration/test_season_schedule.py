@@ -1,5 +1,6 @@
 from datetime import date
 from unittest import TestCase, mock
+import os
 
 from requests import HTTPError, codes
 
@@ -18,13 +19,27 @@ class TestSeasonSchedule(TestCase):
         self.assertIsNotNone(result)
 
     def test_season_schedule_csv(self):
-        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./foo.csv")
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.csv"
+        )
+        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=output_file_path)
 
     def test_season_schedule_csv_append(self):
-        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.csv"
+        )
+        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=output_file_path,
+                        output_write_option=OutputWriteOption.WRITE)
 
     def test_2017_season_schedule_csv_append(self):
-        season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.csv"
+        )
+        season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=output_file_path,
+                        output_write_option=OutputWriteOption.WRITE)
 
     def test_future_season_schedule_throws_invalid_season_error(self):
         current_year = date.today().year

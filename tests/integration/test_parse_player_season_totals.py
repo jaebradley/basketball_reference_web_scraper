@@ -25,7 +25,7 @@ class TestPlayersSeasonTotals(TestCase):
         self.jemerrio_jones_blank_age_2019_totals_file = open(
             os.path.join(
                 os.path.dirname(__file__),
-                './NBA_2019_totals_jemerrio_jones_blank_age.html',
+                './files/NBA_2019_totals_jemerrio_jones_blank_age.html',
             )
         )
         self.jemerrio_jones_with_a_blank_age_2019_totals = self.jemerrio_jones_blank_age_2019_totals_file.read()
