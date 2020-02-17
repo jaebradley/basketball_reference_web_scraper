@@ -1,5 +1,6 @@
 from datetime import date
 from unittest import TestCase, mock
+import os
 
 from requests import HTTPError, codes
 
@@ -19,13 +20,39 @@ class TestPlayerAdvancedSeasonTotals(TestCase):
         self.assertIsNotNone(result)
 
     def test_players_advanced_season_totals_csv(self):
-        players_advanced_season_totals(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./player_advanced_season_totals_2019.csv")
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/player_advanced_season_totals_2019.csv",
+        )
+        players_advanced_season_totals(
+            season_end_year=2018,
+            output_type=OutputType.CSV,
+            output_file_path=output_file_path,
+        )
 
     def test_players_advanced_season_totals_csv_append(self):
-        players_advanced_season_totals(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./player_advanced_season_totals_2019.csv", output_write_option=OutputWriteOption.APPEND)
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/player_advanced_season_totals_2019.csv",
+        )
+        players_advanced_season_totals(
+            season_end_year=2018,
+            output_type=OutputType.CSV,
+            output_file_path=output_file_path,
+            output_write_option=OutputWriteOption.APPEND,
+        )
 
     def test_2001_players_advanced_season_totals_csv(self):
-        players_advanced_season_totals(season_end_year=2001, output_type=OutputType.CSV, output_file_path="./player_advanced_season_totals_2001.csv", output_write_option=OutputWriteOption.WRITE)
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/player_advanced_season_totals_2001.csv",
+        )
+        players_advanced_season_totals(
+            season_end_year=2001,
+            output_type=OutputType.CSV,
+            output_file_path=output_file_path,
+            output_write_option=OutputWriteOption.WRITE,
+        )
 
     def test_future_season_raises_invalid_season(self):
         current_year = date.today().year

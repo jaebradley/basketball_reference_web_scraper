@@ -1,4 +1,5 @@
 from unittest import TestCase, mock
+import os
 
 from requests import HTTPError, codes
 
@@ -20,9 +21,13 @@ class TestPlayerBoxScores(TestCase):
             day=-1, month=1, year=2018)
 
     def test_get_box_scores_from_2001(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/foo.csv",
+        )
         player_box_scores(
             day=1, month=1, year=2001,
-            output_type=OutputType.CSV, output_file_path="./foo.csv", output_write_option=OutputWriteOption.WRITE)
+            output_type=OutputType.CSV, output_file_path=output_file_path, output_write_option=OutputWriteOption.WRITE)
 
     def test_raises_invalid_date_for_nonexistent_dates(self):
         self.assertRaisesRegex(

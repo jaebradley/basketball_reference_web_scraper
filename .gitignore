@@ -4,3 +4,8 @@
 build/
 dist/
 *egg-info/
+
+# Don't commit files from integration test output
+tests/integration/output/**.csv
+tests/integration/output/**.json
+!tests/integration/output/.gitkeep

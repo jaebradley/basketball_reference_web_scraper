@@ -1,5 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
+import os
 
 import requests
 from requests.exceptions import HTTPError
@@ -38,12 +39,16 @@ class TestTeamBoxScores(TestCase):
         self.assertIsNotNone(team_box_scores)
 
     def test_2018_01_01_team_box_scores_json_box_scores_to_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/2018_01_01_team_box_scores.json"
+        )
         client.team_box_scores(
             day=1,
             month=1,
             year=2018,
             output_type=OutputType.JSON,
-            output_file_path="./2018_01_01_team_box_scores.json",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE
         )
 
@@ -58,12 +63,16 @@ class TestTeamBoxScores(TestCase):
         self.assertIsNotNone(january_first_box_scores)
 
     def test_2018_01_01_team_box_scores_csv_box_scores_to_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/2018_01_01_team_box_scores.csv"
+        )
         client.team_box_scores(
             day=1,
             month=1,
             year=2018,
             output_type=OutputType.CSV,
-            output_file_path="./2018_01_01_team_box_scores.csv",
+            output_file_path=output_file_path,
             output_write_option=OutputWriteOption.WRITE
         )
 

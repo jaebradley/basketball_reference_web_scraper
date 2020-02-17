@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from unittest import TestCase, mock
+import os
 
 from requests import HTTPError, codes
 
@@ -84,11 +85,15 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
         self.assertEqual(63, len(json.loads(results)))
 
     def test_outputting_2019_regular_season_box_scores_for_avery_bradley_as_csv(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/test-avery-2019.csv",
+        )
         regular_season_player_box_scores(
             player_identifier="bradlav01",
             season_end_year=2019,
             output_type=OutputType.CSV,
-            output_file_path="./test-avery-2019.csv"
+            output_file_path=output_file_path,
         )
 
     @mock.patch("basketball_reference_web_scraper.client.http_client")
