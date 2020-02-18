@@ -70,115 +70,253 @@ class PlayerAdvancedSeasonTotalsRow:
 
     @property
     def player_name_cell(self):
-        return self.html[1]
+        cells = self.html.xpath('td[@data-stat="player"]')
+
+        if len(cells) > 0:
+            return cells[0]
+
+        return None
 
     @property
     def slug(self):
-        return self.player_name_cell.get('data-append-csv')
+        cell = self.player_name_cell
+        if cell is None:
+            return ''
+
+        return cell.get('data-append-csv')
 
     @property
     def name(self):
-        return self.player_name_cell.text_content()
+        cell = self.player_name_cell
+        if cell is None:
+            return ''
+
+        return cell.text_content()
 
     @property
     def position_abbreviations(self):
-        return self.html[2].text_content()
+        cells = self.html.xpath('td[@data-stat="pos"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def age(self):
-        return self.html[3].text_content()
+        cells = self.html.xpath('td[@data-stat="age"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def team_abbreviation(self):
-        return self.html[4].text_content()
+        cells = self.html.xpath('td[@data-stat="team_id"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def games_played(self):
-        return self.html[5].text_content()
+        cells = self.html.xpath('td[@data-stat="g"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def minutes_played(self):
-        return self.html[6].text_content()
+        cells = self.html.xpath('td[@data-stat="mp"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def player_efficiency_rating(self):
-        return self.html[7].text_content()
+        cells = self.html.xpath('td[@data-stat="per"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def true_shooting_percentage(self):
-        return self.html[8].text_content()
+        cells = self.html.xpath('td[@data-stat="ts_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def three_point_attempt_rate(self):
-        return self.html[9].text_content()
+        cells = self.html.xpath('td[@data-stat="fg3a_per_fga_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def free_throw_attempt_rate(self):
-        return self.html[10].text_content()
+        cells = self.html.xpath('td[@data-stat="fta_per_fga_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def offensive_rebound_percentage(self):
-        return self.html[11].text_content()
+        cells = self.html.xpath('td[@data-stat="orb_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def defensive_rebound_percentage(self):
-        return self.html[12].text_content()
+        cells = self.html.xpath('td[@data-stat="drb_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def total_rebound_percentage(self):
-        return self.html[13].text_content()
+        cells = self.html.xpath('td[@data-stat="trb_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def assist_percentage(self):
-        return self.html[14].text_content()
+        cells = self.html.xpath('td[@data-stat="ast_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def steal_percentage(self):
-        return self.html[15].text_content()
+        cells = self.html.xpath('td[@data-stat="stl_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def block_percentage(self):
-        return self.html[16].text_content()
+        cells = self.html.xpath('td[@data-stat="blk_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def turnover_percentage(self):
-        return self.html[17].text_content()
+        cells = self.html.xpath('td[@data-stat="tov_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def usage_percentage(self):
-        return self.html[18].text_content()
+        cells = self.html.xpath('td[@data-stat="usg_pct"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def offensive_win_shares(self):
-        return self.html[20].text_content()
+        cells = self.html.xpath('td[@data-stat="ows"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def defensive_win_shares(self):
-        return self.html[21].text_content()
+        cells = self.html.xpath('td[@data-stat="dws"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def win_shares(self):
-        return self.html[22].text_content()
+        cells = self.html.xpath('td[@data-stat="ws"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def win_shares_per_48_minutes(self):
-        return self.html[23].text_content()
+        cells = self.html.xpath('td[@data-stat="ws_per_48"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def offensive_plus_minus(self):
-        return self.html[25].text_content()
+        cells = self.html.xpath('td[@data-stat="obpm"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def defensive_plus_minus(self):
-        return self.html[26].text_content()
+        cells = self.html.xpath('td[@data-stat="dbpm"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def plus_minus(self):
-        return self.html[27].text_content()
+        cells = self.html.xpath('td[@data-stat="bpm"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def value_over_replacement_player(self):
-        return self.html[28].text_content()
+        cells = self.html.xpath('td[@data-stat="vorp"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def is_combined_totals(self):
