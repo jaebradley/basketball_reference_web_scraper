@@ -23,7 +23,7 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         self.html.xpath.assert_called_once_with('td[@data-stat="player"]')
 
     @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
-    def test_slug(self, mock_player_name_cell):
+    def test_slug_when_cell_exists(self, mock_player_name_cell):
         player_name_cell = MagicMock()
         mock_player_name_cell.return_value = player_name_cell
 
@@ -36,7 +36,12 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         player_name_cell.get.assert_called_once_with('data-append-csv')
 
     @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
-    def test_name(self, mock_player_name_cell):
+    def test_slug_is_empty_string_when_cell_is_none(self, mock_player_name_cell):
+        mock_player_name_cell.return_value = None
+        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).slug, '')
+
+    @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
+    def test_name_when_cell_exists(self, mock_player_name_cell):
         player_name_cell = MagicMock()
         mock_player_name_cell.return_value = player_name_cell
 
@@ -46,6 +51,11 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).name, name)
         mock_player_name_cell.assert_called_once_with()
         player_name_cell.text_content.assert_called_once_with()
+
+    @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
+    def test_name_when_cell_exists(self, mock_player_name_cell):
+        mock_player_name_cell.return_value = None
+        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).name, '')
 
     def test_position_abbreviations_when_cells_exist(self):
         position_abbreviations = MagicMock()
