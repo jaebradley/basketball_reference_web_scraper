@@ -461,7 +461,11 @@ class StatisticsTable:
     @property
     def team_totals(self):
         # Team totals are stored as table footers
-        return TeamTotalRow(self.html.xpath('tfoot/tr/td'))
+        footers = self.html.xpath('tfoot/tr')
+        if len(footers) > 0:
+            return TeamTotalRow(html=footers[0])
+
+        return None
 
 
 class TeamTotalRow:
