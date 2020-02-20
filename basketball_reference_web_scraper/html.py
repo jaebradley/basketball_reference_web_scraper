@@ -461,7 +461,11 @@ class StatisticsTable:
     @property
     def team_totals(self):
         # Team totals are stored as table footers
-        return TeamTotalRow(self.html.xpath('tfoot/tr/td'))
+        footers = self.html.xpath('tfoot/tr')
+        if len(footers) > 0:
+            return TeamTotalRow(html=footers[0])
+
+        return None
 
 
 class TeamTotalRow:
@@ -470,63 +474,138 @@ class TeamTotalRow:
 
     @property
     def minutes_played(self):
-        return self.html[0].text_content()
+        cells = self.html.xpath('td[@data-stat="mp"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def made_field_goals(self):
-        return self.html[1].text_content()
+        cells = self.html.xpath('td[@data-stat="fg"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def attempted_field_goals(self):
-        return self.html[2].text_content()
+        cells = self.html.xpath('td[@data-stat="fga"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def made_three_point_field_goals(self):
-        return self.html[4].text_content()
+        cells = self.html.xpath('td[@data-stat="fg3"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def attempted_three_point_field_goals(self):
-        return self.html[5].text_content()
+        cells = self.html.xpath('td[@data-stat="fg3a"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def made_free_throws(self):
-        return self.html[7].text_content()
+        cells = self.html.xpath('td[@data-stat="ft"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def attempted_free_throws(self):
-        return self.html[8].text_content()
+        cells = self.html.xpath('td[@data-stat="fta"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def offensive_rebounds(self):
-        return self.html[10].text_content()
+        cells = self.html.xpath('td[@data-stat="orb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def defensive_rebounds(self):
-        return self.html[11].text_content()
+        cells = self.html.xpath('td[@data-stat="drb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def assists(self):
-        return self.html[13].text_content()
+        cells = self.html.xpath('td[@data-stat="ast"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def steals(self):
-        return self.html[14].text_content()
+        cells = self.html.xpath('td[@data-stat="stl"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def blocks(self):
-        return self.html[15].text_content()
+        cells = self.html.xpath('td[@data-stat="blk"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def turnovers(self):
-        return self.html[16].text_content()
+        cells = self.html.xpath('td[@data-stat="tov"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def personal_fouls(self):
-        return self.html[17].text_content()
+        cells = self.html.xpath('td[@data-stat="pf"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def points(self):
-        return self.html[18].text_content()
+        cells = self.html.xpath('td[@data-stat="pts"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
 
 class DailyLeadersPage:
