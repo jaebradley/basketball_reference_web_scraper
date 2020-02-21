@@ -68,36 +68,6 @@ class TestPlayerSeasonTotalsRow(TestCase):
         self.assertEqual(PlayerSeasonTotalsRow(html=self.html).games_started, "")
         self.html.xpath.assert_called_once_with('td[@data-stat="gs"]')
 
-    def test_minutes_played_when_cells_exist(self):
-        self.html.xpath = MagicMock(
-            return_value=[
-                MagicMock(text_content=MagicMock(return_value="some minutes played"))
-            ]
-        )
-
-        self.assertEqual(PlayerSeasonTotalsRow(html=self.html).minutes_played, "some minutes played")
-        self.html.xpath.assert_called_once_with('td[@data-stat="mp"]')
-
-    def test_minutes_played_is_empty_string_when_cells_do_not_exist(self):
-        self.html.xpath = MagicMock(return_value=[])
-        self.assertEqual(PlayerSeasonTotalsRow(html=self.html).minutes_played, "")
-        self.html.xpath.assert_called_once_with('td[@data-stat="mp"]')
-
-    def test_points_when_cells_exist(self):
-        self.html.xpath = MagicMock(
-            return_value=[
-                MagicMock(text_content=MagicMock(return_value="some points"))
-            ]
-        )
-
-        self.assertEqual(PlayerSeasonTotalsRow(html=self.html).points, "some points")
-        self.html.xpath.assert_called_once_with('td[@data-stat="pts"]')
-
-    def test_points_is_empty_string_when_cells_do_not_exist(self):
-        self.html.xpath = MagicMock(return_value=[])
-        self.assertEqual(PlayerSeasonTotalsRow(html=self.html).points, "")
-        self.html.xpath.assert_called_once_with('td[@data-stat="pts"]')
-
     @patch.object(PlayerSeasonTotalsRow, 'team_abbreviation', new_callable=PropertyMock)
     def test_is_combined_totals_when_team_abbreviation_is_tot(self, mocked_team_abbreviation):
         mocked_team_abbreviation.return_value = "TOT"
