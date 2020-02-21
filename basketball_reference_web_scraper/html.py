@@ -615,7 +615,7 @@ class DailyLeadersPage:
     @property
     def daily_leaders(self):
         return [
-            PlayerBoxScoreRow(row_html)
+            PlayerGameBoxScoreRow(row_html)
             for row_html in self.html.xpath('//table[@id="stats"]//tbody/tr[not(contains(@class, "thead"))]')
         ]
 
@@ -662,9 +662,199 @@ class RegularSeasonPlayerBoxScoresTable(PlayerSeasonBoxScoresTable):
                '/tr[not(contains(@class, "thead"))]'
 
 
-class PlayerSeasonBoxScoresRow:
+class PlayerBoxScoreRow:
     def __init__(self, html):
         self.html = html
+
+    def __eq__(self, other):
+        if isinstance(other, PlayerBoxScoreRow):
+            return self.html == other.html
+        return False
+
+    @property
+    def team_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="team_id"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def location_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="game_location"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def opponent_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="opp_id"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def outcome(self):
+        cells = self.html.xpath('td[@data-stat="game_result"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def playing_time(self):
+        cells = self.html.xpath('td[@data-stat="mp"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def made_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fg"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def attempted_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fga"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def made_three_point_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fg3"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def attempted_three_point_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fg3a"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def made_free_throws(self):
+        cells = self.html.xpath('td[@data-stat="ft"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def attempted_free_throws(self):
+        cells = self.html.xpath('td[@data-stat="fta"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def offensive_rebounds(self):
+        cells = self.html.xpath('td[@data-stat="orb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def defensive_rebounds(self):
+        cells = self.html.xpath('td[@data-stat="drb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def assists(self):
+        cells = self.html.xpath('td[@data-stat="ast"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def steals(self):
+        cells = self.html.xpath('td[@data-stat="stl"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def blocks(self):
+        cells = self.html.xpath('td[@data-stat="blk"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def turnovers(self):
+        cells = self.html.xpath('td[@data-stat="tov"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def personal_fouls(self):
+        cells = self.html.xpath('td[@data-stat="pf"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def plus_minus(self):
+        cells = self.html.xpath('td[@data-stat="plus_minus"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def game_score(self):
+        cells = self.html.xpath('td[@data-stat="game_score"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+
+class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
+    def __init__(self, html):
+        super().__init__(html)
 
     def __eq__(self, other):
         if isinstance(other, PlayerSeasonBoxScoresRow):
@@ -675,184 +865,54 @@ class PlayerSeasonBoxScoresRow:
     def is_active(self):
         # When a player is not active (for a reason like "Inactive", "Did Not Play", "Did Not Dress")
         # the game played counter is blank (and a "reason" column will exist)
-        return self.html[1].text_content() != ""
+        cells = self.html.xpath('td[@data-stat="reason"]')
+        return len(cells) < 1
 
     @property
     def date(self):
-        return self.html[2].text_content()
+        cells = self.html.xpath('td[@data-stat="date_game"]')
 
-    @property
-    def team_abbreviation(self):
-        return self.html[4].text_content()
+        if len(cells) > 0:
+            return cells[0].text_content()
 
-    @property
-    def location_abbreviation(self):
-        return self.html[5].text_content()
-
-    @property
-    def opponent_abbreviation(self):
-        return self.html[6].text_content()
-
-    @property
-    def outcome(self):
-        return self.html[7].text_content()
-
-    @property
-    def playing_time(self):
-        return self.html[9].text_content()
-
-    @property
-    def made_field_goals(self):
-        return self.html[10].text_content()
-
-    @property
-    def attempted_field_goals(self):
-        return self.html[11].text_content()
-
-    @property
-    def made_three_point_field_goals(self):
-        return self.html[13].text_content()
-
-    @property
-    def attempted_three_point_field_goals(self):
-        return self.html[14].text_content()
-
-    @property
-    def made_free_throws(self):
-        return self.html[16].text_content()
-
-    @property
-    def attempted_free_throws(self):
-        return self.html[17].text_content()
-
-    @property
-    def offensive_rebounds(self):
-        return self.html[19].text_content()
-
-    @property
-    def defensive_rebounds(self):
-        return self.html[20].text_content()
-
-    @property
-    def assists(self):
-        return self.html[22].text_content()
-
-    @property
-    def steals(self):
-        return self.html[23].text_content()
-
-    @property
-    def blocks(self):
-        return self.html[24].text_content()
-
-    @property
-    def turnovers(self):
-        return self.html[25].text_content()
-
-    @property
-    def personal_fouls(self):
-        return self.html[26].text_content()
+        return ''
 
     @property
     def points_scored(self):
-        return self.html[27].text_content()
+        cells = self.html.xpath('td[@data-stat="pts"]')
 
-    @property
-    def game_score(self):
-        return self.html[28].text_content()
+        if len(cells) > 0:
+            return cells[0].text_content()
 
-    @property
-    def plus_minus(self):
-        return self.html[29].text_content()
+        return ''
 
 
-class PlayerBoxScoreRow:
+class PlayerGameBoxScoreRow(PlayerBoxScoreRow):
     def __init__(self, html):
-        self.html = html
+        super().__init__(html)
+
+    @property
+    def player_cell(self):
+        cells = self.html.xpath('td[@data-stat="player"]')
+
+        if len(cells) > 0:
+            return cells[0]
+
+        return None
 
     @property
     def slug(self):
-        return self.html[1].get('data-append-csv')
+        if self.player_cell is None:
+            return ""
+
+        return self.player_cell.get('data-append-csv')
 
     @property
     def name(self):
-        return self.html[1].text_content()
+        if self.player_cell is None:
+            return ""
 
-    @property
-    def team_abbreviation(self):
-        return self.html[2].text_content()
-
-    @property
-    def location_abbreviation(self):
-        return self.html[3].text_content()
-
-    @property
-    def opponent_abbreviation(self):
-        return self.html[4].text_content()
-
-    @property
-    def outcome(self):
-        return self.html[5].text_content()
-
-    @property
-    def playing_time(self):
-        return self.html[6].text_content()
-
-    @property
-    def made_field_goals(self):
-        return self.html[7].text_content()
-
-    @property
-    def attempted_field_goals(self):
-        return self.html[8].text_content()
-
-    @property
-    def made_three_point_field_goals(self):
-        return self.html[10].text_content()
-
-    @property
-    def attempted_three_point_field_goals(self):
-        return self.html[11].text_content()
-
-    @property
-    def made_free_throws(self):
-        return self.html[13].text_content()
-
-    @property
-    def attempted_free_throws(self):
-        return self.html[14].text_content()
-
-    @property
-    def offensive_rebounds(self):
-        return self.html[16].text_content()
-
-    @property
-    def defensive_rebounds(self):
-        return self.html[17].text_content()
-
-    @property
-    def assists(self):
-        return self.html[19].text_content()
-
-    @property
-    def steals(self):
-        return self.html[20].text_content()
-
-    @property
-    def blocks(self):
-        return self.html[21].text_content()
-
-    @property
-    def turnovers(self):
-        return self.html[22].text_content()
-
-    @property
-    def personal_fouls(self):
-        return self.html[23].text_content()
-
-    @property
-    def game_score(self):
-        return self.html[26].text_content()
+        return self.player_cell.text_content()
 
 
 class PlayByPlayPage:
