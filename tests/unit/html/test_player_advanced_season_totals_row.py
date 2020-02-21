@@ -8,55 +8,6 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
     def setUp(self):
         self.html = MagicMock()
 
-    def test_player_name_cell_when_cells_exist(self):
-        player_name_cell = MagicMock()
-        cells = [player_name_cell]
-        self.html.xpath = MagicMock(return_value=cells)
-
-        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).player_name_cell, player_name_cell)
-        self.html.xpath.assert_called_once_with('td[@data-stat="player"]')
-
-    def test_player_name_cell_empty_string_when_cells_do_not_exist(self):
-        self.html.xpath = MagicMock(return_value=[])
-
-        self.assertIsNone(PlayerAdvancedSeasonTotalsRow(html=self.html).player_name_cell)
-        self.html.xpath.assert_called_once_with('td[@data-stat="player"]')
-
-    @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
-    def test_slug_when_cell_exists(self, mock_player_name_cell):
-        player_name_cell = MagicMock()
-        mock_player_name_cell.return_value = player_name_cell
-
-        row = PlayerAdvancedSeasonTotalsRow(html=self.html)
-        slug = "some slug"
-        player_name_cell.get = MagicMock(return_value=slug)
-
-        self.assertEqual(row.slug, slug)
-        mock_player_name_cell.assert_called_once_with()
-        player_name_cell.get.assert_called_once_with('data-append-csv')
-
-    @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
-    def test_slug_is_empty_string_when_cell_is_none(self, mock_player_name_cell):
-        mock_player_name_cell.return_value = None
-        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).slug, '')
-
-    @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
-    def test_name_when_cell_exists(self, mock_player_name_cell):
-        player_name_cell = MagicMock()
-        mock_player_name_cell.return_value = player_name_cell
-
-        name = "some name"
-        player_name_cell.text_content = MagicMock(return_value=name)
-
-        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).name, name)
-        mock_player_name_cell.assert_called_once_with()
-        player_name_cell.text_content.assert_called_once_with()
-
-    @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
-    def test_name_when_cell_exists(self, mock_player_name_cell):
-        mock_player_name_cell.return_value = None
-        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).name, '')
-
     def test_position_abbreviations_when_cells_exist(self):
         position_abbreviations = MagicMock()
         text_content = 'some text content'
