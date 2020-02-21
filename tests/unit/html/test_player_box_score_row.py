@@ -8,6 +8,22 @@ class TestPlayerBoxScoreRow(TestCase):
     def setUp(self):
         self.html = MagicMock()
 
+    def test_not_equal_when_row_is_compared_against_non_row(self):
+        self.assertNotEqual(1, PlayerBoxScoreRow(html=MagicMock()))
+
+    def test_not_equal_when_both_rows_but_different_html(self):
+        self.assertNotEqual(
+            PlayerBoxScoreRow(html=MagicMock(name="first html")),
+            PlayerBoxScoreRow(html=MagicMock(name="second html")),
+        )
+
+    def test_equal_when_both_rows_and_same_html(self):
+        html = MagicMock(name="shared html")
+        self.assertEqual(
+            PlayerBoxScoreRow(html=html),
+            PlayerBoxScoreRow(html=html),
+        )
+
     def test_team_abbreviation_when_cells_exist(self):
         cell = MagicMock(text_content=MagicMock(return_value="some team abbreviation"))
         self.html.xpath = MagicMock(return_value=[cell])
