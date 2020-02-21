@@ -13,13 +13,13 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         cells = [player_name_cell]
         self.html.xpath = MagicMock(return_value=cells)
 
-        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).player_name_cell, player_name_cell)
+        self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).player_cell, player_name_cell)
         self.html.xpath.assert_called_once_with('td[@data-stat="player"]')
 
     def test_player_name_cell_empty_string_when_cells_do_not_exist(self):
         self.html.xpath = MagicMock(return_value=[])
 
-        self.assertIsNone(PlayerAdvancedSeasonTotalsRow(html=self.html).player_name_cell)
+        self.assertIsNone(PlayerAdvancedSeasonTotalsRow(html=self.html).player_cell)
         self.html.xpath.assert_called_once_with('td[@data-stat="player"]')
 
     @patch.object(PlayerAdvancedSeasonTotalsRow, 'player_name_cell', new_callable=PropertyMock)
