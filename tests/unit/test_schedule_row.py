@@ -14,62 +14,62 @@ class TestScheduleRow(TestCase):
     def test_instance_is_not_equal_to_same_class_instance_if_html_is_different(self):
         self.assertNotEqual(ScheduleRow(html=MagicMock()), ScheduleRow(html=MagicMock()))
 
-    def test_start_date(self):
-        start_date = "some start date"
-        start_date_cell = MagicMock()
-        start_date_cell.text_content = MagicMock(return_value=start_date)
-        self.html.__getitem__ = MagicMock(return_value=start_date_cell)
+    def test_start_date_when_cells_exist(self):
+        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some start date"))])
+        self.assertEqual(ScheduleRow(html=self.html).start_date, "some start date")
+        self.html.xpath.assert_called_once_with('th[@data-stat="date_game"]')
 
-        self.assertEqual(ScheduleRow(html=self.html).start_date, start_date)
-        self.html.__getitem__.assert_called_once_with(0)
-        start_date_cell.text_content.assert_called_once_with()
+    def test_start_date_is_empty_string_when_cells_do_not_exist(self):
+        self.html.xpath = MagicMock(return_value=[])
+        self.assertEqual(ScheduleRow(html=self.html).start_date, "")
+        self.html.xpath.assert_called_once_with('th[@data-stat="date_game"]')
 
-    def test_start_time_of_day(self):
-        start_time_of_day = "some start time of day"
-        start_time_of_day_cell = MagicMock()
-        start_time_of_day_cell.text_content = MagicMock(return_value=start_time_of_day)
-        self.html.__getitem__ = MagicMock(return_value=start_time_of_day_cell)
+    def test_start_time_of_day_when_cells_exist(self):
+        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some start time of day"))])
+        self.assertEqual(ScheduleRow(html=self.html).start_time_of_day, "some start time of day")
+        self.html.xpath.assert_called_once_with('td[@data-stat="game_start_time"]')
 
-        self.assertEqual(ScheduleRow(html=self.html).start_time_of_day, start_time_of_day)
-        self.html.__getitem__.assert_called_once_with(1)
-        start_time_of_day_cell.text_content.assert_called_once_with()
+    def test_start_time_of_day_is_empty_string_when_cells_do_not_exist(self):
+        self.html.xpath = MagicMock(return_value=[])
+        self.assertEqual(ScheduleRow(html=self.html).start_time_of_day, "")
+        self.html.xpath.assert_called_once_with('td[@data-stat="game_start_time"]')
 
-    def test_away_team_name(self):
-        away_team_name = "some away team name"
-        away_team_name_cell = MagicMock()
-        away_team_name_cell.text_content = MagicMock(return_value=away_team_name)
-        self.html.__getitem__ = MagicMock(return_value=away_team_name_cell)
+    def test_away_team_name_when_cells_exist(self):
+        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some away team name"))])
+        self.assertEqual(ScheduleRow(html=self.html).away_team_name, "some away team name")
+        self.html.xpath.assert_called_once_with('td[@data-stat="visitor_team_name"]')
 
-        self.assertEqual(ScheduleRow(html=self.html).away_team_name, away_team_name)
-        self.html.__getitem__.assert_called_once_with(2)
-        away_team_name_cell.text_content.assert_called_once_with()
+    def test_away_team_name_is_empty_string_when_cells_do_not_exist(self):
+        self.html.xpath = MagicMock(return_value=[])
+        self.assertEqual(ScheduleRow(html=self.html).away_team_name, "")
+        self.html.xpath.assert_called_once_with('td[@data-stat="visitor_team_name"]')
 
-    def test_home_team_name(self):
-        home_team_name = "some home team name"
-        home_team_name_cell = MagicMock()
-        home_team_name_cell.text_content = MagicMock(return_value=home_team_name)
-        self.html.__getitem__ = MagicMock(return_value=home_team_name_cell)
+    def test_home_team_name_when_cells_exist(self):
+        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some home team name"))])
+        self.assertEqual(ScheduleRow(html=self.html).home_team_name, "some home team name")
+        self.html.xpath.assert_called_once_with('td[@data-stat="home_team_name"]')
 
-        self.assertEqual(ScheduleRow(html=self.html).home_team_name, home_team_name)
-        self.html.__getitem__.assert_called_once_with(4)
-        home_team_name_cell.text_content.assert_called_once_with()
+    def test_home_team_name_is_empty_string_when_cells_do_not_exist(self):
+        self.html.xpath = MagicMock(return_value=[])
+        self.assertEqual(ScheduleRow(html=self.html).home_team_name, "")
+        self.html.xpath.assert_called_once_with('td[@data-stat="home_team_name"]')
 
-    def test_away_team_score(self):
-        away_team_score = "some away team score"
-        away_team_score_cell = MagicMock()
-        away_team_score_cell.text_content = MagicMock(return_value=away_team_score)
-        self.html.__getitem__ = MagicMock(return_value=away_team_score_cell)
+    def test_away_team_score_when_cells_exist(self):
+        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some away team score"))])
+        self.assertEqual(ScheduleRow(html=self.html).away_team_score, "some away team score")
+        self.html.xpath.assert_called_once_with('td[@data-stat="visitor_pts"]')
 
-        self.assertEqual(ScheduleRow(html=self.html).away_team_score, away_team_score)
-        self.html.__getitem__.assert_called_once_with(3)
-        away_team_score_cell.text_content.assert_called_once_with()
+    def test_away_team_score_is_empty_string_when_cells_do_not_exist(self):
+        self.html.xpath = MagicMock(return_value=[])
+        self.assertEqual(ScheduleRow(html=self.html).away_team_score, "")
+        self.html.xpath.assert_called_once_with('td[@data-stat="visitor_pts"]')
 
-    def test_home_team_score(self):
-        home_team_score = "some home team score"
-        home_team_score_cell = MagicMock()
-        home_team_score_cell.text_content = MagicMock(return_value=home_team_score)
-        self.html.__getitem__ = MagicMock(return_value=home_team_score_cell)
+    def test_home_team_score_when_cells_exist(self):
+        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some home team score"))])
+        self.assertEqual(ScheduleRow(html=self.html).home_team_score, "some home team score")
+        self.html.xpath.assert_called_once_with('td[@data-stat="home_pts"]')
 
-        self.assertEqual(ScheduleRow(html=self.html).home_team_score, home_team_score)
-        self.html.__getitem__.assert_called_once_with(5)
-        home_team_score_cell.text_content.assert_called_once_with()
+    def test_home_team_score_is_empty_string_when_cells_do_not_exist(self):
+        self.html.xpath = MagicMock(return_value=[])
+        self.assertEqual(ScheduleRow(html=self.html).home_team_score, "")
+        self.html.xpath.assert_called_once_with('td[@data-stat="home_pts"]')
