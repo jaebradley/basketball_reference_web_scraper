@@ -876,27 +876,57 @@ class ScheduleRow:
 
     @property
     def start_date(self):
-        return self.html[0].text_content()
+        cells = self.html.xpath('th[@data-stat="date_game"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def start_time_of_day(self):
-        return self.html[1].text_content()
+        cells = self.html.xpath('td[@data-stat="game_start_time"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def away_team_name(self):
-        return self.html[2].text_content()
+        cells = self.html.xpath('td[@data-stat="visitor_team_name"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def home_team_name(self):
-        return self.html[4].text_content()
+        cells = self.html.xpath('td[@data-stat="home_team_name"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def away_team_score(self):
-        return self.html[3].text_content()
+        cells = self.html.xpath('td[@data-stat="visitor_pts"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
     @property
     def home_team_score(self):
-        return self.html[5].text_content()
+        cells = self.html.xpath('td[@data-stat="home_pts"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
 
 class SearchPage:
