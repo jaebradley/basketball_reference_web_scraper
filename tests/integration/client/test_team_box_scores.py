@@ -2,14 +2,9 @@ import json
 import os
 from pathlib import Path
 from unittest import TestCase
-from unittest.mock import patch, MagicMock
-
-import requests
-from requests.exceptions import HTTPError
 
 import basketball_reference_web_scraper.client as client
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, Outcome
-from basketball_reference_web_scraper.errors import InvalidDate
 
 
 class TestTeamBoxScoresInMemoryOutput(TestCase):
@@ -409,7 +404,7 @@ class TestTeamBoxScoresCSVOutput(TestCase):
     def setUp(self):
         self.file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/2018_01_01_team_box_scores.csv"
+            "../output/2018_01_01_team_box_scores.csv"
         )
 
     def tearDown(self):
@@ -434,7 +429,7 @@ class TestTeamBoxScoresCSVOutput(TestCase):
         self.output_2018_01_01_team_box_scores_to_csv()
         expected_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/2018_01_01_team_box_scores.csv"
+            "../output/expected/2018_01_01_team_box_scores.csv"
         )
         with open(self.file_path, 'r') as output_file, open(expected_file_path, 'r') as expected_file:
             output_lines = output_file.readlines()
@@ -447,7 +442,7 @@ class TestTeamBoxScoresInMemoryJSON(TestCase):
     def setUp(self):
         self.expected_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/2018_01_01_team_box_scores.json"
+            "../output/expected/2018_01_01_team_box_scores.json"
         )
 
     def test_2018_01_01_team_box_scores_json_box_scores_to_memory(self):
@@ -465,11 +460,11 @@ class TestTeamBoxScoresJSONOutput(TestCase):
     def setUp(self):
         self.file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/2018_01_01_team_box_scores.json"
+            "../output/2018_01_01_team_box_scores.json"
         )
         self.expected_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/2018_01_01_team_box_scores.json"
+            "../output/expected/2018_01_01_team_box_scores.json"
         )
 
     def tearDown(self):
@@ -502,19 +497,3 @@ class TestTeamBoxScoresJSONOutput(TestCase):
                 json.load(output_file),
                 json.load(expected_file),
             )
-
-
-class TestTeamBoxScores(TestCase):
-    @patch('basketball_reference_web_scraper.http_client.team_box_scores')
-    def test_invalid_date_error_raised_for_unknown_date(self, mocked_http_team_box_scores):
-        mocked_http_team_box_scores.side_effect = HTTPError(
-            response=MagicMock(status_code=requests.codes.not_found)
-        )
-        self.assertRaisesRegex(
-            InvalidDate,
-            "Date with year set to jae, month set to bae, and day set to bae is invalid",
-            client.team_box_scores,
-            day="bae",
-            month="bae",
-            year="jae"
-        )

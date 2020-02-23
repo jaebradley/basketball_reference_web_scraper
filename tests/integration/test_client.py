@@ -32,7 +32,7 @@ class TestClient(TestCase):
     def test_output_csv_box_scores_to_file(self):
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/foo.csv",
+            "./output/2003_10_29_TOR_pbp.csv",
         )
         client.player_box_scores(
             day=1,
