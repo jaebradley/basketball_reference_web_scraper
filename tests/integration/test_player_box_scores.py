@@ -23,7 +23,7 @@ class TestPlayerBoxScores(TestCase):
     def test_get_box_scores_from_2001(self):
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/foo.csv",
+            "./output/2003_10_29_TOR_pbp.csv",
         )
         player_box_scores(
             day=1, month=1, year=2001,

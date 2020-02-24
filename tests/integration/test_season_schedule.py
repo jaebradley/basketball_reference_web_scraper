@@ -21,14 +21,14 @@ class TestSeasonSchedule(TestCase):
     def test_season_schedule_csv(self):
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/foo.csv"
+            "./output/2003_10_29_TOR_pbp.csv"
         )
         season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=output_file_path)
 
     def test_season_schedule_csv_append(self):
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/foo.csv"
+            "./output/2003_10_29_TOR_pbp.csv"
         )
         season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=output_file_path,
                         output_write_option=OutputWriteOption.WRITE)
@@ -36,7 +36,7 @@ class TestSeasonSchedule(TestCase):
     def test_2017_season_schedule_csv_append(self):
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/foo.csv"
+            "./output/2003_10_29_TOR_pbp.csv"
         )
         season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=output_file_path,
                         output_write_option=OutputWriteOption.WRITE)
