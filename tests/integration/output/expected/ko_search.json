@@ -1,0 +1,310 @@
+{
+    "players": [
+        {
+            "identifier": "bryanko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kobe Bryant"
+        },
+        {
+            "identifier": "birdla01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Larry Bird"
+        },
+        {
+            "identifier": "korveky01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kyle Korver"
+        },
+        {
+            "identifier": "kojisdo01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Don Kojis"
+        },
+        {
+            "identifier": "komivho01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Howard Komives"
+        },
+        {
+            "identifier": "patteru01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Ruben Patterson"
+        },
+        {
+            "identifier": "waitedi01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Dion Waiters"
+        },
+        {
+            "identifier": "koufoko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kosta Koufos"
+        },
+        {
+            "identifier": "vanbrja01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION",
+                "AMERICAN_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Jan van Breda Kolff"
+        },
+        {
+            "identifier": "koncajo01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Jon Koncak"
+        },
+        {
+            "identifier": "oquinky01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kyle O'Quinn"
+        },
+        {
+            "identifier": "korkmfu01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Furkan Korkmaz"
+        },
+        {
+            "identifier": "vanbrbu01",
+            "leagues": [
+                "BASKETBALL_ASSOCIATION_OF_AMERICA",
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Butch van Breda Kolff"
+        },
+        {
+            "identifier": "kornelu01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Luke Kornet"
+        },
+        {
+            "identifier": "komenmi01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Milo Komenich"
+        },
+        {
+            "identifier": "davidko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Korn\u00e9l D\u00e1vid"
+        },
+        {
+            "identifier": "gainesu01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Sundiata Gaines"
+        },
+        {
+            "identifier": "blabuw01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Uwe Blab"
+        },
+        {
+            "identifier": "kopicjo01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Joe Kopicki"
+        },
+        {
+            "identifier": "kozelto01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Tom Kozelko"
+        },
+        {
+            "identifier": "papanko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kostas Papanikolaou"
+        },
+        {
+            "identifier": "koperbu01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Bud Koper"
+        },
+        {
+            "identifier": "simmoko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kobi Simmons"
+        },
+        {
+            "identifier": "kornefr01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Frank Kornet"
+        },
+        {
+            "identifier": "kottmha01",
+            "leagues": [
+                "BASKETBALL_ASSOCIATION_OF_AMERICA"
+            ],
+            "name": "Harold Kottman"
+        },
+        {
+            "identifier": "kofoeba01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Bart Kofoed"
+        },
+        {
+            "identifier": "kondlto01",
+            "leagues": [
+                "AMERICAN_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Tom Kondla"
+        },
+        {
+            "identifier": "kostean01",
+            "leagues": [
+                "BASKETBALL_ASSOCIATION_OF_AMERICA"
+            ],
+            "name": "Andy Kostecka"
+        },
+        {
+            "identifier": "kosmale01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Len Kosmalski"
+        },
+        {
+            "identifier": "kozliro01",
+            "leagues": [
+                "AMERICAN_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Ronald Kozlicki"
+        },
+        {
+            "identifier": "korolya01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Yaroslav Korolev"
+        },
+        {
+            "identifier": "youngko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Korleone Young"
+        },
+        {
+            "identifier": "perovko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kosta Perovi\u0107"
+        },
+        {
+            "identifier": "konchjo01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "John Konchar"
+        },
+        {
+            "identifier": "koskito01",
+            "leagues": [
+                "AMERICAN_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Tony Koski"
+        },
+        {
+            "identifier": "stokeed01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Ed Stokes"
+        },
+        {
+            "identifier": "antetko01",
+            "leagues": [
+                "NATIONAL_BASKETBALL_ASSOCIATION"
+            ],
+            "name": "Kostas Antetokounmpo"
+        },
+        {
+            "identifier": "koenibr01",
+            "leagues": [],
+            "name": "Bronson Koenig"
+        },
+        {
+            "identifier": "koumach01",
+            "leagues": [],
+            "name": "Christ Koumadje"
+        },
+        {
+            "identifier": "lucioko01",
+            "leagues": [],
+            "name": "Korie Lucious"
+        },
+        {
+            "identifier": "koshwma01",
+            "leagues": [],
+            "name": "Mac Koshwal"
+        },
+        {
+            "identifier": "kouguma01",
+            "leagues": [],
+            "name": "Max Kouguere"
+        },
+        {
+            "identifier": "kobetol01",
+            "leagues": [],
+            "name": "Oleksandr Kobets"
+        },
+        {
+            "identifier": "prestpa01",
+            "leagues": [],
+            "name": "Paul\u00e3o Prestes"
+        },
+        {
+            "identifier": "koponpe01",
+            "leagues": [],
+            "name": "Petteri Koponen"
+        },
+        {
+            "identifier": "konatsa01",
+            "leagues": [],
+            "name": "Sagaba Konate"
+        }
+    ]
+}
