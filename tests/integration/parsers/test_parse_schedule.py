@@ -21,7 +21,7 @@ class TestScheduleParser(TestCase):
         ).text
         self.schedule_with_future_games_html_file = open(
             os.path.join(os.path.dirname(__file__),
-                         './files/NBA_2019_games-april.html')
+                         '../files/NBA_2019_games-april.html')
         )
         self.schedule_with_future_games_html = self.schedule_with_future_games_html_file.read()
         self.parser = ScheduledGamesParser(
