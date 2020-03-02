@@ -103,10 +103,13 @@ def players_season_totals(season_end_year, output_type=None, output_file_path=No
     )
 
 
-def players_advanced_season_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
-                                   json_options=None):
+def players_advanced_season_totals(season_end_year, include_combined_values=False, output_type=None,
+                                   output_file_path=None, output_write_option=None, json_options=None):
     try:
-        values = http_client.players_advanced_season_totals(season_end_year)
+        values = http_client.players_advanced_season_totals(
+            season_end_year,
+            include_combined_values=include_combined_values
+        )
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidSeason(season_end_year=season_end_year)

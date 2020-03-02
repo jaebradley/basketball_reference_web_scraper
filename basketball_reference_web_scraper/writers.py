@@ -212,6 +212,8 @@ class RowFormatter:
             "period_type",
             "leagues",
         ]:
+            if field_data is None:
+                return None
             if isinstance(field_data, set):
                 return "-".join(map(lambda data: data.value, list(field_data)))
             return field_data.value

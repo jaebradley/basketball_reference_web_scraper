@@ -255,12 +255,11 @@ class PlayerAdvancedSeasonTotalsTable:
             ]
         """
 
-    @property
-    def rows(self):
+    def get_rows(self, include_combined_totals=False):
         player_advanced_season_totals_rows = []
         for row_html in self.html.xpath(self.rows_query):
             row = PlayerAdvancedSeasonTotalsRow(html=row_html)
-            if not row.is_combined_totals:
+            if (include_combined_totals is True and row.is_combined_totals is True) or row.is_combined_totals is False:
                 # Basketball Reference includes a "total" row for players that got traded
                 # which is essentially a sum of all player team rows
                 # I want to avoid including those, so I check the "team" field value for "TOT"

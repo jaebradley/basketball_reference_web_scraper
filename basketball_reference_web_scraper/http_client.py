@@ -147,7 +147,7 @@ def players_season_totals(season_end_year):
     return parser.parse(table.rows)
 
 
-def players_advanced_season_totals(season_end_year):
+def players_advanced_season_totals(season_end_year, include_combined_values=False):
     url = '{BASE_URL}/leagues/NBA_{season_end_year}_advanced.html'.format(
         BASE_URL=BASE_URL,
         season_end_year=season_end_year,
@@ -167,7 +167,7 @@ def players_advanced_season_totals(season_end_year):
         )
     )
 
-    return parser.parse(table.rows)
+    return parser.parse(table.get_rows(include_combined_values))
 
 
 def team_box_score(game_url_path):

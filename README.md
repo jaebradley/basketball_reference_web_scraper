@@ -134,6 +134,10 @@ from basketball_reference_web_scraper import client
 # Get 2017-2018 advanced season statistics for all players
 client.players_advanced_season_totals(season_end_year=2018)
 
+# Get 2017-2018 advanced season statistics for all players and include advanced statistics for a player
+# accumulated over entire course of the season
+client.players_advanced_season_totals(season_end_year=2018, include_combined_values=True)
+
 # The players_advanced_season_totals method also supports all output behavior previously described
 ```
 

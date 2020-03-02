@@ -314,6 +314,7 @@ class PlayerAdvancedSeasonTotalsParser:
                 "defensive_box_plus_minus": str_to_float(total.defensive_plus_minus),
                 "box_plus_minus": str_to_float(total.plus_minus),
                 "value_over_replacement_player": str_to_float(total.value_over_replacement_player),
+                "is_combined_totals": total.is_combined_totals,
             } for total in totals
         ]
 
