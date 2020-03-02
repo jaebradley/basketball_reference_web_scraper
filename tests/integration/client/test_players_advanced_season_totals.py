@@ -13,14 +13,18 @@ class BaseTestPlayerAdvancedSeasonTotalsCSVOutput(TestCase):
     def year(self):
         raise NotImplementedError
 
+    @property
+    def include_combined_values(self):
+        raise NotImplementedError
+
     def setUp(self):
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/player_advanced_season_totals_{year}.csv".format(year=self.year),
+            "../output/player_advanced_season_totals_{year}.csv".format(year=self.year),
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/player_advanced_season_totals_{year}.csv".format(year=self.year),
+            "../output/expected/player_advanced_season_totals_{year}.csv".format(year=self.year),
         )
 
     def tearDown(self):
@@ -31,6 +35,7 @@ class BaseTestPlayerAdvancedSeasonTotalsCSVOutput(TestCase):
             season_end_year=self.year,
             output_type=OutputType.CSV,
             output_file_path=self.output_file_path,
+            include_combined_values=self.include_combined_values,
         )
 
         with open(self.output_file_path, "r") as output_file, \
@@ -46,24 +51,29 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
     def year(self):
         raise NotImplementedError
 
+    @property
+    def include_combined_values(self):
+        raise NotImplementedError
+
     def setUp(self):
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/player_advanced_season_totals_{year}.json".format(year=self.year),
+            "../output/player_advanced_season_totals_{year}.json".format(year=self.year),
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/player_advanced_season_totals_{year}.json".format(year=self.year),
+            "../output/expected/player_advanced_season_totals_{year}.json".format(year=self.year),
         )
 
-    def tearDown(self):
-        os.remove(self.output_file_path)
+    # def tearDown(self):
+    #     os.remove(self.output_file_path)
 
     def assert_player_advanced_season_totals_json(self):
         players_advanced_season_totals(
             season_end_year=self.year,
             output_type=OutputType.JSON,
             output_file_path=self.output_file_path,
+            include_combined_values=self.include_combined_values,
         )
 
         with open(self.output_file_path, "r") as output_file, \
@@ -79,6 +89,36 @@ class Test2018PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
     def year(self):
         return 2018
 
+    @property
+    def include_combined_values(self):
+        return False
+
+    def test_players_advanced_season_totals_csv(self):
+        self.assert_player_advanced_season_totals_csv()
+
+
+class Test2017PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
+    def year(self):
+        return 2017
+
+    @property
+    def include_combined_values(self):
+        return True
+
+    def test_players_advanced_season_totals_csv(self):
+        self.assert_player_advanced_season_totals_csv()
+
+
+class Test2016PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
+    def year(self):
+        return 2016
+
+    @property
+    def include_combined_values(self):
+        return True
+
     def test_players_advanced_season_totals_csv(self):
         self.assert_player_advanced_season_totals_csv()
 
@@ -87,6 +127,10 @@ class Test2001PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
     @property
     def year(self):
         return 2001
+
+    @property
+    def include_combined_values(self):
+        return False
 
     def test_players_advanced_season_totals_csv(self):
         self.assert_player_advanced_season_totals_csv()
@@ -97,6 +141,36 @@ class Test2018PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
     def year(self):
         return 2018
 
+    @property
+    def include_combined_values(self):
+        return False
+
+    def test_players_advanced_season_totals_json(self):
+        self.assert_player_advanced_season_totals_json()
+
+
+class Test2017PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
+    def year(self):
+        return 2017
+
+    @property
+    def include_combined_values(self):
+        return True
+
+    def test_players_advanced_season_totals_json(self):
+        self.assert_player_advanced_season_totals_json()
+
+
+class Test2016PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
+    def year(self):
+        return 2016
+
+    @property
+    def include_combined_values(self):
+        return True
+
     def test_players_advanced_season_totals_json(self):
         self.assert_player_advanced_season_totals_json()
 
@@ -105,6 +179,10 @@ class Test2001PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
     @property
     def year(self):
         return 2001
+
+    @property
+    def include_combined_values(self):
+        return False
 
     def test_players_advanced_season_totals_json(self):
         self.assert_player_advanced_season_totals_json()
@@ -135,6 +213,7 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
                 "defensive_win_shares": 1.0,
                 "free_throw_attempt_rate": 0.158,
                 "games_played": 75,
+                "is_combined_totals": False,
                 "minutes_played": 1134,
                 "name": "\u00c1lex Abrines",
                 "offensive_box_plus_minus": -1.9,
@@ -172,6 +251,7 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
                 "defensive_win_shares": 0.5,
                 "free_throw_attempt_rate": 0.418,
                 "games_played": 43,
+                "is_combined_totals": False,
                 "minutes_played": 410,
                 "name": "Ivica Zubac",
                 "offensive_box_plus_minus": -1.8,
@@ -198,7 +278,7 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
     def test_players_advanced_season_totals_json(self):
         expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/player_advanced_season_totals_2018.json",
+            "../output/expected/player_advanced_season_totals_2018.json",
         )
         result = players_advanced_season_totals(season_end_year=2018, output_type=OutputType.JSON)
         with open(expected_output_file_path, "r") as expected_output:
