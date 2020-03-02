@@ -29,7 +29,7 @@ class TestPlayerAdvancedSeasonTotalsTable(TestCase):
         html_rows = [first_html_row]
         self.html.xpath = MagicMock(return_value=html_rows)
 
-        rows = PlayerAdvancedSeasonTotalsTable(self.html).rows
+        rows = PlayerAdvancedSeasonTotalsTable(self.html).get_rows()
         self.assertTrue(len(html_rows) == len(rows))
 
     @patch.object(PlayerAdvancedSeasonTotalsRow, 'is_combined_totals', new_callable=PropertyMock, return_value=True)
@@ -38,6 +38,6 @@ class TestPlayerAdvancedSeasonTotalsTable(TestCase):
         html_rows = [first_html_row]
         self.html.xpath = MagicMock(return_value=html_rows)
 
-        rows = PlayerAdvancedSeasonTotalsTable(self.html).rows
+        rows = PlayerAdvancedSeasonTotalsTable(self.html).get_rows()
         self.assertTrue(0 == len(rows))
 
