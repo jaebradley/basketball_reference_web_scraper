@@ -65,8 +65,8 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
             "../output/expected/player_advanced_season_totals_{year}.json".format(year=self.year),
         )
 
-    # def tearDown(self):
-    #     os.remove(self.output_file_path)
+    def tearDown(self):
+        os.remove(self.output_file_path)
 
     def assert_player_advanced_season_totals_json(self):
         players_advanced_season_totals(
