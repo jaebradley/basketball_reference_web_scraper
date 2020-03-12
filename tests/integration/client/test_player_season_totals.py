@@ -97,6 +97,7 @@ class BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput(TestCase):
 
 
 class Test2001PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2001
 
@@ -105,6 +106,7 @@ class Test2001PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2002PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2002
 
@@ -113,6 +115,7 @@ class Test2002PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2003PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2003
 
@@ -121,6 +124,7 @@ class Test2003PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2004PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2004
 
@@ -129,6 +133,7 @@ class Test2004PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2005PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2005
 
@@ -137,6 +142,7 @@ class Test2005PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2006PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2006
 
@@ -145,6 +151,7 @@ class Test2006PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2007PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2007
 
@@ -153,6 +160,7 @@ class Test2007PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2008PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2008
 
@@ -161,6 +169,7 @@ class Test2008PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2009PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2009
 
@@ -169,6 +178,7 @@ class Test2009PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2010PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2010
 
@@ -177,6 +187,7 @@ class Test2010PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2011PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2011
 
@@ -185,6 +196,7 @@ class Test2011PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2012PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2012
 
@@ -193,6 +205,7 @@ class Test2012PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2013PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2013
 
@@ -201,6 +214,7 @@ class Test2013PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2014PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2014
 
@@ -209,6 +223,7 @@ class Test2014PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2015PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2015
 
@@ -217,6 +232,7 @@ class Test2015PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2016PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2016
 
@@ -225,6 +241,7 @@ class Test2016PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2017PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2017
 
@@ -233,6 +250,7 @@ class Test2017PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2018PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
     def year(self):
         return 2018
 
@@ -241,6 +259,7 @@ class Test2018PlayerSeasonCSVTotals(BaseTestPlayerAdvancedSeasonTotalsCSVOutput)
 
 
 class Test2001PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2001
 
@@ -249,6 +268,7 @@ class Test2001PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2002PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2002
 
@@ -257,6 +277,7 @@ class Test2002PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2003PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2003
 
@@ -265,6 +286,7 @@ class Test2003PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2004PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2004
 
@@ -273,6 +295,7 @@ class Test2004PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2005PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2005
 
@@ -281,6 +304,7 @@ class Test2005PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2006PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2006
 
@@ -289,6 +313,7 @@ class Test2006PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2007PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2007
 
@@ -297,6 +322,7 @@ class Test2007PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2008PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2008
 
@@ -305,6 +331,7 @@ class Test2008PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2009PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2009
 
@@ -313,6 +340,7 @@ class Test2009PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2010PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2010
 
@@ -321,6 +349,7 @@ class Test2010PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2011PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2011
 
@@ -329,6 +358,7 @@ class Test2011PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2012PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2012
 
@@ -337,6 +367,7 @@ class Test2012PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2013PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2013
 
@@ -345,6 +376,7 @@ class Test2013PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2014PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2014
 
@@ -353,6 +385,7 @@ class Test2014PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2015PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2015
 
@@ -361,6 +394,7 @@ class Test2015PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2016PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2016
 
@@ -369,6 +403,7 @@ class Test2016PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2017PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2017
 
@@ -377,6 +412,7 @@ class Test2017PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2018PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
     def year(self):
         return 2018
 
@@ -385,6 +421,7 @@ class Test2018PlayerSeasonJSONTotals(BaseTestPlayerAdvancedSeasonTotalsJSONOutpu
 
 
 class Test2001PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2001
 
@@ -393,6 +430,7 @@ class Test2001PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2002PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2002
 
@@ -401,6 +439,7 @@ class Test2002PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2003PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2003
 
@@ -409,6 +448,7 @@ class Test2003PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2004PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2004
 
@@ -417,6 +457,7 @@ class Test2004PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2005PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2005
 
@@ -425,6 +466,7 @@ class Test2005PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2006PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2006
 
@@ -433,6 +475,7 @@ class Test2006PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2007PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2007
 
@@ -441,6 +484,7 @@ class Test2007PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2008PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2008
 
@@ -449,6 +493,7 @@ class Test2008PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2009PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2009
 
@@ -457,6 +502,7 @@ class Test2009PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2010PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2010
 
@@ -465,6 +511,7 @@ class Test2010PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2011PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2011
 
@@ -473,6 +520,7 @@ class Test2011PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2012PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2012
 
@@ -481,6 +529,7 @@ class Test2012PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2013PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2013
 
@@ -489,6 +538,7 @@ class Test2013PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2014PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2014
 
@@ -497,6 +547,7 @@ class Test2014PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2015PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2015
 
@@ -505,6 +556,7 @@ class Test2015PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2016PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2016
 
@@ -513,6 +565,7 @@ class Test2016PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2017PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2017
 
@@ -521,6 +574,7 @@ class Test2017PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class Test2018PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsInMemoryJSONOutput):
+    @property
     def year(self):
         return 2018
 
@@ -529,81 +583,141 @@ class Test2018PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 
 
 class TestInMemoryPlayerSeasonTotals(TestCase):
-    def test_2001_player_season_totals(self):
+    def test_2001_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2001)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 490)
 
-    def test_2002_player_season_totals(self):
+    def test_first_2001_player_season_totals(self):
+        player_season_totals = client.players_season_totals(season_end_year=2001)
+        self.assertEqual(
+            player_season_totals[0],
+            {
+                "slug": "abdulma02",
+                "name": "Mahmoud Abdul-Rauf",
+                "positions": [Position.POINT_GUARD],
+                "age": 31,
+                "team": Team.VANCOUVER_GRIZZLIES,
+                "games_played": 41,
+                "games_started": 0,
+                "minutes_played": 486,
+                "made_field_goals": 120,
+                "attempted_field_goals": 246,
+                "made_three_point_field_goals": 4,
+                "attempted_three_point_field_goals": 14,
+                "made_free_throws": 22,
+                "attempted_free_throws": 29,
+                "offensive_rebounds": 5,
+                "defensive_rebounds": 20,
+                "assists": 76,
+                "steals": 9,
+                "blocks": 1,
+                "turnovers": 26,
+                "personal_fouls": 50,
+                "points": 266,
+            }
+        )
+
+    def test_last_2001_player_season_totals(self):
+        player_season_totals = client.players_season_totals(season_end_year=2001)
+        self.assertEqual(
+            player_season_totals[len(player_season_totals) - 1],
+            {
+                "slug": "zhizhwa01",
+                "name": "Wang Zhizhi",
+                "positions": [Position.CENTER],
+                "age": 23,
+                "team": Team.DALLAS_MAVERICKS,
+                "games_played": 5,
+                "games_started": 0,
+                "minutes_played": 38,
+                "made_field_goals": 8,
+                "attempted_field_goals": 19,
+                "made_three_point_field_goals": 0,
+                "attempted_three_point_field_goals": 2,
+                "made_free_throws": 8,
+                "attempted_free_throws": 10,
+                "offensive_rebounds": 1,
+                "defensive_rebounds": 6,
+                "assists": 0,
+                "steals": 0,
+                "blocks": 0,
+                "turnovers": 1,
+                "personal_fouls": 8,
+                "points": 24,
+            }
+        )
+
+    def test_2002_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2002)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 470)
 
-    def test_2003_player_season_totals(self):
+    def test_2003_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2003)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 456)
 
-    def test_2004_player_season_totals(self):
+    def test_2004_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2004)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 517)
 
-    def test_2005_player_season_totals(self):
+    def test_2005_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2005)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 526)
 
-    def test_2006_player_season_totals(self):
+    def test_2006_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2006)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 512)
 
-    def test_2007_player_season_totals(self):
+    def test_2007_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2007)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 487)
 
-    def test_2008_player_season_totals(self):
+    def test_2008_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2008)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 527)
 
-    def test_2009_player_season_totals(self):
+    def test_2009_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2009)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 515)
 
-    def test_2010_player_season_totals(self):
+    def test_2010_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2010)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 512)
 
-    def test_2011_player_season_totals(self):
+    def test_2011_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2011)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 542)
 
-    def test_2012_player_season_totals(self):
+    def test_2012_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2012)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 515)
 
-    def test_2013_player_season_totals(self):
+    def test_2013_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2013)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 523)
 
-    def test_2014_player_season_totals(self):
+    def test_2014_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2014)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 548)
 
-    def test_2015_player_season_totals(self):
+    def test_2015_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2015)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 575)
 
-    def test_2016_player_season_totals(self):
+    def test_2016_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2016)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 528)
 
-    def test_2017_player_season_totals(self):
+    def test_2017_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2017)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 542)
 
-    def test_2018_player_season_totals(self):
+    def test_2018_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2018)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 605)
 
     def test_2019_player_season_totals(self):
         player_season_totals = client.players_season_totals(season_end_year=2019)
-        self.assertIsNotNone(player_season_totals)
+        self.assertEqual(len(player_season_totals), 622)
 
     def test_avery_bradley_2019_player_season_totals(self):
         player_season_totals = client.players_season_totals(season_end_year=2019)
