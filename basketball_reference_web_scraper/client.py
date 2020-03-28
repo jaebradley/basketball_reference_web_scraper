@@ -1,6 +1,8 @@
 import requests
 
 from basketball_reference_web_scraper import http_client
+from basketball_reference_web_scraper.http_service import HTTPService
+from basketball_reference_web_scraper.parser_service import ParserService
 from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.output import output
 from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
@@ -12,7 +14,8 @@ from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                       json_options=None):
     try:
-        values = http_client.player_box_scores(day=day, month=month, year=year)
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.player_box_scores(day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)
