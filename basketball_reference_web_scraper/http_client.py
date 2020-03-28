@@ -4,13 +4,13 @@ from lxml import html
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
     LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM, \
     POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData
-from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
-from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, DailyLeadersPage, \
+from basketball_reference_web_scraper.errors import InvalidPlayerAndSeason
+from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, PlayerSeasonBoxScoresPage, \
     SearchPage, PlayerPage
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
-    SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
+    SecondsPlayedParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
     ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser
@@ -19,37 +19,6 @@ BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
 PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
 SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html'
-
-
-def player_box_scores(day, month, year):
-    url = '{BASE_URL}/friv/dailyleaders.cgi?month={month}&day={day}&year={year}'.format(
-        BASE_URL=BASE_URL,
-        day=day,
-        month=month,
-        year=year
-    )
-
-    response = requests.get(url=url, allow_redirects=False)
-
-    response.raise_for_status()
-
-    if response.status_code == requests.codes.ok:
-        page = DailyLeadersPage(html=html.fromstring(response.content))
-        box_score_parser = PlayerBoxScoresParser(
-            team_abbreviation_parser=TeamAbbreviationParser(
-                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
-            ),
-            location_abbreviation_parser=LocationAbbreviationParser(
-                abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
-            ),
-            outcome_abbreviation_parser=OutcomeAbbreviationParser(
-                abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME
-            ),
-            seconds_played_parser=SecondsPlayedParser(),
-        )
-        return box_score_parser.parse(page.daily_leaders)
-
-    raise InvalidDate(day=day, month=month, year=year)
 
 
 def regular_season_player_box_scores(player_identifier, season_end_year):
