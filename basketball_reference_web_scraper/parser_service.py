@@ -14,6 +14,7 @@ class ParserService:
         self.team_abbreviation_parser = TeamAbbreviationParser(abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM)
         self.location_abbreviation_parser = LocationAbbreviationParser(abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION)
         self.outcome_abbreviation_parser = OutcomeAbbreviationParser(abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME)
+        self.outcome_parser = PlayerBoxScoreOutcomeParser(outcome_abbreviation_parser=self.outcome_abbreviation_parser)
         self.seconds_played_parser = SecondsPlayedParser()
 
         self.player_box_scores_parser = PlayerBoxScoresParser(
@@ -22,6 +23,15 @@ class ParserService:
             outcome_abbreviation_parser=self.outcome_abbreviation_parser,
             seconds_played_parser=self.seconds_played_parser
         )
+        self.player_season_box_scores_parser = PlayerSeasonBoxScoresParser(
+            team_abbreviation_parser=self.team_abbreviation_parser,
+            location_abbreviation_parser=self.location_abbreviation_parser,
+            outcome_parser=self.outcome_parser,
+            seconds_played_parser=self.seconds_played_parser
+        )
 
     def parse_player_box_scores(self, box_scores):
         return self.player_box_scores_parser.parse(box_scores=box_scores)
+
+    def parse_player_season_box_scores(self, box_scores):
+        return self.player_season_box_scores_parser.parse(box_scores=box_scores)

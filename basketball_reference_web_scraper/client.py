@@ -38,7 +38,8 @@ def regular_season_player_box_scores(player_identifier, season_end_year, output_
                                      output_write_option=None, json_options=None):
 
     try:
-        values = http_client.regular_season_player_box_scores(
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.regular_season_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
         )
