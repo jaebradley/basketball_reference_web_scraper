@@ -2,58 +2,20 @@ import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
-    LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM, \
+    TEAM_NAME_TO_TEAM, \
     POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData
-from basketball_reference_web_scraper.errors import InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, PlayerSeasonBoxScoresPage, \
-    SearchPage, PlayerPage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, SearchPage, PlayerPage
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
-    PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
-    SecondsPlayedParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
+    PlayerSeasonTotalsParser, TeamTotalsParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
-    ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
+    ScheduledGamesParser, SearchResultNameParser, \
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser
 
 BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
 PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
 SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html'
-
-
-def regular_season_player_box_scores(player_identifier, season_end_year):
-    # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
-    # surname can be derived from the fact that basketball reference also has a pattern of player identifiers
-    # starting with first few characters of player's surname
-    url = '{BASE_URL}/players/{player_surname_starting_character}/{player_identifier}/gamelog/{season_end_year}'.format(
-        BASE_URL=BASE_URL,
-        player_surname_starting_character=player_identifier[0],
-        player_identifier=player_identifier,
-        season_end_year=season_end_year,
-    )
-
-    response = requests.get(url=url, allow_redirects=False)
-    response.raise_for_status()
-
-    page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
-    if page.regular_season_box_scores_table is None:
-        raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
-
-    parser = PlayerSeasonBoxScoresParser(
-        team_abbreviation_parser=TeamAbbreviationParser(
-            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
-        ),
-        location_abbreviation_parser=LocationAbbreviationParser(
-            abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
-        ),
-        outcome_parser=PlayerBoxScoreOutcomeParser(
-            outcome_abbreviation_parser=OutcomeAbbreviationParser(
-                abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME
-            ),
-        ),
-        seconds_played_parser=SecondsPlayedParser(),
-    )
-    return parser.parse(box_scores=page.regular_season_box_scores_table.rows)
 
 
 def schedule_for_month(url):

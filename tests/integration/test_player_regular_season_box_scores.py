@@ -1,9 +1,7 @@
 import json
-from datetime import datetime
-from unittest import TestCase, mock
 import os
-
-from requests import HTTPError, codes
+from datetime import datetime
+from unittest import TestCase
 
 from basketball_reference_web_scraper.client import regular_season_player_box_scores
 from basketball_reference_web_scraper.data import Team, Outcome, OutputType
@@ -95,18 +93,3 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
             output_type=OutputType.CSV,
             output_file_path=output_file_path,
         )
-
-    @mock.patch("basketball_reference_web_scraper.client.http_client")
-    def test_raises_exception_for_500_response(self, mocked_http_client):
-        mocked_http_client.regular_season_player_box_scores.side_effect = HTTPError(response=mock.Mock(status_code=codes.internal_server_error))
-        self.assertRaises(InvalidPlayerAndSeason, regular_season_player_box_scores, 'Mock Player', 2000)
-
-    @mock.patch("basketball_reference_web_scraper.client.http_client")
-    def test_raises_exception_for_404_response(self, mocked_http_client):
-        mocked_http_client.regular_season_player_box_scores.side_effect = HTTPError(response=mock.Mock(status_code=codes.not_found))
-        self.assertRaises(InvalidPlayerAndSeason, regular_season_player_box_scores, 'Mock Player', 2000)
-
-    @mock.patch("basketball_reference_web_scraper.client.http_client")
-    def test_raises_non_500_http_error(self, mocked_http_client):
-        mocked_http_client.regular_season_player_box_scores.side_effect = HTTPError(response=mock.Mock(status_code=codes.bad_request))
-        self.assertRaises(HTTPError, regular_season_player_box_scores, 'Mock Player', 2000)
