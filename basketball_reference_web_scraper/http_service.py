@@ -2,7 +2,7 @@ import requests
 from lxml import html
 
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
-from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage
+from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable
 
 
 class HTTPService:
@@ -49,3 +49,16 @@ class HTTPService:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
         return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows)
+
+    def players_season_totals(self, season_end_year):
+        url = '{BASE_URL}/leagues/NBA_{season_end_year}_totals.html'.format(
+            BASE_URL=HTTPService.BASE_URL,
+            season_end_year=season_end_year,
+        )
+
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+
+        table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
+        return self.parser.parse_player_season_totals(totals=table.rows)

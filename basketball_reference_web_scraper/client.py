@@ -88,7 +88,8 @@ def season_schedule(season_end_year, output_type=None, output_file_path=None, ou
 def players_season_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
                           json_options=None):
     try:
-        values = http_client.players_season_totals(season_end_year)
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.players_season_totals(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidSeason(season_end_year=season_end_year)

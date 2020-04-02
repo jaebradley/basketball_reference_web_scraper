@@ -4,10 +4,10 @@ from lxml import html
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
     TEAM_NAME_TO_TEAM, \
     POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData
-from basketball_reference_web_scraper.html import PlayerSeasonTotalTable, BoxScoresPage, \
+from basketball_reference_web_scraper.html import BoxScoresPage, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, DailyBoxScoresPage, SchedulePage, SearchPage, PlayerPage
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
-    PlayerSeasonTotalsParser, TeamTotalsParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
+    TeamTotalsParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
     ScheduledGamesParser, SearchResultNameParser, \
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser
@@ -54,28 +54,6 @@ def season_schedule(season_end_year):
         season_schedule_values.extend(monthly_schedule)
 
     return season_schedule_values
-
-
-def players_season_totals(season_end_year):
-    url = '{BASE_URL}/leagues/NBA_{season_end_year}_totals.html'.format(
-        BASE_URL=BASE_URL,
-        season_end_year=season_end_year,
-    )
-
-    response = requests.get(url=url)
-
-    response.raise_for_status()
-
-    table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
-    parser = PlayerSeasonTotalsParser(
-        position_abbreviation_parser=PositionAbbreviationParser(
-            abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
-        ),
-        team_abbreviation_parser=TeamAbbreviationParser(
-            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
-        )
-    )
-    return parser.parse(table.rows)
 
 
 def players_advanced_season_totals(season_end_year, include_combined_values=False):
