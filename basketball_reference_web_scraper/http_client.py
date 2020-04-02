@@ -56,29 +56,6 @@ def season_schedule(season_end_year):
     return season_schedule_values
 
 
-def players_advanced_season_totals(season_end_year, include_combined_values=False):
-    url = '{BASE_URL}/leagues/NBA_{season_end_year}_advanced.html'.format(
-        BASE_URL=BASE_URL,
-        season_end_year=season_end_year,
-    )
-
-    response = requests.get(url=url)
-
-    response.raise_for_status()
-
-    table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(response.content))
-    parser = PlayerAdvancedSeasonTotalsParser(
-        team_abbreviation_parser=TeamAbbreviationParser(
-            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
-        ),
-        position_abbreviation_parser=PositionAbbreviationParser(
-            abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
-        )
-    )
-
-    return parser.parse(table.get_rows(include_combined_values))
-
-
 def team_box_score(game_url_path):
     url = "{BASE_URL}/{game_url_path}".format(BASE_URL=BASE_URL, game_url_path=game_url_path)
 
