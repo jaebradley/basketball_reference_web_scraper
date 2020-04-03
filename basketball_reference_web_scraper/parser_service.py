@@ -40,12 +40,19 @@ class ParserService:
             position_abbreviation_parser=self.position_abbreviation_parser,
             team_abbreviation_parser=self.team_abbreviation_parser,
         )
+        self.player_advanced_season_totals_parser = PlayerAdvancedSeasonTotalsParser(
+            team_abbreviation_parser=self.team_abbreviation_parser,
+            position_abbreviation_parser=self.position_abbreviation_parser,
+        )
 
     def parse_player_box_scores(self, box_scores):
         return self.player_box_scores_parser.parse(box_scores=box_scores)
 
     def parse_player_season_box_scores(self, box_scores):
         return self.player_season_box_scores_parser.parse(box_scores=box_scores)
+
+    def parse_player_advanced_season_totals_parser(self, totals):
+        return self.player_advanced_season_totals_parser.parse(totals=totals)
 
     def parse_player_season_totals(self, totals):
         return self.player_season_totals_parser.parse(totals=totals)
