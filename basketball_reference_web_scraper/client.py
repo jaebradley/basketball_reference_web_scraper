@@ -159,7 +159,8 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
 def play_by_play(home_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                  json_options=None):
     try:
-        values = http_client.play_by_play(home_team=home_team, day=day, month=month, year=year)
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.play_by_play(home_team=home_team, day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)
