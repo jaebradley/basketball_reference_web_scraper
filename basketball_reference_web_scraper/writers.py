@@ -57,6 +57,7 @@ PLAYER_SEASON_TOTALS_COLUMN_NAMES = [
     "attempted_free_throws",
     "offensive_rebounds",
     "defensive_rebounds",
+    "total_rebounds",
     "assists",
     "steals",
     "blocks",
