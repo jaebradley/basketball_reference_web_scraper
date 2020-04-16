@@ -22,7 +22,7 @@ Hopefully this means that if you'd like to use this library, you can by simply d
 pip install basketball_reference_web_scraper
 ```
 
-This library requires `Python 3.4+` and only supports seasons after the `1999-2000` season
+This library requires `Python 3.4+` and only supports seasons after the `1948-1949` season
 
 ## Client
 
