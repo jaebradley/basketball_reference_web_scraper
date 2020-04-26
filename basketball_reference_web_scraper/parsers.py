@@ -426,11 +426,13 @@ class PlayerBoxScoresParser:
                 "attempted_free_throws": str_to_int(box_score.attempted_free_throws),
                 "offensive_rebounds": str_to_int(box_score.offensive_rebounds),
                 "defensive_rebounds": str_to_int(box_score.defensive_rebounds),
+                "total_rebounds": str_to_int(box_score.total_rebounds),
                 "assists": str_to_int(box_score.assists),
                 "steals": str_to_int(box_score.steals),
                 "blocks": str_to_int(box_score.blocks),
                 "turnovers": str_to_int(box_score.turnovers),
                 "personal_fouls": str_to_int(box_score.personal_fouls),
+                "points": str_to_int(box_score.points),
                 "game_score": str_to_float(box_score.game_score),
             } for box_score in box_scores
         ]
