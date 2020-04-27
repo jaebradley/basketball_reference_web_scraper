@@ -6,10 +6,11 @@ from requests.exceptions import HTTPError
 
 import basketball_reference_web_scraper.client as client
 from basketball_reference_web_scraper.errors import InvalidDate
+from basketball_reference_web_scraper.http_service import HTTPService
 
 
 class TestTeamBoxScores(TestCase):
-    @patch('basketball_reference_web_scraper.http_client.team_box_scores')
+    @patch.object(HTTPService, "team_box_scores")
     def test_invalid_date_error_raised_for_unknown_date(self, mocked_http_team_box_scores):
         mocked_http_team_box_scores.side_effect = HTTPError(
             response=MagicMock(status_code=requests.codes.not_found)
