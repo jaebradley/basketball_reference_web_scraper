@@ -288,7 +288,7 @@ class PlayerAdvancedSeasonTotalsParser:
         return [
             {
                 "slug": str(total.slug),
-                "name": str(total.name),
+                "name": str(total.name).rstrip("*"),
                 "positions": self.position_abbreviation_parser.from_abbreviations(total.position_abbreviations),
                 "age": str_to_int(total.age, default=None),
                 "team": self.team_abbreviation_parser.from_abbreviation(total.team_abbreviation),
@@ -328,7 +328,7 @@ class PlayerSeasonTotalsParser:
         return [
             {
                 "slug": str(total.slug),
-                "name": str(total.name),
+                "name": str(total.name).rstrip("*"),
                 "positions": self.position_abbreviation_parser.from_abbreviations(total.position_abbreviations),
                 "age": str_to_int(total.age, default=None),
                 "team": self.team_abbreviation_parser.from_abbreviation(total.team_abbreviation),
@@ -412,7 +412,7 @@ class PlayerBoxScoresParser:
         return [
             {
                 "slug": str(box_score.slug),
-                "name": str(box_score.name),
+                "name": str(box_score.name).rstrip("*"),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
                 "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),
