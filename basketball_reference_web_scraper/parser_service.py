@@ -62,6 +62,7 @@ class ParserService:
             start_time_parser=self.scheduled_start_time_parser,
             team_name_parser=self.team_name_parser,
         )
+        self.team_totals_parser = TeamTotalsParser(team_abbreviation_parser=self.team_abbreviation_parser)
 
     def parse_play_by_plays(self, play_by_plays, away_team_name, home_team_name):
         return self.play_by_plays_parser.parse(
@@ -84,3 +85,6 @@ class ParserService:
 
     def parse_scheduled_games(self, games):
         return self.scheduled_games_parser.parse_games(games)
+
+    def parse_team_totals(self, first_team_totals, second_team_totals):
+        return self.team_totals_parser.parse(first_team_totals=first_team_totals, second_team_totals=second_team_totals)

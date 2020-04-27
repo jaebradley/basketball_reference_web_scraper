@@ -1,10 +1,10 @@
 import requests
 from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage
 
 
 class HTTPService:
@@ -124,3 +124,37 @@ class HTTPService:
             season_schedule_values.extend(monthly_schedule)
 
         return season_schedule_values
+
+    def team_box_score(self, game_url_path):
+        url = "{BASE_URL}/{game_url_path}".format(BASE_URL=HTTPService.BASE_URL, game_url_path=game_url_path)
+
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+
+        page = BoxScoresPage(html.fromstring(response.content))
+        combined_team_totals = [
+            TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
+            for table in page.basic_statistics_tables
+        ]
+
+        return self.parser.parse_team_totals(
+            first_team_totals=combined_team_totals[0],
+            second_team_totals=combined_team_totals[1],
+        )
+
+    def team_box_scores(self, day, month, year):
+        url = "{BASE_URL}/boxscores/".format(BASE_URL=HTTPService.BASE_URL)
+
+        response = requests.get(url=url, params={"day": day, "month": month, "year": year})
+
+        response.raise_for_status()
+
+        page = DailyBoxScoresPage(html=html.fromstring(response.content))
+
+        return [
+            box_score
+            for game_url_path in page.game_url_paths
+            for box_score in self.team_box_score(game_url_path=game_url_path)
+        ]
+

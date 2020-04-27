@@ -138,7 +138,8 @@ def players_advanced_season_totals(season_end_year, include_combined_values=Fals
 def team_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                     json_options=None):
     try:
-        values = http_client.team_box_scores(day=day, month=month, year=year)
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.team_box_scores(day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)
