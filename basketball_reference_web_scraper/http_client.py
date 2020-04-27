@@ -2,56 +2,16 @@ import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal, \
-    TEAM_NAME_TO_TEAM, \
     LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData
 from basketball_reference_web_scraper.html import BoxScoresPage, \
-    DailyBoxScoresPage, SchedulePage, SearchPage, PlayerPage
+    DailyBoxScoresPage, SearchPage, PlayerPage
 from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
-    TeamTotalsParser, TeamNameParser, ScheduledStartTimeParser, \
-    ScheduledGamesParser, SearchResultNameParser, \
+    TeamTotalsParser, SearchResultNameParser, \
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser
 
 BASE_URL = 'https://www.basketball-reference.com'
 PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
 SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html'
-
-
-def schedule_for_month(url):
-    response = requests.get(url=url)
-
-    response.raise_for_status()
-
-    page = SchedulePage(html=html.fromstring(html=response.content))
-    parser = ScheduledGamesParser(
-        start_time_parser=ScheduledStartTimeParser(),
-        team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
-    )
-    return parser.parse_games(games=page.rows)
-
-
-def season_schedule(season_end_year):
-    url = '{BASE_URL}/leagues/NBA_{season_end_year}_games.html'.format(
-        BASE_URL=BASE_URL,
-        season_end_year=season_end_year
-    )
-
-    response = requests.get(url=url)
-
-    response.raise_for_status()
-
-    page = SchedulePage(html=html.fromstring(html=response.content))
-    parser = ScheduledGamesParser(
-        start_time_parser=ScheduledStartTimeParser(),
-        team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
-    )
-    season_schedule_values = parser.parse_games(games=page.rows)
-
-    for month_url_path in page.other_months_schedule_urls:
-        url = '{BASE_URL}{month_url_path}'.format(BASE_URL=BASE_URL, month_url_path=month_url_path)
-        monthly_schedule = schedule_for_month(url=url)
-        season_schedule_values.extend(monthly_schedule)
-
-    return season_schedule_values
 
 
 def team_box_score(game_url_path):

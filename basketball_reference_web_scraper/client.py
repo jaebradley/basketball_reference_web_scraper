@@ -65,7 +65,8 @@ def regular_season_player_box_scores(player_identifier, season_end_year, output_
 def season_schedule(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
                     json_options=None):
     try:
-        values = http_client.season_schedule(season_end_year)
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.season_schedule(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         # https://github.com/requests/requests/blob/master/requests/status_codes.py#L58
         if http_error.response.status_code == requests.codes.not_found:

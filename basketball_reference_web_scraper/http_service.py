@@ -4,7 +4,7 @@ from lxml import html
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage
 
 
 class HTTPService:
@@ -96,3 +96,31 @@ class HTTPService:
 
         table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
         return self.parser.parse_player_season_totals(totals=table.rows)
+
+    def schedule_for_month(self, url):
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+
+        page = SchedulePage(html=html.fromstring(html=response.content))
+        return self.parser.parse_scheduled_games(games=page.rows)
+
+    def season_schedule(self, season_end_year):
+        url = '{BASE_URL}/leagues/NBA_{season_end_year}_games.html'.format(
+            BASE_URL=HTTPService.BASE_URL,
+            season_end_year=season_end_year
+        )
+
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+
+        page = SchedulePage(html=html.fromstring(html=response.content))
+        season_schedule_values = self.parser.parse_scheduled_games(games=page.rows)
+
+        for month_url_path in page.other_months_schedule_urls:
+            url = '{BASE_URL}{month_url_path}'.format(BASE_URL=HTTPService.BASE_URL, month_url_path=month_url_path)
+            monthly_schedule = self.schedule_for_month(url=url)
+            season_schedule_values.extend(monthly_schedule)
+
+        return season_schedule_values
