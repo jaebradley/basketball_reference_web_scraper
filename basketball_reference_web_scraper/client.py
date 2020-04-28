@@ -1,10 +1,9 @@
 import requests
 
-from basketball_reference_web_scraper import http_client
-from basketball_reference_web_scraper.http_service import HTTPService
-from basketball_reference_web_scraper.parser_service import ParserService
 from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason
+from basketball_reference_web_scraper.http_service import HTTPService
 from basketball_reference_web_scraper.output import output
+from basketball_reference_web_scraper.parser_service import ParserService
 from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
     BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
     PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES, \
@@ -182,7 +181,8 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
 
 
 def search(term, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
-    values = http_client.search(term=term)
+    http_service = HTTPService(parser=ParserService())
+    values = http_service.search(term=term)
     return output(
         values=values,
         output_type=output_type,

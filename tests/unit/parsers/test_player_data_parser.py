@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData, League
-from basketball_reference_web_scraper.http_client import SEARCH_RESULT_RESOURCE_LOCATION_REGEX
+from basketball_reference_web_scraper.parser_service import ParserService
 from basketball_reference_web_scraper.parsers import PlayerDataParser, ResourceLocationParser, LeagueAbbreviationParser
 
 
@@ -9,7 +9,7 @@ class TestPlayerDataParser(TestCase):
     def setUp(self):
         self.parser = PlayerDataParser(
             search_result_location_parser=ResourceLocationParser(
-                resource_location_regex=SEARCH_RESULT_RESOURCE_LOCATION_REGEX,
+                resource_location_regex=ParserService.SEARCH_RESULT_RESOURCE_LOCATION_REGEX,
             ),
             league_abbreviation_parser=LeagueAbbreviationParser(abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE),
         )

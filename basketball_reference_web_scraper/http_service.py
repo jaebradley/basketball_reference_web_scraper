@@ -1,10 +1,11 @@
 import requests
 from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
-    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage
+    PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
+    PlayerPage
 
 
 class HTTPService:
@@ -158,3 +159,45 @@ class HTTPService:
             for box_score in self.team_box_score(game_url_path=game_url_path)
         ]
 
+    def search(self, term):
+        response = requests.get(
+            url="{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL),
+            params={"search": term}
+        )
+
+        response.raise_for_status()
+
+        player_results = []
+
+        if response.url.startswith("{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL)):
+            page = SearchPage(html=html.fromstring(response.content))
+            parsed_results = self.parser.parse_player_search_results(nba_aba_baa_players=page.nba_aba_baa_players)
+            player_results += parsed_results["players"]
+
+            while page.nba_aba_baa_players_pagination_url is not None:
+                response = requests.get(
+                    url="{BASE_URL}/search/{pagination_url}".format(
+                        BASE_URL=HTTPService.BASE_URL,
+                        pagination_url=page.nba_aba_baa_players_pagination_url
+                    )
+                )
+
+                response.raise_for_status()
+
+                page = SearchPage(html=html.fromstring(response.content))
+
+                parsed_results = self.parser.parse_player_search_results(nba_aba_baa_players=page.nba_aba_baa_players)
+                player_results += parsed_results["players"]
+
+        elif response.url.startswith("{BASE_URL}/players".format(BASE_URL=HTTPService.BASE_URL)):
+            page = PlayerPage(html=html.fromstring(response.content))
+            data = PlayerData(
+                name=page.name,
+                resource_location=response.url,
+                league_abbreviations=set([row.league_abbreviation for row in page.totals_table.rows])
+            )
+            player_results += [self.parser.parse_player_data(player=data)]
+
+        return {
+            "players": player_results
+        }
