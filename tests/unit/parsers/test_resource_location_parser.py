@@ -1,12 +1,12 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.http_client import SEARCH_RESULT_RESOURCE_LOCATION_REGEX
+from basketball_reference_web_scraper.parser_service import ParserService
 from basketball_reference_web_scraper.parsers import ResourceLocationParser
 
 
 class TestResourceLocationParser(TestCase):
     def setUp(self):
-        self.parser = ResourceLocationParser(resource_location_regex=SEARCH_RESULT_RESOURCE_LOCATION_REGEX)
+        self.parser = ResourceLocationParser(resource_location_regex=ParserService.SEARCH_RESULT_RESOURCE_LOCATION_REGEX)
 
     def test_parse_players_resource_type(self):
         self.assertEqual(
