@@ -23,8 +23,7 @@ jobs:
           pip install -r requirements.txt
       - name: Test With Pytest
         run: |
-          pip install pytest
-          pip install pytest-cov
-          pytest --cov=./ --cov-report=xml
+          pip install -e .
+          coverage run -m unittest discover
       - name: Upload Coverage To Codecov
         uses: codecov/codecov-action@v1
