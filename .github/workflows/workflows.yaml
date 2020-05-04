@@ -2,6 +2,8 @@ name: Basketball Reference Web Scraper
 
 on:
   push:
+    branches:
+      - v4
   pull_request:
   schedule:
     - cron: '0 22 * * *'
