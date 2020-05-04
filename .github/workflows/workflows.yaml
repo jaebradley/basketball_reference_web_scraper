@@ -13,6 +13,8 @@ jobs:
           # there's some issue when installing lxml
           - os: windows-latest
             python-version: 3.8
+          - os: ubuntu-latest
+            python-version: 3.8
     steps:
       - uses: actions/checkout@v2
         with:
