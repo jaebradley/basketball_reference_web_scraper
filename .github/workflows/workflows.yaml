@@ -7,8 +7,12 @@ jobs:
     runs-on:  ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubutu-latest, macos-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
         python-version: [3.5, 3.6, 3.7, 3.8]
+        exclude:
+          # there's some issue when installing lxml
+          - os: windows-latest
+            python-version: 3.8
     steps:
       - uses: actions/checkout@master
         with:
