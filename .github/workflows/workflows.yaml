@@ -1,6 +1,8 @@
 name: Basketball Reference Web Scraper
 
 on:
+  release:
+    types: [published]
   push:
     branches:
       - v4
