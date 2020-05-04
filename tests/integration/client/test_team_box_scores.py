@@ -431,7 +431,7 @@ class TestTeamBoxScoresCSVOutput(TestCase):
             os.path.dirname(__file__),
             "../output/expected/2018_01_01_team_box_scores.csv"
         )
-        with open(self.file_path, 'r') as output_file, open(expected_file_path, 'r') as expected_file:
+        with open(self.file_path, 'r', encoding="utf8") as output_file, open(expected_file_path, 'r', encoding="utf8") as expected_file:
             output_lines = output_file.readlines()
             expected_lines = expected_file.readlines()
 
@@ -452,7 +452,7 @@ class TestTeamBoxScoresInMemoryJSON(TestCase):
             year=2018,
             output_type=OutputType.JSON,
         )
-        with open(self.expected_file_path) as expected_json:
+        with open(self.expected_file_path, encoding="utf8") as expected_json:
             self.assertEqual(json.loads(january_first_box_scores), json.load(expected_json))
 
 
@@ -492,7 +492,7 @@ class TestTeamBoxScoresJSONOutput(TestCase):
             output_write_option=OutputWriteOption.WRITE
         )
 
-        with open(self.file_path, 'r') as output_file, open(self.expected_file_path, 'r') as expected_file:
+        with open(self.file_path, 'r', encoding="utf8") as output_file, open(self.expected_file_path, 'r', encoding="utf8") as expected_file:
             self.assertEqual(
                 json.load(output_file),
                 json.load(expected_file),

@@ -38,8 +38,8 @@ class BaseTestPlayerAdvancedSeasonTotalsCSVOutput(TestCase):
             include_combined_values=self.include_combined_values,
         )
 
-        with open(self.output_file_path, "r") as output_file, \
-                open(self.expected_output_file_path, "r") as expected_output_file:
+        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 output_file.readlines(),
                 expected_output_file.readlines(),
@@ -76,8 +76,8 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
             include_combined_values=self.include_combined_values,
         )
 
-        with open(self.output_file_path, "r") as output_file, \
-                open(self.expected_output_file_path, "r") as expected_output_file:
+        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 json.load(output_file),
                 json.load(expected_output_file),
@@ -281,7 +281,7 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
             "../output/expected/player_advanced_season_totals_2018.json",
         )
         result = players_advanced_season_totals(season_end_year=2018, output_type=OutputType.JSON)
-        with open(expected_output_file_path, "r") as expected_output:
+        with open(expected_output_file_path, "r", encoding="utf8") as expected_output:
             self.assertEqual(
                 json.loads(result),
                 json.load(expected_output),
