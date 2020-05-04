@@ -166,7 +166,7 @@ class JSONWriter:
             )
 
         if options.should_write_to_file():
-            with open(options.file_path, options.mode.value, newline="", encoding="utf-8") as json_file:
+            with open(options.file_path, options.mode.value, newline="", encoding="utf8") as json_file:
                 return json.dump(data, json_file, cls=self.encoder, **output_options)
 
         return json.dumps(data, cls=self.encoder, **output_options)
@@ -181,7 +181,7 @@ class CSVWriter:
         return [self.row_formatter.format(row_data) for row_data in data]
 
     def write(self, data, options):
-        with open(options.file_path, options.mode.value, newline="", encoding="utf-8") as csv_file:
+        with open(options.file_path, options.mode.value, newline="", encoding="utf8") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=self.column_names)
             writer.writeheader()
             writer.writerows(self.format_rows(data=data))
