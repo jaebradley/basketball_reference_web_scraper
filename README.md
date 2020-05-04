@@ -4,7 +4,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/basketball_reference_web_scraper)
 ![PyPI - License](https://img.shields.io/pypi/l/basketball_reference_web_scraper)
 [![codecov](https://codecov.io/gh/jaebradley/basketball_reference_web_scraper/branch/v4/graph/badge.svg)](https://codecov.io/gh/jaebradley/basketball_reference_web_scraper)
-[![Build Status](https://travis-ci.org/jaebradley/basketball_reference_web_scraper.svg?branch=master)](https://travis-ci.org/jaebradley/basketball_reference_web_scraper)
+![GitHub Actions - Default Branch](https://github.com/jaebradley/basketball_reference_web_scraper/workflows/Basketball%20Reference%20Web%20Scraper/badge.svg)
 
 [Basketball Reference](http://www.basketball-reference.com) is a great site (especially for a basketball stats nut like me), and hopefully they don't get too pissed off at me for creating this.
 
