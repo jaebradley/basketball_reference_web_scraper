@@ -24,7 +24,7 @@ class TestCSVWriter(TestCase):
                     mode=OutputWriteOption.WRITE
                 )
             )
-            mock_file.assert_called_with("some file path", OutputWriteOption.WRITE.value, newline="")
+            mock_file.assert_called_with("some file path", OutputWriteOption.WRITE.value, newline="", encoding="utf-8")
 
     @mock.patch("basketball_reference_web_scraper.writers.csv.DictWriter")
     def test_file_and_columns_are_used_by_writer(self, mock_csv_dict_writer):
