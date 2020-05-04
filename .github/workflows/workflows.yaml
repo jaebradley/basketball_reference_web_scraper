@@ -1,6 +1,8 @@
 name: Basketball Reference Web Scraper
 
 on: [push, pull_request]
+  schedule:
+    - cron: '0 22 * * *'
 
 jobs:
   build:
@@ -8,9 +10,14 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.7, 3.8]
+        include:
+          - os: macos-latest
+            python-version: 3.5
+          - os: macos-latest
+            python-version: 3.6
         exclude:
-          # there's some issue when installing lxml
+          # there's some issue when installing lxml on linux and windows
           - os: windows-latest
             python-version: 3.8
           - os: ubuntu-latest
