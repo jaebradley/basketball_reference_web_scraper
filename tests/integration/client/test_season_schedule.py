@@ -82,8 +82,8 @@ class TestSeasonScheduleCSVOutput(TestCase):
 
     def test_2018_season_schedule_csv(self):
         season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=self.output_2018_file_path)
-        with open(self.output_2018_file_path, "r") as output_file, \
-                open(self.expected_output_2018_file_path, "r") as expected_output_file:
+        with open(self.output_2018_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_2018_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 output_file.readlines(),
                 expected_output_file.readlines()
@@ -91,8 +91,8 @@ class TestSeasonScheduleCSVOutput(TestCase):
 
     def test_2017_season_schedule_csv(self):
         season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=self.output_2001_file_path)
-        with open(self.output_2001_file_path, "r") as output_file, \
-                open(self.expected_output_2001_file_path, "r") as expected_output_file:
+        with open(self.output_2001_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_2001_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 output_file.readlines(),
                 expected_output_file.readlines()
@@ -127,7 +127,7 @@ class TestSeasonScheduleJSONOutput(TestCase):
 
     def test_2018_season_schedule_in_memory_json(self):
         result = season_schedule(season_end_year=2018, output_type=OutputType.JSON)
-        with open(self.expected_output_2018_file_path, "r") as expected_output_file:
+        with open(self.expected_output_2018_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 json.loads(result),
                 json.load(expected_output_file)
@@ -135,8 +135,8 @@ class TestSeasonScheduleJSONOutput(TestCase):
 
     def test_writing_2018_season_schedule_json_file(self):
         season_schedule(season_end_year=2018, output_type=OutputType.JSON, output_file_path=self.output_2018_file_path)
-        with open(self.output_2018_file_path, "r") as output_file, \
-                open(self.expected_output_2018_file_path, "r") as expected_output_file:
+        with open(self.output_2018_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_2018_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 json.load(output_file),
                 json.load(expected_output_file),
@@ -144,8 +144,8 @@ class TestSeasonScheduleJSONOutput(TestCase):
 
     def test_writing_2017_season_schedule_json_file(self):
         season_schedule(season_end_year=2001, output_type=OutputType.JSON, output_file_path=self.output_2001_file_path)
-        with open(self.output_2001_file_path, "r") as output_file, \
-                open(self.expected_output_2001_file_path, "r") as expected_output_file:
+        with open(self.output_2001_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_2001_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 json.load(output_file),
                 json.load(expected_output_file),

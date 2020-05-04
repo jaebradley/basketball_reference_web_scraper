@@ -142,8 +142,8 @@ class TestPlayByPlayCSVOutput(TestCase):
             output_file_path=self.output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
-        with open(self.output_file_path, "r") as output_file, \
-                open(self.expected_output_file_path, "r") as expected_output_file:
+        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(output_file.readlines(), expected_output_file.readlines())
 
 
@@ -168,8 +168,8 @@ class TestPlayByPlayJSONOutput(TestCase):
             output_write_option=OutputWriteOption.WRITE,
         )
 
-        with open(self.output_file_path, "r") as output_file, \
-                open(self.expected_output_file_path, "r") as expected_output_file:
+        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
             self.assertEqual(
                 json.load(output_file),
                 json.load(expected_output_file),

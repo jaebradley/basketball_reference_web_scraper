@@ -90,8 +90,8 @@ class TestSearchJSONOutput(TestCase):
             output_file_path=self.output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
-        with open(self.output_file_path, "r") as output_file, \
-                open(self.expected_output_file_path, "r") as expected_output_file:
+        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
             output_data = json.load(output_file)
             expected_output_data = json.load(expected_output_file)
             for expected_data_row in expected_output_data:
@@ -120,8 +120,8 @@ class TestSearchCSVOutput(TestCase):
             output_write_option=OutputWriteOption.WRITE,
         )
 
-        with open(self.output_file_path, "r") as output_file, \
-                open(self.expected_output_file_path, "r") as expected_output_file:
+        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
+                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
             output_data = output_file.readlines()
             expected_output_data = expected_output_file.readlines()
             for expected_data_row in expected_output_data:
