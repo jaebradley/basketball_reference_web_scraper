@@ -1,7 +1,7 @@
 name: Basketball Reference Web Scraper
 
 on: [push, pull_request]
-  schedule:
+  - schedule:
     - cron: '0 22 * * *'
 
 jobs:
