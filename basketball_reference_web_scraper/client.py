@@ -2,12 +2,14 @@ import requests
 
 from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.http_service import HTTPService
-from basketball_reference_web_scraper.output import output
-from basketball_reference_web_scraper.parser_service import ParserService
-from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
-    BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
+from basketball_reference_web_scraper.output.columns import BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, \
+    PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
     PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES, \
-    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SearchResultsCSVWriter, SEARCH_RESULTS_COLUMN_NAMES
+    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SEARCH_RESULTS_COLUMN_NAMES
+from basketball_reference_web_scraper.output.fields import format_value, BasketballReferenceJSONEncoder
+from basketball_reference_web_scraper.output.service import OutputService
+from basketball_reference_web_scraper.parser_service import ParserService
+from basketball_reference_web_scraper.output.writers import CSVWriter, JSONWriter, JSONOptions, CSVOptions, WriteOptions
 
 
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -20,17 +22,19 @@ def player_box_scores(day, month, year, output_type=None, output_file_path=None,
             raise InvalidDate(day=day, month=month, year=year)
         else:
             raise http_error
-    return output(
-        values=values,
+
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=BOX_SCORE_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=BOX_SCORE_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=BOX_SCORE_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def regular_season_player_box_scores(player_identifier, season_end_year, output_type=None, output_file_path=None,
@@ -48,17 +52,18 @@ def regular_season_player_box_scores(player_identifier, season_end_year, output_
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
         else:
             raise http_error
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def season_schedule(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
@@ -72,17 +77,18 @@ def season_schedule(season_end_year, output_type=None, output_file_path=None, ou
             raise InvalidSeason(season_end_year=season_end_year)
         else:
             raise http_error
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=SCHEDULE_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=SCHEDULE_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=SCHEDULE_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def players_season_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
@@ -95,17 +101,18 @@ def players_season_totals(season_end_year, output_type=None, output_file_path=No
             raise InvalidSeason(season_end_year=season_end_year)
         else:
             raise http_error
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=PLAYER_SEASON_TOTALS_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=PLAYER_SEASON_TOTALS_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=PLAYER_SEASON_TOTALS_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def players_advanced_season_totals(season_end_year, include_combined_values=False, output_type=None,
@@ -121,17 +128,18 @@ def players_advanced_season_totals(season_end_year, include_combined_values=Fals
             raise InvalidSeason(season_end_year=season_end_year)
         else:
             raise http_error
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def team_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -144,17 +152,18 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
             raise InvalidDate(day=day, month=month, year=year)
         else:
             raise http_error
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=TEAM_BOX_SCORES_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=TEAM_BOX_SCORES_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=TEAM_BOX_SCORES_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def play_by_play(home_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -167,30 +176,32 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
             raise InvalidDate(day=day, month=month, year=year)
         else:
             raise http_error
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=PLAY_BY_PLAY_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=PLAY_BY_PLAY_COLUMN_NAMES)
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=PLAY_BY_PLAY_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=write_options)
 
 
 def search(term, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
     http_service = HTTPService(parser=ParserService())
     values = http_service.search(term=term)
-    return output(
-        values=values,
+    write_options = WriteOptions(
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=SearchResultsCSVWriter(
-            column_names=SEARCH_RESULTS_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=SEARCH_RESULTS_COLUMN_NAMES),
-        ),
-        json_options=json_options,
+        file_path=output_file_path,
+        mode=output_write_option,
+        json=JSONOptions.of(options=json_options),
+        csv=CSVOptions(column_names=SEARCH_RESULTS_COLUMN_NAMES),
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values["players"], options=write_options)

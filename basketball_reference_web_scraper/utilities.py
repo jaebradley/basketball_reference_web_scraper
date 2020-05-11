@@ -13,8 +13,3 @@ def str_to_float(value, default=float(0)):
     except ValueError:
         return default
 
-
-def merge_two_dicts(first, second):
-    combined = first.copy()
-    combined.update(second)
-    return combined

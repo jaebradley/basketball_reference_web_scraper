@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.writers import WriteOptions
+from basketball_reference_web_scraper.output.writers import WriteOptions
 
 
 class TestWriteOptions(TestCase):

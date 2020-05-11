@@ -1,7 +1,7 @@
 from unittest import TestCase, mock
 
 from basketball_reference_web_scraper.data import OutputWriteOption
-from basketball_reference_web_scraper.writers import JSONWriter
+from basketball_reference_web_scraper.output.writers import JSONWriter
 
 
 class TestJSONWriter(TestCase):

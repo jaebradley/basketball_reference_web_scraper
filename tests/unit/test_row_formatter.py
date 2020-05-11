@@ -1,76 +1,39 @@
 from unittest import TestCase
 
 from basketball_reference_web_scraper.data import Team, Location, Outcome, Position
-from basketball_reference_web_scraper.writers import RowFormatter
+from basketball_reference_web_scraper.output.fields import format_value
 
 
 class TestRowFormatter(TestCase):
-    def test_away_team_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["away_team"])
-        self.assertEqual(
-            formatter.format(row_data={"away_team": Team.BOSTON_CELTICS}),
-            {"away_team": Team.BOSTON_CELTICS.value}
-        )
+    def test_team_enum_value(self):
+        self.assertEqual(format_value(Team.BOSTON_CELTICS), "BOSTON CELTICS")
 
-    def test_home_team_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["home_team"])
-        self.assertEqual(
-            formatter.format(row_data={"home_team": Team.BOSTON_CELTICS}),
-            {"home_team": Team.BOSTON_CELTICS.value}
-        )
+    def test_location_enum_value(self):
+        self.assertEqual(format_value(Location.HOME), "HOME")
 
-    def test_team_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["team"])
-        self.assertEqual(
-            formatter.format(row_data={"team": Team.BOSTON_CELTICS}),
-            {"team": Team.BOSTON_CELTICS.value}
-        )
+    def test_outcome_enum_value(self):
+        self.assertEqual(format_value(Outcome.LOSS), "LOSS")
 
-    def test_location_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["location"])
-        self.assertEqual(
-            formatter.format(row_data={"location": Location.HOME}),
-            {"location": Location.HOME.value}
-        )
+    def test_empty_array(self):
+        self.assertEqual(format_value([]), "")
 
-    def test_opponent_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["opponent"])
-        self.assertEqual(
-            formatter.format(row_data={"opponent": Team.BOSTON_CELTICS}),
-            {"opponent": Team.BOSTON_CELTICS.value}
-        )
+    def test_empty_set(self):
+        self.assertEqual(format_value(set()), "")
 
-    def test_outcome_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["outcome"])
-        self.assertEqual(
-            formatter.format(row_data={"outcome": Outcome.WIN}),
-            {"outcome": Outcome.WIN.value}
-        )
+    def test_position_enum_value(self):
+        self.assertEqual(format_value(Position.POINT_GUARD), "POINT GUARD")
 
-    def test_empty_positions_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["positions"])
-        self.assertEqual(
-            formatter.format(row_data={"positions": []}),
-            {"positions": ""}
-        )
+    def test_positions_array_with_single_position(self):
+        self.assertEqual(format_value([Position.POINT_GUARD]), "POINT GUARD")
 
-    def test_single_position_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["positions"])
-        self.assertEqual(
-            formatter.format(row_data={"positions": [Position.POINT_GUARD]}),
-            {"positions": "POINT GUARD"}
-        )
+    def test_positions_array_with_multiple_positions(self):
+        self.assertEqual(format_value([Position.POINT_GUARD, Position.SHOOTING_GUARD]), "POINT GUARD-SHOOTING GUARD")
 
-    def test_multiple_positions_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["positions"])
-        self.assertEqual(
-            formatter.format(row_data={"positions": [Position.POINT_GUARD, Position.SHOOTING_GUARD]}),
-            {"positions": "POINT GUARD-SHOOTING GUARD"}
-        )
+    def test_positions_set_with_single_position(self):
+        self.assertEqual(format_value({Position.POINT_GUARD}), "POINT GUARD")
 
-    def test_non_team_outcome_location_position_data_field_name(self):
-        formatter = RowFormatter(data_field_names=["name"])
-        self.assertEqual(
-            formatter.format(row_data={"name": "jaebaebae"}),
-            {"name": "jaebaebae"}
-        )
+    def test_positions_set_with_multiple_positions(self):
+        self.assertEqual(format_value({Position.POINT_GUARD, Position.SHOOTING_GUARD}), "POINT GUARD-SHOOTING GUARD")
+
+    def test_string_value(self):
+        self.assertEqual(format_value("jaebaebae"), "jaebaebae")

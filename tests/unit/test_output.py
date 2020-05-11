@@ -1,9 +1,9 @@
 from unittest import TestCase, mock
 
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType
-from basketball_reference_web_scraper.json_encoders import BasketballReferenceJSONEncoder
+from basketball_reference_web_scraper.output.fields import BasketballReferenceJSONEncoder
 from basketball_reference_web_scraper.output import output
-from basketball_reference_web_scraper.writers import WriteOptions
+from basketball_reference_web_scraper.output.writers import WriteOptions
 
 
 class TestOutput(TestCase):
