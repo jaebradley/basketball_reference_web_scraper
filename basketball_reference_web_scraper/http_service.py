@@ -109,7 +109,7 @@ class HTTPService:
         response = requests.get(url=url)
 
         response.raise_for_status()
-        page = html.fromstring(response.content)
+
         table = TeamSalaryTable(html=html.fromstring(response.content))
 
         return self.parser.parse_team_salary(player_salaries=table.rows)

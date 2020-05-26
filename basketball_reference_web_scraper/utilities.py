@@ -24,8 +24,6 @@ def merge_two_dicts(first, second):
 def extract_html_obj_in_comment(html_tree, xpath):
     for node in html_tree.iter(etree.Comment):
         comment = node.text
-
         extracted_html = html.fromstring(comment)
-
         if extracted_html.xpath(xpath):
             return extracted_html
