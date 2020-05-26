@@ -1,5 +1,4 @@
 import re
-import lxml.html
 
 from basketball_reference_web_scraper.utilities import extract_html_obj_in_comment
 
@@ -1094,8 +1093,6 @@ class PlayerPage:
 
         return None
 
-import lxml.html
-
 class PlayerSalaryRow:
     def __init__(self, html, row_index):
         self.html = html
@@ -1107,8 +1104,8 @@ class PlayerSalaryRow:
 
     @property
     def salary(self):
-        return self.html.xpath('//td[@data-stat="salary"]')[self.index].text_content()
-
+        salary_td = self.html.xpath('//td[@data-stat="salary"]')[self.index]
+        return salary_td.get('csk')
 
 class TeamSalaryTable:
     def __init__(self, html):
