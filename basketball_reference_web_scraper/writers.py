@@ -7,8 +7,7 @@ from basketball_reference_web_scraper.utilities import merge_two_dicts
 # without doing it this way
 
 SHARED_COLUMN_NAMES = [
-    "team",
-    "location",
+    "team", "location",
     "opponent",
     "outcome",
     "seconds_played",
@@ -128,6 +127,11 @@ SEARCH_RESULTS_COLUMN_NAMES = [
     "name",
     "identifier",
     "leagues",
+]
+
+SALARY_COLUMN_NAMES = [
+    "name",
+    "salary",
 ]
 
 

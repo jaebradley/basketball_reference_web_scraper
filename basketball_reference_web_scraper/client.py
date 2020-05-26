@@ -7,7 +7,8 @@ from basketball_reference_web_scraper.parser_service import ParserService
 from basketball_reference_web_scraper.writers import CSVWriter, RowFormatter, \
     BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
     PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES, \
-    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SearchResultsCSVWriter, SEARCH_RESULTS_COLUMN_NAMES
+    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SearchResultsCSVWriter, SEARCH_RESULTS_COLUMN_NAMES, \
+    SALARY_COLUMN_NAMES
 
 
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
@@ -149,8 +150,8 @@ def team_salaries(team, season_end_year, output_type=None, output_file_path=None
         output_file_path=output_file_path,
         output_write_option=output_write_option,
         csv_writer=CSVWriter(
-            column_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES)
+            column_names=SALARY_COLUMN_NAMES,
+            row_formatter=RowFormatter(data_field_names=SALARY_COLUMN_NAMES)
         ),
         json_options=json_options,
     ) 

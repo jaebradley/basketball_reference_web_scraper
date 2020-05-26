@@ -555,8 +555,4 @@ class PlayerDataParser:
 
 class TeamSalaryParser:
     def parse(self, player_salaries):
-        data = {}
-        for salary_row in player_salaries:
-            data[salary_row.name] = int(salary_row.salary)
-        return data
-
+        return [{'name': row.name, 'salary': int(row.salary)} for row in player_salaries]
