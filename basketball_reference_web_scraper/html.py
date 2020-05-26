@@ -1114,7 +1114,7 @@ class TeamSalaryTable:
     @property
     def rows(self):
         # basketball-reference does this weird thing where it puts table data in 
-        # comments on the HTML doc and has a script I guess transform display it
+        # comments on the HTML doc which then gets added to the DOM (I'm guessing)
         # after a certain amount of time. I assume it is an attempt to make scraping
         # more difficult. This is evidenced by the fact that if you attempt to load
         # a page on a team with Javascript disabled you will not be able to see all
