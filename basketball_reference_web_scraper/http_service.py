@@ -5,7 +5,7 @@ from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, Tea
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
-    PlayerPage, PlayerSalaryRow, TeamSalaryTable
+    PlayerPage, TeamSalaryTable
 
 
 
@@ -98,20 +98,6 @@ class HTTPService:
 
         table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
         return self.parser.parse_player_season_totals(totals=table.rows)
-
-    def players_salaries(self, season_end_year):
-        # There is a table for current contracts at basketball-reference/contracts, but
-        # there is no way to view contracts for a given year. We must go through every
-        # team in season_end_year and pull the salaries from the Salaries section.
-        url = '{BASE_URL}/contracts/players.html'.format(
-            BASE_URL=HTTPService.BASE_URL
-        )
-
-        response = requests.get(url=url)
-
-        response.raise_for_status()
-
-        raise NotImplementedError
 
     def team_salaries(self, team, season_end_year):
         url = '{BASE_URL}/teams/{team_abbr}/{end_year}.html'.format(
