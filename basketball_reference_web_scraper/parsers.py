@@ -552,3 +552,11 @@ class PlayerDataParser:
                 )
             )
         }
+
+class TeamSalaryParser:
+    def parse(self, player_salaries):
+        data = {}
+        for salary_row in player_salaries:
+            data[salary_row.name] = salary_row.salary
+        return data
+

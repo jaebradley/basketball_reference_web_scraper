@@ -133,6 +133,49 @@ def players_advanced_season_totals(season_end_year, include_combined_values=Fals
         json_options=json_options,
     )
 
+def players_salaries(season_end_year, output_type=None, output_file_path=None, output_write_option=None, 
+                     json_options=None):
+    try:
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.players_salaries(season_end_year)
+    except requests.exceptions.HTTPError as http_error:
+        if http_error.response.status_code == requests.codes.not_found:
+            raise InvalidSeason(season_end_year=season_end_year)
+        else:
+            raise http_error
+    return output(
+        values=values,
+        output_type=output_type,
+        output_file_path=output_file_path,
+        output_write_option=output_write_option,
+        csv_writer=CSVWriter(
+            column_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES,
+            row_formatter=RowFormatter(data_field_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES)
+        ),
+        json_options=json_options,
+    ) 
+
+def team_salaries(team, season_end_year, output_type=None, output_file_path=None, output_write_option=None,
+                  json_options=None):
+    try:
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.team_salaries(team, season_end_year)
+    except requests.exceptions.HTTPError as http_error:
+        if http_error.response.status_code == requests.codes.not_found:
+            raise InvalidSeason(season_end_year=season_end_year)
+        else:
+            raise http_error
+    return output(
+        values=values,
+        output_type=output_type,
+        output_file_path=output_file_path,
+        output_write_option=output_write_option,
+        csv_writer=CSVWriter(
+            column_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES,
+            row_formatter=RowFormatter(data_field_names=PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES)
+        ),
+        json_options=json_options,
+    ) 
 
 def team_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                     json_options=None):
