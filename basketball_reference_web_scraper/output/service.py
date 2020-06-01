@@ -11,7 +11,7 @@ class OutputService:
         }
 
     def output(self, data, options):
-        if options.mode is None:
+        if options.output_type is None:
             return data
 
         writer = self.output_type_writers.get(options.output_type)

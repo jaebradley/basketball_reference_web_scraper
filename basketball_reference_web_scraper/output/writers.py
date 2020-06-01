@@ -1,54 +1,64 @@
 import csv
 import json
 
+from basketball_reference_web_scraper.data import OutputType
+from basketball_reference_web_scraper.utilities import merge_two_dicts
 
-class WriteOptions:
-    def __init__(self, output_type=None, file_path=None, mode=None, json=None, csv=None):
-        self.output_type = output_type
-        self.file_path = file_path
+DEFAULT_JSON_SORT_KEYS = True
+DEFAULT_JSON_INDENT = 4
+DEFAULT_JSON_OPTIONS = {
+    "sort_keys": DEFAULT_JSON_SORT_KEYS,
+    "indent": DEFAULT_JSON_INDENT,
+}
+
+
+class FileOptions:
+    def __init__(self, path=None, mode=None):
+        self.path = path
         self.mode = mode
-        self.json = json
-        self.csv = csv
 
+    @property
     def should_write_to_file(self):
-        return self.output_type is not None and self.file_path is not None and self.mode is not None
+        return self.path is not None and self.mode is not None
 
     def __eq__(self, other):
-        if isinstance(other, WriteOptions):
-            return self.output_type == other.output_type \
-                   and self.file_path == other.file_path \
-                   and self.mode == other.mode \
-                   and self.json == other.json \
-                   and self.csv == other.csv
+        if isinstance(other, FileOptions):
+            return self.path == other.path \
+                   and self.mode == other.mode
         return False
 
 
-class JSONOptions:
+class OutputOptions:
     @staticmethod
-    def of(options):
-        if options is None:
-            return JSONOptions()
+    def of(file_options, output_type, json_options=None, csv_options=None):
+        if output_type == OutputType.JSON:
+            if json_options is None:
+                formatting_options = DEFAULT_JSON_OPTIONS
+            else:
+                formatting_options = merge_two_dicts(DEFAULT_JSON_OPTIONS, json_options)
+        elif output_type == OutputType.CSV:
+            formatting_options = csv_options
+        elif output_type is None:
+            return OutputOptions(file_options=None, formatting_options={}, output_type=None)
+        else:
+            raise ValueError("Unknown output type: {output_type}".format(output_type=output_type))
 
-        return JSONOptions(sort_keys=options.get("sort_keys"), indent=options.get("indent"))
+        return OutputOptions(
+            file_options=file_options,
+            formatting_options=formatting_options,
+            output_type=output_type,
+        )
 
-    def __init__(self, sort_keys=True, indent=4):
-        self.sort_keys = sort_keys if sort_keys is not None else True
-        self.indent = indent if indent is not None else 4
+    def __init__(self, file_options, formatting_options, output_type):
+        self.file_options = file_options
+        self.formatting_options = formatting_options
+        self.output_type = output_type
 
     def __eq__(self, other):
-        if isinstance(other, JSONOptions):
-            return self.sort_keys == other.sort_keys \
-                    and self.indent == other.indent
-        return False
-
-
-class CSVOptions:
-    def __init__(self, column_names):
-        self.column_names = column_names
-
-    def __eq__(self, other):
-        if isinstance(other, CSVOptions):
-            return self.column_names == other.column_names
+        if isinstance(other, OutputOptions):
+            return self.file_options == other.file_options \
+                    and self.formatting_options == other.formatting_options \
+                    and self.output_type == other.output_type
 
         return False
 
@@ -63,22 +73,55 @@ class Writer:
 
 class JSONWriter(Writer):
     def write(self, data, options):
-        if options.should_write_to_file():
-            with open(options.file_path, options.mode.value, newline="", encoding="utf8") as json_file:
-                return json.dump(data, json_file, cls=self.value_formatter, sort_keys=options.json.sort_keys, indent=options.json.indent)
+        output_options = merge_two_dicts(DEFAULT_JSON_OPTIONS, options.formatting_options)
+        if options.file_options.should_write_to_file:
+            with open(
+                    options.file_options.path,
+                    options.file_options.mode.value,
+                    newline="",
+                    encoding="utf8"
+            ) as json_file:
+                return json.dump(
+                    data,
+                    json_file,
+                    cls=self.value_formatter,
+                    **output_options,
+                )
 
-        return json.dumps(data, cls=self.value_formatter, sort_keys=options.sort_keys, indent=options.indent)
+        return json.dumps(
+            data,
+            cls=self.value_formatter,
+            **output_options,
+        )
 
 
 class CSVWriter(Writer):
+    def rows(self, data):
+        return [
+            dict((key, self.value_formatter(value)) for key, value in row.items())
+            for row in data
+        ]
+
     def write(self, data, options):
-        with open(options.file_path, options.mode.value, newline="", encoding="utf8") as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=options.csv.column_names)
+        with open(
+                options.file_options.path,
+                options.file_options.mode.value,
+                newline="",
+                encoding="utf8",
+        ) as csv_file:
+            writer = csv.DictWriter(
+                csv_file,
+                fieldnames=options.formatting_options.get("column_names"),
+            )
             writer.writeheader()
 
-            rows = [
-                dict((key, self.value_formatter(value)) for key, value in row.items())
-                for row in data
-            ]
-            writer.writerows(rows)
+            writer.writerows(self.rows(data=data))
+
+
+class SearchCSVWriter(CSVWriter):
+    def rows(self, data):
+        return [
+            dict((key, self.value_formatter(value)) for key, value in row.items())
+            for row in data["players"]
+        ]
 
