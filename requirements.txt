@@ -4,7 +4,7 @@ certifi==2018.10.15
 chardet==3.0.4
 coverage==4.5.1
 idna==2.7
-lxml==4.2.5
+lxml==4.5.1
 more-itertools==4.3.0
 pluggy==0.8.0
 py==1.7.0
