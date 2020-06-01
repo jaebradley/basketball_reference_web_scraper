@@ -19,7 +19,7 @@ setuptools.setup(
         "certifi==2018.10.15",
         "chardet==3.0.4",
         "idna==2.7",
-        "lxml==4.2.5",
+        "lxml==4.5.1",
         "pytz==2018.6",
         "requests==2.20.0",
         "urllib3==1.24.3",
