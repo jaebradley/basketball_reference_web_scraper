@@ -51,8 +51,6 @@ This client has seven methods
 * Getting regular season box scores for a given player and season (`client.regular_season_player_box_scores`)
 * Searching (`client.search`)
 
-You can see all methods used in [this `repl`]()https://repl.it/@jaebradley/v300api-examples).
-
 ### Data output
 
 This client also supports three output types:
@@ -76,6 +74,8 @@ Versions `>=3` of this client outputs `CSV` to a specified file path and returns
 
 ### Get player box scores by date
 
+* [`repl.it` Examples](https://repl.it/@jaebradley/PlayerBoxScoresByDate#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
 from basketball_reference_web_scraper.data import OutputType
@@ -95,53 +95,91 @@ client.player_box_scores(day=1, month=1, year=2017, output_type=OutputType.CSV, 
 
 ### Get team box scores by date
 
+* [`repl.it` Examples](https://repl.it/@jaebradley/TeamBoxScoresByDate#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import OutputType
 
-# Get all team totals for January 1st, 2018
+# Get all team box scores for January 1st, 2018 
 client.team_box_scores(day=1, month=1, year=2018)
 
-# The team_box_scores method also supports all output behavior previously described
+# Get all team box scores for January 1st, 2018 in JSON format
+client.team_box_scores(day=1, month=1, year=2018, output_type=OutputType.JSON)
+
+# Output all team box scores for January 1st, 2018 in JSON format to 1_1_2018_box_scores.json
+client.team_box_scores(day=1, month=1, year=2018, output_type=OutputType.JSON, output_file_path="./1_1_2018_box_scores.json")
+
+# Output all team box scores for January 1st, 2018 in JSON format to 1_1_2018_box_scores.csv
+client.team_box_scores(day=1, month=1, year=2018, output_type=OutputType.CSV, output_file_path="./1_1_2018_box_scores.csv")
 ```
 
 ### Get season schedule
 
+* [`repl.it` Examples](https://repl.it/@jaebradley/SeasonSchedule#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import OutputType
 
 # Get all games for the 2017-2018 season
 client.season_schedule(season_end_year=2018)
 
-# The schedule method also supports all output behavior previously described
+# Get all games for the 2017-2018 season and output in JSON format
+client.season_schedule(season_end_year=2018, output_type=OutputType.JSON)
+
+# Output all games for the 2017-2018 season in CSV format to 2017_2018_season.csv
+client.season_schedule(season_end_year=2018, output_type=OutputType.JSON, output_file_path="./2017_2018_season.json")
+
+# Output all games for the 2017-2018 season in CSV format to 2017_2018_season.csv
+client.season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./2017_2018_season.csv")
 ``` 
 
 ### Get season totals for all players
 
+* [`repl.it` Examples](https://repl.it/@jaebradley/PlayerSeasonTotals#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import OutputType
 
-# Get 2017-2018 season totals for all players
+# Get all player season totals for the 2017-2018 season
 client.players_season_totals(season_end_year=2018)
 
-# The players_season_totals method also supports all output behavior previously described
+# Get all player season totals for the 2017-2018 season and output in JSON format
+client.players_season_totals(season_end_year=2018, output_type=OutputType.JSON)
+
+# Output all player season totals for the 2017-2018 season in JSON format to 2017_2018_player_season_totals.json
+client.players_season_totals(season_end_year=2018, output_type=OutputType.JSON, output_file_path="./2017_2018_player_season_totals.json")
+
+# Output all player season totals for the 2017-2018 season in CSV format to 2017_2018_player_season_totals.csv
+client.players_season_totals(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./2017_2018_player_season_totals.csv")
 ```
 
 ### Get advanced season statistics for all players
 
+* [`repl.it` Examples](https://repl.it/@jaebradley/PlayerAdvancedSeasonTotals#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import OutputType
 
-# Get 2017-2018 advanced season statistics for all players
+# Get all advanced player season totals for the 2017-2018 season
 client.players_advanced_season_totals(season_end_year=2018)
 
-# Get 2017-2018 advanced season statistics for all players and include advanced statistics for a player
-# accumulated over entire course of the season
-client.players_advanced_season_totals(season_end_year=2018, include_combined_values=True)
+# Get all advanced player season totals for the 2017-2018 season and output in JSON format
+client.players_advanced_season_totals(season_end_year=2018, output_type=OutputType.JSON)
 
-# The players_advanced_season_totals method also supports all output behavior previously described
+# Output all advanced player season totals for the 2017-2018 season in JSON format to 2017_2018_player_season_totals.json
+client.players_advanced_season_totals(season_end_year=2018, output_type=OutputType.JSON, output_file_path="./2017_2018_advanced_player_season_totals.json")
+
+# Output all advanced player season totals for the 2017-2018 season in CSV format to 2017_2018_player_season_totals.csv
+client.players_advanced_season_totals(season_end_year=2018, output_type=OutputType.CSV, output_file_path="./2017_2018_advanced_player_season_totals.csv")
 ```
 
 ### Get play-by-play data for a game
+
+* [`repl.it` Examples](https://repl.it/@jaebradley/PlayByPlay#main.py)
 
 The structure of the API is due to the unique URL pattern that Basketball Reference has for getting play-by-play data, 
 which depends on the date of the game and the home team.
@@ -150,29 +188,40 @@ Example: `https://www.basketball-reference.com/boxscores/pbp/201810160BOS.html`
 
 ```python
 from basketball_reference_web_scraper import client
-from basketball_reference_web_scraper.data import Team
+from basketball_reference_web_scraper.data import OutputType, Team
 
-# Get play-by-play data for 2018-10-16 game played at the Boston Celtics
-play_by_play = client.play_by_play(
-    home_team=Team.BOSTON_CELTICS,
-    year=2018,
-    month=10,
-    day=16,
-)
+# Get play-by-play for Boston Celtics game on October 16th, 2018
+client.play_by_play(home_team=Team.BOSTON_CELTICS, year=2018, month=10, day=16)
+
+# Get play-by-play for Boston Celtics game on October 16th, 2018 and output in JSON format
+client.play_by_play(home_team=Team.BOSTON_CELTICS, year=2018, month=10, day=16, output_type=OutputType.JSON)
+
+# Get play-by-play for Boston Celtics game on October 16th, 2018  in JSON format to 2018_10_06_BOS_PBP.json
+client.play_by_play(home_team=Team.BOSTON_CELTICS, year=2018, month=10, day=16, output_type=OutputType.JSON, output_file_path="./2018_10_06_BOS_PBP.json")
+
+# Output all advanced player season totals for the 2017-2018 season in CSV format to 2018_10_06_BOS_PBP.csv
+client.play_by_play(home_team=Team.BOSTON_CELTICS, year=2018, month=10, day=16, output_type=OutputType.CSV, output_file_path="./2018_10_06_BOS_PBP.csv")
 ```
 
 ### Get regular season box scores for a player
 
+* [`repl.it` Examples](https://repl.it/@jaebradley/RegularSeasonPlayerBoxScores#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import OutputType
 
-# Get regular season box scores for Russell Westbrook for the 2018-2019 season
-client.regular_season_player_box_scores(
-  player_identifier="westbru01",
-  season_end_year=2019,
-)
+# Get all 2017-2018 regular season player box scores for Russell Westbrook
+client.regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2018)
 
-# The regular_season_player_box_score method supports all output behavior previously described
+# Get all 2017-2018 regular season player box scores for Russell Westbrook in JSON format
+client.regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2018, output_type=OutputType.JSON)
+
+# Output all 2017-2018 regular season player box scores for Russell Westbrook in JSON format to 2017_2018_russell_westbrook_regular_season_box_scores.json
+client.regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2018, output_type=OutputType.JSON, output_file_path="./2017_2018_russell_westbrook_regular_season_box_scores.json")
+
+# Output all 2017-2018 regular season player box scores for Russell Westbrook in CSV format to 2017_2018_russell_westbrook_regular_season_box_scores.csv
+client.regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2018, output_type=OutputType.CSV, output_file_path="./2017_2018_russell_westbrook_regular_season_box_scores.csv")
 ```
 
 The `player_identifier` is Basketball Reference's unique identifier for each player. In the case of Russell Westbrook,
@@ -181,13 +230,23 @@ his `player_identifier` is `westbru01` (you can see this from his player page UR
 
 ### Search 
 
+* [`repli.t` Examples](https://repl.it/@jaebradley/Search#main.py)
+
 ```python
 from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper.data import OutputType
 
 # Get all results that match "Ko"
 client.search(term="Ko")
 
-# The search method supports all output behavior previously described
+# Get all results that match "Ko" and output in JSON format
+client.search(term="Ko", output_type=OutputType.JSON)
+
+# Output all results that match "Ko" in JSON format to ko_search.json
+client.search(term="Ko", output_type=OutputType.JSON, output_file_path="./ko_search.json")
+
+# Output all results that match "Ko" in CSV format to ko_search.csv
+client.search(term="Ko", output_type=OutputType.CSV, output_file_path="./ko_search.csv")
 ```
 
 ## Development
