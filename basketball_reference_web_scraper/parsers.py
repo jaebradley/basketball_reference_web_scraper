@@ -552,3 +552,7 @@ class PlayerDataParser:
                 )
             )
         }
+
+class TeamSalaryParser:
+    def parse(self, player_salaries):
+        return [{'name': row.name, 'salary': int(row.salary)} for row in player_salaries]

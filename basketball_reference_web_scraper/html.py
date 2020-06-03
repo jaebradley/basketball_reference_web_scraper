@@ -1,5 +1,7 @@
 import re
 
+from basketball_reference_web_scraper.utilities import extract_html_obj_in_comment
+
 
 class BasicBoxScoreRow:
     def __init__(self, html):
@@ -1090,3 +1092,38 @@ class PlayerPage:
             return PlayerPageTotalsTable(html=totals_tables[0])
 
         return None
+
+class PlayerSalaryRow:
+    def __init__(self, html, row_index):
+        self.html = html
+        self.index = row_index
+
+    @property
+    def name(self):
+        return self.html.xpath('//td[@data-stat="player"]')[self.index].text_content()
+
+    @property
+    def salary(self):
+        salary_td = self.html.xpath('//td[@data-stat="salary"]')[self.index]
+        return salary_td.get('csk')
+
+class TeamSalaryTable:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def rows(self):
+        # basketball-reference does this weird thing where it puts table data in 
+        # comments on the HTML doc which then gets added to the DOM (I'm guessing)
+        # after a certain amount of time. I assume it is an attempt to make scraping
+        # more difficult. This is evidenced by the fact that if you attempt to load
+        # a page on a team with Javascript disabled you will not be able to see all
+        # the tables. To get around this we just read from the comments.
+        salary_table = extract_html_obj_in_comment(self.html, '//table[@id="salaries2"]')
+        header = salary_table.xpath('//tr')[0]
+        header.getparent().remove(header)
+        row_tags = salary_table.xpath('//tr//th[@class="center"]')
+        return [
+                PlayerSalaryRow(html=row_html, row_index=i)
+                for i, row_html in enumerate(salary_table.xpath('//tr'))
+        ]

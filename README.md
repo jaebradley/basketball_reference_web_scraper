@@ -42,13 +42,14 @@ from basketball_reference_web_scraper.data import Team
 
 ## API
 
-This client has seven methods
+This client has eight methods
 * Getting player box scores by a date (`client.player_box_scores`)
 * Getting team box scores by a date (`client.team_box_scores`)
 * Getting the schedule for a season (`client.season_schedule`)
 * Getting players totals for a season (`client.players_season_totals`)
 * Getting players advanced season statistics for a season (`client.players_advanced_season_totals`)
 * Getting regular season box scores for a given player and season (`client.regular_season_player_box_scores`)
+* Getting the salaries of players of a team for a season (`client.team_salaries`)
 * Searching (`client.search`)
 
 ### Data output
@@ -227,6 +228,21 @@ client.regular_season_player_box_scores(player_identifier="westbru01", season_en
 The `player_identifier` is Basketball Reference's unique identifier for each player. In the case of Russell Westbrook,
 his `player_identifier` is `westbru01` (you can see this from his player page URL: 
 `https://www.basketball-reference.com/players/w/westbru01/gamelog/2020`)
+
+### Get salary data for a team in a particular season
+
+```python
+from basketball_reference_web_scraper import client
+from basketball_reference.data import Team
+
+# Get salaries of all the players on the 1997-1998 Bulls team
+client.team_salaries(
+  team=Team.CHICAGO_BULLS,
+  1998
+)
+
+# The team_salaries method supports all output behavior previously described
+```
 
 ### Search 
 
