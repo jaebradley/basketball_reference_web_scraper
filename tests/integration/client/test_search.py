@@ -11,6 +11,49 @@ class TestSearchInMemory(TestCase):
         results = client.search(term="ja")
         self.assertGreaterEqual(498, len(results["players"]))
 
+    def test_search_alonzo_mourning(self):
+        results = client.search(term="Alonzo Mourning")
+        self.assertEqual(
+            [
+                {
+                    "name": "Alonzo Mourning",
+                    "identifier": "mournal01",
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION}
+                }
+            ],
+            results["players"]
+        )
+
+    def test_search_alonz(self):
+        results = client.search(term="Alonz")
+        self.assertGreaterEqual(6, results["players"])
+
+    def test_search_dominique_wilkins(self):
+        results = client.search(term="Dominique Wilkins")
+        self.assertEqual(
+            [
+                {
+                    "name": "Dominique Wilkins",
+                    "identifier": "wilkido01",
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION}
+                }
+            ],
+            results["players"]
+        )
+
+    def test_search_rick_barry(self):
+        results = client.search(term="Rick Barry")
+        self.assertEqual(
+            [
+                {
+                    "name": "Rick Barry",
+                    "identifier": "barryri01",
+                    "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION, League.AMERICAN_BASKETBALL_ASSOCIATION}
+                }
+            ],
+            results["players"]
+        )
+
     def test_search_jaebaebae(self):
         results = client.search(term="jaebaebae")
         self.assertListEqual([], results["players"])

@@ -194,7 +194,11 @@ class HTTPService:
             data = PlayerData(
                 name=page.name,
                 resource_location=response.url,
-                league_abbreviations=set([row.league_abbreviation for row in page.totals_table.rows])
+                league_abbreviations=set([
+                    row.league_abbreviation
+                    for row in page.totals_table.rows
+                    if row.league_abbreviation is not None
+                ])
             )
             player_results += [self.parser.parse_player_data(player=data)]
 
