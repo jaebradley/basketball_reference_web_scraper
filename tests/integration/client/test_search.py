@@ -26,7 +26,7 @@ class TestSearchInMemory(TestCase):
 
     def test_search_alonz(self):
         results = client.search(term="Alonz")
-        self.assertGreaterEqual(6, results["players"])
+        self.assertGreaterEqual(6, len(results["players"]))
 
     def test_search_dominique_wilkins(self):
         results = client.search(term="Dominique Wilkins")
