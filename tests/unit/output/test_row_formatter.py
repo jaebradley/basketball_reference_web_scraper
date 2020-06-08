@@ -32,8 +32,5 @@ class TestRowFormatter(TestCase):
     def test_positions_set_with_single_position(self):
         self.assertEqual(format_value({Position.POINT_GUARD}), "POINT GUARD")
 
-    def test_positions_set_with_multiple_positions(self):
-        self.assertEqual(format_value({Position.POINT_GUARD, Position.SHOOTING_GUARD}), "POINT GUARD-SHOOTING GUARD")
-
     def test_string_value(self):
         self.assertEqual(format_value("jaebaebae"), "jaebaebae")
