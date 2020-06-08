@@ -93,3 +93,9 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
             output_type=OutputType.CSV,
             output_file_path=output_file_path,
         )
+        with open(output_file_path, 'r', encoding="utf8") as output_file, open('./output/expected/test-avery-2019.csv', 'r', encoding="utf8") as expected_file:
+            output_lines = output_file.readlines()
+            expected_lines = expected_file.readlines()
+
+        self.assertEqual(output_lines, expected_lines)
+        os.remove(output_file_path)

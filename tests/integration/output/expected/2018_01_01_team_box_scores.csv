@@ -1,9 +1,9 @@
-team,minutes_played,made_field_goals,attempted_field_goals,made_three_point_field_goals,attempted_three_point_field_goals,made_free_throws,attempted_free_throws,offensive_rebounds,defensive_rebounds,assists,steals,blocks,turnovers,personal_fouls
-ORLANDO MAGIC,240,35,96,6,31,19,25,19,33,16,5,5,12,18
-BROOKLYN NETS,240,36,82,9,25,17,23,10,42,17,7,10,13,22
-PORTLAND TRAIL BLAZERS,265,47,108,14,33,16,18,12,38,25,7,5,8,16
-CHICAGO BULLS,265,45,104,11,27,19,23,15,43,28,5,7,12,21
-LOS ANGELES LAKERS,240,34,76,8,26,20,29,9,28,18,12,4,24,25
-MINNESOTA TIMBERWOLVES,240,40,81,7,20,27,30,7,34,26,14,5,17,24
-MILWAUKEE BUCKS,265,44,93,13,27,26,28,10,33,27,9,3,14,23
-TORONTO RAPTORS,265,45,91,14,33,27,33,6,34,25,8,8,12,20
+team,minutes_played,made_field_goals,attempted_field_goals,made_three_point_field_goals,attempted_three_point_field_goals,made_free_throws,attempted_free_throws,offensive_rebounds,defensive_rebounds,assists,steals,blocks,turnovers,personal_fouls,points,outcome
+ORLANDO MAGIC,240,35,96,6,31,19,25,19,33,16,5,5,12,18,95,LOSS
+BROOKLYN NETS,240,36,82,9,25,17,23,10,42,17,7,10,13,22,98,WIN
+PORTLAND TRAIL BLAZERS,265,47,108,14,33,16,18,12,38,25,7,5,8,16,124,WIN
+CHICAGO BULLS,265,45,104,11,27,19,23,15,43,28,5,7,12,21,120,LOSS
+LOS ANGELES LAKERS,240,34,76,8,26,20,29,9,28,18,12,4,24,25,96,LOSS
+MINNESOTA TIMBERWOLVES,240,40,81,7,20,27,30,7,34,26,14,5,17,24,114,WIN
+MILWAUKEE BUCKS,265,44,93,13,27,26,28,10,33,27,9,3,14,23,127,LOSS
+TORONTO RAPTORS,265,45,91,14,33,27,33,6,34,25,8,8,12,20,131,WIN

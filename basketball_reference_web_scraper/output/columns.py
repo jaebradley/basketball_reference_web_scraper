@@ -25,7 +25,7 @@ SHARED_COLUMN_NAMES = [
 
 BOX_SCORE_COLUMN_NAMES = ["slug", "name"] + SHARED_COLUMN_NAMES
 
-PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = ["date"] + SHARED_COLUMN_NAMES
+PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = ["date", "points_scored", "plus_minus"] + SHARED_COLUMN_NAMES
 
 SCHEDULE_COLUMN_NAMES = [
     "start_time",
@@ -88,6 +88,7 @@ PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES = [
     "defensive_box_plus_minus",
     "box_plus_minus",
     "value_over_replacement_player",
+    "is_combined_totals",
 ]
 
 TEAM_BOX_SCORES_COLUMN_NAMES = [
@@ -106,6 +107,8 @@ TEAM_BOX_SCORES_COLUMN_NAMES = [
     "blocks",
     "turnovers",
     "personal_fouls",
+    "points",
+    "outcome",
 ]
 
 PLAY_BY_PLAY_COLUMN_NAMES = [
