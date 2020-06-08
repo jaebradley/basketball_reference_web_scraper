@@ -19,7 +19,7 @@ class TestOutput(TestCase):
             self.output_service.output(
                 data=self.values,
                 options=OutputOptions(
-                    file_options=FileOptions(),
+                    file_options=FileOptions.of(),
                     formatting_options={},
                     output_type=None,
                 ),
