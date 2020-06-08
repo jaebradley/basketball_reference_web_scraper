@@ -24,7 +24,7 @@ def player_box_scores(day, month, year, output_type=None, output_file_path=None,
             raise http_error
 
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": BOX_SCORE_COLUMN_NAMES}
@@ -52,7 +52,7 @@ def regular_season_player_box_scores(player_identifier, season_end_year, output_
         else:
             raise http_error
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES}
@@ -76,7 +76,7 @@ def season_schedule(season_end_year, output_type=None, output_file_path=None, ou
         else:
             raise http_error
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": SCHEDULE_COLUMN_NAMES}
@@ -99,7 +99,7 @@ def players_season_totals(season_end_year, output_type=None, output_file_path=No
         else:
             raise http_error
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": PLAYER_SEASON_TOTALS_COLUMN_NAMES}
@@ -125,7 +125,7 @@ def players_advanced_season_totals(season_end_year, include_combined_values=Fals
         else:
             raise http_error
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES}
@@ -148,7 +148,7 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
         else:
             raise http_error
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": TEAM_BOX_SCORES_COLUMN_NAMES}
@@ -171,7 +171,7 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
         else:
             raise http_error
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": PLAY_BY_PLAY_COLUMN_NAMES}
@@ -187,7 +187,7 @@ def search(term, output_type=None, output_file_path=None, output_write_option=No
     http_service = HTTPService(parser=ParserService())
     values = http_service.search(term=term)
     options = OutputOptions.of(
-        file_options=FileOptions(path=output_file_path, mode=output_write_option),
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
         json_options=json_options,
         csv_options={"column_names": SEARCH_RESULTS_COLUMN_NAMES}

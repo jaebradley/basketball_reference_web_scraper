@@ -57,6 +57,7 @@ PLAYER_SEASON_TOTALS_COLUMN_NAMES = [
     "blocks",
     "turnovers",
     "personal_fouls",
+    "points"
 ]
 
 PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES = [

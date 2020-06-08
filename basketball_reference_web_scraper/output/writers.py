@@ -1,7 +1,7 @@
 import csv
 import json
 
-from basketball_reference_web_scraper.data import OutputType
+from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
 from basketball_reference_web_scraper.utilities import merge_two_dicts
 
 DEFAULT_JSON_SORT_KEYS = True
@@ -13,7 +13,14 @@ DEFAULT_JSON_OPTIONS = {
 
 
 class FileOptions:
-    def __init__(self, path=None, mode=None):
+    @staticmethod
+    def of(path=None, mode=None):
+        if mode is None:
+            return FileOptions(path=path, mode=OutputWriteOption.WRITE)
+        
+        return FileOptions(path=path, mode=mode)
+    
+    def __init__(self, path, mode):
         self.path = path
         self.mode = mode
 
