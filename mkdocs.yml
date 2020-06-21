@@ -1,0 +1,21 @@
+site_name: Basketball Reference Web Scraper
+site_url: https://jaebadley.github.io/basketball_reference_web_scraper
+site_author: Jae Bradley
+repo_name: jaebradley/basketball_reference_web_scraper
+repo_url: https://github.com/jaebradley/basketball_reference_web_scraper
+nav:
+  - Home: index.md
+  - API: api.md
+  - Development: development.md
+theme: material
+markdown_extensions:
+  - admonition
+  - codehilite:
+      linenums: true
+  - pymdownx.magiclink
+  - pymdownx.tabbed
+  - pymdownx.tilde
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
