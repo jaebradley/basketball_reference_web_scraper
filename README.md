@@ -3,7 +3,7 @@
         <img width="550" src="https://imgur.com/dJL05Ud.png" alt="logo">
     </a>
 </p>
-<p>
+<p align="center">
     <a href="https://pypi.org/project/basketball-reference-scraper/">
         <img src="https://img.shields.io/pypi/v/basketball_reference_web_scraper" alt="pypi" />
     </a>
