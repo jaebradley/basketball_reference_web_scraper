@@ -13,7 +13,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/jaebradley/basketball_reference_web_scraper",
-    packages=setuptools.find_packages(exclude=["tests"]),
+    packages=setuptools.find_packages(exclude=["tests", "docs"]),
     python_requires=">=3.4",
     install_requires=[
         "certifi==2018.10.15",
