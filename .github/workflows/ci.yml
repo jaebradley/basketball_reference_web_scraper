@@ -12,20 +12,10 @@ on:
 
 jobs:
   build:
-    runs-on:  ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        python-version: [3.7, 3.8]
-        exclude:
-          # there's some issue when installing lxml on linux and windows
-          - os: windows-latest
-            python-version: 3.8
-          - os: ubuntu-latest
-            python-version: 3.8
-          # running into test failures when running more than 5 tests on the matrix
-          - os: macos-latest
-            python-version: 3.7
+        python-version: ['3.8']
     steps:
       - uses: actions/checkout@v2
         with:
@@ -34,14 +24,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel
-          pip install -r requirements.txt
-      - name: Test With Pytest
-        run: |
-          coverage run -m unittest discover
+      - name: Test
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: ${{ matrix.python-version }}
+          poetry_version: 1.0.9
+          args: run python -m coverage run -m unittest discover
       - name: Upload Coverage To Codecov
         uses: codecov/codecov-action@v1
   docs:
@@ -57,11 +45,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel
-          pip install -r requirements.txt
       - name: Set Git Configuration
         run: |
           REMOTE="https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}"
@@ -73,4 +56,8 @@ jobs:
           GH_NAME: ${{ secrets.GH_NAME }}
           GH_EMAIL: ${{ secrets.GH_EMAIL }}
       - name: Deploy To GitHub Pages
-        run: mkdocs gh-deploy --clean --force
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: ${{ matrix.python-version }}
+          poetry_version: 1.0.9
+          args: run python -m mkdocs gh-deploy --clean --force
