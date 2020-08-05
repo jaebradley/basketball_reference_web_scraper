@@ -9,7 +9,7 @@ from basketball_reference_web_scraper.data import League, OutputType, OutputWrit
 class TestSearchInMemory(TestCase):
     def test_search_ja(self):
         results = client.search(term="ja")
-        self.assertGreaterEqual(498, len(results["players"]))
+        self.assertLessEqual(498, len(results["players"]))
 
     def test_search_alonzo_mourning(self):
         results = client.search(term="Alonzo Mourning")
