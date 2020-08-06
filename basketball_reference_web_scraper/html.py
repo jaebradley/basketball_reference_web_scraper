@@ -1078,7 +1078,7 @@ class PlayerPage:
         name_headers = self.html.xpath('.//h1[@itemprop="name"]')
 
         if len(name_headers) > 0:
-            return name_headers[0].text_content()
+            return name_headers[0].text_content().strip()
 
         return None
 
