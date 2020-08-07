@@ -53,6 +53,27 @@ class HTTPService:
 
         return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows)
 
+    def playoff_player_box_scores(self, player_identifier, season_end_year):
+        # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
+        # surname can be derived from the fact that basketball reference also has a pattern of player identifiers
+        # starting with first few characters of player's surname
+        url = '{BASE_URL}/players/{player_surname_starting_character}/{player_identifier}/gamelog/{season_end_year}' \
+            .format(
+                BASE_URL=HTTPService.BASE_URL,
+                player_surname_starting_character=player_identifier[0],
+                player_identifier=player_identifier,
+                season_end_year=season_end_year,
+            )
+
+        response = requests.get(url=url, allow_redirects=False)
+        response.raise_for_status()
+
+        page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
+        if page.playoff_box_scores_table is None:
+            raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
+
+        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows)
+
     def play_by_play(self, home_team, day, month, year):
         add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
 

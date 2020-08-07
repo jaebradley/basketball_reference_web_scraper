@@ -1,4 +1,6 @@
 import re
+from lxml import html
+from lxml.html import HtmlComment
 
 
 class BasicBoxScoreRow:
@@ -651,7 +653,50 @@ class PlayerSeasonBoxScoresPage:
         if len(matching_tables) != 1:
             return None
 
-        return RegularSeasonPlayerBoxScoresTable(html=matching_tables[0])
+        return PlayerSeasonBoxScoresTable(html=matching_tables[0])
+
+    @property
+    def playoff_box_scores_table_container_query(self):
+        return '//div[@id="all_pgl_basic_playoffs"]'
+
+    """
+    This is a limitation of requests as the playoff box scores table is "hidden" in a comment that is rendered later
+    via some JavaScript.
+    
+    Because requests only fetches the raw HTML and doesn't process any JavaScript, this DOM element that (eventually)
+    renders in the browser is not part of the HTML that is part of the initial fetched markup.
+    
+    Thus, the comment containing the playoff table is identified and parsed and then fed into lxml to create the element
+    tree that will eventually be rendered on the page.
+    """
+    @property
+    def playoff_box_scores_table(self):
+        matching_containers = self.html.xpath(self.playoff_box_scores_table_container_query)
+
+        if len(matching_containers) != 1:
+            return None
+
+        match = matching_containers[0]
+        comments = [child for child in match.iter() if isinstance(child, HtmlComment)]
+
+        if len(comments) != 1:
+            return None
+
+        first_comment = comments[0]
+
+        try:
+            playoff_table_html = re.search(r'(<!--)([\s\S]*?)(-->)', str(first_comment)).group(2).strip()
+        except IndexError:
+            return None
+
+        tree = html.fromstring(playoff_table_html)
+
+        matching_tables = tree.xpath('//table[@id="pgl_basic_playoffs"]')
+
+        if len(matching_tables) != 1:
+            return None
+
+        return PlayerSeasonBoxScoresTable(html=matching_tables[0])
 
 
 class PlayerSeasonBoxScoresTable:
@@ -660,7 +705,9 @@ class PlayerSeasonBoxScoresTable:
 
     @property
     def rows_query(self):
-        raise NotImplementedError()
+        # Every 20 rows, there's a row that has the column header values - those should be ignored
+        return '//tbody' \
+               '/tr[not(contains(@class, "thead"))]'
 
     @property
     def rows(self):
@@ -668,15 +715,6 @@ class PlayerSeasonBoxScoresTable:
             PlayerSeasonBoxScoresRow(html=row_html)
             for row_html in self.html.xpath(self.rows_query)
         ]
-
-
-class RegularSeasonPlayerBoxScoresTable(PlayerSeasonBoxScoresTable):
-    @property
-    def rows_query(self):
-        # Every 20 rows, there's a row that has the column header values - those should be ignored
-        return '//tbody' \
-               '/tr[not(contains(@class, "thead"))]'
-
 
 class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
     def __init__(self, html):
