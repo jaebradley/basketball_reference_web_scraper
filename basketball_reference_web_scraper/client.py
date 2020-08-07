@@ -77,17 +77,18 @@ def playoff_player_box_scores(player_identifier, season_end_year, output_type=No
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
         else:
             raise http_error
-    return output(
-        values=values,
+
+    options = OutputOptions.of(
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
         output_type=output_type,
-        output_file_path=output_file_path,
-        output_write_option=output_write_option,
-        csv_writer=CSVWriter(
-            column_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES,
-            row_formatter=RowFormatter(data_field_names=PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES)
-        ),
         json_options=json_options,
+        csv_options={"column_names": PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES}
     )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=options)
 
 
 def season_schedule(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
