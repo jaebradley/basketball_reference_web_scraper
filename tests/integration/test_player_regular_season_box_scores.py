@@ -87,9 +87,20 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
             os.path.dirname(__file__),
             "./output/test-avery-2019.csv",
         )
+        expected_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/test-avery-2019.csv"
+        )
         regular_season_player_box_scores(
             player_identifier="bradlav01",
             season_end_year=2019,
             output_type=OutputType.CSV,
             output_file_path=output_file_path,
         )
+        with open(output_file_path, 'r', encoding="utf8") as output_file, \
+                open(expected_file_path, 'r', encoding="utf8") as expected_file:
+            output_lines = output_file.readlines()
+            expected_lines = expected_file.readlines()
+
+        self.assertEqual(output_lines, expected_lines)
+        os.remove(output_file_path)
