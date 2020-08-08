@@ -446,6 +446,67 @@ or appended to the specified file path (or any of other the Python file mode opt
         output_file_path="./2017_2018_russell_westbrook_regular_season_box_scores.csv"
     )
     ```
+
+
+### Playoff Player Box Scores
+
+!!! note
+    The `player_identifier` is **Basketball Reference's** unique identifier for each player. 
+    
+    In the case of Russell Westbrook, their `player_identifier` is **`westbru01`**.
+    
+    You can see this from their player page URL: https://www.basketball-reference.com/players/w/westbru01/gamelog/2020.
+    
+
+* [`repl.it` Examples](https://repl.it/@jaebradley/PlayoffPlayerBoxScores#main.py)
+
+=== "Python Data Structures"
+    ```python
+    from basketball_reference_web_scraper import client
+
+    client.playoff_player_box_scores(
+        player_identifier="westbru01", 
+        season_end_year=2018
+    )
+    ```
+    
+=== "JSON"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import OutputType
+
+    client.playoff_player_box_scores(
+        player_identifier="westbru01", 
+        season_end_year=2018, 
+        output_type=OutputType.JSON
+    )
+    ```
+
+=== "JSON to file"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import OutputType
+
+    client.playoff_player_box_scores(
+        player_identifier="westbru01", 
+        season_end_year=2018, 
+        output_type=OutputType.JSON,
+        output_file_path="./2017_2018_russell_westbrook_playoff_box_scores.json"
+    )
+    ```
+       
+=== "CSV to file"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import OutputType
+
+    client.playoff_player_box_scores(
+        player_identifier="westbru01", 
+        season_end_year=2018, 
+        output_type=OutputType.CSV, 
+        output_file_path="./2017_2018_russell_westbrook_playoff_box_scores.csv"
+    )
+    ```
     
 ### Search
 
