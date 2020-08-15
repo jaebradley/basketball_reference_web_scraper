@@ -93,6 +93,15 @@ class BasicBoxScoreRow:
         return ''
 
     @property
+    def total_rebounds(self):
+        cells = self.html.xpath('td[@data-stat="trb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
     def assists(self):
         cells = self.html.xpath('td[@data-stat="ast"]')
 
