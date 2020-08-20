@@ -1,11 +1,12 @@
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, LOCATION_ABBREVIATIONS_TO_POSITION, OUTCOME_ABBREVIATIONS_TO_OUTCOME, TEAM_NAME_TO_TEAM, \
-    POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE
+    POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE, Division, Team, DIVISIONS_TO_CONFERENCES
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
     ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
-    ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser
+    ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser, DivisionNameParser, \
+    TeamStandingsParser, ConferenceDivisionStandingsParser
 
 
 class ParserService:
@@ -76,6 +77,16 @@ class ParserService:
             league_abbreviation_parser=self.league_abbreviation_parser,
         )
         self.team_totals_parser = TeamTotalsParser(team_abbreviation_parser=self.team_abbreviation_parser)
+        self.division_name_parser = DivisionNameParser(divisions=Division)
+        self.team_standings_parser = TeamStandingsParser(teams=Team)
+        self.conference_division_standings_parser = ConferenceDivisionStandingsParser(
+            division_name_parser=self.division_name_parser,
+            team_standings_parser=self.team_standings_parser,
+            divisions_to_conferences=DIVISIONS_TO_CONFERENCES,
+        )
+
+    def parse_division_standings(self, standings):
+        return self.conference_division_standings_parser.parse(division_standings=standings)
 
     def parse_play_by_plays(self, play_by_plays, away_team_name, home_team_name):
         return self.play_by_plays_parser.parse(

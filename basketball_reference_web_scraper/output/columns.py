@@ -128,3 +128,11 @@ SEARCH_RESULTS_COLUMN_NAMES = [
     "identifier",
     "leagues",
 ]
+
+STANDINGS_COLUMNS_NAMES = [
+    "team",
+    "wins",
+    "losses",
+    "division",
+    "conference",
+]
