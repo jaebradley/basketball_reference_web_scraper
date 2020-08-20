@@ -85,6 +85,31 @@ class League(Enum):
     BASKETBALL_ASSOCIATION_OF_AMERICA = "BASKETBALL_ASSOCIATION_OF_AMERICA"
 
 
+class Conference(Enum):
+    EASTERN = "EASTERN"
+    WESTERN = "WESTERN"
+
+
+class Division(Enum):
+    ATLANTIC = "ATLANTIC"
+    CENTRAL = "CENTRAL"
+    MIDWEST = "MIDWEST"
+    NORTHWEST = "NORTHWEST"
+    PACIFIC = "PACIFIC"
+    SOUTHEAST = "SOUTHEAST"
+    SOUTHWEST = "SOUTHWEST"
+
+
+DIVISIONS_TO_CONFERENCES = {
+    Division.ATLANTIC: Conference.EASTERN,
+    Division.CENTRAL: Conference.EASTERN,
+    Division.SOUTHEAST: Conference.EASTERN,
+    Division.MIDWEST: Conference.WESTERN,
+    Division.PACIFIC: Conference.WESTERN,
+    Division.SOUTHWEST: Conference.WESTERN,
+}
+
+
 TEAM_ABBREVIATIONS_TO_TEAM = {
     'ATL': Team.ATLANTA_HAWKS,
     'BOS': Team.BOSTON_CELTICS,

@@ -5,7 +5,7 @@ from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, Tea
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
-    PlayerPage
+    PlayerPage, StandingsPage
 
 
 class HTTPService:
@@ -13,6 +13,20 @@ class HTTPService:
 
     def __init__(self, parser):
         self.parser = parser
+
+    def standings(self, season_end_year):
+        url = '{BASE_URL}/leagues/NBA_{season_end_year}.html'.format(
+            BASE_URL=HTTPService.BASE_URL,
+            season_end_year=season_end_year,
+        )
+
+        response = requests.get(url=url, allow_redirects=False)
+
+        response.raise_for_status()
+
+        page = StandingsPage(html=html.fromstring(response.content))
+        return self.parser.parse_division_standings(standings=page.division_standings.eastern_conference_table.rows) + \
+               self.parser.parse_division_standings(standings=page.division_standings.western_conference_table.rows)
 
     def player_box_scores(self, day, month, year):
         url = '{BASE_URL}/friv/dailyleaders.cgi?month={month}&day={day}&year={year}'.format(
@@ -38,11 +52,11 @@ class HTTPService:
         # starting with first few characters of player's surname
         url = '{BASE_URL}/players/{player_surname_starting_character}/{player_identifier}/gamelog/{season_end_year}' \
             .format(
-                BASE_URL=HTTPService.BASE_URL,
-                player_surname_starting_character=player_identifier[0],
-                player_identifier=player_identifier,
-                season_end_year=season_end_year,
-            )
+            BASE_URL=HTTPService.BASE_URL,
+            player_surname_starting_character=player_identifier[0],
+            player_identifier=player_identifier,
+            season_end_year=season_end_year,
+        )
 
         response = requests.get(url=url, allow_redirects=False)
         response.raise_for_status()
@@ -59,11 +73,11 @@ class HTTPService:
         # starting with first few characters of player's surname
         url = '{BASE_URL}/players/{player_surname_starting_character}/{player_identifier}/gamelog/{season_end_year}' \
             .format(
-                BASE_URL=HTTPService.BASE_URL,
-                player_surname_starting_character=player_identifier[0],
-                player_identifier=player_identifier,
-                season_end_year=season_end_year,
-            )
+            BASE_URL=HTTPService.BASE_URL,
+            player_surname_starting_character=player_identifier[0],
+            player_identifier=player_identifier,
+            season_end_year=season_end_year,
+        )
 
         response = requests.get(url=url, allow_redirects=False)
         response.raise_for_status()

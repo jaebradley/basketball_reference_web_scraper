@@ -551,3 +551,46 @@ or appended to the specified file path (or any of other the Python file mode opt
     )
     ```
 
+### Standings
+
+* [`repli.t` Examples](https://repl.it/@jaebradley/Standings#main.py)
+
+=== "Python Data Structures"
+    ```python
+    from basketball_reference_web_scraper import client
+
+    client.standings(season_end_year=2019)
+    ```
+    
+=== "JSON"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import OutputType
+
+    client.standings(season_end_year=2019, output_type=OutputType.JSON)
+    ```
+
+=== "JSON to file"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import OutputType
+
+    client.standings(
+        season_end_year=2019,
+        output_type=OutputType.JSON, 
+        output_file_path="./2019_standings.json"
+    )
+    ```
+       
+=== "CSV to file"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import OutputType
+
+    client.standings(
+        season_end_year=2019,
+        output_type=OutputType.JSON, 
+        output_file_path="./2019_standings.csv"
+    )
+    ```
+
