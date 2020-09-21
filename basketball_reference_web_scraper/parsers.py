@@ -467,34 +467,62 @@ class PlayerSeasonBoxScoresParser:
         self.outcome_parser = outcome_parser
         self.seconds_played_parser = seconds_played_parser
 
-    def parse(self, box_scores):
-        return [
-            {
+    def parse(self, box_scores, include_inactive_games=False):
+        results = []
+        for box_score in box_scores:
+            common = {
                 "date": datetime.strptime(str(box_score.date), "%Y-%m-%d").date(),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
                 "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),
                 "outcome": self.outcome_parser.parse_outcome(formatted_outcome=box_score.outcome),
-                "seconds_played": self.seconds_played_parser.parse(box_score.playing_time),
-                "made_field_goals": str_to_int(box_score.made_field_goals),
-                "attempted_field_goals": str_to_int(box_score.attempted_field_goals),
-                "made_three_point_field_goals": str_to_int(box_score.made_three_point_field_goals),
-                "attempted_three_point_field_goals": str_to_int(box_score.attempted_three_point_field_goals),
-                "made_free_throws": str_to_int(box_score.made_free_throws),
-                "attempted_free_throws": str_to_int(box_score.attempted_free_throws),
-                "offensive_rebounds": str_to_int(box_score.offensive_rebounds),
-                "defensive_rebounds": str_to_int(box_score.defensive_rebounds),
-                "assists": str_to_int(box_score.assists),
-                "steals": str_to_int(box_score.steals),
-                "blocks": str_to_int(box_score.blocks),
-                "turnovers": str_to_int(box_score.turnovers),
-                "personal_fouls": str_to_int(box_score.personal_fouls),
-                "points_scored": str_to_int(box_score.points_scored),
-                "game_score": str_to_float(box_score.game_score),
-                "plus_minus": str_to_int(box_score.plus_minus),
-            } for box_score in box_scores
-            if box_score.is_active
-        ]
+            }
+            if box_score.is_active:
+                results.append({
+                    **common,
+                    "active": True,
+                    "seconds_played": self.seconds_played_parser.parse(box_score.playing_time),
+                    "made_field_goals": str_to_int(box_score.made_field_goals),
+                    "attempted_field_goals": str_to_int(box_score.attempted_field_goals),
+                    "made_three_point_field_goals": str_to_int(box_score.made_three_point_field_goals),
+                    "attempted_three_point_field_goals": str_to_int(box_score.attempted_three_point_field_goals),
+                    "made_free_throws": str_to_int(box_score.made_free_throws),
+                    "attempted_free_throws": str_to_int(box_score.attempted_free_throws),
+                    "offensive_rebounds": str_to_int(box_score.offensive_rebounds),
+                    "defensive_rebounds": str_to_int(box_score.defensive_rebounds),
+                    "assists": str_to_int(box_score.assists),
+                    "steals": str_to_int(box_score.steals),
+                    "blocks": str_to_int(box_score.blocks),
+                    "turnovers": str_to_int(box_score.turnovers),
+                    "personal_fouls": str_to_int(box_score.personal_fouls),
+                    "points_scored": str_to_int(box_score.points_scored),
+                    "game_score": str_to_float(box_score.game_score),
+                    "plus_minus": str_to_int(box_score.plus_minus),
+                })
+            elif include_inactive_games:
+                results.append({
+                    **common,
+                    "active": False,
+                    "seconds_played": None,
+                    "made_field_goals": None,
+                    "attempted_field_goals": None,
+                    "made_three_point_field_goals": None,
+                    "attempted_three_point_field_goals": None,
+                    "made_free_throws": None,
+                    "attempted_free_throws": None,
+                    "offensive_rebounds": None,
+                    "defensive_rebounds": None,
+                    "assists": None,
+                    "steals": None,
+                    "blocks": None,
+                    "turnovers": None,
+                    "personal_fouls": None,
+                    "points_scored": None,
+                    "game_score": None,
+                    "plus_minus": None,
+                })
+
+        return results
 
 
 class PlayByPlaysParser:

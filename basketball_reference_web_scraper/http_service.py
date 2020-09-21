@@ -46,7 +46,7 @@ class HTTPService:
 
         raise InvalidDate(day=day, month=month, year=year)
 
-    def regular_season_player_box_scores(self, player_identifier, season_end_year):
+    def regular_season_player_box_scores(self, player_identifier, season_end_year, include_inactive_games=False):
         # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
         # surname can be derived from the fact that basketball reference also has a pattern of player identifiers
         # starting with first few characters of player's surname
@@ -65,9 +65,9 @@ class HTTPService:
         if page.regular_season_box_scores_table is None:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
-        return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows)
+        return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows, include_inactive_games=include_inactive_games)
 
-    def playoff_player_box_scores(self, player_identifier, season_end_year):
+    def playoff_player_box_scores(self, player_identifier, season_end_year, include_inactive_games=False):
         # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
         # surname can be derived from the fact that basketball reference also has a pattern of player identifiers
         # starting with first few characters of player's surname
@@ -86,7 +86,7 @@ class HTTPService:
         if page.playoff_box_scores_table is None:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
-        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows)
+        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows, include_inactive_games=include_inactive_games)
 
     def play_by_play(self, home_team, day, month, year):
         add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s

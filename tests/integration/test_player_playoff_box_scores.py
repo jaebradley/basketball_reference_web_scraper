@@ -16,6 +16,7 @@ class TestPlayerPlayoffBoxScores(TestCase):
 
     def test_get_first_2019_playoff_box_score_for_russell_westbrook(self):
         result = playoff_player_box_scores(player_identifier="westbru01", season_end_year=2019)
+        self.assertEqual(True, result[0]["active"])
         self.assertEqual(datetime.strptime("2019-04-14", "%Y-%m-%d").date(), result[0]["date"])
         self.assertEqual(Team.OKLAHOMA_CITY_THUNDER, result[0]["team"])
         self.assertEqual(Outcome.LOSS, result[0]["outcome"])
@@ -111,6 +112,113 @@ class TestPlayerPlayoffBoxScores(TestCase):
             season_end_year=2019,
             output_type=OutputType.CSV,
             output_file_path=output_file_path,
+        )
+        with open(output_file_path, "r", encoding="utf8") as output_file, \
+                open(expected_file_path, "r", encoding="utf8") as expected_output_file:
+            self.assertEqual(
+                output_file.readlines(),
+                expected_output_file.readlines(),
+            )
+        os.remove(output_file_path)
+
+    def test_get_playoff_box_scores_removes_inactive_games_by_default(self):
+        # Giannis missed one playoff game in 2020. Verify that the game from
+        # 9/8/2020 is not included in his boxscores.
+        results = playoff_player_box_scores(player_identifier="antetgi01", season_end_year=2020)
+        self.assertIsNotNone(results)
+        self.assertEqual(9, len(results))
+
+        d = datetime.strptime("2020-09-08", "%Y-%m-%d").date()
+        self.assertTrue(all([bs["date"] != d and bs["active"] for bs in results]))
+
+    def test_get_playoff_box_scores_keeps_inactive_games_if_requested(self):
+        results = playoff_player_box_scores(player_identifier="antetgi01", season_end_year=2020, include_inactive_games=True)
+        self.assertIsNotNone(results)
+        self.assertEqual(10, len(results))
+
+        inactive_game = results[-1]
+        self.assertEqual(datetime.strptime("2020-09-08", "%Y-%m-%d").date(), inactive_game["date"])
+        self.assertFalse(inactive_game["active"])
+
+        expected_null_stats = {
+            "seconds_played",
+            "made_field_goals",
+            "attempted_field_goals",
+            "made_three_point_field_goals",
+            "attempted_three_point_field_goals",
+            "made_free_throws",
+            "attempted_free_throws",
+            "offensive_rebounds",
+            "defensive_rebounds",
+            "assists",
+            "steals",
+            "blocks",
+            "turnovers",
+            "personal_fouls",
+            "points_scored",
+            "game_score",
+            "plus_minus",
+        }
+
+        for stat in expected_null_stats:
+            self.assertIsNone(inactive_game[stat])
+
+    def test_outputting_2020_playoff_box_scores_for_russell_westbrook_with_inactive_games_as_json(self):
+        expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/test-westbrook-playoffs-2020-include-inactive.json",
+        )
+        results = playoff_player_box_scores(
+            player_identifier="westbru01",
+            season_end_year=2020,
+            output_type=OutputType.JSON,
+            include_inactive_games=True,
+        )
+        with open(expected_output_file_path, "r", encoding="utf8") as expected_output:
+            self.assertEqual(
+                json.loads(results),
+                json.load(expected_output),
+            )
+
+    def test_outputting_2020_playoff_box_scores_for_russell_westbrook_with_inactive_games_as_json_file(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/test-westbrook-playoffs-2020-include-inactive.json",
+        )
+        expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/test-westbrook-playoffs-2020-include-inactive.json",
+        )
+        playoff_player_box_scores(
+            player_identifier="westbru01",
+            season_end_year=2020,
+            output_type=OutputType.JSON,
+            output_file_path=output_file_path,
+            include_inactive_games=True,
+        )
+        with open(output_file_path, "r", encoding="utf8") as output_file, \
+                open(expected_output_file_path, "r", encoding="utf8") as expected_output_file:
+            self.assertEqual(
+                json.load(output_file),
+                json.load(expected_output_file),
+            )
+        os.remove(output_file_path)
+
+    def test_outputting_2020_playoff_box_scores_for_russell_westbrook_with_inactive_games_as_csv(self):
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/test-westbrook-playoffs-2020-include-inactive.csv",
+        )
+        expected_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/test-westbrook-playoffs-2020-include-inactive.csv"
+        )
+        playoff_player_box_scores(
+            player_identifier="westbru01",
+            season_end_year=2020,
+            output_type=OutputType.CSV,
+            output_file_path=output_file_path,
+            include_inactive_games=True,
         )
         with open(output_file_path, "r", encoding="utf8") as output_file, \
                 open(expected_file_path, "r", encoding="utf8") as expected_output_file:

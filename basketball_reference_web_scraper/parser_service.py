@@ -98,8 +98,8 @@ class ParserService:
     def parse_player_box_scores(self, box_scores):
         return self.player_box_scores_parser.parse(box_scores=box_scores)
 
-    def parse_player_season_box_scores(self, box_scores):
-        return self.player_season_box_scores_parser.parse(box_scores=box_scores)
+    def parse_player_season_box_scores(self, box_scores, include_inactive_games=False):
+        return self.player_season_box_scores_parser.parse(box_scores=box_scores, include_inactive_games=include_inactive_games)
 
     def parse_player_advanced_season_totals_parser(self, totals):
         return self.player_advanced_season_totals_parser.parse(totals=totals)
