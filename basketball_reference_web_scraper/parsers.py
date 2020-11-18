@@ -421,6 +421,8 @@ class TeamTotalsParser:
             "turnovers": str_to_int(team_totals.turnovers),
             "personal_fouls": str_to_int(team_totals.personal_fouls),
             "points": str_to_int(team_totals.points),
+            "offensive_rating": str_to_float(total.offensive_rating),
+            "defensive_rating": str_to_float(total.defensive_rating),
         }
 
 
