@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "basketball_reference_web_scraper"
-version = "4.11.0"
+version = "4.12.0"
 description = "A Basketball Reference client that generates data by scraping the website"
 authors = ["Jae Bradley <jae.b.bradley@gmail.com>"]
 maintainers = ["Jae Bradley <jae.b.bradley@gmail.com>"]
