@@ -61,12 +61,13 @@ def player_box_scores(day, month, year, output_type=None, output_file_path=None,
 
 
 def regular_season_player_box_scores(player_identifier, season_end_year, output_type=None, output_file_path=None,
-                                     output_write_option=None, json_options=None):
+                                     output_write_option=None, json_options=None, include_inactive_games=False):
     try:
         http_service = HTTPService(parser=ParserService())
         values = http_service.regular_season_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
+            include_inactive_games=include_inactive_games,
         )
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.internal_server_error \
@@ -88,12 +89,13 @@ def regular_season_player_box_scores(player_identifier, season_end_year, output_
 
 
 def playoff_player_box_scores(player_identifier, season_end_year, output_type=None, output_file_path=None,
-                              output_write_option=None, json_options=None):
+                              output_write_option=None, json_options=None, include_inactive_games=False):
     try:
         http_service = HTTPService(parser=ParserService())
         values = http_service.playoff_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
+            include_inactive_games=include_inactive_games,
         )
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.internal_server_error \
