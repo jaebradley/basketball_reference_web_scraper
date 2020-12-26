@@ -10635,6 +10635,32 @@
     },
     {
         "age": 22,
+        "assists": 55,
+        "attempted_field_goals": 285,
+        "attempted_free_throws": 94,
+        "attempted_three_point_field_goals": 102,
+        "blocks": 27,
+        "defensive_rebounds": 132,
+        "games_played": 59,
+        "games_started": 10,
+        "made_field_goals": 114,
+        "made_free_throws": 74,
+        "made_three_point_field_goals": 33,
+        "minutes_played": 981,
+        "name": "Taurean Prince",
+        "offensive_rebounds": 25,
+        "personal_fouls": 96,
+        "points": 335,
+        "positions": [
+            "SMALL FORWARD"
+        ],
+        "slug": "princta02",
+        "steals": 43,
+        "team": "ATLANTA HAWKS",
+        "turnovers": 61
+    },
+    {
+        "age": 22,
         "assists": 11,
         "attempted_field_goals": 29,
         "attempted_free_throws": 3,
@@ -13076,32 +13102,6 @@
         "steals": 157,
         "team": "WASHINGTON WIZARDS",
         "turnovers": 322
-    },
-    {
-        "age": 22,
-        "assists": 55,
-        "attempted_field_goals": 285,
-        "attempted_free_throws": 94,
-        "attempted_three_point_field_goals": 102,
-        "blocks": 27,
-        "defensive_rebounds": 132,
-        "games_played": 59,
-        "games_started": 10,
-        "made_field_goals": 114,
-        "made_free_throws": 74,
-        "made_three_point_field_goals": 33,
-        "minutes_played": 981,
-        "name": "Taurean Prince",
-        "offensive_rebounds": 25,
-        "personal_fouls": 96,
-        "points": 335,
-        "positions": [
-            "SMALL FORWARD"
-        ],
-        "slug": "princta02",
-        "steals": 43,
-        "team": "ATLANTA HAWKS",
-        "turnovers": 61
     },
     {
         "age": 23,
