@@ -5964,13 +5964,6 @@
         "start_time": "2001-03-04T03:00:00+00:00"
     },
     {
-        "away_team": "ORLANDO MAGIC",
-        "away_team_score": 84,
-        "home_team": "DETROIT PISTONS",
-        "home_team_score": 93,
-        "start_time": "2001-03-04T17:30:00+00:00"
-    },
-    {
         "away_team": "NEW YORK KNICKS",
         "away_team_score": 88,
         "home_team": "TORONTO RAPTORS",
@@ -5982,6 +5975,13 @@
         "away_team_score": 116,
         "home_team": "BOSTON CELTICS",
         "home_team_score": 97,
+        "start_time": "2001-03-04T20:00:00+00:00"
+    },
+    {
+        "away_team": "ORLANDO MAGIC",
+        "away_team_score": 84,
+        "home_team": "DETROIT PISTONS",
+        "home_team_score": 93,
         "start_time": "2001-03-04T20:00:00+00:00"
     },
     {
