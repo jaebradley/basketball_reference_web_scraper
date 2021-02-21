@@ -510,7 +510,7 @@ or appended to the specified file path (or any of other the Python file mode opt
     
 ### Search
 
-* [`repli.t` Examples](https://repl.it/@jaebradley/Search#main.py)
+* [`repl.it` Examples](https://repl.it/@jaebradley/Search#main.py)
 
 === "Python Data Structures"
     ```python
@@ -553,7 +553,7 @@ or appended to the specified file path (or any of other the Python file mode opt
 
 ### Standings
 
-* [`repli.t` Examples](https://repl.it/@jaebradley/Standings#main.py)
+* [`repl.it` Examples](https://repl.it/@jaebradley/Standings#main.py)
 
 === "Python Data Structures"
     ```python
