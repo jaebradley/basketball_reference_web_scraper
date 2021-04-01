@@ -4466,13 +4466,6 @@
         "start_time": "2001-01-30T03:30:00+00:00"
     },
     {
-        "away_team": "PHILADELPHIA 76ERS",
-        "away_team_score": 89,
-        "home_team": "TORONTO RAPTORS",
-        "home_team_score": 96,
-        "start_time": "2001-01-31T00:00:00+00:00"
-    },
-    {
         "away_team": "LOS ANGELES LAKERS",
         "away_team_score": 102,
         "home_team": "CLEVELAND CAVALIERS",
@@ -4484,6 +4477,13 @@
         "away_team_score": 86,
         "home_team": "ORLANDO MAGIC",
         "home_team_score": 93,
+        "start_time": "2001-01-31T01:00:00+00:00"
+    },
+    {
+        "away_team": "PHILADELPHIA 76ERS",
+        "away_team_score": 89,
+        "home_team": "TORONTO RAPTORS",
+        "home_team_score": 96,
         "start_time": "2001-01-31T01:00:00+00:00"
     },
     {
@@ -7424,7 +7424,7 @@
         "away_team_score": 99,
         "home_team": "PHOENIX SUNS",
         "home_team_score": 106,
-        "start_time": "2001-04-02T00:00:00+00:00"
+        "start_time": "2001-04-02T01:00:00+00:00"
     },
     {
         "away_team": "DALLAS MAVERICKS",
@@ -8446,7 +8446,7 @@
         "away_team_score": 92,
         "home_team": "INDIANA PACERS",
         "home_team_score": 87,
-        "start_time": "2001-04-28T17:40:00+00:00"
+        "start_time": "2001-04-28T16:40:00+00:00"
     },
     {
         "away_team": "UTAH JAZZ",

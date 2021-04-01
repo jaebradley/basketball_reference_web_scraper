@@ -89,7 +89,7 @@ class TestSeasonScheduleCSVOutput(TestCase):
                 expected_output_file.readlines()
             )
 
-    def test_2017_season_schedule_csv(self):
+    def test_2001_season_schedule_csv(self):
         season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=self.output_2001_file_path)
         with open(self.output_2001_file_path, "r", encoding="utf8") as output_file, \
                 open(self.expected_output_2001_file_path, "r", encoding="utf8") as expected_output_file:
@@ -142,7 +142,7 @@ class TestSeasonScheduleJSONOutput(TestCase):
                 json.load(expected_output_file),
             )
 
-    def test_writing_2017_season_schedule_json_file(self):
+    def test_writing_2001_season_schedule_json_file(self):
         season_schedule(season_end_year=2001, output_type=OutputType.JSON, output_file_path=self.output_2001_file_path)
         with open(self.output_2001_file_path, "r", encoding="utf8") as output_file, \
                 open(self.expected_output_2001_file_path, "r", encoding="utf8") as expected_output_file:
