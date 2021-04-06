@@ -10640,7 +10640,7 @@
         "offensive_box_plus_minus": 4.7,
         "offensive_rebound_percentage": 2.2,
         "offensive_win_shares": 8.0,
-        "player_efficiency_rating": 22.2,
+        "player_efficiency_rating": 22.1,
         "positions": [
             "POINT GUARD"
         ],
@@ -18403,7 +18403,7 @@
     },
     {
         "age": 27,
-        "assist_percentage": 9.5,
+        "assist_percentage": 9.6,
         "block_percentage": 1.2,
         "box_plus_minus": 0.0,
         "defensive_box_plus_minus": -0.1,
