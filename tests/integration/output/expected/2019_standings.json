@@ -105,35 +105,35 @@
         "wins": 29
     },
     {
-        "conference": null,
+        "conference": "WESTERN",
         "division": "NORTHWEST",
         "losses": 28,
         "team": "DENVER NUGGETS",
         "wins": 54
     },
     {
-        "conference": null,
+        "conference": "WESTERN",
         "division": "NORTHWEST",
         "losses": 29,
         "team": "PORTLAND TRAIL BLAZERS",
         "wins": 53
     },
     {
-        "conference": null,
+        "conference": "WESTERN",
         "division": "NORTHWEST",
         "losses": 32,
         "team": "UTAH JAZZ",
         "wins": 50
     },
     {
-        "conference": null,
+        "conference": "WESTERN",
         "division": "NORTHWEST",
         "losses": 33,
         "team": "OKLAHOMA CITY THUNDER",
         "wins": 49
     },
     {
-        "conference": null,
+        "conference": "WESTERN",
         "division": "NORTHWEST",
         "losses": 46,
         "team": "MINNESOTA TIMBERWOLVES",

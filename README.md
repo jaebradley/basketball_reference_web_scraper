@@ -32,5 +32,5 @@ For documentation about installing the package and API methods see [the document
 ## Contributors
 
 Thanks to [@DaiJunyan](https://github.com/DaiJunyan), [@ecallahan5](https://github.com/ecallahan5), 
-[@Yotamho](https://github.com/Yotamho), and [@ntsirakis](https://github.com/ntsirakis) for their contributions!
+[@Yotamho](https://github.com/Yotamho), [@ntsirakis](https://github.com/ntsirakis), and [@allanbelliti](https://github.com/allanbelliti) for their contributions!
 
