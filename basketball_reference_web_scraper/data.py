@@ -107,6 +107,7 @@ DIVISIONS_TO_CONFERENCES = {
     Division.MIDWEST: Conference.WESTERN,
     Division.PACIFIC: Conference.WESTERN,
     Division.SOUTHWEST: Conference.WESTERN,
+    Division.NORTHWEST : Conference.WESTERN
 }
 
 
