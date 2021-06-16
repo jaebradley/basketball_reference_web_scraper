@@ -4935,13 +4935,6 @@
         "start_time": "2001-02-08T03:30:00+00:00"
     },
     {
-        "away_team": "DENVER NUGGETS",
-        "away_team_score": 92,
-        "home_team": "TORONTO RAPTORS",
-        "home_team_score": 99,
-        "start_time": "2001-02-09T00:00:00+00:00"
-    },
-    {
         "away_team": "ATLANTA HAWKS",
         "away_team_score": 84,
         "home_team": "CHARLOTTE HORNETS",
@@ -4959,6 +4952,13 @@
         "away_team": "SAN ANTONIO SPURS",
         "away_team_score": 97,
         "home_team": "NEW JERSEY NETS",
+        "home_team_score": 99,
+        "start_time": "2001-02-09T01:00:00+00:00"
+    },
+    {
+        "away_team": "DENVER NUGGETS",
+        "away_team_score": 92,
+        "home_team": "TORONTO RAPTORS",
         "home_team_score": 99,
         "start_time": "2001-02-09T01:00:00+00:00"
     },
