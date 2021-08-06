@@ -10790,6 +10790,32 @@
         "turnovers": 9
     },
     {
+        "age": null,
+        "assists": 10,
+        "attempted_field_goals": 23,
+        "attempted_free_throws": 2,
+        "attempted_three_point_field_goals": 2,
+        "blocks": 0,
+        "defensive_rebounds": 1,
+        "games_played": 6,
+        "games_started": 0,
+        "made_field_goals": 8,
+        "made_free_throws": 1,
+        "made_three_point_field_goals": 0,
+        "minutes_played": 78,
+        "name": "Tony Smith",
+        "offensive_rebounds": 2,
+        "personal_fouls": 12,
+        "points": 17,
+        "positions": [
+            "SHOOTING GUARD"
+        ],
+        "slug": "smithto02",
+        "steals": 7,
+        "team": "ATLANTA HAWKS",
+        "turnovers": 9
+    },
+    {
         "age": 27,
         "assists": 369,
         "attempted_field_goals": 435,

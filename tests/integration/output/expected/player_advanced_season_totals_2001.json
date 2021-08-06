@@ -13280,6 +13280,38 @@
         "win_shares_per_48_minutes": -0.11
     },
     {
+        "age": null,
+        "assist_percentage": 20.5,
+        "block_percentage": 0.0,
+        "box_plus_minus": -8.6,
+        "defensive_box_plus_minus": -0.1,
+        "defensive_rebound_percentage": 1.4,
+        "defensive_win_shares": 0.1,
+        "free_throw_attempt_rate": 0.087,
+        "games_played": 6,
+        "is_combined_totals": false,
+        "minutes_played": 78,
+        "name": "Tony Smith",
+        "offensive_box_plus_minus": -8.5,
+        "offensive_rebound_percentage": 2.8,
+        "offensive_win_shares": -0.3,
+        "player_efficiency_rating": 3.8,
+        "positions": [
+            "SHOOTING GUARD"
+        ],
+        "slug": "smithto02",
+        "steal_percentage": 4.7,
+        "team": "ATLANTA HAWKS",
+        "three_point_attempt_rate": 0.087,
+        "total_rebound_percentage": 2.1,
+        "true_shooting_percentage": 0.356,
+        "turnover_percentage": 27.4,
+        "usage_percentage": 18.8,
+        "value_over_replacement_player": -0.1,
+        "win_shares": -0.2,
+        "win_shares_per_48_minutes": -0.11
+    },
+    {
         "age": 27,
         "assist_percentage": 33.9,
         "block_percentage": 0.3,

@@ -132,8 +132,8 @@ class TestPlayByPlayCSVOutput(TestCase):
             "../output/expected/2003_10_29_TOR_pbp.csv"
         )
 
-    def tearDown(self):
-        os.remove(self.output_file_path)
+    # def tearDown(self):
+    #     os.remove(self.output_file_path)
 
     def test_2003_10_29_TOR_box_scores(self):
         play_by_play(

@@ -44,7 +44,7 @@ class TestPlayersSeasonTotals(TestCase):
     def test_2001_players_season_totals(self):
         table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2001_totals))
         parsed_season_totals = self.parser.parse(table.rows)
-        self.assertEqual(len(parsed_season_totals), 490)
+        self.assertEqual(len(parsed_season_totals), 491)
 
         mahmoud_abdul_rauf = parsed_season_totals[0]
 

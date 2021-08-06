@@ -585,7 +585,7 @@ class Test2018PlayerSeasonInMemoryJSONTotals(BaseTestPlayerAdvancedSeasonTotalsI
 class TestInMemoryPlayerSeasonTotals(TestCase):
     def test_2001_player_season_totals_length(self):
         player_season_totals = client.players_season_totals(season_end_year=2001)
-        self.assertEqual(len(player_season_totals), 490)
+        self.assertEqual(len(player_season_totals), 491)
 
     def test_first_2001_player_season_totals(self):
         player_season_totals = client.players_season_totals(season_end_year=2001)
