@@ -7,7 +7,7 @@ chardet==3.0.4 \
 idna==2.7 \
     --hash=sha256:156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e \
     --hash=sha256:684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16
-lxml==4.5.1 \
+lxml==4.6.3 \
     --hash=sha256:ee2be8b8f72a2772e72ab926a3bccebf47bb727bda41ae070dc91d1fb759b726 \
     --hash=sha256:fadd2a63a2bfd7fb604508e553d1cf68eca250b2fbdbd81213b5f6f2fbf23529 \
     --hash=sha256:4f282737d187ae723b2633856085c31ae5d4d432968b7f3f478a48a54835f5c4 \
@@ -41,6 +41,6 @@ pytz==2018.6 \
 requests==2.20.0 \
     --hash=sha256:a84b8c9ab6239b578f22d1c21d51b696dcfe004032bb80ea832398d6909d7279 \
     --hash=sha256:99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c
-urllib3==1.24.3 \
+urllib3==1.26.5 \
     --hash=sha256:a637e5fae88995b256e3409dc4d52c2e2e0ba32c42a6365fee8bbd2238de3cfb \
     --hash=sha256:2393a695cd12afedd0dcb26fe5d50d0cf248e5a66f75dbd89a3d4eb333a61af4
