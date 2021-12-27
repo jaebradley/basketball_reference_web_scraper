@@ -4,13 +4,13 @@
     </a>
 </p>
 <p align="center">
-    <a href="https://pypi.org/project/basketball-reference-scraper/">
+    <a href="https://pypi.org/project/basketball-reference-web-scraper/">
         <img src="https://img.shields.io/pypi/v/basketball_reference_web_scraper" alt="pypi" />
     </a>
-    <a href="https://pypi.org/project/basketball-reference-scraper/">
+    <a href="https://pypi.org/project/basketball-reference-web-scraper/">
         <img src="https://img.shields.io/pypi/pyversions/basketball_reference_web_scraper" alt="python version" />
     </a>
-    <a href="https://pypi.org/project/basketball-reference-scraper/">
+    <a href="https://pypi.org/project/basketball-reference-web-scraper/">
         <img src="https://img.shields.io/pypi/l/basketball_reference_web_scraper" alt="license" />
     </a>
     <a href="https://codecov.io/gh/jaebradley/basketball_reference_web_scraper">
