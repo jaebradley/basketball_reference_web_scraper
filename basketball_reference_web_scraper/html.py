@@ -852,7 +852,7 @@ class PlayByPlayRow:
         # Or are one of the table headers for each period group (aria-label = Time)
         return not self.is_start_of_period \
                and self.html[1].get('colspan') != '5' \
-               and self.timestamp_cell.get('aria-label') != 'Time'
+               and not self.timestamp_cell.get('aria-label') in ['Time', '']
 
 
 class DailyBoxScoresPage:
