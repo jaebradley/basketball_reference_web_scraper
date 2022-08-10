@@ -235,6 +235,28 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
     )
     return output_service.output(data=values, options=options)
 
+def shot_charts(home_team,relevant_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
+                 json_options=None):
+    try:
+        http_service = HTTPService(parser=ParserService())
+        values = http_service.shot_chart(home_team=home_team, relevant_team = relevant_team, day=day, month=month, year=year)
+    except requests.exceptions.HTTPError as http_error:
+        if http_error.response.status_code == requests.codes.not_found:
+            raise InvalidDate(day=day, month=month, year=year)
+        else:
+            raise http_error
+    options = OutputOptions.of(
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
+        output_type=output_type,
+        json_options=json_options,
+        csv_options={"column_names": ["Xpos","Ypos","Success","Player","Time_remaining"]}
+    )
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=options)
+
 
 def search(term, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
     http_service = HTTPService(parser=ParserService())

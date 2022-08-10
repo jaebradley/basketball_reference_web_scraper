@@ -770,8 +770,8 @@ class PlayByPlayPage:
         return \
             '//*[@id="content"]' \
             '//div[@class="scorebox"]' \
-            '//div[@itemprop="performer"]' \
-            '//a[@itemprop="name"]'
+            '//strong'\
+            '//a'
 
     @property
     def play_by_play_table(self):
@@ -807,6 +807,40 @@ class PlayByPlayTable:
             for row_html in self.html[1:]
         ]
 
+class ShotChartPage:
+    def __init__(self, html, string):
+        self.html = html
+        self.string = string
+
+    @property
+    def shots_query(self):
+        return \
+            '//*[@id="shots-'+self.string+'"]' \
+            '//div'
+    @property
+    def position_shots(self):
+        shots = self.html.xpath(self.shots_query)
+
+        return [
+            shot.values()[0]
+            for shot in shots
+        ]
+    @property
+    def success_shots(self):
+        shots = self.html.xpath(self.shots_query)
+
+        return [
+            shot.text_content()
+            for shot in shots
+        ]
+    @property
+    def info_shots(self):
+        shots = self.html.xpath(self.shots_query)
+
+        return [
+            shot.values()[1]
+            for shot in shots
+            ]
 
 class PlayByPlayRow:
     def __init__(self, html):

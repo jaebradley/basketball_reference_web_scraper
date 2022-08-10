@@ -1,11 +1,13 @@
 import requests
 from lxml import html
+import re
+from datetime import datetime
 
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
-    PlayerPage, StandingsPage
+    PlayerPage, StandingsPage, ShotChartPage
 
 
 class HTTPService:
@@ -106,6 +108,51 @@ class HTTPService:
             away_team_name=page.away_team_name,
             home_team_name=page.home_team_name,
         )
+
+    def get_description(s):
+        match = re.match(r'(\d)[a-z]{2} quarter, (\S*) remaining<br>(.*) \b(missed|made) (\d)-pointer from (\d*) ft', s)
+        d = {}
+        if not match:
+            match = re.match(r'(\d)[a-z]{2} overtime, (\S*) remaining<br>(.*) \b(missed|made) (\d)-pointer from (\d*) ft', s)
+        if match:
+            groups = match.groups()
+            d['QUARTER'] = int(groups[0])
+            dt = datetime.strptime( groups[1], "%M:%S.%f" )
+            d['TIME_REMAINING'] = str(float(
+                (dt.minute * 60) + dt.second + (dt.microsecond / 1000000)
+            ))
+            d['PLAYER'] = groups[2]
+            d['MAKE_MISS'] = '1' if groups[3]=='made' else '0'
+            d['VALUE'] = int(groups[4])
+            d['DISTANCE'] = groups[5] + ' ft'
+        return d
+
+    def shot_parser(positions, success, infos):
+        ret = []
+        if len(positions) != len(success) or len(positions) != len(infos):
+            print("Erreur parsing", len(positions), len(success))
+            return ret
+        for i in range( len(positions) ):
+            pos = positions[i].split(';')
+            xpos = int(pos[0][4:-2])
+            ypos = int(pos[1][5:-2])
+            inf = get_description(infos[i])
+            ret.append({'Xpos' : xpos, 'Ypos' : ypos, 'Success' : inf["MAKE_MISS"], "Player" : inf["PLAYER"], "Time_remaining": inf["TIME_REMAINING"]})
+        return ret
+
+    def shot_chart(self, home_team, relevant_team, day, month, year):
+        add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
+
+        # the hard-coded `0` in the url assumes we always take the first match of the given date and team.
+        url = "{BASE_URL}/boxscores/shot-chart/{year}{month}{day}0{team_abbr}.html".format(
+            BASE_URL=HTTPService.BASE_URL, year=year, month=add_0_if_needed(str(month)), day=add_0_if_needed(str(day)),
+            team_abbr=TEAM_TO_TEAM_ABBREVIATION[home_team]
+        )
+        response = requests.get(url=url)
+        response.raise_for_status()
+        page = ShotChartPage( html=html.fromstring(response.content), string = (TEAM_TO_TEAM_ABBREVIATION[relevant_team]) )
+        return shot_parser( page.position_shots, page.success_shots, page.info_shots )
+
 
     def players_advanced_season_totals(self, season_end_year, include_combined_values=False):
         url = '{BASE_URL}/leagues/NBA_{season_end_year}_advanced.html'.format(
