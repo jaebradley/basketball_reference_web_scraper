@@ -770,8 +770,10 @@ class PlayByPlayPage:
         return \
             '//*[@id="content"]' \
             '//div[@class="scorebox"]' \
-            '//div[@itemprop="performer"]' \
-            '//a[@itemprop="name"]'
+            '//strong' \
+            '//a'
+            # '//div[@itemprop="performer"]' \
+            # '//a[@itemprop="name"]'
 
     @property
     def play_by_play_table(self):
@@ -850,9 +852,11 @@ class PlayByPlayRow:
         # Need to avoid rows that indicate start of period
         # Or denote tipoff / end of period (colspan = 5)
         # Or are one of the table headers for each period group (aria-label = Time)
+        # And remove events that happen during dead time at start / end of period (e.g. substitutions)
         return not self.is_start_of_period \
                and self.html[1].get('colspan') != '5' \
-               and self.timestamp_cell.get('aria-label') != 'Time'
+               and not self.timestamp_cell.get('aria-label') in ['Time', ''] \
+               and not self.timestamp.endswith('00.0')
 
 
 class DailyBoxScoresPage:

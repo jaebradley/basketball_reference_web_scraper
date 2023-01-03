@@ -536,7 +536,7 @@ class PlayByPlaysParser:
         result = []
         for play_by_play in play_by_plays:
             if play_by_play.is_start_of_period:
-                current_period += 1
+                current_period = int(play_by_play.html.get('id').strip('q'))
             elif play_by_play.has_play_by_play_data:
                 result.append(self.format_data(
                     current_period=current_period,
