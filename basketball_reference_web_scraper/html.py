@@ -202,6 +202,15 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
         return ''
 
     @property
+    def points_scored(self):
+        cells = self.html.xpath('td[@data-stat="pts"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
     def game_score(self):
         cells = self.html.xpath('td[@data-stat="game_score"]')
 
