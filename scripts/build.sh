@@ -1,11 +1,7 @@
 #!/bin/bash
 
 function main() {
-  local -r current_directory=$(pwd)
-  if [[ "0" != "$?" ]]; then printf "Cannot identify current working directory\n" && exit 255; fi
-
-  local -r dependencies_folder_path="${current_directory}/dependencies"
-
+  local -r dependencies_folder_path="$1"
   mkdir -p "${dependencies_folder_path}"
   if [[ "0" != "$?" ]]; then printf "Creating dependencies folder at ${dependencies_folder_path} failed\n" && exit 255; fi
 
@@ -50,4 +46,4 @@ function main() {
   if [[ "0" != "${poetry_exit_code}" ]]; then printf "Cannot run pytest using poetry program at ${poetry_program_path}\n" && exit 255; fi
 }
 
-main
+main "$@"
