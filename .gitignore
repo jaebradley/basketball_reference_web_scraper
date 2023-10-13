@@ -9,3 +9,5 @@ dist/
 tests/integration/output/**.csv
 tests/integration/output/**.json
 !tests/integration/output/.gitkeep
+
+dependencies/*
