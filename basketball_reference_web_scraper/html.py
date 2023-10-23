@@ -773,8 +773,6 @@ class PlayByPlayPage:
             '//div[@class="scorebox"]' \
             '//strong' \
             '//a'
-        # '//div[@itemprop="performer"]' \
-        # '//a[@itemprop="name"]'
 
     @property
     def play_by_play_table(self):
