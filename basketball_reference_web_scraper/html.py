@@ -669,6 +669,7 @@ class PlayerSeasonBoxScoresPage:
     Thus, the comment containing the playoff table is identified and parsed and then fed into lxml to create the element
     tree that will eventually be rendered on the page.
     """
+
     @property
     def playoff_box_scores_table(self):
         matching_containers = self.html.xpath(self.playoff_box_scores_table_container_query)
@@ -770,8 +771,8 @@ class PlayByPlayPage:
         return \
             '//*[@id="content"]' \
             '//div[@class="scorebox"]' \
-            '//div[@itemprop="performer"]' \
-            '//a[@itemprop="name"]'
+            '//strong' \
+            '//a'
 
     @property
     def play_by_play_table(self):
@@ -1065,17 +1066,17 @@ class PlayerSearchResult(SearchResult):
     @property
     def league_abbreviations(self):
         abbreviations = self.html.xpath(self.league_abbreviation_query)
-        
+
         if len(abbreviations) > 0:
             return abbreviations[0].text_content()
 
         return None
-    
+
 
 class PlayerPageTotalsRow:
     def __init__(self, html):
         self.html = html
-    
+
     @property
     def league_abbreviation(self):
         league_abbreviation_cells = self.html.xpath('.//td[@data-stat="lg_id"]')
@@ -1111,7 +1112,7 @@ class PlayerPageTotalsTable:
 class PlayerPage:
     def __init__(self, html):
         self.html = html
-    
+
     @property
     def name(self):
         name_headers = self.html.xpath('.//h1[@itemprop="name"]')
