@@ -29,7 +29,7 @@ jobs:
         run: bash ./scripts/build.sh "$(pwd)/dependencies"
         shell: bash
       - name: Upload Coverage To Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
   documentation:
     strategy:
       matrix:
