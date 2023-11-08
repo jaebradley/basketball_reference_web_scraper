@@ -465,17 +465,18 @@ files = [
 
 [[package]]
 name = "pymdown-extensions"
-version = "7.1"
+version = "10.0"
 description = "Extension pack for Python Markdown."
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
+python-versions = ">=3.7"
 files = [
-    {file = "pymdown-extensions-7.1.tar.gz", hash = "sha256:5bf93d1ccd8281948cd7c559eb363e59b179b5373478e8a7195cf4b78e3c11b6"},
-    {file = "pymdown_extensions-7.1-py2.py3-none-any.whl", hash = "sha256:8f415b21ee86d80bb2c3676f4478b274d0a8ccb13af672a4c86b9ffd22bd005c"},
+    {file = "pymdown_extensions-10.0-py3-none-any.whl", hash = "sha256:e6cbe8ace7d8feda30bc4fd6a21a073893a9a0e90c373e92d69ce5b653051f55"},
+    {file = "pymdown_extensions-10.0.tar.gz", hash = "sha256:9a77955e63528c2ee98073a1fb3207c1a45607bc74a34ef21acd098f46c3aa8a"},
 ]
 
 [package.dependencies]
-Markdown = ">=3.2"
+markdown = ">=3.2"
+pyyaml = "*"
 
 [[package]]
 name = "pytest"
@@ -671,4 +672,4 @@ testing = ["func-timeout", "jaraco.itertools", "pathlib2", "unittest2"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "d70a32decbbaa8887abb3c7f7c3888de616e644c2ff4b99e72011adfba5cf3e2"
+content-hash = "c76844c86dcde13d88180910b658b08d621b03f697f91eb4402191dee704afd7"

@@ -26,7 +26,7 @@ urllib3 = "==1.24.3"
 codecov = "^2.1.13"
 mkdocs = "^1.1.2"
 mkdocs-material = "^5.3.3"
-pymdown-extensions = "^7.1"
+pymdown-extensions = "^10.0"
 coverage = "^5.1"
 pytest = "^7.4.2"
 
