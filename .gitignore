@@ -9,3 +9,7 @@ dist/
 tests/integration/output/**.csv
 tests/integration/output/**.json
 !tests/integration/output/.gitkeep
+# Ignore generated code coverage files
+.coverage
+
+dependencies/*
