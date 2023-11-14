@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run build script
-        run: bash ./scripts/build.sh
+        run: bash ./scripts/build.sh "$(pwd)/dependencies"
         shell: bash
       - name: Upload Coverage To Codecov
         uses: codecov/codecov-action@v3
