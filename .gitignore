@@ -4,7 +4,7 @@
 build/
 dist/
 *egg-info/
-
+get-poetry.py
 # Don't commit files from integration test output
 tests/integration/output/**.csv
 tests/integration/output/**.json
@@ -13,3 +13,5 @@ tests/integration/output/**.json
 .coverage
 
 dependencies/*
+
+.vscode/
