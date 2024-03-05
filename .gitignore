@@ -13,3 +13,11 @@ tests/integration/output/**.json
 .coverage
 
 dependencies/*
+
+# virtualenv's
+venv/
+.venv/
+
+# caches
+.pytest_cache/
+**/*/__pycache__/

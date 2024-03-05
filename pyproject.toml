@@ -13,14 +13,14 @@ readme = "README.md"
 exclude = ["tests", "docs"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.10"
 certifi = "==2018.10.15"
 chardet = "==3.0.4"
 idna = "==2.7"
-lxml = "==4.5.1"
-pytz = "==2018.6"
-requests = "==2.20.0"
-urllib3 = "==1.24.3"
+lxml = "^4.9.1"
+pytz = "^2018.6"
+requests = "^2.20.0"
+urllib3 = "^1.24.3"
 
 [tool.poetry.dev-dependencies]
 codecov = "^2.1.13"
@@ -35,8 +35,8 @@ issues = "https://github.com/jaebradley/basketball_reference_web_scraper/issues"
 pull_requests = "https://github.com/jaebradley/basketball_reference_web_scraper/pull_requests"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 pythonpath = "basketball_reference_web_scraper"
