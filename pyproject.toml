@@ -24,7 +24,7 @@ urllib3 = "^1.24.3"
 
 [tool.poetry.dev-dependencies]
 codecov = "^2.1.13"
-mkdocs = "^1.1.2"
+mkdocs = "^1.5.3"
 mkdocs-material = "^5.3.3"
 pymdown-extensions = "^7.1"
 coverage = "^5.1"
