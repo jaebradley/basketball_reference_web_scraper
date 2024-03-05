@@ -13,7 +13,7 @@ readme = "README.md"
 exclude = ["tests", "docs"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.7"
 certifi = "==2018.10.15"
 chardet = "==3.0.4"
 idna = "==2.7"
