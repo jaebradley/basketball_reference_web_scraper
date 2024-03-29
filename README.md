@@ -16,8 +16,8 @@
     <a href="https://codecov.io/gh/jaebradley/basketball_reference_web_scraper">
         <img src="https://codecov.io/gh/jaebradley/basketball_reference_web_scraper/branch/v4/graph/badge.svg" alt="code coverage" />
     </a>
-    <a href="https://github.com/jaebradley/basketball_reference_web_scraper/workflows/Basketball%20Reference%20Web%20Scraper/badge.svg">
-        <img src="https://github.com/jaebradley/basketball_reference_web_scraper/workflows/Basketball%20Reference%20Web%20Scraper/badge.svg" alt="continuous integration" />
+    <a href="https://github.com/jaebradley/basketball_reference_web_scraper/workflows/Build/badge.svg">
+        <img src="https://github.com/jaebradley/basketball_reference_web_scraper/workflows/Build/badge.svg" alt="continuous integration" />
     </a>
 </p>
 
@@ -32,5 +32,5 @@ For documentation about installing the package and API methods see [the document
 ## Contributors
 
 Thanks to [@DaiJunyan](https://github.com/DaiJunyan), [@ecallahan5](https://github.com/ecallahan5), 
-[@Yotamho](https://github.com/Yotamho), [@ntsirakis](https://github.com/ntsirakis), [@allanbelliti](https://github.com/allanbelliti), and [@krlu](https://github.com/krlu) for their contributions!
+[@Yotamho](https://github.com/Yotamho), [@ntsirakis](https://github.com/ntsirakis), [@allanbelliti](https://github.com/allanbelliti), [@krlu](https://github.com/krlu), and [@aaronbannin](https://github.com/aaronbannin) for their contributions!
 
