@@ -11,7 +11,7 @@ from basketball_reference_web_scraper.data import OutputWriteOption, OutputType,
 class TestClient(TestCase):
     def setUp(self):
         # To avoid getting rate-limited
-        time.sleep(10)
+        time.sleep(20)
 
     def test_player_box_scores(self):
         box_scores = client.player_box_scores(day=11, month=3, year=2024)
