@@ -24,7 +24,7 @@ pip install basketball_reference_web_scraper
 ```
 
 !!! note
-    This library requires `Python 3.4+` 
+    This library requires `Python 3.7+` 
 
 !!! note
     Currently, only data from seasons after the `1999-2000` season is supported
@@ -38,5 +38,5 @@ This is an open-source project that welcomes **_all_** pull requests and issues 
 ideas around making this project even better.
 
 Thanks to [**@DaiJunyan**](https://github.com/DaiJunyan), [**@ecallahan5**](https://github.com/ecallahan5), 
-[**@Yotamho**](https://github.com/Yotamho), and [**@ntsirakis**](https://github.com/ntsirakis) for their contributions!
+[**@Yotamho**](https://github.com/Yotamho), [**@ntsirakis**](https://github.com/ntsirakis), [**@allanbelliti**](https://github.com/allanbelliti), [**@krlu**](https://github.com/krlu), and [**@aaronbannin**](https://github.com/aaronbannin) for their contributions!
 
