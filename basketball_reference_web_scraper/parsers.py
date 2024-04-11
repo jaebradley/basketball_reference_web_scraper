@@ -620,7 +620,7 @@ class ConferenceDivisionStandingsParser:
                 current_division = self.division_name_parser.parse_division(formatted_name=standing.division_name)
             else:
                 results.append({
-                    "team": self.team_standings_parser.parse_team(formatted_name=standing.team_abbreviation),
+                    "team": self.team_standings_parser.parse_team(formatted_name=standing.team_name),
                     "wins": str_to_int(standing.wins),
                     "losses": str_to_int(standing.losses),
                     "division": current_division,
