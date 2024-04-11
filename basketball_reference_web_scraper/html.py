@@ -1275,13 +1275,22 @@ class PlayerContractsRow:
 
     @property
     def sixth_contract_year_data(self):
-        return self.calculate_contract_year_data("y6")
+        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y6")
+
+    @property
+    def guaranteed(self):
+        matching_cells = self.html.xpath('.//td[@data-stat="remain_gtd"]')
+
+        if 1 == len(matching_cells):
+            return matching_cells[0].text_content()
+
+        return None
 
     def calculate_contract_year_data(self, contract_year_data_stat_attribute_value):
         matching_cells = self.html.xpath(f'.//td[@data-stat="{contract_year_data_stat_attribute_value}"]')
 
         if 1 == len(matching_cells):
-            salary = matching_cells[0].get('csk')
+            salary = matching_cells[0].text_content()
             class_names = matching_cells[0].get('class')
 
             return salary, class_names
