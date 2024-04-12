@@ -1245,6 +1245,14 @@ class PlayerContractsRow:
         return None
 
     @property
+    def player_identifier(self):
+        matching_attribute_value = self.html.xpath('.//td/@data-append-csv')
+        if 1 == len(matching_attribute_value):
+            return matching_attribute_value[0]
+
+        return None
+
+    @property
     def team_abbreviation(self):
         matching_cells = self.html.xpath('.//td[@data-stat="team_id"]')
 

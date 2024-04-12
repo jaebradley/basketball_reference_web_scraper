@@ -15,6 +15,7 @@ class TestPlayerContractsRow(TestCase):
 
         self.assertIsNotNone(row)
         self.assertEqual("Pascal Siakam", row.player_name)
+        self.assertEqual("siakapa01", row.player_identifier)
         self.assertEqual("IND", row.team_abbreviation)
         self.assertEqual(("$37,893,408", "right "), row.first_contract_year_data)
         self.assertEqual(("", "right iz"), row.second_contract_year_data)
@@ -32,6 +33,7 @@ class TestPlayerContractsRow(TestCase):
 
         self.assertIsNotNone(row)
         self.assertEqual("Jaylen Brown", row.player_name)
+        self.assertEqual("brownja02", row.player_identifier)
         self.assertEqual("BOS", row.team_abbreviation)
         self.assertEqual(("$31,830,357", "right "), row.first_contract_year_data)
         self.assertEqual(("$49,700,000", "right "), row.second_contract_year_data)
@@ -48,6 +50,7 @@ class TestPlayerContractsRow(TestCase):
         ))
 
         self.assertEqual("Gary Trent Jr.", row.player_name)
+        self.assertEqual("trentga02", row.player_identifier)
         self.assertEqual("TOR", row.team_abbreviation)
         self.assertEqual(("$18,560,000", "right salary-pl"), row.first_contract_year_data)
         self.assertEqual(("", "right iz"), row.second_contract_year_data)
@@ -64,6 +67,7 @@ class TestPlayerContractsRow(TestCase):
             """
         ))
         self.assertEqual("James Wiseman", row.player_name)
+        self.assertEqual("wisemja01", row.player_identifier)
         self.assertEqual("DET", row.team_abbreviation)
         self.assertEqual(("$12,119,440", "right salary-tm"), row.first_contract_year_data)
         self.assertEqual(("", "right iz"), row.second_contract_year_data)
