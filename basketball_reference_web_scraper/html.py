@@ -1,7 +1,11 @@
 import re
+from typing import Dict, Set, Tuple
 
 from lxml import html
 from lxml.html import HtmlComment
+
+from basketball_reference_web_scraper.contracts.readers import RowDataReader, Column, PlayerDataCellReader, \
+    SingleCellValueReader, SingleCellFinder
 
 
 class BasicBoxScoreRow:
@@ -1231,9 +1235,36 @@ class ConferenceDivisionStandingsRow:
         return None
 
 
+class PlayerContractsTableReader:
+    def __init__(self, row_reader):
+        self.row_reader = row_reader
+
+    @property
+    def column_names_by_identifier(self) -> Dict[str, str]:
+        return dict(
+            filter(lambda value: 1 == len(value[1]),
+                   map(lambda expected_header_identifier: (
+                       expected_header_identifier,
+                       self.html.xpath(f'.//th[@scope="col"]/[@data-stat="{expected_header_identifier}]')),
+                       Column)))
+
+    def rows(self, table):
+        for row_html in table.xpath('./tbody/tr[not[@class]]'):
+            yield PlayerContractsTableReader.row_reader.read(row=row_html)
+
+
 class PlayerContractsRow:
     def __init__(self, html):
         self.html = html
+
+    def retrieve_cell(self, statistic_identifier: str, attributes: Set[str]) -> Tuple[str, Dict[str, str]]:
+        matching_cells = self.html.xpath(f'.//td[@data-stat="{statistic_identifier}')
+
+        if 1 == len(matching_cells):
+            cell = matching_cells[0]
+            return cell.text_content(), dict(map(lambda attribute: [attribute, cell.get(attribute)], attributes))
+
+        raise ValueError(f"expected exactly one matching cell for statistic identifier {statistic_identifier}")
 
     @property
     def player_name(self):
