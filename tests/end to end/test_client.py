@@ -3,7 +3,8 @@ import os
 import time
 from unittest import TestCase
 
-import basketball_reference_web_scraper.client as client
+from basketball_reference_web_scraper.client import player_box_scores, season_schedule, players_advanced_season_totals, \
+    play_by_play
 from basketball_reference_web_scraper.data import Location, Outcome
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
 
@@ -14,7 +15,7 @@ class TestClient(TestCase):
         time.sleep(20)
 
     def test_player_box_scores(self):
-        box_scores = client.player_box_scores(day=11, month=3, year=2024)
+        box_scores = player_box_scores(day=11, month=3, year=2024)
         self.assertIsNotNone(box_scores)
         self.assertNotEqual(0, len(box_scores))
         self.assertEqual(124, len(box_scores))
@@ -44,20 +45,20 @@ class TestClient(TestCase):
             box_scores[0])
 
     def test_2001_season_schedule(self):
-        schedule = client.season_schedule(season_end_year=2001)
+        schedule = season_schedule(season_end_year=2001)
         self.assertIsNotNone(schedule)
 
     def test_current_year_season_schedule(self):
-        season_schedule = client.season_schedule(season_end_year=datetime.datetime.now().year)
+        season_schedule = season_schedule(season_end_year=datetime.datetime.now().year)
         self.assertIsNotNone(season_schedule)
 
     def test_2019_player_advanced_season_totals(self):
-        player_season_totals = client.players_advanced_season_totals(season_end_year=2019)
+        player_season_totals = players_advanced_season_totals(season_end_year=2019)
         self.assertIsNotNone(player_season_totals)
         self.assertTrue(len(player_season_totals) > 0)
 
     def test_BOS_2018_10_16_play_by_play(self):
-        play_by_play = client.play_by_play(
+        play_by_play = play_by_play(
             home_team=Team.BOSTON_CELTICS,
             day=16,
             month=10,
@@ -70,7 +71,7 @@ class TestClient(TestCase):
             os.path.dirname(__file__),
             "./output/2018_10_16_BOS_pbp.csv",
         )
-        client.play_by_play(
+        play_by_play(
             home_team=Team.BOSTON_CELTICS,
             day=16,
             month=10,
@@ -81,7 +82,7 @@ class TestClient(TestCase):
         )
 
     def test_overtime_play_by_play(self):
-        play_by_play = client.play_by_play(
+        play_by_play = play_by_play(
             home_team=Team.PORTLAND_TRAIL_BLAZERS,
             day=22,
             month=10,
@@ -97,7 +98,7 @@ class TestClient(TestCase):
             os.path.dirname(__file__),
             "./output/2018_10_22_POR_pbp.json",
         )
-        client.play_by_play(
+        play_by_play(
             home_team=Team.PORTLAND_TRAIL_BLAZERS,
             day=22,
             month=10,

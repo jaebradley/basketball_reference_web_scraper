@@ -7,8 +7,8 @@ from basketball_reference_web_scraper.data import PeriodType, Outcome
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 PLAYER_SEASON_BOX_SCORES_GAME_DATE_FORMAT = '%Y-%m-%d'
-PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX = '(?P<outcome_abbreviation>W|L) \((?P<margin_of_victory>[^)]+)\)'
-SEARCH_RESULT_NAME_REGEX = '(?P<name>^[^\(]+)'
+PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX = '(?P<outcome_abbreviation>W|L) \\((?P<margin_of_victory>[^)]+)\\)'
+SEARCH_RESULT_NAME_REGEX = '(?P<name>^[^\\(]+)'
 
 
 class TeamAbbreviationParser:
