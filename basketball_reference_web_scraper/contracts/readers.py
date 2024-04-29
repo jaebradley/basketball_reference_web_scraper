@@ -52,3 +52,8 @@ class PlayerDataCellReader:
 
     def read(self, cell: Element) -> PlayerData:
         return PlayerData(name=cell.text_content(), identifier=cell.get(self.player_identifier_attribute_name))
+
+
+class TeamDataCellReader:
+    def read(self, cell: Element) -> str:
+        return cell.text_content()

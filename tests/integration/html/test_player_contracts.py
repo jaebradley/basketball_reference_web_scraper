@@ -4,6 +4,7 @@ from lxml import html
 
 from basketball_reference_web_scraper.html import PlayerContractsTableReader, Column, RowDataReader, \
     SingleCellValueReader, SingleCellFinder, PlayerDataCellReader
+from basketball_reference_web_scraper.contracts.readers import TeamDataCellReader
 
 
 class TestPlayerContractsTable(unittest.TestCase):
@@ -1076,8 +1077,14 @@ class TestPlayerContractsTable(unittest.TestCase):
                     Column.PLAYER:
                         SingleCellValueReader(
                             cell_finder=SingleCellFinder(column=Column.PLAYER),
-                            cell_reader=PlayerDataCellReader(player_identifier_attribute_name="data-append-csv"))
+                            cell_reader=PlayerDataCellReader(player_identifier_attribute_name="data-append-csv")),
+                    Column.TEAM:
+                        SingleCellValueReader(
+                            cell_finder=SingleCellFinder(column=Column.TEAM),
+                            cell_reader=TeamDataCellReader()
+                        )
                 }
         )).rows(table_html):
             self.assertIsNotNone(row)
             self.assertIsNotNone(row.get(Column.PLAYER))
+            self.assertIsNotNone(row.get(Column.TEAM))
