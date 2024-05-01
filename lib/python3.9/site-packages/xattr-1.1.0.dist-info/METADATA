@@ -1,0 +1,74 @@
+Metadata-Version: 2.1
+Name: xattr
+Version: 1.1.0
+Summary: Python wrapper for extended filesystem attributes
+Author-email: Bob Ippolito <bob@redivi.com>
+Maintainer-email: Bob Ippolito <bob@redivi.com>
+License: This is the MIT license.  This software may also be distributed under the same terms as Python (the PSF license).
+        
+        Copyright (c) 2004 Bob Ippolito.
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/xattr/xattr
+Project-URL: Repository, https://github.com/xattr/xattr
+Keywords: xattr
+Platform: MacOS X
+Platform: Linux
+Platform: FreeBSD
+Platform: Solaris
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: POSIX :: BSD :: FreeBSD
+Classifier: Operating System :: POSIX :: SunOS/Solaris
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: cffi >=1.16.0
+Provides-Extra: test
+Requires-Dist: pytest ; extra == 'test'
+
+xattr
+-----
+
+xattr is a Python wrapper for extended filesystem attributes.
+
+xattr also ships with an `xattr` command line tool for viewing and
+editing extended filesystem attributes. On platforms that support or
+ship with the attr package, you may prefer to use the `getfattr`
+and `setfattr` command line tools from the attr package.
+
+Extended attributes extend the basic attributes of files and directories
+in the file system.  They are stored as name:data pairs associated with
+file system objects (files, directories, symlinks, etc).
+
+Extended attributes are currently only available on Darwin 8.0+ (Mac OS X 10.4)
+and Linux 2.6+. Experimental support is included for Solaris and FreeBSD.
+
+Python 3.8+ is required as of v1.0.0, and this is the minimum version
+that is compatible with Python 3.12+.
+
+Versions older than v1.0.0 are no longer supported, but are
+available for use. v0.10.1 is the last version to support older versions
+of Python (including 2.7).
+
+Note: On Linux, custom xattr keys need to be prefixed with the `user`
+namespace, ie: `user.your_attr`.
+
+Note: If you need to read or write Spotlight metadata attributes on macOS,
+see osxmetadata_ which provides a native macOS means to do so without
+directly manipulating extended attributes. osxmetadata also provides access
+to other macOS metadata attributes and extended attributes via xattr.
+
+.. _osxmetadata: https://github.com/RhetTbull/osxmetadata
