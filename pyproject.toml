@@ -36,6 +36,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 pythonpath = "basketball_reference_web_scraper"
+testpaths = "tests"
 addopts = [
     "--import-mode=importlib",
 ]
