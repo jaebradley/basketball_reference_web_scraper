@@ -49,8 +49,8 @@ class TestClient(TestCase):
         self.assertIsNotNone(schedule)
 
     def test_current_year_season_schedule(self):
-        season_schedule = season_schedule(season_end_year=datetime.datetime.now().year)
-        self.assertIsNotNone(season_schedule)
+        schedule = season_schedule(season_end_year=datetime.datetime.now().year)
+        self.assertIsNotNone(schedule)
 
     def test_2019_player_advanced_season_totals(self):
         player_season_totals = players_advanced_season_totals(season_end_year=2019)
@@ -58,13 +58,13 @@ class TestClient(TestCase):
         self.assertTrue(len(player_season_totals) > 0)
 
     def test_BOS_2018_10_16_play_by_play(self):
-        play_by_play = play_by_play(
+        plays = play_by_play(
             home_team=Team.BOSTON_CELTICS,
             day=16,
             month=10,
             year=2018,
         )
-        self.assertIsNotNone(play_by_play)
+        self.assertIsNotNone(plays)
 
     def test_BOS_2018_10_16_play_by_play_csv_to_file(self):
         output_file_path = os.path.join(
@@ -82,13 +82,13 @@ class TestClient(TestCase):
         )
 
     def test_overtime_play_by_play(self):
-        play_by_play = play_by_play(
+        plays = play_by_play(
             home_team=Team.PORTLAND_TRAIL_BLAZERS,
             day=22,
             month=10,
             year=2018,
         )
-        last_play = play_by_play[-1]
+        last_play = plays[-1]
         self.assertIsNotNone(last_play)
         self.assertEqual(1, last_play["period"])
         self.assertEqual(PeriodType.OVERTIME, last_play["period_type"])
