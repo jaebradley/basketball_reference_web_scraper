@@ -236,9 +236,18 @@ LEAGUE_ABBREVIATIONS_TO_LEAGUE = {
 
 
 class TeamTotal:
-    def __init__(self, team_abbreviation, totals):
+    def __init__(self, team_abbreviation, totals, advanced_totals):
         self.team_abbreviation = team_abbreviation
         self.totals = totals
+        self.advanced_totals = advanced_totals
+
+    @property
+    def offensive_rating(self):
+        return self.advanced_totals.offensive_rating
+
+    @property
+    def defensive_rating(self):
+        return self.advanced_totals.defensive_rating
 
     @property
     def minutes_played(self):

@@ -169,10 +169,14 @@ class HTTPService:
         response.raise_for_status()
 
         page = BoxScoresPage(html.fromstring(response.content))
-        combined_team_totals = [
-            TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
-            for table in page.basic_statistics_tables
-        ]
+        combined_team_totals = []
+        for i in range(len(page.basic_statistics_tables)):
+            table = page.basic_statistics_tables[i]
+            adv_table = page.advanced_statistics_tables[i]
+            combined_team_totals.append(
+                TeamTotal(team_abbreviation=table.team_abbreviation,
+                          totals=table.team_totals,
+                          advanced_totals=adv_table.advanced_team_totals))
 
         return self.parser.parse_team_totals(
             first_team_totals=combined_team_totals[0],

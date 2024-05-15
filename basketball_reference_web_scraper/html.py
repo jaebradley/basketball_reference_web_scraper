@@ -602,6 +602,14 @@ class BoxScoresPage:
             if table.has_basic_statistics is True
         ]
 
+    @property
+    def advanced_statistics_tables(self):
+        return [
+            table
+            for table in self.statistics_tables
+            if table.has_advanced_statistics is True
+        ]
+
 
 class StatisticsTable:
     def __init__(self, html):
@@ -610,6 +618,11 @@ class StatisticsTable:
     @property
     def has_basic_statistics(self):
         return 'game-basic' in self.html.attrib["id"]
+
+
+    @property
+    def has_advanced_statistics(self):
+        return 'game-advanced' in self.html.attrib["id"]
 
     @property
     def team_abbreviation(self):
@@ -625,6 +638,24 @@ class StatisticsTable:
             return BasicBoxScoreRow(html=footers[0])
 
         return None
+
+    @property
+    def advanced_team_totals(self):
+        # Team totals are stored as table footers
+        return AdvancedTeamTotalRow(self.html.xpath('tfoot/tr/td'))
+
+
+class AdvancedTeamTotalRow:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def offensive_rating(self):
+        return self.html[13].text_content()
+
+    @property
+    def defensive_rating(self):
+        return self.html[14].text_content()
 
 
 class DailyLeadersPage:
