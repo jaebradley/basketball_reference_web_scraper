@@ -1,9 +1,17 @@
 import enum
-from typing import Dict, Any, Optional
+from typing import Optional, Callable, Dict, Any
 
 from lxml.etree import Element
 
 from .data import PlayerData
+
+
+def read_player_cell_data(cell: Element) -> PlayerData:
+    return PlayerData(name=cell.text_content(), identifier=cell.get("data-append-csv"))
+
+
+def read_team_identifier_cell_data(cell: Element) -> str:
+    return cell.text_content()
 
 
 class Column(enum.Enum):
@@ -17,43 +25,43 @@ class Column(enum.Enum):
     SIXTH_SEASON_SALARY = "y6"
 
 
-class SingleCellFinder:
+class CellIdentifier:
     def __init__(self, column: Column):
         self.column = column
 
-    def find(self, row: Element) -> Optional[Element]:
+    def identify_cell(self, row: Element) -> Optional[Element]:
         matching_cells = row.xpath(f'./td[@data-stat="{self.column.value}"]')
         if 1 == len(matching_cells):
             return matching_cells[0]
 
 
-class SingleCellValueReader:
-    def __init__(self, cell_finder: SingleCellFinder, cell_reader):
-        self.cell_finder = cell_finder
-        self.cell_reader = cell_reader
-
-    def read(self, row: Element):
-        cell = self.cell_finder.find(row=row)
-        if cell:
-            return self.cell_reader.read(cell=cell)
-
-
 class RowDataReader:
-    def __init__(self, cell_readers_by_column: Dict[Column, SingleCellValueReader]):
-        self.cell_readers_by_column = cell_readers_by_column
+
+    def __init__(self,
+                 cell_identifiers_by_column: Dict[Column, CellIdentifier],
+                 cell_value_readers_by_column: Dict[Column, Callable[[Element], Any]]):
+        self.cell_identifiers_by_column = cell_identifiers_by_column
+        self.cell_value_readers_by_column = cell_value_readers_by_column
 
     def read(self, row: Element) -> Dict[Column, Optional[Any]]:
-        return dict(map(lambda e: [e[0], e[1].read(row=row)], self.cell_readers_by_column.items()))
+        return dict(map(lambda column_and_cell: [
+            column_and_cell[0],
+            None if column_and_cell[1] is None \
+                else self.cell_value_readers_by_column.get(column_and_cell[0])(column_and_cell[1])
+        ], map(
+            lambda e: [e[0], e[1].identify_cell(row=row)],
+            self.cell_identifiers_by_column.items())))
 
-
-class PlayerDataCellReader:
-    def __init__(self, player_identifier_attribute_name):
-        self.player_identifier_attribute_name = player_identifier_attribute_name
-
-    def read(self, cell: Element) -> PlayerData:
-        return PlayerData(name=cell.text_content(), identifier=cell.get(self.player_identifier_attribute_name))
-
-
-class TeamDataCellReader:
-    def read(self, cell: Element) -> str:
-        return cell.text_content()
+    @staticmethod
+    def instance():
+        # TODO: don't recreate the object on each invocation
+        return RowDataReader(
+            cell_identifiers_by_column={
+                Column.PLAYER: CellIdentifier(column=Column.PLAYER),
+                Column.TEAM: CellIdentifier(column=Column.TEAM),
+            },
+            cell_value_readers_by_column={
+                Column.PLAYER: read_player_cell_data,
+                Column.TEAM: read_team_identifier_cell_data
+            }
+        )

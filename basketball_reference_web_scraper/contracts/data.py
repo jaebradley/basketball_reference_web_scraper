@@ -23,6 +23,6 @@ class SeasonSalaryData:
 
 @dataclasses.dataclass(frozen=True)
 class RowData:
-    player: PlayerData
-    team_id: str
+    player: Optional[PlayerData]
+    team_id: Optional[str]
     salary_by_season: Dict[str, Optional[SeasonSalaryData]]

@@ -4,8 +4,7 @@ from typing import Dict, Set, Tuple
 from lxml import html
 from lxml.html import HtmlComment
 
-from basketball_reference_web_scraper.contracts.readers import RowDataReader, Column, PlayerDataCellReader, \
-    SingleCellValueReader, SingleCellFinder
+from basketball_reference_web_scraper.contracts.readers import RowDataReader, Column
 
 
 class BasicBoxScoreRow:
@@ -1236,8 +1235,8 @@ class ConferenceDivisionStandingsRow:
 
 
 class PlayerContractsTableReader:
-    def __init__(self, row_reader):
-        self.row_reader = row_reader
+    def __init__(self, row_data_reader: RowDataReader):
+        self.row_data_reader = row_data_reader
 
     @property
     def column_names_by_identifier(self) -> Dict[str, str]:
@@ -1249,8 +1248,8 @@ class PlayerContractsTableReader:
                        Column)))
 
     def rows(self, table):
-        for row_html in table.xpath('./tbody/tr[not[@class]]'):
-            yield PlayerContractsTableReader.row_reader.read(row=row_html)
+        for row_html in table.xpath('./tbody/tr[@data-row and not(@class)]'):
+            yield self.row_data_reader.read(row=row_html)
 
 
 class PlayerContractsRow:

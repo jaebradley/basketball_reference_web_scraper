@@ -2,9 +2,8 @@ import unittest
 
 from lxml import html
 
-from basketball_reference_web_scraper.html import PlayerContractsTableReader, Column, RowDataReader, \
-    SingleCellValueReader, SingleCellFinder, PlayerDataCellReader
-from basketball_reference_web_scraper.contracts.readers import TeamDataCellReader
+from basketball_reference_web_scraper.contracts.readers import RowDataReader
+from basketball_reference_web_scraper.html import PlayerContractsTableReader, Column
 
 
 class TestPlayerContractsTable(unittest.TestCase):
@@ -1072,19 +1071,12 @@ class TestPlayerContractsTable(unittest.TestCase):
 </tbody></table>
             """
         )
-        for row in PlayerContractsTableReader(row_reader=RowDataReader(
-                {
-                    Column.PLAYER:
-                        SingleCellValueReader(
-                            cell_finder=SingleCellFinder(column=Column.PLAYER),
-                            cell_reader=PlayerDataCellReader(player_identifier_attribute_name="data-append-csv")),
-                    Column.TEAM:
-                        SingleCellValueReader(
-                            cell_finder=SingleCellFinder(column=Column.TEAM),
-                            cell_reader=TeamDataCellReader()
-                        )
-                }
-        )).rows(table_html):
+        count = 0
+        table_reader = PlayerContractsTableReader(row_data_reader=RowDataReader.instance())
+        for row in table_reader.rows(table_html):
             self.assertIsNotNone(row)
             self.assertIsNotNone(row.get(Column.PLAYER))
             self.assertIsNotNone(row.get(Column.TEAM))
+            count += 1
+
+        self.assertGreater(count, 0)
