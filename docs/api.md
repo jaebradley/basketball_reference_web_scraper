@@ -16,7 +16,7 @@ They are `import`ed from the `data` path.
 
 === "League"
     ```python
-    from basketball_reference_web_scraper.data import Location 
+    from basketball_reference_web_scraper.data import League
     ```
     
     !!! note
@@ -589,7 +589,7 @@ or appended to the specified file path (or any of other the Python file mode opt
 
     client.standings(
         season_end_year=2019,
-        output_type=OutputType.JSON, 
+        output_type=OutputType.CSV, 
         output_file_path="./2019_standings.csv"
     )
     ```
