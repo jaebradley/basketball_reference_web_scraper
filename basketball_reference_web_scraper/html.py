@@ -870,6 +870,17 @@ class DailyBoxScoresPage:
         game_links = self.html.xpath(self.game_url_paths_query)
         return [game_link.attrib['href'] for game_link in game_links]
 
+class TeamRoster:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def roster_query(self):
+        return '//table[@id="roster"]//td[@data-stat="player"]'
+    @property
+    def team_roster(self):
+        players = self.html.xpath(self.roster_query)
+        return [player.text_content() for player in players]
 
 class SchedulePage:
     def __init__(self, html):

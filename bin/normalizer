@@ -1,4 +1,6 @@
-#!/Users/jaebradley/projects/basketball_reference_web_scraper/bin/python3
+#!/bin/sh
+'''exec' "/Users/paramgattupalli/Documents/Fall 2024/CEN 3031/basketball_reference_web_scraper/bin/python" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys
