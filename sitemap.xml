@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://jaebadley.github.io/basketball_reference_web_scraper/</loc>
+         <lastmod>2024-10-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://jaebadley.github.io/basketball_reference_web_scraper/api/</loc>
+         <lastmod>2024-10-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://jaebadley.github.io/basketball_reference_web_scraper/development/</loc>
+         <lastmod>2024-10-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
