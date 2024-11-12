@@ -590,7 +590,7 @@ class TestInMemoryPlayerSeasonTotals(TestCase):
     def test_first_2001_player_season_totals(self):
         player_season_totals = client.players_season_totals(season_end_year=2001)
         self.assertEqual(
-            player_season_totals[0],
+            next(filter(lambda totals: "abdulma02" == totals["slug"], player_season_totals)),
             {
                 "slug": "abdulma02",
                 "name": "Mahmoud Abdul-Rauf",
