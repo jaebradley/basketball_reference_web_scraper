@@ -998,11 +998,17 @@ class PlayByPlayRow:
 
     @property
     def away_team_play_description(self):
-        return self.html[1].text_content().strip()
+        if 6 == len(self.html):
+            return self.html[1].text_content().strip()
+
+        return ''
 
     @property
     def home_team_play_description(self):
-        return self.html[5].text_content().strip()
+        if 6 == len(self.html):
+            return self.html[5].text_content().strip()
+
+        return ''
 
     @property
     def is_away_team_play(self):
@@ -1014,7 +1020,9 @@ class PlayByPlayRow:
 
     @property
     def formatted_scores(self):
-        return self.html[3].text_content().strip()
+        if 6 == len(self.html):
+            return self.html[3].text_content().strip()
+        return ''
 
     @property
     def is_start_of_period(self):
@@ -1026,7 +1034,10 @@ class PlayByPlayRow:
         # Need to avoid rows that indicate start of period
         # Or denote tipoff / end of period (colspan = 5)
         # Or are one of the table headers for each period group (aria-label = Time)
+        # There are certain cases, like at the 10 minute mark in https://www.basketball-reference.com/boxscores/pbp/199911160ATL.html
+        # where there are no event details. Probably a visual bug on Basketball Reference's side of things.
         return not self.is_start_of_period \
+            and 2 <= len(self.html) \
             and self.html[1].get('colspan') != '5' \
             and self.timestamp_cell.get('aria-label') != 'Time'
 

@@ -9,6 +9,10 @@ from basketball_reference_web_scraper.errors import InvalidDate
 
 
 class TestPlayByPlayInMemory(TestCase):
+    def test_total_play_by_play_length_for_1999_11_16_ATL(self):
+        result = play_by_play(home_team=Team.ATLANTA_HAWKS, day=16, month=11, year=1999)
+        self.assertEqual(len(result), 420)
+
     def test_total_play_by_play_length_for_2018_10_29(self):
         result = play_by_play(home_team=Team.MILWAUKEE_BUCKS, day=27, month=10, year=2018)
         self.assertEqual(len(result), 465)
