@@ -108,7 +108,7 @@ class PlayerBoxScoreOutcomeParser:
     def parse_margin_of_victory(self, formatted_outcome):
         return int(
             self.search_formatted_outcome(formatted_outcome=formatted_outcome)
-                .group(self.margin_of_victory_regex_group_name)
+            .group(self.margin_of_victory_regex_group_name)
         )
 
 
@@ -177,13 +177,13 @@ class ScoresParser:
     def parse_away_team_score(self, formatted_scores):
         return int(
             self.parse_scores(formatted_scores=formatted_scores)
-                .group(self.away_team_score_group_name)
+            .group(self.away_team_score_group_name)
         )
 
     def parse_home_team_score(self, formatted_scores):
         return int(
             self.parse_scores(formatted_scores=formatted_scores)
-                .group(self.home_team_score_group_name)
+            .group(self.home_team_score_group_name)
         )
 
 
@@ -455,6 +455,7 @@ class PlayerBoxScoresParser:
                 "blocks": str_to_int(box_score.blocks),
                 "turnovers": str_to_int(box_score.turnovers),
                 "personal_fouls": str_to_int(box_score.personal_fouls),
+                "plus_minus": str_to_float(box_score.plus_minus),
                 "game_score": str_to_float(box_score.game_score),
             } for box_score in box_scores
         ]

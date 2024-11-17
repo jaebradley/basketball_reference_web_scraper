@@ -9,6 +9,12 @@ dist/
 tests/integration/output/**.csv
 tests/integration/output/**.json
 !tests/integration/output/.gitkeep
+
+# Don't commit files from end to end test output
+tests/end to end/output/generated/**.json
+tests/end to end/output/generated/**.csv
+!tests/end to end/output/.gitkeep
+
 # Ignore generated code coverage files
 .coverage
 
