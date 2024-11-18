@@ -25,6 +25,7 @@ mkdocs-material = "<= 9.2.8"
 pymdown-extensions = "<= 10.2.1"
 coverage = "<= 7.2.7"
 pytest = "<= 7.4.4"
+requests-mock = "^1.12.1"
 
 [tool.poetry.urls]
 issues = "https://github.com/jaebradley/basketball_reference_web_scraper/issues"

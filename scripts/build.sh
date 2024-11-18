@@ -39,7 +39,15 @@ function main() {
   if [[ "0" != "$?" ]]; then printf "Cannot execute poetry at ${poetry_program_path}\n" && exit 255; fi
 
   # TODO: @jaebradley re-enable integration pytests
-  "${poetry_program_path}" run coverage run --source=basketball_reference_web_scraper --module pytest --ignore "./tests/integration"
+  "${poetry_program_path}" run coverage run --source=basketball_reference_web_scraper --module pytest \
+    --ignore "./tests/integration/test_player_box_scores.py" \
+    --ignore "./tests/integration/test_player_season_totals.py" \
+    --ignore "./tests/integration/test_players_advanced_season_totals.py" \
+    --ignore "./tests/integration/test_players_season_totals.py" \
+    --ignore "./tests/integration/test_search.py" \
+    --ignore "./tests/integration/test_season_schedule.py" \
+    --ignore "./tests/integration/test_standings.py" \
+    --ignore "./tests/integration/test_team_box_scores.py" \
   local poetry_exit_code="$?"
   # https://docs.pytest.org/en/7.1.x/reference/exit-codes.html#:~:text=Exit%20code%205,No%20tests%20were%20collected&text=If%20you%20would%20like%20to,using%20the%20pytest%2Dcustom_exit_code%20plugin.
   if [[ "5" == "${poetry_exit_code}" ]]; then printf "pytest using poetry program at ${poetry_program_path} did not collect any tests" && exit 0; fi
