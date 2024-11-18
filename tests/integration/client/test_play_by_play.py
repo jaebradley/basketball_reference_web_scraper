@@ -2,6 +2,7 @@ import json
 import os
 from unittest import TestCase
 
+import pytest
 import requests_mock
 
 from basketball_reference_web_scraper.client import play_by_play
@@ -75,6 +76,7 @@ class Test201810270MILPlayByPlay(TestCase):
             })
 
 
+@pytest.mark.skip(reason="Replace rate limits with mocks")
 class TestPlayByPlayInMemory(TestCase):
     def test_total_play_by_play_length_for_1999_11_16_ATL(self):
         result = play_by_play(home_team=Team.ATLANTA_HAWKS, day=16, month=11, year=1999)
@@ -192,6 +194,7 @@ class TestPlayByPlayInMemory(TestCase):
         self.assertIsNotNone(result)
 
 
+@pytest.mark.skip(reason="Replace rate limits with mocks")
 class TestPlayByPlayCSVOutput(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
@@ -218,6 +221,7 @@ class TestPlayByPlayCSVOutput(TestCase):
             self.assertEqual(output_file.readlines(), expected_output_file.readlines())
 
 
+@pytest.mark.skip(reason="Replace rate limits with mocks")
 class TestPlayByPlayJSONOutput(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(

@@ -40,14 +40,19 @@ function main() {
 
   # TODO: @jaebradley re-enable integration pytests
   "${poetry_program_path}" run coverage run --source=basketball_reference_web_scraper --module pytest \
-    --ignore "./tests/integration/test_player_box_scores.py" \
-    --ignore "./tests/integration/test_player_season_totals.py" \
-    --ignore "./tests/integration/test_players_advanced_season_totals.py" \
-    --ignore "./tests/integration/test_players_season_totals.py" \
-    --ignore "./tests/integration/test_search.py" \
-    --ignore "./tests/integration/test_season_schedule.py" \
-    --ignore "./tests/integration/test_standings.py" \
-    --ignore "./tests/integration/test_team_box_scores.py"
+    --ignore "./tests/integration/client/test_player_box_scores.py" \
+    --ignore "./tests/integration/client/test_player_season_totals.py" \
+    --ignore "./tests/integration/client/test_players_advanced_season_totals.py" \
+    --ignore "./tests/integration/client/test_players_season_totals.py" \
+    --ignore "./tests/integration/client/test_search.py" \
+    --ignore "./tests/integration/client/test_season_schedule.py" \
+    --ignore "./tests/integration/client/test_standings.py" \
+    --ignore "./tests/integration/client/test_team_box_scores.py" \
+    --ignore "./tests/integration/client/test_client.py" \
+    --ignore "./tests/integration/client/test_player_playoff_box_scores.py" \
+    --ignore "./tests/integration/client/test_player_regular_season_box_scores.py" \
+    --ignore "./tests/integration/parsers" \
+    --ignore "./tests/integration/html/test_daily_box_scores_page.py"
 
   local poetry_exit_code="$?"
   # https://docs.pytest.org/en/7.1.x/reference/exit-codes.html#:~:text=Exit%20code%205,No%20tests%20were%20collected&text=If%20you%20would%20like%20to,using%20the%20pytest%2Dcustom_exit_code%20plugin.
