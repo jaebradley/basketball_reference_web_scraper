@@ -5,6 +5,7 @@ build/
 dist/
 *egg-info/
 bin/
+lib/
 
 # Don't commit files from integration test output
 tests/integration/output/**.csv
