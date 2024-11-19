@@ -11,6 +11,11 @@ from basketball_reference_web_scraper.data import OutputWriteOption, OutputType,
 
 
 class BaseEndToEndTest(TestCase):
+
+    def setUp(self):
+        # To avoid getting rate-limited
+        time.sleep(20)
+
     def tearDown(self):
         # To avoid getting rate-limited
         time.sleep(20)
@@ -19,6 +24,8 @@ class BaseEndToEndTest(TestCase):
 class TestPlayerBoxScores(BaseEndToEndTest):
 
     def setUp(self):
+        super().setUp()
+
         self.box_scores = player_box_scores(day=11, month=3, year=2024)
 
     def test_first_entry(self):
