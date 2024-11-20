@@ -48,7 +48,6 @@ function main() {
     --ignore "./tests/integration/client/test_standings.py" \
     --ignore "./tests/integration/client/test_team_box_scores.py" \
     --ignore "./tests/integration/client/test_client.py" \
-    --ignore "./tests/integration/client/test_player_playoff_box_scores.py" \
     --ignore "./tests/integration/client/test_player_regular_season_box_scores.py" \
     --ignore "./tests/integration/parsers" \
     --ignore "./tests/integration/html/test_daily_box_scores_page.py"
