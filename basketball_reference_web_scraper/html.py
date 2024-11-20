@@ -284,7 +284,7 @@ class PlayerSeasonTotalTable:
                     //table[@id='totals_stats']
                     /tbody
                     /tr[
-                        not(contains(@class, 'thead')) or 
+                        not(contains(@class, 'thead')) and 
                         not(contains(@class, 'norank'))
                     ]
                 """
