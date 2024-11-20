@@ -5,7 +5,7 @@ import time
 from unittest import TestCase
 
 from basketball_reference_web_scraper.client import player_box_scores, season_schedule, players_advanced_season_totals, \
-    play_by_play
+    play_by_play, players_season_totals
 from basketball_reference_web_scraper.data import Location, Outcome
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
 
@@ -192,3 +192,13 @@ class TestPlayByPlay(BaseEndToEndTest):
                             os.path.dirname(__file__),
                             "./output/expected/2018_10_22_POR_pbp.json",
                         )))
+
+
+class TestPlayersSeasonTotals(TestCase):
+
+    def test_2018(self):
+        totals = players_season_totals(season_end_year=2018)
+
+        for total in totals:
+            self.assertIsNot("", total["name"])
+            self.assertIsNot("League Average", total["name"])
