@@ -249,12 +249,13 @@ class PlayerAdvancedSeasonTotalsTable:
     @property
     def rows_query(self):
         return """
-            //table[@id="advanced_stats"]
+            //table[@id="advanced"]
             /tbody
             /tr[
-                contains(@class, "full_table") or 
-                contains(@class, "italic_text partial_table") 
-                and not(contains(@class, "rowSum"))
+                (
+                    not(contains(@class, 'thead'))
+                    or not(contains(@class, "rowSum"))
+                )
             ]
         """
 
@@ -307,6 +308,31 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         super().__init__(html=html)
 
     @property
+    def player_cell(self):
+        cells = self.html.xpath('td[@data-stat="name_display"]')
+
+        if len(cells) > 0:
+            return cells[0]
+
+        return None
+
+    @property
+    def slug(self):
+        cell = self.player_cell
+        if cell is None:
+            return ''
+
+        return cell.get('data-append-csv')
+
+    @property
+    def name(self):
+        cell = self.player_cell
+        if cell is None:
+            return ''
+
+        return cell.text_content()
+
+    @property
     def position_abbreviations(self):
         cells = self.html.xpath('td[@data-stat="pos"]')
 
@@ -326,7 +352,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
 
     @property
     def team_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="team_id"]')
+        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -533,7 +559,10 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
 
     @property
     def is_combined_totals(self):
-        return self.team_abbreviation == "TOT"
+        #  No longer says 'TOT' - now says 2TM, 3TM, etc.
+        # Can safely use the 'TM' suffix as an identifier as no team abbreviations
+        # end in 'TM'
+        return self.team_abbreviation.endswith("TM")
 
 
 class PlayerSeasonTotalsRow:

@@ -12,12 +12,13 @@ class TestPlayerAdvancedSeasonTotalsTable(TestCase):
     def test_rows_query_after_stripping_whitespace(self):
         self.assertEqual(
             """
-            //table[@id="advanced_stats"]
+            //table[@id="advanced"]
             /tbody
             /tr[
-                contains(@class, "full_table") or 
-                contains(@class, "italic_text partial_table") 
-                and not(contains(@class, "rowSum"))
+                (
+                    not(contains(@class, 'thead'))
+                    or not(contains(@class, "rowSum"))
+                )
             ]
             """.strip(),
             PlayerAdvancedSeasonTotalsTable(html=self.html).rows_query.strip(),
@@ -40,4 +41,3 @@ class TestPlayerAdvancedSeasonTotalsTable(TestCase):
 
         rows = PlayerAdvancedSeasonTotalsTable(self.html).get_rows()
         self.assertTrue(0 == len(rows))
-
