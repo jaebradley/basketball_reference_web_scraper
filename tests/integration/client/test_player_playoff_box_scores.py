@@ -15,7 +15,7 @@ class TestRussellWestbrook2019(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/playoff_player_box_scores/2019/westbru01.html"
+                "../files/player_box_scores/2019/westbru01.html"
         ), 'r') as file_input: self._html = file_input.read()
 
     @requests_mock.Mocker()
@@ -62,7 +62,7 @@ class RussellWestbrook2020IncludingInactiveGames(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/playoff_player_box_scores/2020/westbru01.html"
+                "../files/player_box_scores/2020/westbru01.html"
         ), 'r') as file_input: self._html = file_input.read()
         self.expected_output_json_file_path = os.path.join(
             os.path.dirname(__file__),
@@ -99,7 +99,7 @@ class RussellWestbrook2020IncludingInactiveGames(TestCase):
 
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/generated/playoff_player_box_scores/2020/westbru01/include-include.json",
+            "./output/generated/playoff_player_box_scores/2020/westbru01/include_inactive.json",
         )
 
         try:
@@ -125,7 +125,7 @@ class RussellWestbrook2020IncludingInactiveGames(TestCase):
 
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/generated/playoff_player_box_scores/2020/westbru01/include-include.csv",
+            "./output/generated/playoff_player_box_scores/2020/westbru01/include_inactive.csv",
         )
 
         try:
@@ -148,7 +148,7 @@ class TestNonExistentPlayerPlayoffBoxScores(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/playoff_player_box_scores/2020/foobar.html"
+                "../files/player_box_scores/2020/foobar.html"
         ), 'r') as file_input: self._html = file_input.read()
 
     @requests_mock.Mocker()
@@ -173,7 +173,7 @@ class Giannis2020(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/playoff_player_box_scores/2020/antetgi01.html"
+                "../files/player_box_scores/2020/antetgi01.html"
         ), 'r') as file_input: self._html = file_input.read()
 
     @requests_mock.Mocker()

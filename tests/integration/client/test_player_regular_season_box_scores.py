@@ -3,23 +3,33 @@ import os
 from datetime import datetime
 from unittest import TestCase
 
+import requests_mock
+
 from basketball_reference_web_scraper.client import regular_season_player_box_scores
 from basketball_reference_web_scraper.data import Team, Outcome, OutputType
 from basketball_reference_web_scraper.errors import InvalidPlayerAndSeason
 
 
-class TestPlayerRegularSeasonBoxScores(TestCase):
-    def test_get_2020_regular_season_box_scores_for_russell_westbrook(self):
+class TestWestbrook2020(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/player_box_scores/2020/westbru01.html"
+        ), 'r') as file_input: self._html = file_input.read()
+
+    @requests_mock.Mocker()
+    def test_length(self, m):
+        m.get("https://www.basketball-reference.com/players/w/westbru01/gamelog/2020",
+              text=self._html,
+              status_code=200)
         result = regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2020)
-        self.assertIsNotNone(result)
-        self.assertTrue(len(result) > 0)
+        self.assertGreater(len(result), 0)
 
-    def test_get_2019_regular_season_box_scores_for_russell_westbrook(self):
-        result = regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2019)
-        self.assertIsNotNone(result)
-        self.assertEqual(len(result), 73)
-
-    def test_get_first_20202_regular_season_box_score_for_russell_westbrook(self):
+    @requests_mock.Mocker()
+    def test_first_box_score(self, m):
+        m.get("https://www.basketball-reference.com/players/w/westbru01/gamelog/2020",
+              text=self._html,
+              status_code=200)
         result = regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2020)
         self.assertEqual(datetime.strptime("2019-10-24", "%Y-%m-%d").date(), result[0]["date"])
         self.assertEqual(Team.HOUSTON_ROCKETS, result[0]["team"])
@@ -43,39 +53,93 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
         self.assertEqual(23.1, result[0]["game_score"])
         self.assertEqual(0, result[0]["plus_minus"])
 
-    def test_get_season_box_scores_for_player_that_does_not_exist_raises_exception(self):
+
+class TestWestbrook2019(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/player_box_scores/2019/westbru01.html"
+        ), 'r') as file_input: self._html = file_input.read()
+
+    @requests_mock.Mocker()
+    def test_length(self, m):
+        m.get("https://www.basketball-reference.com/players/w/westbru01/gamelog/2019",
+              text=self._html,
+              status_code=200)
+        result = regular_season_player_box_scores(player_identifier="westbru01", season_end_year=2019)
+        self.assertEqual(len(result), 73)
+
+
+class TestNonExistentPlayerPlayoffBoxScores(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/player_box_scores/2020/foobar.html"
+        ), 'r') as file_input: self._html = file_input.read()
+
+    @requests_mock.Mocker()
+    def test_non_existent_player_raises(self, m):
+        # bbref won't actually 404 or 500 if the player/season is invalid, it'll
+        # just take you to the player page with blank data
+
+        m.get("https://www.basketball-reference.com/players/f/foobar/gamelog/2020",
+              text=self._html,
+              status_code=200)
+
         self.assertRaisesRegex(
             InvalidPlayerAndSeason,
-            'Player with identifier "Foo Bar" in season ending in 2020 is invalid',
+            'Player with identifier "foobar" in season ending in 2020 is invalid',
             regular_season_player_box_scores,
-            player_identifier='Foo Bar',
+            player_identifier='foobar',
             season_end_year=2020,
         )
 
-    def test_get_season_box_scores_for_invalid_season_raises_exception(self):
-        # bbref won't actually 404 or 500 if the season is invalid, it'll
-        # just take you to the player page with blank data
-        self.assertRaisesRegex(
-            InvalidPlayerAndSeason,
-            'Player with identifier "westbru01" in season ending in 1991 is invalid',
-            regular_season_player_box_scores,
-            player_identifier='westbru01',
-            season_end_year=1991,
-        )
 
-    def test_get_season_box_scores_removes_inactive_games_by_default(self):
+class TestJabariBrown2015(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/player_box_scores/2015/brownja01.html"
+        ), 'r') as file_input: self._html = file_input.read()
+
+    @requests_mock.Mocker()
+    def test_default_does_not_include_inactive_games(self, m):
+        m.get("https://www.basketball-reference.com/players/b/brownja01/gamelog/2015",
+              text=self._html,
+              status_code=200)
+
         # Jabari Brown was a DNP in his first game in the gamelog for the 2014-2015 season
         # https://www.basketball-reference.com/players/b/brownja01/gamelog/2015
         # The date for the DNP was 2015-03-10 while the first game he was active was on 2015-03-12
         # The first game that is returned should be on 2015-03-12
         results = regular_season_player_box_scores(player_identifier="brownja01", season_end_year=2015)
-        self.assertIsNotNone(results)
         self.assertEqual(19, len(results))
         self.assertEqual(datetime.strptime("2015-03-12", "%Y-%m-%d").date(), results[0]["date"])
 
-    def test_get_season_box_scores_keeps_inactive_games_if_requested(self):
+    @requests_mock.Mocker()
+    def test_does_not_include_inactive_games_when_explicitly_specified(self, m):
+        m.get("https://www.basketball-reference.com/players/b/brownja01/gamelog/2015",
+              text=self._html,
+              status_code=200)
+
+        # Jabari Brown was a DNP in his first game in the gamelog for the 2014-2015 season
+        # https://www.basketball-reference.com/players/b/brownja01/gamelog/2015
+        # The date for the DNP was 2015-03-10 while the first game he was active was on 2015-03-12
+        # The first game that is returned should be on 2015-03-12
+        results = regular_season_player_box_scores(player_identifier="brownja01", season_end_year=2015,
+                                                   include_inactive_games=False)
+        self.assertEqual(19, len(results))
+        self.assertEqual(datetime.strptime("2015-03-12", "%Y-%m-%d").date(), results[0]["date"])
+
+    @requests_mock.Mocker()
+    def test_include_inactive_games_when_explicitly_specified(self, m):
+        m.get("https://www.basketball-reference.com/players/b/brownja01/gamelog/2015",
+              text=self._html,
+              status_code=200)
+
         # Use Jabari Brown's 2014-2015 season again as we know it has one DNP
-        results = regular_season_player_box_scores(player_identifier="brownja01", season_end_year=2015, include_inactive_games=True)
+        results = regular_season_player_box_scores(player_identifier="brownja01", season_end_year=2015,
+                                                   include_inactive_games=True)
         self.assertIsNotNone(results)
         self.assertEqual(20, len(results))
 
@@ -106,70 +170,151 @@ class TestPlayerRegularSeasonBoxScores(TestCase):
         for stat in expected_null_stats:
             self.assertIsNone(inactive_game[stat])
 
-    def test_outputting_2019_regular_season_box_scores_for_avery_bradley_as_json(self):
+
+class TestAveryBradley2019(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/player_box_scores/2019/bradlav01.html"
+        ), 'r') as file_input: self._html = file_input.read()
+        self.expected_excluding_inactive_games_output_json_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/player_box_scores/2019/bradlav01/exclude_inactive.json",
+        )
+        self.expected_excluding_inactive_games_output_csv_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/player_box_scores/2019/bradlav01/exclude_inactive.csv",
+        )
+        self.expected_including_inactive_games_output_json_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/player_box_scores/2019/bradlav01/include_inactive.json",
+        )
+        self.expected_including_inactive_games_output_csv_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/player_box_scores/2019/bradlav01/include_inactive.csv",
+        )
+
+    @requests_mock.Mocker()
+    def test_in_memory_json_output(self, m):
+        m.get("https://www.basketball-reference.com/players/b/bradlav01/gamelog/2019",
+              text=self._html,
+              status_code=200)
+
         results = regular_season_player_box_scores(
             player_identifier="bradlav01",
             season_end_year=2019,
             output_type=OutputType.JSON,
         )
-        self.assertIsNotNone(results)
-        self.assertEqual(63, len(json.loads(results)))
+        with open(self.expected_excluding_inactive_games_output_json_file_path, "r",
+                  encoding="utf8") as expected_output:
+            self.assertEqual(
+                json.loads(results),
+                json.load(expected_output),
+            )
 
-    def test_outputting_2019_regular_season_box_scores_for_avery_bradley_as_csv(self):
+    @requests_mock.Mocker()
+    def test_json_file_output_excluding_inactive_games(self, m):
+        m.get("https://www.basketball-reference.com/players/b/bradlav01/gamelog/2019",
+              text=self._html,
+              status_code=200)
+
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/test-avery-2019.csv",
+            "./output/generated/player_box_scores/2019/bradlav01/exclude_inactive.json",
         )
-        expected_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/test-avery-2019.csv"
-        )
-        regular_season_player_box_scores(
-            player_identifier="bradlav01",
-            season_end_year=2019,
-            output_type=OutputType.CSV,
-            output_file_path=output_file_path,
-        )
-        with open(output_file_path, 'r', encoding="utf8") as output_file, \
-                open(expected_file_path, 'r', encoding="utf8") as expected_file:
-            output_lines = output_file.readlines()
-            expected_lines = expected_file.readlines()
 
-        self.assertEqual(output_lines, expected_lines)
-        os.remove(output_file_path)
+        try:
+            regular_season_player_box_scores(
+                player_identifier="bradlav01",
+                season_end_year=2019,
+                output_type=OutputType.JSON,
+                output_file_path=output_file_path,
+            )
+            with open(output_file_path, 'r', encoding="utf8") as output_file, \
+                    open(self.expected_excluding_inactive_games_output_json_file_path, 'r',
+                         encoding="utf8") as expected_file:
+                output_lines = output_file.readlines()
+                expected_lines = expected_file.readlines()
 
-    def test_outputting_2019_regular_season_box_scores_for_avery_bradley_with_inactive_games_as_json(self):
+            self.assertEqual(output_lines, expected_lines)
+        finally:
+            os.remove(output_file_path)
+
+    @requests_mock.Mocker()
+    def test_json_output_including_inactive_games(self, m):
+        m.get("https://www.basketball-reference.com/players/b/bradlav01/gamelog/2019",
+              text=self._html,
+              status_code=200)
+
         results = regular_season_player_box_scores(
             player_identifier="bradlav01",
             season_end_year=2019,
             output_type=OutputType.JSON,
             include_inactive_games=True,
         )
-        self.assertIsNotNone(results)
-
         # Bradley only has 81 reported games in 2019 due to a mid-season trade
         self.assertEqual(81, len(json.loads(results)))
 
-    def test_outputting_2019_regular_season_box_scores_for_avery_bradley_with_inactive_games_as_csv(self):
+        with open(self.expected_including_inactive_games_output_json_file_path, "r",
+                  encoding="utf8") as expected_output:
+            self.assertEqual(
+                json.loads(results),
+                json.load(expected_output),
+            )
+
+    @requests_mock.Mocker()
+    def test_csv_file_output_excluding_inactive_games(self, m):
+        m.get("https://www.basketball-reference.com/players/b/bradlav01/gamelog/2019",
+              text=self._html,
+              status_code=200)
+
         output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/test-avery-2019-include-inactive.csv",
+            "./output/generated/player_box_scores/2019/bradlav01/exclude_inactive.csv",
         )
-        expected_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/test-avery-2019-include-inactive.csv"
-        )
-        regular_season_player_box_scores(
-            player_identifier="bradlav01",
-            season_end_year=2019,
-            output_type=OutputType.CSV,
-            output_file_path=output_file_path,
-            include_inactive_games=True,
-        )
-        with open(output_file_path, 'r', encoding="utf8") as output_file, \
-                open(expected_file_path, 'r', encoding="utf8") as expected_file:
-            output_lines = output_file.readlines()
-            expected_lines = expected_file.readlines()
 
-        self.assertEqual(output_lines, expected_lines)
-        os.remove(output_file_path)
+        try:
+            regular_season_player_box_scores(
+                player_identifier="bradlav01",
+                season_end_year=2019,
+                output_type=OutputType.CSV,
+                output_file_path=output_file_path,
+            )
+            with open(output_file_path, 'r', encoding="utf8") as output_file, \
+                    open(self.expected_excluding_inactive_games_output_csv_file_path, 'r',
+                         encoding="utf8") as expected_file:
+                output_lines = output_file.readlines()
+                expected_lines = expected_file.readlines()
+
+            self.assertEqual(output_lines, expected_lines)
+        finally:
+            os.remove(output_file_path)
+
+    @requests_mock.Mocker()
+    def test_csv_file_output_including_inactive_games(self, m):
+        m.get("https://www.basketball-reference.com/players/b/bradlav01/gamelog/2019",
+              text=self._html,
+              status_code=200)
+
+        output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/generated/player_box_scores/2019/bradlav01/include_inactive.csv",
+        )
+
+        try:
+            regular_season_player_box_scores(
+                player_identifier="bradlav01",
+                season_end_year=2019,
+                output_type=OutputType.CSV,
+                output_file_path=output_file_path,
+                include_inactive_games=True
+            )
+            with open(output_file_path, 'r', encoding="utf8") as output_file, \
+                    open(self.expected_including_inactive_games_output_csv_file_path, 'r',
+                         encoding="utf8") as expected_file:
+                output_lines = output_file.readlines()
+                expected_lines = expected_file.readlines()
+
+            self.assertEqual(output_lines, expected_lines)
+        finally:
+            os.remove(output_file_path)
