@@ -43,12 +43,12 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         self.html.xpath = MagicMock(return_value=[team_abbreviation])
 
         self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).team_abbreviation, text_content)
-        self.html.xpath.assert_called_once_with('td[@data-stat="team_id"]')
+        self.html.xpath.assert_called_once_with('td[@data-stat="team_name_abbr"]')
 
     def test_team_abbreviation_is_empty_string_when_cells_do_not_exist(self):
         self.html.xpath = MagicMock(return_value=[])
         self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).team_abbreviation, '')
-        self.html.xpath.assert_called_once_with('td[@data-stat="team_id"]')
+        self.html.xpath.assert_called_once_with('td[@data-stat="team_name_abbr"]')
 
     def test_games_played_when_cells_exist(self):
         games_played = MagicMock()
@@ -371,7 +371,7 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         PlayerAdvancedSeasonTotalsRow,
         'team_abbreviation',
         new_callable=PropertyMock,
-        return_value='TOT'
+        return_value='2TM'
     )
     def test_is_combined_totals_when_team_abbreviation_is_TOT(self, _):
         self.assertTrue(PlayerAdvancedSeasonTotalsRow(html=self.html).is_combined_totals)
