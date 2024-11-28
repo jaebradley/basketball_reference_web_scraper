@@ -363,7 +363,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
 
     @property
     def games_played(self):
-        cells = self.html.xpath('td[@data-stat="g"]')
+        cells = self.html.xpath('td[@data-stat="games"]')
 
         if len(cells) > 0:
             return cells[0].text_content()

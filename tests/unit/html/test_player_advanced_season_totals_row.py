@@ -57,12 +57,12 @@ class TestPlayerAdvancedSeasonTotalsRow(TestCase):
         self.html.xpath = MagicMock(return_value=[games_played])
 
         self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).games_played, text_content)
-        self.html.xpath.assert_called_once_with('td[@data-stat="g"]')
+        self.html.xpath.assert_called_once_with('td[@data-stat="games"]')
 
     def test_games_played_when_cells_do_not_exist(self):
         self.html.xpath = MagicMock(return_value=[])
         self.assertEqual(PlayerAdvancedSeasonTotalsRow(html=self.html).games_played, '')
-        self.html.xpath.assert_called_once_with('td[@data-stat="g"]')
+        self.html.xpath.assert_called_once_with('td[@data-stat="games"]')
 
     def test_minutes_played_when_cells_exist(self):
         minutes_played = MagicMock()
