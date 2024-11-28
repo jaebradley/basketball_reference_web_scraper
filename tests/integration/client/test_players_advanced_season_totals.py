@@ -119,6 +119,19 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
             )
 
 
+class Test2019PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+    @property
+    def year(self):
+        return 2019
+
+    @property
+    def include_combined_values(self):
+        return False
+
+    def test_players_advanced_season_totals_csv(self):
+        self.assert_player_advanced_season_totals_csv()
+
+
 class Test2018PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
     @property
     def year(self):
@@ -169,6 +182,19 @@ class Test2001PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
 
     def test_players_advanced_season_totals_csv(self):
         self.assert_player_advanced_season_totals_csv()
+
+
+class Test2019PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+    @property
+    def year(self):
+        return 2019
+
+    @property
+    def include_combined_values(self):
+        return False
+
+    def test_players_advanced_season_totals_json(self):
+        self.assert_player_advanced_season_totals_json()
 
 
 class Test2018PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):

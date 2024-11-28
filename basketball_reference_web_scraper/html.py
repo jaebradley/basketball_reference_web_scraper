@@ -248,13 +248,15 @@ class PlayerAdvancedSeasonTotalsTable:
 
     @property
     def rows_query(self):
+        # Basketball Reference includes individual rows for players that played for multiple teams in a season.
+        # It also includes a "League Average" row that has a class value of 'norank'.
         return """
             //table[@id="advanced"]
             /tbody
             /tr[
                 (
-                    not(contains(@class, 'thead'))
-                    or not(contains(@class, "rowSum"))
+                    not(contains(@class, 'thead')) and 
+                    not(contains(@class, 'norank'))
                 )
             ]
         """
