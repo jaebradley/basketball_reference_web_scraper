@@ -41,7 +41,6 @@ function main() {
   # TODO: @jaebradley re-enable integration pytests
   "${poetry_program_path}" run coverage run --source=basketball_reference_web_scraper --module pytest \
     --ignore "./tests/integration/client/test_search.py" \
-    --ignore "./tests/integration/client/test_season_schedule.py" \
     --ignore "./tests/integration/client/test_standings.py" \
     --ignore "./tests/integration/client/test_team_box_scores.py" \
     --ignore "./tests/integration/client/test_client.py" \

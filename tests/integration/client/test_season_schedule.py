@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest import TestCase
 
 import pytz
+import requests_mock
 
 from basketball_reference_web_scraper.client import season_schedule
 from basketball_reference_web_scraper.data import OutputType, Team
@@ -12,9 +13,88 @@ from basketball_reference_web_scraper.errors import InvalidSeason
 
 
 class TestSeasonScheduleInMemoryOutput(TestCase):
-    def test_2018_season_schedule_length(self):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/2018.html",
+        ), 'r') as file_input: self._base_html = file_input.read();
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/october.html",
+        ), 'r') as file_input: self._october_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/november.html",
+        ), 'r') as file_input: self._november_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/december.html",
+        ), 'r') as file_input: self._december_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/january.html",
+        ), 'r') as file_input: self._january_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/february.html",
+        ), 'r') as file_input: self._february_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/march.html",
+        ), 'r') as file_input: self._march_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/april.html",
+        ), 'r') as file_input: self._april_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/may.html",
+        ), 'r') as file_input: self._may_html = file_input.read();
+
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/schedule/2018/june.html",
+        ), 'r') as file_input: self._june_html = file_input.read();
+
+    @requests_mock.Mocker()
+    def test_2018_season_schedule_length(self, m):
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games.html", text=self._base_html, status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-october.html",
+              text=self._october_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-november.html",
+              text=self._november_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-december.html",
+              text=self._december_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-january.html",
+              text=self._january_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-february.html",
+              text=self._february_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-march.html",
+              text=self._march_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-april.html",
+              text=self._april_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-may.html",
+              text=self._may_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-june.html",
+              text=self._june_html,
+              status_code=200)
         result = season_schedule(season_end_year=2018)
-        self.assertEqual(1312, len(result))
+        self.assertEqual(1416, len(result))
 
     def test_first_game_of_2018_season(self):
         result = season_schedule(season_end_year=2018)
