@@ -12,51 +12,37 @@ from basketball_reference_web_scraper.data import OutputType, Team
 from basketball_reference_web_scraper.errors import InvalidSeason
 
 
+class SeasonScheduleMocker:
+    def __init__(self, schedules_directory, season_end_year):
+        html_files_directory = os.path.join(schedules_directory, str(season_end_year))
+        self.responses_by_url = {}
+        for file in os.listdir(os.fsencode(html_files_directory)):
+            filename = os.fsdecode(file)
+            if not filename.endswith(".html"):
+                raise ValueError(
+                    f"Unexpected prefix for {filename}. Expected all files in {html_files_directory} to end with .html.")
+
+            with open(os.path.join(html_files_directory, filename), 'r') as file_input:
+                if filename.startswith(str(season_end_year)):
+                    key = f"https://www.basketball-reference.com/leagues/NBA_{season_end_year}_games.html"
+                else:
+                    key = f"https://www.basketball-reference.com/leagues/NBA_{season_end_year}_games-{filename}"
+                self.responses_by_url[key] = file_input.read()
+
+    def setup(self, m):
+        for url, response in self.responses_by_url.items():
+            m.get(url, text=response, status_code=200)
+
+
 class TestSeasonScheduleInMemoryOutput(TestCase):
     def setUp(self):
-        with open(os.path.join(
+        self.mocker = SeasonScheduleMocker(
+            schedules_directory=os.path.join(
                 os.path.dirname(__file__),
-                "../files/schedule/2018/2018.html",
-        ), 'r') as file_input: self._base_html = file_input.read();
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/october.html",
-        ), 'r') as file_input: self._october_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/november.html",
-        ), 'r') as file_input: self._november_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/december.html",
-        ), 'r') as file_input: self._december_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/january.html",
-        ), 'r') as file_input: self._january_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/february.html",
-        ), 'r') as file_input: self._february_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/march.html",
-        ), 'r') as file_input: self._march_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/april.html",
-        ), 'r') as file_input: self._april_html = file_input.read();
-
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/may.html",
-        ), 'r') as file_input: self._may_html = file_input.read();
+                "../files/schedule",
+            ),
+            season_end_year=2018
+        )
 
         with open(os.path.join(
                 os.path.dirname(__file__),
@@ -65,38 +51,13 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
 
     @requests_mock.Mocker()
     def test_2018_season_schedule_length(self, m):
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games.html", text=self._base_html, status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-october.html",
-              text=self._october_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-november.html",
-              text=self._november_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-december.html",
-              text=self._december_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-january.html",
-              text=self._january_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-february.html",
-              text=self._february_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-march.html",
-              text=self._march_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-april.html",
-              text=self._april_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-may.html",
-              text=self._may_html,
-              status_code=200)
-        m.get("https://www.basketball-reference.com/leagues/NBA_2018_games-june.html",
-              text=self._june_html,
-              status_code=200)
+        self.mocker.setup(m)
         result = season_schedule(season_end_year=2018)
         self.assertEqual(1416, len(result))
 
-    def test_first_game_of_2018_season(self):
+    @requests_mock.Mocker()
+    def test_first_game_of_2018_season(self, m):
+        self.mocker.setup(m)
         result = season_schedule(season_end_year=2018)
         self.assertEqual(
             result[0],
@@ -109,10 +70,12 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
             },
         )
 
-    def test_last_game_of_2018_season(self):
+    @requests_mock.Mocker()
+    def test_last_game_of_2018_season(self, m):
+        self.mocker.setup(m)
         result = season_schedule(season_end_year=2018)
         self.assertEqual(
-            result[1311],
+            result[1415],
             {
                 "away_team": Team.GOLDEN_STATE_WARRIORS,
                 "away_team_score": 108,
@@ -121,6 +84,9 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
                 "start_time": datetime(2018, 6, 9, 1, 0, tzinfo=pytz.utc)
             }
         )
+
+
+class TestFutureSeasonSchedul(TestCase):
 
     def test_future_season_schedule_throws_invalid_season_error(self):
         current_year = date.today().year
