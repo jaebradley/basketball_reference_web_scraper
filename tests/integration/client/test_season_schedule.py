@@ -44,11 +44,6 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
             season_end_year=2018
         )
 
-        with open(os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule/2018/june.html",
-        ), 'r') as file_input: self._june_html = file_input.read();
-
     @requests_mock.Mocker()
     def test_2018_season_schedule_length(self, m):
         self.mocker.setup(m)
@@ -86,18 +81,18 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
         )
 
 
-class TestFutureSeasonSchedul(TestCase):
+class TestFutureSeasonSchedule(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                f"../files/schedule/not-found.html",
+        ), 'r') as file_input: self._html = file_input.read()
 
-    def test_future_season_schedule_throws_invalid_season_error(self):
-        current_year = date.today().year
-        future_year = current_year + 10
-        expected_message = "Season end year of {future_year} is invalid".format(future_year=future_year)
-        self.assertRaisesRegex(
-            InvalidSeason,
-            expected_message,
-            season_schedule,
-            season_end_year=future_year
-        )
+    @requests_mock.Mocker()
+    def test_future_season_schedule_returns_empty_list(self, m):
+        m.get(url=f"https://www.basketball-reference.com/leagues/NBA_2026_games.html", text=self._html, status_code=200)
+        result = season_schedule(season_end_year=2026)
+        self.assertEqual([], result)
 
 
 class TestSeasonScheduleCSVOutput(TestCase):
