@@ -1,6 +1,7 @@
+import functools
 import json
 import os
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 from unittest import TestCase
 
@@ -9,50 +10,71 @@ import requests_mock
 
 from basketball_reference_web_scraper.client import season_schedule
 from basketball_reference_web_scraper.data import OutputType, Team
-from basketball_reference_web_scraper.errors import InvalidSeason
 
 
 class SeasonScheduleMocker:
     def __init__(self, schedules_directory, season_end_year):
-        html_files_directory = os.path.join(schedules_directory, str(season_end_year))
-        self.responses_by_url = {}
-        for file in os.listdir(os.fsencode(html_files_directory)):
-            filename = os.fsdecode(file)
-            if not filename.endswith(".html"):
-                raise ValueError(
-                    f"Unexpected prefix for {filename}. Expected all files in {html_files_directory} to end with .html.")
+        self._schedules_directory = schedules_directory
+        self._season_end_year = season_end_year
 
-            with open(os.path.join(html_files_directory, filename), 'r') as file_input:
-                if filename.startswith(str(season_end_year)):
-                    key = f"https://www.basketball-reference.com/leagues/NBA_{season_end_year}_games.html"
-                else:
-                    key = f"https://www.basketball-reference.com/leagues/NBA_{season_end_year}_games-{filename}"
-                self.responses_by_url[key] = file_input.read()
+    def decorate_class(self, klass):
+        for attr_name in dir(klass):
+            if not attr_name.startswith('test_'):
+                continue
 
-    def setup(self, m):
-        for url, response in self.responses_by_url.items():
-            m.get(url, text=response, status_code=200)
+            attr = getattr(klass, attr_name)
+            if not hasattr(attr, '__call__'):
+                continue
+
+            setattr(klass, attr_name, self.mock(attr))
+
+        return klass
+
+    def mock(self, callable):
+        @functools.wraps(callable)
+        def inner(*args, **kwargs):
+            html_files_directory = os.path.join(self._schedules_directory, str(self._season_end_year))
+            self.responses_by_url = {}
+            for file in os.listdir(os.fsencode(html_files_directory)):
+                filename = os.fsdecode(file)
+                if not filename.endswith(".html"):
+                    raise ValueError(
+                        f"Unexpected prefix for {filename}. Expected all files in {html_files_directory} to end with .html.")
+
+                with open(os.path.join(html_files_directory, filename), 'r') as file_input:
+                    if filename.startswith(str(self._season_end_year)):
+                        key = f"https://www.basketball-reference.com/leagues/NBA_{self._season_end_year}_games.html"
+                    else:
+                        key = f"https://www.basketball-reference.com/leagues/NBA_{self._season_end_year}_games-{filename}"
+                    self.responses_by_url[key] = file_input.read()
+            with requests_mock.Mocker() as m:
+                for url, response in self.responses_by_url.items():
+                    m.get(url, text=response, status_code=200)
+                return callable(*args, **kwargs)
+
+        return inner
+
+    def __call__(self, obj):
+        if isinstance(obj, type):
+            return self.decorate_class(obj)
+
+        raise ValueError("Should only be used as a class decorator")
 
 
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2018
+)
 class TestSeasonScheduleInMemoryOutput(TestCase):
-    def setUp(self):
-        self.mocker = SeasonScheduleMocker(
-            schedules_directory=os.path.join(
-                os.path.dirname(__file__),
-                "../files/schedule",
-            ),
-            season_end_year=2018
-        )
 
-    @requests_mock.Mocker()
-    def test_2018_season_schedule_length(self, m):
-        self.mocker.setup(m)
+    def test_2018_season_schedule_length(self):
         result = season_schedule(season_end_year=2018)
         self.assertEqual(1416, len(result))
 
-    @requests_mock.Mocker()
-    def test_first_game_of_2018_season(self, m):
-        self.mocker.setup(m)
+    def test_first_game_of_2018_season(self):
         result = season_schedule(season_end_year=2018)
         self.assertEqual(
             result[0],
@@ -65,9 +87,7 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
             },
         )
 
-    @requests_mock.Mocker()
-    def test_last_game_of_2018_season(self, m):
-        self.mocker.setup(m)
+    def test_last_game_of_2018_season(self):
         result = season_schedule(season_end_year=2018)
         self.assertEqual(
             result[1415],
