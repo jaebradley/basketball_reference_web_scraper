@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: @jaebradley move the duplicative script setup into it's own helper script
+
 function main() {
   local -r dependencies_folder_path="$1"
   mkdir -p "${dependencies_folder_path}"
@@ -38,15 +40,9 @@ function main() {
   "${poetry_program_path}" install
   if [[ "0" != "$?" ]]; then printf "Cannot execute poetry at ${poetry_program_path}\n" && exit 255; fi
 
-  # TODO: @jaebradley re-enable integration pytests
   "${poetry_program_path}" run coverage run --source=basketball_reference_web_scraper --module pytest \
-    --ignore "./tests/end to end/*" \
-    --ignore "./tests/integration/client/test_search.py" \
-    --ignore "./tests/integration/client/test_standings.py" \
-    --ignore "./tests/integration/client/test_team_box_scores.py" \
-    --ignore "./tests/integration/client/test_client.py" \
-    --ignore "./tests/integration/parsers" \
-    --ignore "./tests/integration/html/test_daily_box_scores_page.py"
+    --ignore "./tests/integration/*" \
+    --ignore "./tests/unit/*"
 
   local poetry_exit_code="$?"
   # https://docs.pytest.org/en/7.1.x/reference/exit-codes.html#:~:text=Exit%20code%205,No%20tests%20were%20collected&text=If%20you%20would%20like%20to,using%20the%20pytest%2Dcustom_exit_code%20plugin.
