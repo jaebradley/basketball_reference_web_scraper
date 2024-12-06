@@ -1,3 +1,4 @@
+import filecmp
 import functools
 import json
 import os
@@ -115,16 +116,89 @@ class TestFutureSeasonSchedule(TestCase):
         self.assertEqual([], result)
 
 
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2018
+)
+class Test2018SeasonScheduleCsvOutput(TestCase):
+    def setUp(self):
+        self.output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/generated/season_schedule/2018.csv"
+        )
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/season_schedule/2018.csv"
+        )
+
+    def tearDown(self):
+        os.remove(self.output_file_path)
+
+    def test_output(self):
+        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=self.output_file_path)
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
+
+
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2018
+)
+class Test2018SeasonScheduleJsonOutput(TestCase):
+    def setUp(self):
+        self.output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/generated/season_schedule/2018.json"
+        )
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/season_schedule/2018.json"
+        )
+
+    def tearDown(self):
+        os.remove(self.output_file_path)
+
+    def test_file_output(self):
+        season_schedule(season_end_year=2018, output_type=OutputType.JSON, output_file_path=self.output_file_path)
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
+
+
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2018
+)
+class Test2018SeasonScheduleInMemoryJson(TestCase):
+    def setUp(self):
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/season_schedule/2018.json"
+        )
+
+    def test_in_memory_json(self):
+        schedule = season_schedule(season_end_year=2018, output_type=OutputType.JSON)
+        with open(self.expected_output_file_path, "r", encoding="utf8") as f:
+            self.assertEqual(
+                json.load(f),
+                json.loads(schedule),
+            )
+
+
 class TestSeasonScheduleCSVOutput(TestCase):
     def setUp(self):
-        self.output_2018_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "../output/2018_season_schedule.csv"
-        )
-        self.expected_output_2018_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "../output/expected/2018_season_schedule.csv"
-        )
         self.output_2001_file_path = os.path.join(
             os.path.dirname(__file__),
             "../output/2001_season_schedule.csv"
@@ -135,20 +209,8 @@ class TestSeasonScheduleCSVOutput(TestCase):
         )
 
     def tearDown(self):
-        if Path(self.output_2018_file_path).exists():
-            os.remove(self.output_2018_file_path)
-
         if Path(self.output_2001_file_path).exists():
             os.remove(self.output_2001_file_path)
-
-    def test_2018_season_schedule_csv(self):
-        season_schedule(season_end_year=2018, output_type=OutputType.CSV, output_file_path=self.output_2018_file_path)
-        with open(self.output_2018_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_2018_file_path, "r", encoding="utf8") as expected_output_file:
-            self.assertEqual(
-                output_file.readlines(),
-                expected_output_file.readlines()
-            )
 
     def test_2001_season_schedule_csv(self):
         season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=self.output_2001_file_path)
@@ -185,23 +247,6 @@ class TestSeasonScheduleJSONOutput(TestCase):
 
         if Path(self.output_2001_file_path).exists():
             os.remove(self.output_2001_file_path)
-
-    def test_2018_season_schedule_in_memory_json(self):
-        result = season_schedule(season_end_year=2018, output_type=OutputType.JSON)
-        with open(self.expected_output_2018_file_path, "r", encoding="utf8") as expected_output_file:
-            self.assertEqual(
-                json.loads(result),
-                json.load(expected_output_file)
-            )
-
-    def test_writing_2018_season_schedule_json_file(self):
-        season_schedule(season_end_year=2018, output_type=OutputType.JSON, output_file_path=self.output_2018_file_path)
-        with open(self.output_2018_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_2018_file_path, "r", encoding="utf8") as expected_output_file:
-            self.assertEqual(
-                json.load(output_file),
-                json.load(expected_output_file),
-            )
 
     def test_writing_2001_season_schedule_json_file(self):
         season_schedule(season_end_year=2001, output_type=OutputType.JSON, output_file_path=self.output_2001_file_path)
