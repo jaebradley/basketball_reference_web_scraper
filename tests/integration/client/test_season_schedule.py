@@ -3,7 +3,6 @@ import functools
 import json
 import os
 from datetime import datetime
-from pathlib import Path
 from unittest import TestCase
 
 import pytz
@@ -197,62 +196,82 @@ class Test2018SeasonScheduleInMemoryJson(TestCase):
             )
 
 
-class TestSeasonScheduleCSVOutput(TestCase):
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2001
+)
+class Test2001SeasonScheduleCsvOutput(TestCase):
     def setUp(self):
-        self.output_2001_file_path = os.path.join(
+        self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/2001_season_schedule.csv"
+            "./output/generated/season_schedule/2001.csv"
         )
-        self.expected_output_2001_file_path = os.path.join(
+        self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/expected/2001_season_schedule.csv"
+            "./output/expected/season_schedule/2001.csv"
         )
 
     def tearDown(self):
-        if Path(self.output_2001_file_path).exists():
-            os.remove(self.output_2001_file_path)
+        os.remove(self.output_file_path)
 
-    def test_2001_season_schedule_csv(self):
-        season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=self.output_2001_file_path)
-        with open(self.output_2001_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_2001_file_path, "r", encoding="utf8") as expected_output_file:
-            self.assertEqual(
-                output_file.readlines(),
-                expected_output_file.readlines()
-            )
+    def test_output(self):
+        season_schedule(season_end_year=2001, output_type=OutputType.CSV, output_file_path=self.output_file_path)
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
 
 
-class TestSeasonScheduleJSONOutput(TestCase):
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2001
+)
+class Test2018SeasonScheduleJsonOutput(TestCase):
     def setUp(self):
-        self.output_2018_file_path = os.path.join(
+        self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/2018_season_schedule.json"
+            "./output/generated/season_schedule/2001.json"
         )
-        self.expected_output_2018_file_path = os.path.join(
+        self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/expected/2018_season_schedule.json"
-        )
-        self.output_2001_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "../output/2001_season_schedule.json"
-        )
-        self.expected_output_2001_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "../output/expected/2001_season_schedule.json"
+            "./output/expected/season_schedule/2001.json"
         )
 
     def tearDown(self):
-        if Path(self.output_2018_file_path).exists():
-            os.remove(self.output_2018_file_path)
+        os.remove(self.output_file_path)
 
-        if Path(self.output_2001_file_path).exists():
-            os.remove(self.output_2001_file_path)
+    def test_file_output(self):
+        season_schedule(season_end_year=2001, output_type=OutputType.JSON, output_file_path=self.output_file_path)
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
 
-    def test_writing_2001_season_schedule_json_file(self):
-        season_schedule(season_end_year=2001, output_type=OutputType.JSON, output_file_path=self.output_2001_file_path)
-        with open(self.output_2001_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_2001_file_path, "r", encoding="utf8") as expected_output_file:
+
+@SeasonScheduleMocker(
+    schedules_directory=os.path.join(
+        os.path.dirname(__file__),
+        "../files/schedule",
+    ),
+    season_end_year=2001
+)
+class Test2018SeasonScheduleInMemoryJson(TestCase):
+    def setUp(self):
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/season_schedule/2001.json"
+        )
+
+    def test_in_memory_json(self):
+        schedule = season_schedule(season_end_year=2001, output_type=OutputType.JSON)
+        with open(self.expected_output_file_path, "r", encoding="utf8") as f:
             self.assertEqual(
-                json.load(output_file),
-                json.load(expected_output_file),
+                json.load(f),
+                json.loads(schedule),
             )
