@@ -48,9 +48,6 @@ function main() {
   # https://docs.pytest.org/en/7.1.x/reference/exit-codes.html#:~:text=Exit%20code%205,No%20tests%20were%20collected&text=If%20you%20would%20like%20to,using%20the%20pytest%2Dcustom_exit_code%20plugin.
   if [[ "5" == "${poetry_exit_code}" ]]; then printf "pytest using poetry program at ${poetry_program_path} did not collect any tests" && exit 0; fi
   if [[ "0" != "${poetry_exit_code}" ]]; then printf "Cannot run pytest using poetry program at ${poetry_program_path}\n" && exit 255; fi
-
-  "${poetry_program_path}" run coverage report --show-missing
-  if [[ "0" != "$?" ]]; then printf "Cannot run coverage report program at ${poetry_program_path}\n" && exit 255; fi
 }
 
 main "$@"

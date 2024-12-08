@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Tests
-        run: bash ./scripts/end\ to\ end\ tests.sh "$(pwd)/dependencies/bin/poetry"
+        run: bash ./scripts/end\ to\ end\ tests.sh "$(pwd)/dependencies"
   documentation:
     strategy:
       matrix:
