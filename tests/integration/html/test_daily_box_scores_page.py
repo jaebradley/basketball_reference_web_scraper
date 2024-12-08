@@ -1,6 +1,6 @@
+import os
 from unittest import TestCase
 
-import requests
 from lxml import html
 
 from basketball_reference_web_scraper.html import DailyBoxScoresPage
@@ -8,8 +8,10 @@ from basketball_reference_web_scraper.html import DailyBoxScoresPage
 
 class TestDailyBoxScoresPage(TestCase):
     def setUp(self):
-        response = requests.get('https://www.basketball-reference.com/boxscores/index.fcgi?month=01&day=01&year=2017')
-        self.january_01_2017_box_scores = response.text
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/boxscores/2017/1/1.html"
+        ), 'r') as file_input: self.january_01_2017_box_scores = file_input.read()
 
     def test_game_url_paths_query(self):
         page = DailyBoxScoresPage(html=html.fromstring(self.january_01_2017_box_scores))
