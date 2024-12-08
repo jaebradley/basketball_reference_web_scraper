@@ -19,6 +19,7 @@ tests/end to end/output/generated/**.csv
 
 # Ignore generated code coverage files
 .coverage
+coverage.xml
 
 dependencies/*
 

@@ -65,7 +65,9 @@ jobs:
         run: bash ./scripts/build.sh "$(pwd)/dependencies"
         shell: bash
       - name: Upload Coverage To Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Set Git Configuration
         run: |
           REMOTE="https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}"

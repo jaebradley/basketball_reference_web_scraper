@@ -53,8 +53,8 @@ function main() {
   if [[ "5" == "${poetry_exit_code}" ]]; then printf "pytest using poetry program at ${poetry_program_path} did not collect any tests" && exit 0; fi
   if [[ "0" != "${poetry_exit_code}" ]]; then printf "Cannot run pytest using poetry program at ${poetry_program_path}\n" && exit 255; fi
 
-  "${poetry_program_path}" run coverage report --show-missing
-  if [[ "0" != "$?" ]]; then printf "Cannot run coverage report program at ${poetry_program_path}\n" && exit 255; fi
+  "${poetry_program_path}" run coverage xml
+  if [[ "0" != "$?" ]]; then printf "Cannot run coverage xml program at ${poetry_program_path}\n" && exit 255; fi
 }
 
 main "$@"
