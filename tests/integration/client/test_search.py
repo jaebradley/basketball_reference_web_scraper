@@ -2,8 +2,112 @@ import json
 import os
 from unittest import TestCase
 
+import requests_mock
+
 from basketball_reference_web_scraper import client
 from basketball_reference_web_scraper.data import League, OutputType, OutputWriteOption
+
+
+@requests_mock.Mocker()
+class TestJa(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/0.html"
+        ), 'r') as file_input: self._html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/1.html"
+        ), 'r') as file_input: self._1_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/2.html"
+        ), 'r') as file_input: self._2_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/3.html"
+        ), 'r') as file_input: self._3_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/4.html"
+        ), 'r') as file_input: self._4_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/5.html"
+        ), 'r') as file_input: self._5_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/6.html"
+        ), 'r') as file_input: self._6_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/7.html"
+        ), 'r') as file_input: self._7_html = file_input.read()
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/ja/8.html"
+        ), 'r') as file_input: self._8_html = file_input.read()
+
+    def test_length(self, m):
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja",
+              text=self._html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=100",
+              text=self._1_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=200",
+              text=self._2_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=300",
+              text=self._3_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=400",
+              text=self._4_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=500",
+              text=self._5_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=600",
+              text=self._6_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=700",
+              text=self._7_html,
+              status_code=200)
+        m.get("https://www.basketball-reference.com/search/search.fcgi?search=ja&i=players&offset=800",
+              text=self._8_html,
+              status_code=200)
+        results = client.search(term="ja")
+        self.assertEqual(863, len(results["players"]))
+        self.assertEqual({
+                    "name": "LeBron James",
+                    "identifier": "jamesle01",
+                    "leagues": set()
+                }, results["players"][0])
+
+@requests_mock.Mocker()
+class TestAlonzoMourning(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/Alonzo Mourning.html"
+        ), 'r') as file_input: self._html = file_input.read()
+
+    def test_result(self, m):
+        m.get(f"https://www.basketball-reference.com/search/search.fcgi?search=Alonzo+Mourning",
+              text=self._html,
+              status_code=200)
+        results = client.search(term="Alonzo Mourning")
+        self.assertEqual(
+            [
+                {
+                    "name": "Alonzo Mourning",
+                    "identifier": "mournal01",
+                    # Basketball-Reference moved leagues from the search results
+                    "leagues": set()
+                }
+            ],
+            results["players"]
+        )
 
 
 class TestSearchInMemory(TestCase):
