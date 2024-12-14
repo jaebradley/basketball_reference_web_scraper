@@ -1,4 +1,4 @@
-import json
+import filecmp
 import os
 from unittest import TestCase
 
@@ -260,66 +260,74 @@ class TestKobe(TestCase):
         )
 
 
+@requests_mock.Mocker()
 class TestSearchJSONOutput(TestCase):
     def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/kobe.html"
+        ), 'r') as file_input: self._html = file_input.read()
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/ko_search.json",
+            "./output/expected/search/kobe.json",
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/expected/ko_search.json",
+            "./output/generated/search/kobe.json",
         )
 
     def tearDown(self):
         os.remove(self.output_file_path)
 
-    def test_ko_search_json_output_includes_expected_json_output(self):
+    def test_kobe_search_json_output_includes_expected_json_output(self, m):
+        m.get(f"https://www.basketball-reference.com/search/search.fcgi?search=kobe",
+              text=self._html,
+              status_code=200)
+
         client.search(
-            term="ko",
+            term="kobe",
             output_type=OutputType.JSON,
             output_file_path=self.output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
-        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
-            output_data = json.load(output_file)
-            expected_output_data = json.load(expected_output_file)
-            for expected_data_row in expected_output_data:
-                self.assertTrue(expected_data_row in output_data)
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
 
 
+@requests_mock.Mocker()
 class TestSearchCSVOutput(TestCase):
     def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/kobe.html"
+        ), 'r') as file_input: self._html = file_input.read()
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/ko_search.csv",
+            "./output/generated/search/kobe.csv",
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "../output/expected/ko_search.csv",
+            "./output/expected/search/kobe.csv",
         )
 
     def tearDown(self):
         os.remove(self.output_file_path)
 
-    def test_ko_csv_output_search_includes_expected_csv_output(self):
+    def test_kobe_csv_output_search_includes_expected_csv_output(self, m):
+        m.get(f"https://www.basketball-reference.com/search/search.fcgi?search=kobe",
+              text=self._html,
+              status_code=200)
+
         client.search(
-            term="ko",
+            term="kobe",
             output_type=OutputType.CSV,
             output_file_path=self.output_file_path,
             output_write_option=OutputWriteOption.WRITE,
         )
 
-        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
-            output_data = output_file.readlines()
-            expected_output_data = expected_output_file.readlines()
-            for expected_data_row in expected_output_data:
-                # TODO: @jaebradley this is freakin' gross but sets are not ordered (duh)
-                # so serialization of the set of leagues will not be consistent.
-                # Need to find a way to use an ordered set or something for this.
-                # In the interim, ignore serialized sets of leagues - quick and dirty way
-                # is to look for `-` (this ignores players with a `-` but I'll take the tradeoff for now)
-                if "-" not in expected_data_row:
-                    self.assertTrue(expected_data_row in output_data)
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))

@@ -1,0 +1,39 @@
+{
+    "players": [
+        {
+            "identifier": "bryanko01",
+            "leagues": [],
+            "name": "Kobe Bryant"
+        },
+        {
+            "identifier": "patteru01",
+            "leagues": [],
+            "name": "Ruben Patterson"
+        },
+        {
+            "identifier": "waitedi01",
+            "leagues": [],
+            "name": "Dion Waiters"
+        },
+        {
+            "identifier": "reaveau01",
+            "leagues": [],
+            "name": "Austin Reaves"
+        },
+        {
+            "identifier": "bufkiko01",
+            "leagues": [],
+            "name": "Kobe Bufkin"
+        },
+        {
+            "identifier": "brownko01",
+            "leagues": [],
+            "name": "Kobe Brown"
+        },
+        {
+            "identifier": "kobetol01",
+            "leagues": [],
+            "name": "Oleksandr Kobets"
+        }
+    ]
+}
