@@ -1,4 +1,5 @@
 import filecmp
+import json
 import os
 from unittest import TestCase
 
@@ -261,7 +262,7 @@ class TestKobe(TestCase):
 
 
 @requests_mock.Mocker()
-class TestSearchJSONOutput(TestCase):
+class TestSearchJSONFileOutput(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
@@ -269,17 +270,17 @@ class TestSearchJSONOutput(TestCase):
         ), 'r') as file_input: self._html = file_input.read()
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/search/kobe.json",
+            "./output/generated/search/kobe.json",
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/generated/search/kobe.json",
+            "./output/expected/search/kobe.json",
         )
 
     def tearDown(self):
         os.remove(self.output_file_path)
 
-    def test_kobe_search_json_output_includes_expected_json_output(self, m):
+    def test_file_output(self, m):
         m.get(f"https://www.basketball-reference.com/search/search.fcgi?search=kobe",
               text=self._html,
               status_code=200)
@@ -294,6 +295,38 @@ class TestSearchJSONOutput(TestCase):
             filecmp.cmp(
                 self.output_file_path,
                 self.expected_output_file_path))
+
+
+@requests_mock.Mocker()
+class TestSearchJSONInMemoryOutput(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/search/kobe.html"
+        ), 'r') as file_input: self._html = file_input.read()
+        self.output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/generated/search/kobe.json",
+        )
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "./output/expected/search/kobe.json",
+        )
+
+    def test_in_memory_output(self, m):
+        m.get(f"https://www.basketball-reference.com/search/search.fcgi?search=kobe",
+              text=self._html,
+              status_code=200)
+
+        results = client.search(
+            term="kobe",
+            output_type=OutputType.JSON,
+        )
+        with open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
+            self.assertEqual(
+                json.loads(results),
+                json.load(expected_output_file),
+            )
 
 
 @requests_mock.Mocker()
@@ -315,7 +348,7 @@ class TestSearchCSVOutput(TestCase):
     def tearDown(self):
         os.remove(self.output_file_path)
 
-    def test_kobe_csv_output_search_includes_expected_csv_output(self, m):
+    def test_file_output(self, m):
         m.get(f"https://www.basketball-reference.com/search/search.fcgi?search=kobe",
               text=self._html,
               status_code=200)
