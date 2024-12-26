@@ -41,7 +41,6 @@ function main() {
   # TODO: @jaebradley re-enable integration pytests
   "${poetry_program_path}" run coverage run --source=basketball_reference_web_scraper --module pytest \
     --ignore="tests/end to end/" \
-    --ignore="tests/integration/client/test_client.py" \
     --ignore="tests/integration/parsers"
 
   local poetry_exit_code="$?"
