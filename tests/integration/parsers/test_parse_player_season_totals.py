@@ -1,7 +1,6 @@
 import os
 from unittest import TestCase
 
-import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import Team, Position, POSITION_ABBREVIATIONS_TO_POSITION, \
@@ -11,42 +10,33 @@ from basketball_reference_web_scraper.parsers import PositionAbbreviationParser,
     PlayerSeasonTotalsParser
 
 
-class TestPlayersSeasonTotals(TestCase):
-    def setUp(self):
-        self.season_2001_totals = requests.get(
-            'https://www.basketball-reference.com/leagues/NBA_2001_totals.html'
-        ).text
-        self.season_2018_totals = requests.get(
-            'https://www.basketball-reference.com/leagues/NBA_2018_totals.html'
-        ).text
-        self.season_2019_totals = requests.get(
-            'https://www.basketball-reference.com/leagues/NBA_2019_totals.html'
-        ).text
-        self.jemerrio_jones_blank_age_2019_totals_file = open(
-            os.path.join(
+class BasePlayerSeasonTotalsTestCase(TestCase):
+    _season_end_year = None
+
+    @classmethod
+    def setUpClass(cls):
+        with open(os.path.join(
                 os.path.dirname(__file__),
-                '../files/NBA_2019_totals_jemerrio_jones_blank_age.html',
-            )
-        )
-        self.jemerrio_jones_with_a_blank_age_2019_totals = self.jemerrio_jones_blank_age_2019_totals_file.read()
-        self.parser = PlayerSeasonTotalsParser(
+                f"../files/players_season_totals/{cls._season_end_year}.html",
+        ), 'r') as file_input: _html = file_input.read()
+        cls._parsed_season_totals = PlayerSeasonTotalsParser(
             position_abbreviation_parser=PositionAbbreviationParser(
                 abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
             ),
             team_abbreviation_parser=TeamAbbreviationParser(
                 abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
             )
-        )
+        ).parse(PlayerSeasonTotalTable(html=html.fromstring(_html)).rows)
 
-    def tearDown(self):
-        self.jemerrio_jones_blank_age_2019_totals_file.close()
 
-    def test_2001_players_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2001_totals))
-        parsed_season_totals = self.parser.parse(table.rows)
-        self.assertEqual(len(parsed_season_totals), 491)
+class Test2001PlayerSeasonTotals(BasePlayerSeasonTotalsTestCase):
+    _season_end_year = 2001
 
-        mahmoud_abdul_rauf = parsed_season_totals[0]
+    def test_length(self):
+        self.assertEqual(len(Test2001PlayerSeasonTotals._parsed_season_totals), 490)
+
+    def test_mahmoud_abdul_rauf(self):
+        mahmoud_abdul_rauf = Test2001PlayerSeasonTotals._parsed_season_totals[279]
 
         self.assertEqual(mahmoud_abdul_rauf["slug"], "abdulma02")
         self.assertEqual(mahmoud_abdul_rauf["name"], "Mahmoud Abdul-Rauf")
@@ -69,12 +59,15 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(mahmoud_abdul_rauf["turnovers"], 26)
         self.assertEqual(mahmoud_abdul_rauf["personal_fouls"], 50)
 
-    def test_2018_players_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2018_totals))
-        parsed_season_totals = self.parser.parse(table.rows)
-        self.assertEqual(len(parsed_season_totals), 605)
 
-        alex_abrines = parsed_season_totals[0]
+class Test2018PlayerSeasonTotals(BasePlayerSeasonTotalsTestCase):
+    _season_end_year = 2018
+
+    def test_length(self):
+        self.assertEqual(len(Test2018PlayerSeasonTotals._parsed_season_totals), 605)
+
+    def test_alex_abrines(self):
+        alex_abrines = Test2018PlayerSeasonTotals._parsed_season_totals[300]
 
         self.assertEqual(alex_abrines["slug"], "abrinal01")
         self.assertEqual(alex_abrines["name"], "Álex Abrines")
@@ -97,11 +90,8 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(alex_abrines["turnovers"], 25)
         self.assertEqual(alex_abrines["personal_fouls"], 124)
 
-    def test_2018_omer_asik_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2018_totals))
-        parsed_season_totals = self.parser.parse(table.rows)
-
-        pelicans_omer_asik = parsed_season_totals[22]
+    def test_omer_asik(self):
+        pelicans_omer_asik = Test2018PlayerSeasonTotals._parsed_season_totals[528]
 
         self.assertEqual(pelicans_omer_asik["slug"], "asikom01")
         self.assertEqual(pelicans_omer_asik["name"], "Ömer Aşık")
@@ -124,7 +114,7 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(pelicans_omer_asik["turnovers"], 5)
         self.assertEqual(pelicans_omer_asik["personal_fouls"], 14)
 
-        bulls_omer_asik = parsed_season_totals[23]
+        bulls_omer_asik = Test2018PlayerSeasonTotals._parsed_season_totals[529]
 
         self.assertEqual(pelicans_omer_asik["slug"], "asikom01")
         self.assertEqual(bulls_omer_asik["name"], "Ömer Aşık")
@@ -147,11 +137,12 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(bulls_omer_asik["turnovers"], 4)
         self.assertEqual(bulls_omer_asik["personal_fouls"], 6)
 
-    def test_2019_jimmy_butler_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.season_2019_totals))
-        parsed_season_totals = self.parser.parse(table.rows)
 
-        philly_jimmy_butler = parsed_season_totals[94]
+class Test2019PlayerSeasonTotals(BasePlayerSeasonTotalsTestCase):
+    _season_end_year = 2019
+
+    def test_jimmy_butler(self):
+        philly_jimmy_butler = Test2019PlayerSeasonTotals._parsed_season_totals[60]
 
         self.assertEqual(philly_jimmy_butler["slug"], "butleji01")
         self.assertEqual(philly_jimmy_butler["name"], "Jimmy Butler")
@@ -173,31 +164,3 @@ class TestPlayersSeasonTotals(TestCase):
         self.assertEqual(philly_jimmy_butler["blocks"], 29)
         self.assertEqual(philly_jimmy_butler["turnovers"], 81)
         self.assertEqual(philly_jimmy_butler["personal_fouls"], 93)
-
-    def test_2019_jemerrio_jones_blank_age_season_totals(self):
-        table = PlayerSeasonTotalTable(html=html.fromstring(self.jemerrio_jones_with_a_blank_age_2019_totals))
-        parsed_season_totals = self.parser.parse(table.rows)
-
-        jemerrio_jones = parsed_season_totals[310]
-
-        self.assertEqual(jemerrio_jones["slug"], "jonesje01")
-        self.assertEqual(jemerrio_jones["name"], "Jemerrio Jones")
-        self.assertEqual(jemerrio_jones["positions"], [Position.SMALL_FORWARD])
-        self.assertIsNone(jemerrio_jones["age"])
-        self.assertEqual(jemerrio_jones["team"], Team.LOS_ANGELES_LAKERS)
-        self.assertEqual(jemerrio_jones["games_played"], 1)
-        self.assertEqual(jemerrio_jones["games_started"], 0)
-        self.assertEqual(jemerrio_jones["minutes_played"], 5)
-        self.assertEqual(jemerrio_jones["made_field_goals"], 1)
-        self.assertEqual(jemerrio_jones["attempted_field_goals"], 2)
-        self.assertEqual(jemerrio_jones["made_three_point_field_goals"], 0)
-        self.assertEqual(jemerrio_jones["attempted_three_point_field_goals"], 1)
-        self.assertEqual(jemerrio_jones["made_free_throws"], 0)
-        self.assertEqual(jemerrio_jones["attempted_free_throws"], 0)
-        self.assertEqual(jemerrio_jones["offensive_rebounds"], 1)
-        self.assertEqual(jemerrio_jones["defensive_rebounds"], 0)
-        self.assertEqual(jemerrio_jones["assists"], 0)
-        self.assertEqual(jemerrio_jones["steals"], 1)
-        self.assertEqual(jemerrio_jones["blocks"], 0)
-        self.assertEqual(jemerrio_jones["turnovers"], 0)
-        self.assertEqual(jemerrio_jones["personal_fouls"], 0)

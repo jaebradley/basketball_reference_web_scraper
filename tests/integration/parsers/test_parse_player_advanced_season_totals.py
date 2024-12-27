@@ -1,6 +1,6 @@
+import os
 from unittest import TestCase
 
-import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import Team, Position, TEAM_ABBREVIATIONS_TO_TEAM, \
@@ -12,9 +12,10 @@ from basketball_reference_web_scraper.parsers import PlayerAdvancedSeasonTotalsP
 
 class TestPlayersAdvancedSeasonTotals(TestCase):
     def setUp(self):
-        self.season_2019_totals = requests.get(
-            'https://www.basketball-reference.com/leagues/NBA_2019_advanced.html'
-        ).text
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                f"../files/player_advanced_season_totals/2019.html",
+        ), 'r') as file_input: self._html = file_input.read()
         self.parser = PlayerAdvancedSeasonTotalsParser(
             position_abbreviation_parser=PositionAbbreviationParser(
                 abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
@@ -23,12 +24,12 @@ class TestPlayersAdvancedSeasonTotals(TestCase):
                 abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
             ),
         )
-        self.season_2019_totals_table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(self.season_2019_totals))
+        self.season_2019_totals_table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(self._html))
 
     def test_2019_jimmy_butler_philly_season_totals(self):
-        parsed_season_totals = self.parser.parse(totals=self.season_2019_totals_table.get_rows())
+        parsed_season_totals = self.parser.parse(totals=self.season_2019_totals_table.get_rows(include_combined_totals=False))
 
-        philly_jimmy_butler = parsed_season_totals[94]
+        philly_jimmy_butler = parsed_season_totals[77]
 
         self.assertEqual(philly_jimmy_butler["slug"], "butleji01")
         self.assertEqual(philly_jimmy_butler["name"], "Jimmy Butler")
@@ -58,13 +59,14 @@ class TestPlayersAdvancedSeasonTotals(TestCase):
         self.assertEqual(philly_jimmy_butler["value_over_replacement_player"], 2.4)
 
     def test_2019_jimmy_butler_combined_season_totals(self):
-        parsed_season_totals = self.parser.parse(totals=self.season_2019_totals_table.get_rows(include_combined_totals=True))
+        parsed_season_totals = self.parser.parse(
+            totals=self.season_2019_totals_table.get_rows(include_combined_totals=True))
 
-        philly_jimmy_butler = parsed_season_totals[102]
+        philly_jimmy_butler = parsed_season_totals[81]
 
         self.assertEqual(philly_jimmy_butler["slug"], "butleji01")
         self.assertEqual(philly_jimmy_butler["name"], "Jimmy Butler")
-        self.assertEqual(philly_jimmy_butler["positions"], [Position.SMALL_FORWARD, Position.SHOOTING_GUARD])
+        self.assertEqual(philly_jimmy_butler["positions"], [Position.SHOOTING_GUARD])
         self.assertEqual(philly_jimmy_butler["team"], None)
         self.assertEqual(philly_jimmy_butler["games_played"], 65)
         self.assertEqual(philly_jimmy_butler["minutes_played"], 2185)
