@@ -1,4 +1,5 @@
 import functools
+import os
 from typing import Dict
 
 import requests_mock
@@ -43,3 +44,18 @@ class ResponseMocker:
             return self.decorate_class(obj)
 
         raise ValueError("Should only be used as a class decorator")
+
+
+class SeasonScheduleMocker(ResponseMocker):
+    def __init__(self, schedules_directory: str, season_end_year: int):
+        basketball_reference_paths_by_filename: Dict[str, str] = {}
+        html_files_directory = os.path.join(schedules_directory, str(season_end_year))
+        for file in os.listdir(os.fsencode(html_files_directory)):
+            filename = os.fsdecode(file)
+            if filename.startswith(str(season_end_year)):
+                key = f"leagues/NBA_{season_end_year}_games.html"
+            else:
+                key = f"leagues/NBA_{season_end_year}_games-{filename}"
+            basketball_reference_paths_by_filename[os.path.join(html_files_directory, filename)] = key
+
+        super().__init__(basketball_reference_paths_by_filename=basketball_reference_paths_by_filename)
