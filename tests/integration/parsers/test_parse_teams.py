@@ -1,6 +1,6 @@
+import os
 from unittest import TestCase
 
-import requests
 from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
@@ -11,29 +11,30 @@ from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
 
 
 class TestParseTeams(TestCase):
-    def setUp(self):
-        self.atlanta_box_score_2017_01_01 = requests.get(
-            'https://www.basketball-reference.com/boxscores/201701010ATL.html'
-        ).text
-        self.team_abbreviation_parser = TeamAbbreviationParser(
-            abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
-        )
-        self.page = BoxScoresPage(html.fromstring(self.atlanta_box_score_2017_01_01))
-        self.combined_team_totals = [
+    @classmethod
+    def setUpClass(cls):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                f"../files/boxscores/2017/1/201701010ATL.html",
+        ), 'r') as file_input: _html = file_input.read()
+        first_team_totals, second_team_totals = [
             TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
-            for table in self.page.basic_statistics_tables
+            for table in BoxScoresPage(html.fromstring(html=_html)).basic_statistics_tables
         ]
-        self.parser = TeamTotalsParser(team_abbreviation_parser=self.team_abbreviation_parser)
-        self.team_totals = self.parser.parse(
-            first_team_totals=self.combined_team_totals[0],
-            second_team_totals=self.combined_team_totals[1],
+        cls._parsed_results = TeamTotalsParser(
+            team_abbreviation_parser=TeamAbbreviationParser(
+                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
+            ),
+        ).parse(
+            first_team_totals=first_team_totals,
+            second_team_totals=second_team_totals,
         )
 
-    def test_parse_two_team_totals(self):
-        self.assertEqual(len(self.team_totals), 2)
+    def test_length(self):
+        self.assertEqual(len(self._parsed_results), 2)
 
     def test_parse_san_antonio_team_totals(self):
-        sas_team_totals = self.team_totals[0]
+        sas_team_totals = self._parsed_results[0]
         self.assertEqual(sas_team_totals["team"], Team.SAN_ANTONIO_SPURS)
         self.assertEqual(sas_team_totals["outcome"], Outcome.LOSS)
         self.assertEqual(sas_team_totals["minutes_played"], 265)
@@ -53,7 +54,7 @@ class TestParseTeams(TestCase):
         self.assertEqual(sas_team_totals["points"], 112)
 
     def test_parse_atlanta_team_totals(self):
-        atl_team_totals = self.team_totals[1]
+        atl_team_totals = self._parsed_results[1]
         self.assertEqual(atl_team_totals["team"], Team.ATLANTA_HAWKS)
         self.assertEqual(atl_team_totals["outcome"], Outcome.WIN)
         self.assertEqual(atl_team_totals["minutes_played"], 265)
