@@ -14,7 +14,7 @@ class Test199911160ATLPlayByPlay(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/199911160ATL.html",
+                "../files/play_by_play/199911160ATL.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     @requests_mock.Mocker()
@@ -28,7 +28,7 @@ class Test201810270MILPlayByPlay(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/201810270MIL.html",
+                "../files/play_by_play/201810270MIL.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     @requests_mock.Mocker()
@@ -79,7 +79,7 @@ class Test201901010DEN(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/201901010DEN.html",
+                "../files/play_by_play/201901010DEN.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     @requests_mock.Mocker()
@@ -131,7 +131,7 @@ class Test201901010SAC(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/201901010SAC.html",
+                "../files/play_by_play/201901010SAC.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     @requests_mock.Mocker()
@@ -158,7 +158,7 @@ class Test201810160GSW(TestCase):
     def setUp(self):
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/201810160GSW.html",
+                "../files/play_by_play/201810160GSW.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     @requests_mock.Mocker()
@@ -193,7 +193,7 @@ class TestPlayByPlayCSVOutput(TestCase):
         )
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/200310290TOR.html",
+                "../files/play_by_play/200310290TOR.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     def tearDown(self):
@@ -225,7 +225,7 @@ class TestPlayByPlayJSONOutput(TestCase):
         )
         with open(os.path.join(
                 os.path.dirname(__file__),
-                "../files/200310290TOR.html",
+                "../files/play_by_play/200310290TOR.html",
         ), 'r') as file_input: self._html = file_input.read();
 
     def tearDown(self):

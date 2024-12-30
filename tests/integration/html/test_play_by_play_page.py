@@ -9,7 +9,7 @@ class TestPlayByPlayPage(TestCase):
     def setUp(self):
         with open(
                 os.path.join(os.path.dirname(__file__),
-                             '../files/199911160ATL.html')
+                             '../files/play_by_play/199911160ATL.html')
         ) as f:
             self._1999_11_16_ATL_html = f.read()
 
