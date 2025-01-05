@@ -1,11 +1,16 @@
 from typing import Callable
 
+import datetime
+
 import requests
 from basketball_reference_web_scraper.contracts.data.models import Contract
 from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, NothingMoreToParse, \
     ContractRowData
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
 from basketball_reference_web_scraper.errors import CouldNotGetPlayerContractData
+from lxml import html
+
+from basketball_reference_web_scraper.data import TeamTotal, PlayerData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
@@ -13,6 +18,9 @@ from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeason
 from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
 from basketball_reference_web_scraper.team_season.html import TeamSeasonPage
 from lxml import html
+from basketball_reference_web_scraper.models.calculators import calculate_team_abbreviation
+from basketball_reference_web_scraper.serialization.urls.models import PlayByPlayURLData
+from basketball_reference_web_scraper.serialization.urls.serializers import DEFAULT_PLAY_BY_PLAY_URL_SERIALIZER
 
 
 class HTTPService:
@@ -98,12 +106,15 @@ class HTTPService:
                                                           include_inactive_games=include_inactive_games)
 
     def play_by_play(self, home_team, day, month, year):
-        add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
-
-        # the hard-coded `0` in the url assumes we always take the first match of the given date and team.
-        url = "{BASE_URL}/boxscores/pbp/{year}{month}{day}0{team_abbr}.html".format(
-            BASE_URL=HTTPService.BASE_URL, year=year, month=add_0_if_needed(str(month)), day=add_0_if_needed(str(day)),
-            team_abbr=TEAM_TO_TEAM_ABBREVIATION[home_team]
+        try:
+            date = datetime.date(year=year, month=month, day=day)
+        except ValueError:
+            raise InvalidDate(day=day, month=month, year=year)
+        url = DEFAULT_PLAY_BY_PLAY_URL_SERIALIZER.serialize(
+            value=PlayByPlayURLData(
+                date=date,
+                team_abbreviation=calculate_team_abbreviation(team=home_team, date=date)
+            )
         )
         response = requests.get(url=url)
         response.raise_for_status()

@@ -46,3 +46,4 @@ TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
 }
 
 ABBREVIATIONS_BY_TEAM: dict[Team, TeamAbbreviation] = {v: k for k, v in TEAMS_BY_ABBREVIATION.items()}
+ABBREVIATIONS_BY_TEAM[Team.CHARLOTTE_HORNETS] = TeamAbbreviation.CHO

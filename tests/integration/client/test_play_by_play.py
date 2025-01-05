@@ -169,11 +169,25 @@ class Test201810160GSW(TestCase):
         self.assertEqual(len(plays), 509)
 
 
-class TestErrorCases(TestCase):
+class Test20010109CHH(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/play_by_play/200101090CHH.html",
+        ), 'r') as file_input: self._html = file_input.read();
 
     @requests_mock.Mocker()
-    def test_get_play_by_play_for_day_that_does_not_exist(self, m):
-        m.get('https://www.basketball-reference.com/boxscores/pbp/201801-10MIL.html', text="Not found", status_code=404)
+    def test_charlotte_hornets(self, m):
+        m.get('https://www.basketball-reference.com/boxscores/pbp/200101090CHH.html', text=self._html, status_code=200)
+        plays = play_by_play(home_team=Team.CHARLOTTE_HORNETS, day=9, month=1, year=2001)
+        self.assertIsNotNone(plays)
+        self.assertEqual(len(plays), 576)
+
+
+class TestErrorCases(TestCase):
+
+    @requests_mock.Mocker(real_http=False)
+    def test_get_play_by_play_for_day_that_does_not_exist(self, _):
         self.assertRaisesRegex(
             InvalidDate,
             "Date with year set to 2018, month set to 1, and day set to -1 is invalid",
