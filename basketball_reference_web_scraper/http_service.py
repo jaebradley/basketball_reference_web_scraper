@@ -120,7 +120,7 @@ class HTTPService:
         table = PlayerAdvancedSeasonTotalsTable(html=html.fromstring(response.content))
         return self.parser.parse_player_advanced_season_totals_parser(totals=table.get_rows(include_combined_values))
 
-    def players_season_totals(self, season_end_year):
+    def players_season_totals(self, season_end_year, include_combined_values=False):
         url = '{BASE_URL}/leagues/NBA_{season_end_year}_totals.html'.format(
             BASE_URL=HTTPService.BASE_URL,
             season_end_year=season_end_year,
@@ -131,7 +131,7 @@ class HTTPService:
         response.raise_for_status()
 
         table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
-        return self.parser.parse_player_season_totals(totals=table.rows)
+        return self.parser.parse_player_season_totals(totals=table.get_rows(include_combined_values))
 
     def schedule_for_month(self, url):
         response = requests.get(url=url)

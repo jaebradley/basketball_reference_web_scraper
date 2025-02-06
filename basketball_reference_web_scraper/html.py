@@ -265,10 +265,10 @@ class PlayerAdvancedSeasonTotalsTable:
         player_advanced_season_totals_rows = []
         for row_html in self.html.xpath(self.rows_query):
             row = PlayerAdvancedSeasonTotalsRow(html=row_html)
-            if (include_combined_totals is True and row.is_combined_totals is True) or row.is_combined_totals is False:
+            if (include_combined_totals and row.is_combined_totals) or not row.is_combined_totals:
                 # Basketball Reference includes a "total" row for players that got traded
                 # which is essentially a sum of all player team rows
-                # I want to avoid including those, so I check the "team" field value for "TOT"
+                # I want to avoid including those by default, so I check the "team" field value for "TOT"
                 player_advanced_season_totals_rows.append(row)
 
         return player_advanced_season_totals_rows
@@ -291,15 +291,14 @@ class PlayerSeasonTotalTable:
                     ]
                 """
 
-    @property
-    def rows(self):
+    def get_rows(self, include_combined_totals=False):
         player_season_totals_rows = []
         for row_html in self.html.xpath(self.rows_query):
             row = PlayerSeasonTotalsRow(html=row_html)
             # Basketball Reference includes a "total" row for players that got traded
             # which is essentially a sum of all player team rows
-            # I want to avoid including those, so I check the "team" field value for "TOT"
-            if not row.is_combined_totals:
+            # I want to avoid including those by default, so I check the "team" field value for "TOT"
+            if not row.is_combined_totals or (row.is_combined_totals and include_combined_totals):
                 player_season_totals_rows.append(row)
 
         return player_season_totals_rows
