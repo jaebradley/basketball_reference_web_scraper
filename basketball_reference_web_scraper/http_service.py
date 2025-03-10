@@ -1,11 +1,21 @@
+from typing import Callable
+
 import requests
 from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
-from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
-from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
+from basketball_reference_web_scraper.content import DailyLeadersPage, PlayerSeasonBoxScoresPage, \
+    PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage
+from basketball_reference_web_scraper.contracts.data.models import PlayerContract
+from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, NothingMoreToParse, \
+    PlayerContractData
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
+from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
+
+
+class CouldNotGetPlayerContractData(Exception):
+    pass
 
 
 class HTTPService:
@@ -26,7 +36,7 @@ class HTTPService:
 
         page = StandingsPage(html=html.fromstring(response.content))
         return self.parser.parse_division_standings(standings=page.division_standings.eastern_conference_table.rows) + \
-               self.parser.parse_division_standings(standings=page.division_standings.western_conference_table.rows)
+            self.parser.parse_division_standings(standings=page.division_standings.western_conference_table.rows)
 
     def player_box_scores(self, day, month, year):
         url = '{BASE_URL}/friv/dailyleaders.cgi?month={month}&day={day}&year={year}'.format(
@@ -65,7 +75,8 @@ class HTTPService:
         if page.regular_season_box_scores_table is None:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
-        return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows, include_inactive_games=include_inactive_games)
+        return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows,
+                                                          include_inactive_games=include_inactive_games)
 
     def playoff_player_box_scores(self, player_identifier, season_end_year, include_inactive_games=False):
         # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
@@ -86,7 +97,8 @@ class HTTPService:
         if page.playoff_box_scores_table is None:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
-        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows, include_inactive_games=include_inactive_games)
+        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows,
+                                                          include_inactive_games=include_inactive_games)
 
     def play_by_play(self, home_team, day, month, year):
         add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
@@ -240,3 +252,22 @@ class HTTPService:
         return {
             "players": player_results
         }
+
+    def player_contracts(self, player_contract_processor: Callable[[PlayerContractData], PlayerContract]) -> None:
+        with requests.get(
+                url=f"{HTTPService.BASE_URL}/contracts/players.html",
+                stream=True,
+
+        ) as response:
+            if not response.ok:
+                raise CouldNotGetPlayerContractData()
+
+            if response.encoding is None:
+                response.encoding = 'utf-8'
+
+            with PlayerContractsPageParser(player_contract_data_processor=player_contract_processor) as p:
+                for chunk in response.iter_content(chunk_size=500, decode_unicode=True):
+                    try:
+                        p.parse(chunk=chunk)
+                    except NothingMoreToParse:
+                        break

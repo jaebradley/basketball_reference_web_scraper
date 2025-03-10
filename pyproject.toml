@@ -17,6 +17,7 @@ python = "^3.7"
 lxml = "^5.1.0"
 pytz = "^2024.1"
 requests = "^2.31.0"
+price-parser = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
 codecov = "^2.1.13"
@@ -30,6 +31,9 @@ requests-mock = "^1.12.1"
 [tool.poetry.urls]
 issues = "https://github.com/jaebradley/basketball_reference_web_scraper/issues"
 pull_requests = "https://github.com/jaebradley/basketball_reference_web_scraper/pull_requests"
+
+[tool.poetry.group.dev.dependencies]
+memray = "^1.16.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

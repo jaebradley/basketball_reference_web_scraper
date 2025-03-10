@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, PropertyMock, patch
 
-from basketball_reference_web_scraper.html import PlayerSeasonBoxScoresPage
+from basketball_reference_web_scraper.content import PlayerSeasonBoxScoresPage
 
 
 class TestPlayerSeasonBoxScoresPage(TestCase):

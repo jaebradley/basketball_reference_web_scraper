@@ -1,5 +1,9 @@
+from typing import Any, Callable
+
 import requests
 
+from basketball_reference_web_scraper.contracts.data.models import PlayerContract
+from basketball_reference_web_scraper.contracts.data.parsers import create_player_contract
 from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.http_service import HTTPService
 from basketball_reference_web_scraper.output.columns import BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, \
@@ -250,3 +254,9 @@ def search(term, output_type=None, output_file_path=None, output_write_option=No
         csv_writer=SearchCSVWriter(value_formatter=format_value)
     )
     return output_service.output(data=values, options=options)
+
+
+def player_contracts(player_contract_processor: Callable[[PlayerContract], Any]):
+    HTTPService(parser=ParserService()).player_contracts(
+        player_contract_processor=lambda player_row_contract_data: player_contract_processor(
+            create_player_contract(player_row_contract_data)))

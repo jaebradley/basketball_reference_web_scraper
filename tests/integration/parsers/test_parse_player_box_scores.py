@@ -7,7 +7,7 @@ from lxml import html
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, LOCATION_ABBREVIATIONS_TO_POSITION, \
     OUTCOME_ABBREVIATIONS_TO_OUTCOME
 from basketball_reference_web_scraper.data import Team, Outcome
-from basketball_reference_web_scraper.html import DailyLeadersPage
+from basketball_reference_web_scraper.content import DailyLeadersPage
 from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
     LocationAbbreviationParser, OutcomeAbbreviationParser, \
     SecondsPlayedParser, PlayerBoxScoresParser

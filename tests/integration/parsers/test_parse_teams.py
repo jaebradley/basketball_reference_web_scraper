@@ -5,7 +5,7 @@ from lxml import html
 
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
 from basketball_reference_web_scraper.data import Team, Outcome
-from basketball_reference_web_scraper.html import BoxScoresPage
+from basketball_reference_web_scraper.content import BoxScoresPage
 from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
     TeamTotalsParser
 

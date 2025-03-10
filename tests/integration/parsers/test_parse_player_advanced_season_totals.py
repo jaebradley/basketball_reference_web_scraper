@@ -5,7 +5,7 @@ from lxml import html
 
 from basketball_reference_web_scraper.data import Team, Position, TEAM_ABBREVIATIONS_TO_TEAM, \
     POSITION_ABBREVIATIONS_TO_POSITION
-from basketball_reference_web_scraper.html import PlayerAdvancedSeasonTotalsTable
+from basketball_reference_web_scraper.content import PlayerAdvancedSeasonTotalsTable
 from basketball_reference_web_scraper.parsers import PlayerAdvancedSeasonTotalsParser, PositionAbbreviationParser, \
     TeamAbbreviationParser
 

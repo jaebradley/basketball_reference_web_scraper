@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
 
-from basketball_reference_web_scraper.html import PlayerPage, PlayerPageTotalsTable
+from basketball_reference_web_scraper.content import PlayerPage, PlayerPageTotalsTable
 
 
 class TestPlayerPage(TestCase):

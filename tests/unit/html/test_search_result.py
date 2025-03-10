@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, PropertyMock, patch
 
-from basketball_reference_web_scraper.html import SearchResult
+from basketball_reference_web_scraper.content import SearchResult
 
 
 class TestSearchResult(TestCase):

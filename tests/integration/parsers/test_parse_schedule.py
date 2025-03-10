@@ -6,7 +6,7 @@ import pytz
 from lxml import html
 
 from basketball_reference_web_scraper.data import Team, TEAM_NAME_TO_TEAM
-from basketball_reference_web_scraper.html import SchedulePage
+from basketball_reference_web_scraper.content import SchedulePage
 from basketball_reference_web_scraper.parsers import ScheduledGamesParser, TeamNameParser, ScheduledStartTimeParser
 
 
