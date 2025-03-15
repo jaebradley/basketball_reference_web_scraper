@@ -1,11 +1,14 @@
+import requests
+
+
 class InvalidDate(Exception):
     def __init__(self, day, month, year):
-        message = "Date with year set to {year}, month set to {month}, and day set to {day} is invalid"\
+        message = "Date with year set to {year}, month set to {month}, and day set to {day} is invalid" \
             .format(
-                year=year,
-                month=month,
-                day=day,
-            )
+            year=year,
+            month=month,
+            day=day,
+        )
         super().__init__(message)
 
 
@@ -20,3 +23,10 @@ class InvalidPlayerAndSeason(Exception):
         message = "Player with identifier \"{player_identifier}\" in season ending in {season_end_year} is invalid" \
             .format(player_identifier=player_identifier, season_end_year=season_end_year)
         super().__init__(message)
+
+
+class CouldNotGetPlayerContractData(Exception):
+    def __init__(self, response: requests.Response):
+        self._response = response
+
+        super().__init__(f"HTTP request to {self._response.url} was unsuccessful: {self._response.status_code}")

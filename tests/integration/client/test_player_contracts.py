@@ -19,5 +19,5 @@ class TestPlayerContracts(TestCase):
               text=self._html,
               status_code=200)
         data = []
-        player_contracts(player_contract_processor=lambda player_contract: data.append(player_contract))
+        player_contracts(player_contract_processor=data.append)
         assert 496 == len(data)
