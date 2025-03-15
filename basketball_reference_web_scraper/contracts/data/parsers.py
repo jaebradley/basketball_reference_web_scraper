@@ -40,6 +40,9 @@ def deserialize_season_start_year(serialized_season: str) -> int:
     :param serialized_season: str representing the column name of a particular contract year season
     :return: int representing the starting year for a given contract season
     """
+    parts = serialized_season.split("-")
+    if 1 >= len(parts):
+        raise ValueError(f"Unexpected contract season name: {serialized_season}")
     return datetime.strptime(serialized_season.split("-")[0], "%Y").year
 
 
