@@ -1,6 +1,10 @@
+from decimal import Decimal
 from unittest import TestCase
 
-from basketball_reference_web_scraper.contracts.data.parsers import deserialize_season_start_year
+from basketball_reference_web_scraper.contracts.data.models import Salary
+from basketball_reference_web_scraper.contracts.data.parsers import deserialize_season_start_year, deserialize_team, \
+    deserialize_guaranteed_salary
+from basketball_reference_web_scraper.data import Team
 
 
 class TestDeserializingSeasonStartYear(TestCase):
@@ -14,3 +18,35 @@ class TestDeserializingSeasonStartYear(TestCase):
 
     def test_validly_formatted_value_returns_value(self):
         assert 2024 == deserialize_season_start_year(serialized_season="2024-25")
+
+
+class TestDeserializingTeamAbbreviation(TestCase):
+    def test_invalid_abbreviation_raises_error(self):
+        with self.assertRaisesRegexp(ValueError, "Unable to deserialize team abbreviation: jaebaebae"):
+            deserialize_team("jaebaebae")
+
+    def test_valid_abbreviation_returns_team(self):
+        assert Team.BOSTON_CELTICS == deserialize_team("BOS")
+
+
+class TestDeserializingGuaranteedSalary(TestCase):
+    def test_raise_error_guaranteed_salary_column_does_not_exist(self):
+        with self.assertRaises(ValueError):
+            deserialize_guaranteed_salary(contract_values_by_column_identifier={})
+
+    def test_raises_when_column_exists_but_value_is_an_empty_string(self):
+        with self.assertRaises(ValueError):
+            deserialize_guaranteed_salary(contract_values_by_column_identifier={"remain_gtd": ""})
+
+    def test_returns_salary_when_column_exists_and_value_is_not_an_empty_string(self):
+        assert Salary(amount=Decimal(1_234_567), currency="$") == deserialize_guaranteed_salary(
+            contract_values_by_column_identifier={"remain_gtd": "$1,234,567"}
+        )
+
+class TestSalariesBySeasonParser(TestCase):
+    def test_unknown_column_name_raises_error(self):
+        raise NotImplementedError()
+    def test_season_start_year_deserialization_error_raises_error(self):
+        raise NotImplementedError()
+    def test_salary_deserialization_error_raises_error(self):
+        raise NotImplementedError()
