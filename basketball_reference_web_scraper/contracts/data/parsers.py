@@ -29,9 +29,10 @@ class SalariesBySeasonParser:
                         lambda season_salary_columns_by_value: (
                             column_names_by_identifier[season_salary_columns_by_value[0]],
                             season_salary_columns_by_value[1]),
-                        filter(lambda value_by_identifier: value_by_identifier[
-                                                               0] != GUARANTEED_SALARY_COLUMN_DATA_STAT_VALUE,
-                               contract_values_by_column_identifier.items())))))
+                        filter(
+                            lambda value_and_column_identifier:
+                            value_and_column_identifier[0] != GUARANTEED_SALARY_COLUMN_DATA_STAT_VALUE,
+                            contract_values_by_column_identifier.items())))))
 
 
 def deserialize_season_start_year(serialized_season: str) -> int:

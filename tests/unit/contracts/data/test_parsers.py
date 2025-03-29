@@ -47,15 +47,6 @@ class TestDeserializingGuaranteedSalary(TestCase):
 
 
 class TestSalariesBySeasonParser(TestCase):
-    def test_unknown_column_name_raises_error(self):
-        raise NotImplementedError()
-
-    def test_season_start_year_deserialization_error_raises_error(self):
-        raise NotImplementedError()
-
-    def test_salary_deserialization_error_raises_error(self):
-        raise NotImplementedError()
-
     def test_valid_salaries_by_season(self):
         def generate_salary():
             for value in itertools.count(start=0, step=1):
