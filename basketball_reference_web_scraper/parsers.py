@@ -225,7 +225,7 @@ class ScheduledStartTimeParser:
         # All basketball reference times seem to be in Eastern
         est = pytz.timezone("US/Eastern")
         localized_start_time = est.localize(start_time)
-        return localized_start_time.astimezone(self.time_zone)
+        return localized_start_time
 
 
 class SearchResultNameParser:
