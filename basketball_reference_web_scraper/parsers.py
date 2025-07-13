@@ -7,7 +7,7 @@ from basketball_reference_web_scraper.data import PeriodType, Outcome
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 PLAYER_SEASON_BOX_SCORES_GAME_DATE_FORMAT = '%Y-%m-%d'
-PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX = '(?P<outcome_abbreviation>W|L) \\((?P<margin_of_victory>[^)]+)\\)'
+PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX = '(?P<outcome_abbreviation>W|L),'
 SEARCH_RESULT_NAME_REGEX = '(?P<name>^[^\\(]+)'
 
 
@@ -86,12 +86,10 @@ class PlayerBoxScoreOutcomeParser:
                  outcome_abbreviation_parser,
                  formatted_outcome_regex=PLAYER_SEASON_BOX_SCORES_OUTCOME_REGEX,
                  outcome_abbreviation_regex_group_name='outcome_abbreviation',
-                 margin_of_victory_regex_group_name='margin_of_victory',
                  ):
         self.outcome_abbreviation_parser = outcome_abbreviation_parser
         self.formatted_outcome_regex = formatted_outcome_regex
         self.outcome_abbreviation_regex_group_name = outcome_abbreviation_regex_group_name
-        self.margin_of_victory_regex_group_name = margin_of_victory_regex_group_name
 
     def search_formatted_outcome(self, formatted_outcome):
         return re.search(self.formatted_outcome_regex, formatted_outcome)
@@ -103,12 +101,6 @@ class PlayerBoxScoreOutcomeParser:
     def parse_outcome(self, formatted_outcome):
         return self.outcome_abbreviation_parser.from_abbreviation(
             abbreviation=self.parse_outcome_abbreviation(formatted_outcome=formatted_outcome)
-        )
-
-    def parse_margin_of_victory(self, formatted_outcome):
-        return int(
-            self.search_formatted_outcome(formatted_outcome=formatted_outcome)
-            .group(self.margin_of_victory_regex_group_name)
         )
 
 
@@ -438,7 +430,7 @@ class PlayerBoxScoresParser:
                 "slug": str(box_score.slug),
                 "name": str(box_score.name).rstrip("*"),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
-                "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation),
+                "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation.strip()),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),
                 "outcome": self.outcome_abbreviation_parser.from_abbreviation(box_score.outcome),
                 "seconds_played": self.seconds_played_parser.parse(box_score.playing_time),
@@ -474,7 +466,7 @@ class PlayerSeasonBoxScoresParser:
             common = {
                 "date": datetime.strptime(str(box_score.date), "%Y-%m-%d").date(),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
-                "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation),
+                "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation.strip()),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),
                 "outcome": self.outcome_parser.parse_outcome(formatted_outcome=box_score.outcome),
             }

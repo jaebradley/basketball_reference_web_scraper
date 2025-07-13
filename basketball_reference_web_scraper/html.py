@@ -159,7 +159,7 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
 
     @property
     def team_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="team_id"]')
+        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -177,7 +177,7 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
 
     @property
     def opponent_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="opp_id"]')
+        cells = self.html.xpath('td[@data-stat="opp_name_abbr"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -850,7 +850,7 @@ class PlayerSeasonBoxScoresPage:
 
     @property
     def regular_season_box_scores_table_query(self):
-        return '//table[@id="pgl_basic"]'
+        return '//table[@id="player_game_log_reg"]'
 
     @property
     def regular_season_box_scores_table(self):
@@ -863,7 +863,7 @@ class PlayerSeasonBoxScoresPage:
 
     @property
     def playoff_box_scores_table_container_query(self):
-        return '//div[@id="all_pgl_basic_playoffs"]'
+        return '//table[@id="player_game_log_post"]'
 
     """
     This is a limitation of requests as the playoff box scores table is "hidden" in a comment that is rendered later
@@ -913,8 +913,8 @@ class PlayerSeasonBoxScoresTable:
     @property
     def rows_query(self):
         # Every 20 rows, there's a row that has the column header values - those should be ignored
-        return '//tbody' \
-               '/tr[not(contains(@class, "thead"))]'
+        return 'tbody' \
+               '/tr[not(contains(@class, "thead") and not(contains(@class, "spacer")))]'
 
     @property
     def rows(self):
@@ -937,12 +937,15 @@ class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
     def is_active(self):
         # When a player is not active (for a reason like "Inactive", "Did Not Play", "Did Not Dress")
         # the game played counter is blank (and a "reason" column will exist)
-        cells = self.html.xpath('td[@data-stat="reason"]')
-        return len(cells) < 1
+        cells = self.html.xpath('td[@data-stat="is_starter"]')
+        if len(cells) > 0:
+            return cells[0].text_content() == '1' or cells[0].text_content() == '0'
+
+        return False
 
     @property
     def date(self):
-        cells = self.html.xpath('td[@data-stat="date_game"]')
+        cells = self.html.xpath('td[@data-stat="date"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
