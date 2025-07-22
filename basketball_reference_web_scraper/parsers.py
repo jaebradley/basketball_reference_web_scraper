@@ -373,6 +373,50 @@ class PlayerSeasonTotalsParser:
                 "turnovers": str_to_int(total.turnovers),
                 "personal_fouls": str_to_int(total.personal_fouls),
                 "points": str_to_int(total.points),
+                "efficiency_field_goal_percentage": str_to_float(total.efficiency_field_goal_percentage),
+                "free_throw_percentage": str_to_float(total.free_throw_percentage),
+                "three_point_field_goal_percentage": str_to_float(total.three_point_field_goal_percentage),
+                "field_goal_percentage": str_to_float(total.field_goal_percentage)
+            } for total in totals
+        ]
+
+
+class ShootingDietParser:
+    def __init__(self, position_abbreviation_parser, team_abbreviation_parser):
+        self.position_abbreviation_parser = position_abbreviation_parser
+        self.team_abbreviation_parser = team_abbreviation_parser
+
+    def parse(self, totals):
+        return [
+            {
+                "name": str(total.name).rstrip("*"),
+                "positions": self.position_abbreviation_parser.from_abbreviations(total.position_abbreviations),
+                "age": str_to_int(total.age, default=None),
+                "team": self.team_abbreviation_parser.from_abbreviation(total.team_abbreviation),
+                "games_played": str_to_int(total.games_played),
+                "games_started": str_to_int(total.games_started),
+                "minutes_played": str_to_int(total.minutes_played),
+                "field_goal_percentage": str_to_float(total.field_goal_percentage),
+                "average_distance": str_to_float(total.average_distance),
+                "two_point_take_percentage": str_to_float(total.two_point_take_percentage),
+                "zero_to_three_meters_take_percentage": str_to_float(total.zero_to_three_meters_take_percentage),
+                "three_to_ten_meters_take_percentage": str_to_float(total.three_to_ten_meters_take_percentage),
+                "ten_to_sixteen_meters_take_percentage": str_to_float(total.ten_to_sixteen_meters_take_percentage),
+                "sixteen_to_rest_meters_take_percentage": str_to_float(total.sixteen_to_rest_meters_take_percentage),
+                "three_point_take_percentage": str_to_float(total.three_point_take_percentage),
+                "two_point_percentage": str_to_float(total.two_point_percentage),
+                "zero_to_three_meters_percentage": str_to_float(total.zero_to_three_meters_percentage),
+                "three_to_ten_meters_percentage": str_to_float(total.three_to_ten_meters_percentage),
+                "ten_to_sixteen_meters_percentage": str_to_float(total.ten_to_sixteen_meters_percentage),
+                "sixteen_to_rest_meters_percentage": str_to_float(total.sixteen_to_rest_meters_percentage),
+                "three_point_percentage": str_to_float(total.three_point_percentage),
+                "assisted_two_point_percentage": str_to_float(total.assisted_two_point_percentage),
+                "assisted_three_point_percentage": str_to_float(total.assisted_three_point_percentage),
+                "dunk_take_percentage": str_to_float(total.dunk_take_percentage),
+                "dunk_number": str_to_int(total.dunk_number),
+                "corner_three_take_percentage": str_to_float(total.corner_three_take_percentage),
+                "corner_three_percentage": str_to_float(total.corner_three_percentage)
+
             } for total in totals
         ]
 
