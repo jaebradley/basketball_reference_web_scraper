@@ -862,43 +862,12 @@ class PlayerSeasonBoxScoresPage:
         return PlayerSeasonBoxScoresTable(html=matching_tables[0])
 
     @property
-    def playoff_box_scores_table_container_query(self):
+    def playoff_box_scores_table_query(self):
         return '//table[@id="player_game_log_post"]'
-
-    """
-    This is a limitation of requests as the playoff box scores table is "hidden" in a comment that is rendered later
-    via some JavaScript.
-    
-    Because requests only fetches the raw HTML and doesn't process any JavaScript, this DOM element that (eventually)
-    renders in the browser is not part of the HTML that is part of the initial fetched markup.
-    
-    Thus, the comment containing the playoff table is identified and parsed and then fed into lxml to create the element
-    tree that will eventually be rendered on the page.
-    """
 
     @property
     def playoff_box_scores_table(self):
-        matching_containers = self.html.xpath(self.playoff_box_scores_table_container_query)
-
-        if len(matching_containers) != 1:
-            return None
-
-        match = matching_containers[0]
-        comments = [child for child in match.iter() if isinstance(child, HtmlComment)]
-
-        if len(comments) != 1:
-            return None
-
-        first_comment = comments[0]
-
-        try:
-            playoff_table_html = re.search(r'(<!--)([\s\S]*?)(-->)', str(first_comment)).group(2).strip()
-        except IndexError:
-            return None
-
-        tree = html.fromstring(playoff_table_html)
-
-        matching_tables = tree.xpath('//table[@id="pgl_basic_playoffs"]')
+        matching_tables = self.html.xpath(self.playoff_box_scores_table_query)
 
         if len(matching_tables) != 1:
             return None
@@ -913,8 +882,7 @@ class PlayerSeasonBoxScoresTable:
     @property
     def rows_query(self):
         # Every 20 rows, there's a row that has the column header values - those should be ignored
-        return 'tbody' \
-               '/tr[not(contains(@class, "thead") and not(contains(@class, "spacer")))]'
+        return 'tbody/tr[not(contains(@class, "spacer")) and not(contains(@class, "thead"))]'
 
     @property
     def rows(self):
@@ -936,10 +904,12 @@ class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
     @property
     def is_active(self):
         # When a player is not active (for a reason like "Inactive", "Did Not Play", "Did Not Dress")
-        # the game played counter is blank (and a "reason" column will exist)
+        # "is_starter" column has a "colspan" attribute. When a player is active, the "is_starter" column does not
+        # have a "colspan" attribute
         cells = self.html.xpath('td[@data-stat="is_starter"]')
         if len(cells) > 0:
-            return cells[0].text_content() == '1' or cells[0].text_content() == '0'
+            colspan_value = cells[0].get('colspan', None)
+            return colspan_value is None
 
         return False
 
