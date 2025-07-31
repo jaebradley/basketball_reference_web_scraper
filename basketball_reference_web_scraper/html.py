@@ -147,25 +147,6 @@ class BasicBoxScoreRow:
 
         return ''
 
-
-class PlayerBoxScoreRow(BasicBoxScoreRow):
-    def __init__(self, html):
-        super().__init__(html=html)
-
-    def __eq__(self, other):
-        if isinstance(other, PlayerBoxScoreRow):
-            return self.html == other.html
-        return False
-
-    @property
-    def team_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
     @property
     def location_abbreviation(self):
         cells = self.html.xpath('td[@data-stat="game_location"]')
@@ -175,14 +156,6 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
 
         return ''
 
-    @property
-    def opponent_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="opp_name_abbr"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
 
     @property
     def outcome(self):
@@ -205,6 +178,62 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
     @property
     def game_score(self):
         cells = self.html.xpath('td[@data-stat="game_score"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+
+class PlayerSeasonGameLogRow(BasicBoxScoreRow):
+    def __init__(self, html):
+        super().__init__(html=html)
+
+    def __eq__(self, other):
+        if isinstance(other, PlayerBoxScoreRow):
+            return self.html == other.html
+        return False
+
+    @property
+    def team_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def opponent_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="opp_name_abbr"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+
+class PlayerBoxScoreRow(BasicBoxScoreRow):
+    def __init__(self, html):
+        super().__init__(html=html)
+
+    def __eq__(self, other):
+        if isinstance(other, PlayerBoxScoreRow):
+            return self.html == other.html
+        return False
+
+    @property
+    def team_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="team_id"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def opponent_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="opp_id"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -892,7 +921,7 @@ class PlayerSeasonBoxScoresTable:
         ]
 
 
-class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
+class PlayerSeasonBoxScoresRow(PlayerSeasonGameLogRow):
     def __init__(self, html):
         super().__init__(html)
 
