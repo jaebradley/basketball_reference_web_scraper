@@ -8,11 +8,65 @@ from basketball_reference_web_scraper.parsers import PositionAbbreviationParser,
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser, DivisionNameParser, \
     TeamStandingsParser, ConferenceDivisionStandingsParser
 
+import re
+from typing import List
+from bs4 import BeautifulSoup, Comment  # docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+def parse_team_roster_names_from_team_page_html(html: str) -> List[str]:
+    """
+    Given the raw HTML for a Basketball-Reference page
+    (like https://www.basketball-reference.com/teams/BOS/2025.html),
+    return a simple list of player names as they appear in the roster table.
+
+    Steps:
+      1) Parse HTML into a soup (Ref: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#quick-start)
+      2) Find <table id="roster">. If not present, could be commented out,
+         so scan HTML comments too.
+      3) Walk the table rows in <tbody>, grab the player's name from the header cell
+         <th scope="row">.
+    """
+    # 1) Build a DOM tree for easy calls
+    soup = BeautifulSoup(html, "html.parser")
+
+    # 2a) Normal case: roster table there
+    table = soup.find("table", id="roster")
+
+    # 2b) Commented out (they're being annoying):
+    #     Scan comment nodes and parse to search again.
+    #     Ref: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#comments-and-other-special-strings
+    if table is None:
+        for node in soup.find_all(string=lambda s: isinstance(s, Comment)):
+            frag = BeautifulSoup(node, "html.parser")
+            table = frag.find("table", id="roster")
+            if table:
+                break
+
+    # If no usable roster table, return nothing
+    if table is None or table.tbody is None:
+        return []
+
+    names: List[str] = []
+
+    # 3) Iterate direct <tr> rows in <tbody> and get name from the row header cell.
+    for row in table.tbody.find_all("tr", recursive=False):
+        th = row.find("th", attrs={"scope": "row"})
+        if th is None:
+            continue  # skip odd rows (headers/separators)
+
+        a = th.find("a")  # name usually inside a link
+        if a and a.text:
+            names.append(a.text.strip())
+        else:
+            # Fallback to whatever text the header cell has
+            text = th.get_text(strip=True)
+            if text:
+                names.append(text)
+
+    return names
 
 class ParserService:
     PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
     PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
-    SEARCH_RESULT_RESOURCE_LOCATION_REGEX = '(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html'
+    SEARCH_RESULT_RESOURCE_LOCATION_REGEX = re.compile(r'(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html')
 
     def __init__(self):
         self.team_abbreviation_parser = TeamAbbreviationParser(abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM)

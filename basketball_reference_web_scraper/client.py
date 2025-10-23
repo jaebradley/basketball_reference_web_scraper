@@ -12,6 +12,42 @@ from basketball_reference_web_scraper.output.writers import CSVWriter, JSONWrite
     SearchCSVWriter
 from basketball_reference_web_scraper.parser_service import ParserService
 
+# Added for support
+from typing import List
+import requests  # docs: https://requests.readthedocs.io/en/latest/user/quickstart/
+from .data import Team, TEAM_ABBREVIATIONS_TO_TEAM
+from .parser_service import parse_team_roster_names_from_team_page_html
+
+def _team_to_abbr(team: Team) -> str:
+    """
+    Helper: invert TEAM_ABBREVIATIONS_TO_TEAM so we can build URLs.
+
+    """
+    # Make sure abbr is valid
+    for abbr, mapped in TEAM_ABBREVIATIONS_TO_TEAM.items():
+        if mapped == team:
+            return abbr
+    raise ValueError(f"Unsupported team: {team!r}")
+
+def team_roster(team: Team, season_end_year: int) -> List[str]:
+    """
+    Purpose: return the list of player names listed on a team's roster
+    for the given season end year (ex: 2025 for the 2024–25 season).
+
+    Example:
+        team_roster(Team.BOSTON_CELTICS, 2025)
+        returns: ["Jayson Tatum", "Jaylen Brown", ...]
+    """
+    abbr = _team_to_abbr(team)
+    url = f"https://www.basketball-reference.com/teams/{abbr}/{season_end_year}.html"
+
+    # Get a page and check for HTTP errors.
+    # Ref: https://requests.readthedocs.io/en/latest/user/quickstart/#make-a-request
+    resp = requests.get(url, timeout=30)
+    resp.raise_for_status()  # raises HTTPError
+
+    # Hand off to HTML parser:
+    return parse_team_roster_names_from_team_page_html(resp.text)
 
 def standings(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
               json_options=None):
