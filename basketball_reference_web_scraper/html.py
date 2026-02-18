@@ -1072,7 +1072,9 @@ class PlayByPlayRow:
         return not self.is_start_of_period \
             and 2 <= len(self.html) \
             and self.html[1].get('colspan') != '5' \
+            and self.timestamp != 'Time' \
             and self.timestamp_cell.get('aria-label') != 'Time'
+
 
 
 class DailyBoxScoresPage:
