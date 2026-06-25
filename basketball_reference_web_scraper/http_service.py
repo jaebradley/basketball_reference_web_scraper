@@ -11,8 +11,21 @@ from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeason
 class HTTPService:
     BASE_URL = 'https://www.basketball-reference.com'
 
-    def __init__(self, parser):
+    def __init__(self, parser, headers=None, proxies=None, timeout=None):
         self.parser = parser
+        self.headers = headers
+        self.proxies = proxies
+        self.timeout = timeout
+
+    def _get(self, url, allow_redirects=True, params=None):
+        return requests.get(
+            url=url,
+            allow_redirects=allow_redirects,
+            params=params,
+            headers=self.headers,
+            proxies=self.proxies,
+            timeout=self.timeout,
+        )
 
     def standings(self, season_end_year):
         url = '{BASE_URL}/leagues/NBA_{season_end_year}.html'.format(
@@ -20,7 +33,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self._get(url=url, allow_redirects=False)
 
         response.raise_for_status()
 
@@ -36,7 +49,7 @@ class HTTPService:
             year=year
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self._get(url=url, allow_redirects=False)
 
         response.raise_for_status()
 
@@ -58,7 +71,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self._get(url=url, allow_redirects=False)
         response.raise_for_status()
 
         page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
@@ -79,7 +92,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self._get(url=url, allow_redirects=False)
         response.raise_for_status()
 
         page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
@@ -96,7 +109,7 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL, year=year, month=add_0_if_needed(str(month)), day=add_0_if_needed(str(day)),
             team_abbr=TEAM_TO_TEAM_ABBREVIATION[home_team]
         )
-        response = requests.get(url=url)
+        response = self._get(url=url)
         response.raise_for_status()
 
         page = PlayByPlayPage(html=html.fromstring(response.content))
@@ -113,7 +126,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url)
+        response = self._get(url=url)
 
         response.raise_for_status()
 
@@ -126,7 +139,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url)
+        response = self._get(url=url)
 
         response.raise_for_status()
 
@@ -134,7 +147,7 @@ class HTTPService:
         return self.parser.parse_player_season_totals(totals=table.rows)
 
     def schedule_for_month(self, url):
-        response = requests.get(url=url)
+        response = self._get(url=url)
 
         response.raise_for_status()
 
@@ -147,7 +160,7 @@ class HTTPService:
             season_end_year=season_end_year
         )
 
-        response = requests.get(url=url)
+        response = self._get(url=url)
 
         response.raise_for_status()
 
@@ -164,7 +177,7 @@ class HTTPService:
     def team_box_score(self, game_url_path):
         url = "{BASE_URL}/{game_url_path}".format(BASE_URL=HTTPService.BASE_URL, game_url_path=game_url_path)
 
-        response = requests.get(url=url)
+        response = self._get(url=url)
 
         response.raise_for_status()
 
@@ -182,7 +195,7 @@ class HTTPService:
     def team_box_scores(self, day, month, year):
         url = "{BASE_URL}/boxscores/".format(BASE_URL=HTTPService.BASE_URL)
 
-        response = requests.get(url=url, params={"day": day, "month": month, "year": year})
+        response = self._get(url=url, params={"day": day, "month": month, "year": year})
 
         response.raise_for_status()
 
@@ -195,7 +208,7 @@ class HTTPService:
         ]
 
     def search(self, term):
-        response = requests.get(
+        response = self._get(
             url="{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL),
             params={"search": term}
         )
@@ -210,7 +223,7 @@ class HTTPService:
             player_results += parsed_results["players"]
 
             while page.nba_aba_baa_players_pagination_url is not None:
-                response = requests.get(
+                response = self._get(
                     url="{BASE_URL}/search/{pagination_url}".format(
                         BASE_URL=HTTPService.BASE_URL,
                         pagination_url=page.nba_aba_baa_players_pagination_url
