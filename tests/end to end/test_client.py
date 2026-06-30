@@ -14,13 +14,11 @@ class BaseEndToEndTest(TestCase):
 
     def setUp(self):
         # To avoid getting rate-limited
-        # time.sleep(20)
-        pass
+        time.sleep(20)
 
     def tearDown(self):
         # To avoid getting rate-limited
-        # time.sleep(20)
-        pass
+        time.sleep(20)
 
 
 class TestPlayerBoxScores(BaseEndToEndTest):
