@@ -13,8 +13,14 @@ function main() {
     command -v "uvx"
     if [[ "0" != "$?" ]]; then printf "Cannot identify uvx program\n" && exit 255; fi
 
-    uv venv
-    if [[ "0" != "$?" ]]; then printf "Cannot create a virtual environment\n" && exit 255; fi
+    if [[ -f ".venv/bin/activate" ]]; then
+      source ".venv/bin/activate"
+      if [[ "0" != "$?" ]]; then printf "Could not activate existing virtual environment\n" && exit 255; fi
+    else
+      uv venv
+      if [[ "0" != "$?" ]]; then printf "Cannot create a virtual environment\n" && exit 255; fi
+    fi
+
 
     uv sync  --active
     if [[ "0" != "$?" ]]; then printf "Cannot install dependencies\n" && exit 255; fi
