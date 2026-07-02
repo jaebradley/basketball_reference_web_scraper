@@ -11,13 +11,13 @@ The `v3` branch (as well as the `3+` version) will be deprecated in the near-fut
 
 ## Local
 
-Install dependencies using [`poetry`](https://python-poetry.org/) - for installation directions, see 
-[the documentation](https://python-poetry.org/docs/).
+Install dependencies using [`uv`](https://docs.astral.sh/uv) - for installation directions, see 
+[the documentation](https://docs.astral.sh/uv/).
 
-Once `poetry` has been installed, dependencies can be installed using the `install` command like
+Once `uv` has been installed, dependencies can be installed using the `sync` command like
 
 ```bash
-poetry install
+uv sync
 ```
 
 !!! note
