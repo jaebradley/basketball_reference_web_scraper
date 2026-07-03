@@ -3,8 +3,8 @@ import json
 import os
 from datetime import datetime
 from unittest import TestCase
+from zoneinfo import ZoneInfo
 
-import pytz
 import requests_mock
 
 from basketball_reference_web_scraper.client import season_schedule
@@ -34,7 +34,7 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
                 "away_team_score": 99,
                 "home_team": Team.CLEVELAND_CAVALIERS,
                 "home_team_score": 102,
-                "start_time": datetime(2017, 10, 18, 0, 1, tzinfo=pytz.utc),
+                "start_time": datetime(2017, 10, 18, 0, 1, tzinfo=ZoneInfo("UTC")),
             },
         )
 
@@ -47,7 +47,7 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
                 "away_team_score": 108,
                 "home_team": Team.CLEVELAND_CAVALIERS,
                 "home_team_score": 85,
-                "start_time": datetime(2018, 6, 9, 1, 0, tzinfo=pytz.utc)
+                "start_time": datetime(2018, 6, 9, 1, 0, tzinfo=ZoneInfo("UTC"))
             }
         )
 

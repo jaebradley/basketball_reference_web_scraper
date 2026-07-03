@@ -6,6 +6,7 @@ dist/
 *egg-info/
 bin/
 lib/
+.vscode/
 
 # Don't commit files from integration test output
 tests/integration/output/**.csv
@@ -26,6 +27,7 @@ dependencies/*
 # virtualenv's
 venv/
 .venv/
+pyvenv.cfg
 
 # caches
 .pytest_cache/

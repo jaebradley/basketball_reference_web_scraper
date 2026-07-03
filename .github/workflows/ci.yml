@@ -14,7 +14,7 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: [ '3.8', '3.9', '3.10' ]
+        python-version: [ '3.10', '3.14' ]
         os: [ 'macos-latest' ]
     runs-on: ${{ matrix.os }}
     name: build
@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run build script
-        run: bash ./scripts/build.sh "$(pwd)/dependencies"
+        run: bash ./scripts/build.sh
         shell: bash
       - name: Upload Coverage To Codecov
         uses: codecov/codecov-action@v3
@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Tests
-        run: bash ./scripts/end\ to\ end\ tests.sh "$(pwd)/dependencies"
+        run: bash ./scripts/end\ to\ end\ tests.sh
   documentation:
     strategy:
       matrix:
@@ -62,7 +62,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run build script
-        run: bash ./scripts/build.sh "$(pwd)/dependencies"
+        run: bash ./scripts/build.sh
         shell: bash
       - name: Upload Coverage To Codecov
         uses: codecov/codecov-action@v4
@@ -79,4 +79,4 @@ jobs:
           GH_NAME: ${{ secrets.GH_NAME }}
           GH_EMAIL: ${{ secrets.GH_EMAIL }}
       - name: Publish Documentation
-        run: bash ./scripts/Publish\ Documentation\ to\ GitHub\ Pages.sh "$(pwd)/dependencies/bin/poetry"
+        run: bash ./scripts/Publish\ Documentation\ to\ GitHub\ Pages.sh

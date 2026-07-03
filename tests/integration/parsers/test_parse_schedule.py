@@ -1,13 +1,12 @@
 import os
 from datetime import datetime, timedelta
 from unittest import TestCase
-
-import pytz
-from lxml import html
+from zoneinfo import ZoneInfo
 
 from basketball_reference_web_scraper.data import Team, TEAM_NAME_TO_TEAM
 from basketball_reference_web_scraper.html import SchedulePage
 from basketball_reference_web_scraper.parsers import ScheduledGamesParser, TeamNameParser, ScheduledStartTimeParser
+from lxml import html
 
 
 class BaseTest(TestCase):
@@ -65,9 +64,8 @@ class TestOctober2001Parser(BaseParserTest):
 
     def test_first_game(self):
         first_game = self._parsed_results[0]
-        expected_datetime = pytz.timezone("US/Eastern") \
-            .localize(datetime(year=2000, month=10, day=31, hour=19, minute=30)) \
-            .astimezone(pytz.utc)
+        expected_datetime = datetime(year=2000, month=10, day=31, hour=19, minute=30,
+                                     tzinfo=ZoneInfo("US/Eastern")).astimezone(ZoneInfo("UTC"))
 
         self.assertTrue(abs(first_game["start_time"] - expected_datetime) < timedelta(seconds=1))
         self.assertEqual(first_game["away_team"], Team.CHARLOTTE_HORNETS)
@@ -93,9 +91,8 @@ class TestParsingUpcomingGames(BaseParserTest):
         first_game = self._parsed_results[0]
 
         self.assertEqual(first_game["start_time"],
-                         pytz.timezone("US/Eastern") \
-                         .localize(datetime(year=2019, month=4, day=1, hour=19, minute=30)) \
-                         .astimezone(pytz.utc))
+                         datetime(year=2019, month=4, day=1, hour=19, minute=30,
+                                  tzinfo=ZoneInfo("US/Eastern")).astimezone(ZoneInfo("UTC")))
         self.assertEqual(first_game["away_team"], Team.MIAMI_HEAT)
         self.assertEqual(first_game["home_team"], Team.BOSTON_CELTICS)
         self.assertIsNone(first_game["away_team_score"])
