@@ -1,6 +1,6 @@
 [project]
 name = "basketball_reference_web_scraper"
-version = "4.16.0"
+version = "4.17.0"
 description = "A Basketball Reference client that generates data by scraping the website"
 authors = [{ name = "Jae Bradley", email = "jae.b.bradley@gmail.com" }]
 requires-python = ">=3.10,<4"
