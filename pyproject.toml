@@ -25,7 +25,6 @@ classifiers = [
 ]
 dependencies = [
     "lxml>=6.1.1,<7",
-    "pytz==2026.2,<2027",
     "requests>=2.34.2,<3",
 ]
 
