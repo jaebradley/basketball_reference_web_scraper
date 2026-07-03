@@ -1,7 +1,6 @@
 import re
 from datetime import datetime
-
-import pytz
+from zoneinfo import ZoneInfo
 
 from basketball_reference_web_scraper.data import PeriodType, Outcome
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
@@ -188,7 +187,7 @@ class TeamNameParser:
 
 
 class ScheduledStartTimeParser:
-    def __init__(self, time_zone=pytz.utc):
+    def __init__(self, time_zone=ZoneInfo("UTC")):
         self.time_zone = time_zone
 
     def parse_start_time(self, formatted_date, formatted_time_of_day):
@@ -215,8 +214,7 @@ class ScheduledStartTimeParser:
             start_time = datetime.strptime(formatted_date, "%a, %b %d, %Y")
 
         # All basketball reference times seem to be in Eastern
-        est = pytz.timezone("US/Eastern")
-        localized_start_time = est.localize(start_time)
+        localized_start_time = start_time.replace(tzinfo=ZoneInfo("US/Eastern"))
         return localized_start_time.astimezone(self.time_zone)
 
 
@@ -430,7 +428,8 @@ class PlayerBoxScoresParser:
                 "slug": str(box_score.slug),
                 "name": str(box_score.name).rstrip("*"),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
-                "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation.strip()),
+                "location": self.location_abbreviation_parser.from_abbreviation(
+                    box_score.location_abbreviation.strip()),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),
                 "outcome": self.outcome_abbreviation_parser.from_abbreviation(box_score.outcome),
                 "seconds_played": self.seconds_played_parser.parse(box_score.playing_time),
@@ -466,7 +465,8 @@ class PlayerSeasonBoxScoresParser:
             common = {
                 "date": datetime.strptime(str(box_score.date), "%Y-%m-%d").date(),
                 "team": self.team_abbreviation_parser.from_abbreviation(box_score.team_abbreviation),
-                "location": self.location_abbreviation_parser.from_abbreviation(box_score.location_abbreviation.strip()),
+                "location": self.location_abbreviation_parser.from_abbreviation(
+                    box_score.location_abbreviation.strip()),
                 "opponent": self.team_abbreviation_parser.from_abbreviation(box_score.opponent_abbreviation),
                 "outcome": self.outcome_parser.parse_outcome(formatted_outcome=box_score.outcome),
             }
