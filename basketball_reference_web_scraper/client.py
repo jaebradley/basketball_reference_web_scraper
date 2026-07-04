@@ -163,8 +163,8 @@ def players_season_totals(season_end_year, output_type=None, output_file_path=No
     )
     return output_service.output(data=values, options=options)
 
-def shooting_diet_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
-                          json_options=None):
+def regular_season_player_shooting_statistics(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
+                                              json_options=None):
     try:
         http_service = HTTPService(parser=ParserService())
         values = http_service.shooting_diet_totals(season_end_year=season_end_year)
