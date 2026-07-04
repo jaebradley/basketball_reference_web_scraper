@@ -1,31 +1,3 @@
-class PlayersSeasonShootingStatisticsTable:
-    def __init__(self, html):
-        self.html = html
-
-    @property
-    def rows_query(self):
-        # Basketball Reference includes individual rows for players that played for multiple teams in a season.
-        # It also includes a "League Average" row that has a class value of 'norank'.
-        return """
-                    //table[@id='shooting']
-                    /tbody
-                    /tr[
-                        not(contains(@class, 'thead')) and 
-                        not(contains(@class, 'norank'))
-                    ]
-                """
-
-    @property
-    def rows(self) -> list[PlayerShootingStatisticRow]:
-        players_shooting_statistics_rows = []
-        for row_html in self.html.xpath(self.rows_query):
-            row = PlayerShootingStatisticRow(html=row_html)
-            # Basketball Reference includes a "total" row for players that got traded
-            # which is essentially a sum of all player team rows
-            # I want to avoid including those, so I check the "team" field value for "TOT"
-            if not row.is_combined_totals:
-                players_shooting_statistics_rows.append(row)
-        return players_shooting_statistics_rows
 
 
 class PlayerShootingStatisticRow:
@@ -315,3 +287,32 @@ class PlayerShootingStatisticRow:
             return cells[0].text_content()
 
         return ''
+
+class PlayersSeasonShootingStatisticsTable:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def rows_query(self):
+        # Basketball Reference includes individual rows for players that played for multiple teams in a season.
+        # It also includes a "League Average" row that has a class value of 'norank'.
+        return """
+                    //table[@id='shooting']
+                    /tbody
+                    /tr[
+                        not(contains(@class, 'thead')) and 
+                        not(contains(@class, 'norank'))
+                    ]
+                """
+
+    @property
+    def rows(self) -> list[PlayerShootingStatisticRow]:
+        players_shooting_statistics_rows = []
+        for row_html in self.html.xpath(self.rows_query):
+            row = PlayerShootingStatisticRow(html=row_html)
+            # Basketball Reference includes a "total" row for players that got traded
+            # which is essentially a sum of all player team rows
+            # I want to avoid including those, so I check the "team" field value for "TOT"
+            if not row.is_combined_totals:
+                players_shooting_statistics_rows.append(row)
+        return players_shooting_statistics_rows
