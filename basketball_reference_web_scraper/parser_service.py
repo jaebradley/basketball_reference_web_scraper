@@ -6,7 +6,8 @@ from basketball_reference_web_scraper.parsers import PositionAbbreviationParser,
     PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
     ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser, DivisionNameParser, \
-    TeamStandingsParser, ConferenceDivisionStandingsParser, ShootingDietParser
+    TeamStandingsParser, ConferenceDivisionStandingsParser
+from shooting.parsers import PlayerSeasonShootingStatisticsParser
 
 
 class ParserService:
@@ -66,7 +67,7 @@ class ParserService:
             team_abbreviation_parser=self.team_abbreviation_parser,
             position_abbreviation_parser=self.position_abbreviation_parser,
         )
-        self.shooting_diet_parser = ShootingDietParser(
+        self.player_season_shooting_statistics_parser = PlayerSeasonShootingStatisticsParser(
             position_abbreviation_parser=self.position_abbreviation_parser,
             team_abbreviation_parser=self.team_abbreviation_parser,
         )
@@ -111,8 +112,8 @@ class ParserService:
     def parse_player_season_totals(self, totals):
         return self.player_season_totals_parser.parse(totals=totals)
 
-    def parse_shooting_diet(self, totals):
-        return self.shooting_diet_parser.parse(totals=totals)
+    def parse_player_season_shooting_statistics(self, totals):
+        return self.player_season_shooting_statistics_parser.parse(totals=totals)
 
     def parse_scheduled_games(self, games):
         return self.scheduled_games_parser.parse_games(games)

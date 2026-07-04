@@ -5,7 +5,8 @@ from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, Tea
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
-    PlayerPage, StandingsPage, ShootingDietTable
+    PlayerPage, StandingsPage
+from shooting.html import PlayersSeasonShootingStatisticsTable
 
 
 class HTTPService:
@@ -133,7 +134,7 @@ class HTTPService:
         table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
         return self.parser.parse_player_season_totals(totals=table.rows)
 
-    def shooting_diet_totals(self, season_end_year):
+    def players_season_shooting_statistics(self, season_end_year):
         url = '{BASE_URL}/leagues/NBA_{season_end_year}_shooting.html'.format(
             BASE_URL=HTTPService.BASE_URL,
             season_end_year=season_end_year,
@@ -141,8 +142,8 @@ class HTTPService:
         response = requests.get(url=url)
 
         response.raise_for_status()
-        table = ShootingDietTable(html=html.fromstring(response.content))
-        return self.parser.parse_shooting_diet(totals=table.rows)
+        table = PlayersSeasonShootingStatisticsTable(html=html.fromstring(response.content))
+        return self.parser.parse_player_season_shooting_statistics(totals=table.rows)
 
     def schedule_for_month(self, url):
         response = requests.get(url=url)
