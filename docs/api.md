@@ -120,8 +120,6 @@ or appended to the specified file path (or any of other the Python file mode opt
 
 ### Player Box Scores For A Given Day
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/PlayerBoxScoresByDate#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -162,8 +160,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     ```
 
 ### Team Box Scores For A Given Day
-
-* [`repl.it` Examples](https://repl.it/@jaebradley/TeamBoxScoresByDate#main.py)
 
 === "Python Data Structures"
     ```python
@@ -206,8 +202,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     
 ### Get Season Schedule
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/SeasonSchedule#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -248,8 +242,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     ```
 
 ### Player Season Totals (Basic Statistics)
-
-* [`repl.it` Examples](https://repl.it/@jaebradley/PlayerSeasonTotals#main.py)
 
 === "Python Data Structures"
     ```python
@@ -292,8 +284,6 @@ or appended to the specified file path (or any of other the Python file mode opt
 
 ### Player Season Totals (Advanced Statistics)
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/PlayerAdvancedSeasonTotals#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -334,8 +324,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     ```
 
 ### Play-By-Play
-
-* [`repl.it` Examples](https://repl.it/@jaebradley/PlayByPlay#main.py)
 
 !!! note
     The structure of the API is due to the unique URL pattern that **Basketball Reference** has for getting play-by-play 
@@ -397,8 +385,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     You can see this from their player page URL: https://www.basketball-reference.com/players/w/westbru01/gamelog/2020.
     
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/RegularSeasonPlayerBoxScores#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -458,8 +444,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     You can see this from their player page URL: https://www.basketball-reference.com/players/w/westbru01/gamelog/2020.
     
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/PlayoffPlayerBoxScores#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -510,8 +494,6 @@ or appended to the specified file path (or any of other the Python file mode opt
     
 ### Search
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/Search#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -553,8 +535,6 @@ or appended to the specified file path (or any of other the Python file mode opt
 
 ### Standings
 
-* [`repl.it` Examples](https://repl.it/@jaebradley/Standings#main.py)
-
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -594,3 +574,55 @@ or appended to the specified file path (or any of other the Python file mode opt
     )
     ```
 
+### Regular Season Players Shooting Statistics
+
+=== "Python Data Structures"
+    ```python
+    from basketball_reference_web_scraper import client
+
+    client.players_regular_season_shooting_statistics(season_end_year=2026)
+    ```
+
+=== "Example List Element"
+    
+    This API returns a list of dictionaries. These dictionaries contain player shooting statistics that have the following form
+    
+    ```python
+    {'slug': 'thompam01',
+     'name': 'Amen Thompson',
+     'position': <Position.POINT_GUARD: 'POINT GUARD'>,
+     'age': 23,
+     'team': <Team.HOUSTON_ROCKETS: 'HOUSTON ROCKETS'>,
+     'games_played': 79,
+     'games_started': 79,
+     'minutes_played': 2953,
+     'field_goal_percentage': 0.534,
+     'average_field_goal_attempt_distance': {'value': 7.8, 'units': 'feet'},
+     'two_point_shot_statistics': {'field_goal_percentage': 0.573,
+                                   'assisted_percentage': 0.53,
+                                   'percentage_of_total_field_goal_attempts': 0.889,
+                                   'statistics_by_range': {'0-3': {'percentage_of_total_field_goal_attempts': 0.383,
+                                                                   'field_goal_percentage': 0.76,
+                                                                   'units': 'feet'},
+                                                           '3-10': {'percentage_of_total_field_goal_attempts': 0.333,
+                                                                    'field_goal_percentage': 0.486,
+                                                                    'units': 'feet'},
+                                                           '10-16': {'percentage_of_total_field_goal_attempts': 0.112,
+                                                                     'field_goal_percentage': 0.325,
+                                                                     'units': 'feet'},
+                                                           '16+': {'percentage_of_total_field_goal_attempts': 0.06,
+                                                                   'field_goal_percentage': 0.333,
+                                                                   'units': 'feet'}},
+                                   'dunks': {'percentage_of_total_field_goal_attempts': 0.209,
+                                             'made': 201}},
+     'three_point_shot_statistics': {'field_goal_percentage': 0.216,
+                                     'assisted_percentage': 0.96,
+                                     'percentage_of_total_field_goal_attempts': 0.111,
+                                     'corner': {'percentage_of_three_point_field_goal_attempts': 0.586,
+                                                'field_goal_percentage': 0.235},
+                                     'beyond_half_court': {'attempts': 1,
+                                                           'made': 0}}}
+    ```
+
+    !!! note
+    This API **only** currently supports listing lists of dictionaries containing shooting statistics. It does not currently support exporting this data to JSON or CSV formats (unlike other client methods), for now.
