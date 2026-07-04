@@ -7,7 +7,7 @@ from basketball_reference_web_scraper.parsers import PositionAbbreviationParser,
     ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser, DivisionNameParser, \
     TeamStandingsParser, ConferenceDivisionStandingsParser
-from shooting.parsers import PlayerSeasonShootingStatisticsParser
+from basketball_reference_web_scraper.shooting.parsers import PlayerSeasonShootingStatisticsParser
 
 
 class ParserService:

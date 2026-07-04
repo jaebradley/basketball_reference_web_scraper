@@ -1,5 +1,5 @@
-from shooting.html import PlayerShootingStatisticRow
-from utilities import str_to_int, str_to_float
+from basketball_reference_web_scraper.shooting.html import PlayerShootingStatisticRow
+from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 
 class PlayerSeasonShootingStatisticsParser:

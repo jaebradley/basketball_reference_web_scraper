@@ -6,7 +6,7 @@ from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAn
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage
-from shooting.html import PlayersSeasonShootingStatisticsTable
+from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
 
 
 class HTTPService:
