@@ -363,10 +363,6 @@ class PlayerSeasonTotalsParser:
                 "turnovers": str_to_int(total.turnovers),
                 "personal_fouls": str_to_int(total.personal_fouls),
                 "points": str_to_int(total.points),
-                "efficiency_field_goal_percentage": str_to_float(total.efficiency_field_goal_percentage),
-                "free_throw_percentage": str_to_float(total.free_throw_percentage),
-                "three_point_field_goal_percentage": str_to_float(total.three_point_field_goal_percentage),
-                "field_goal_percentage": str_to_float(total.field_goal_percentage)
             } for total in totals
         ]
 

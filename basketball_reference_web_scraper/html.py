@@ -1,5 +1,8 @@
 import re
 
+from lxml import html
+from lxml.html import HtmlComment
+
 
 class BasicBoxScoreRow:
     def __init__(self, html):
@@ -145,41 +148,6 @@ class BasicBoxScoreRow:
         return ''
 
     @property
-    def field_goal_percentage(self):
-        cells = self.html.xpath('td[@data-stat="fg_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def three_point_field_goal_percentage(self):
-        cells = self.html.xpath('td[@data-stat="fg3_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def free_throw_percentage(self):
-        cells = self.html.xpath('td[@data-stat="ft_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def efficiency_field_goal_percentage(self):
-        cells = self.html.xpath('td[@data-stat="efg_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
     def location_abbreviation(self):
         cells = self.html.xpath('td[@data-stat="game_location"]')
 
@@ -187,6 +155,7 @@ class BasicBoxScoreRow:
             return cells[0].text_content()
 
         return ''
+
 
     @property
     def outcome(self):
@@ -841,42 +810,6 @@ class PlayerSeasonTotalsRow:
     @property
     def points(self):
         cells = self.html.xpath('td[@data-stat="pts"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def field_goal_percentage(self):
-        cells = self.html.xpath('td[@data-stat="fg_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def three_point_field_goal_percentage(self):
-        cells = self.html.xpath('td[@data-stat="fg3_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def free_throw_percentage(self):
-        cells = self.html.xpath('td[@data-stat="ft_pct"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def efficiency_field_goal_percentage(self):
-        cells = self.html.xpath('td[@data-stat="efg_pct"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
