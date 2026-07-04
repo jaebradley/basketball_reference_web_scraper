@@ -9,6 +9,9 @@ from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeason
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage, TeamSeasonPage
 
+from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
+
+
 
 class HTTPService:
     BASE_URL = 'https://www.basketball-reference.com'
@@ -134,6 +137,17 @@ class HTTPService:
 
         table = PlayerSeasonTotalTable(html=html.fromstring(response.content))
         return self.parser.parse_player_season_totals(totals=table.rows)
+
+    def players_season_shooting_statistics(self, season_end_year):
+        url = '{BASE_URL}/leagues/NBA_{season_end_year}_shooting.html'.format(
+            BASE_URL=HTTPService.BASE_URL,
+            season_end_year=season_end_year,
+        )
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+        table = PlayersSeasonShootingStatisticsTable(html=html.fromstring(response.content))
+        return self.parser.parse_player_season_shooting_statistics(totals=table.rows)
 
     def schedule_for_month(self, url):
         response = requests.get(url=url)

@@ -147,25 +147,6 @@ class BasicBoxScoreRow:
 
         return ''
 
-
-class PlayerBoxScoreRow(BasicBoxScoreRow):
-    def __init__(self, html):
-        super().__init__(html=html)
-
-    def __eq__(self, other):
-        if isinstance(other, PlayerBoxScoreRow):
-            return self.html == other.html
-        return False
-
-    @property
-    def team_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="team_id"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
     @property
     def location_abbreviation(self):
         cells = self.html.xpath('td[@data-stat="game_location"]')
@@ -175,14 +156,6 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
 
         return ''
 
-    @property
-    def opponent_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="opp_id"]')
-
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
 
     @property
     def outcome(self):
@@ -205,6 +178,62 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
     @property
     def game_score(self):
         cells = self.html.xpath('td[@data-stat="game_score"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+
+class PlayerSeasonGameLogRow(BasicBoxScoreRow):
+    def __init__(self, html):
+        super().__init__(html=html)
+
+    def __eq__(self, other):
+        if isinstance(other, PlayerBoxScoreRow):
+            return self.html == other.html
+        return False
+
+    @property
+    def team_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def opponent_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="opp_name_abbr"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+
+class PlayerBoxScoreRow(BasicBoxScoreRow):
+    def __init__(self, html):
+        super().__init__(html=html)
+
+    def __eq__(self, other):
+        if isinstance(other, PlayerBoxScoreRow):
+            return self.html == other.html
+        return False
+
+    @property
+    def team_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="team_id"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def opponent_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="opp_id"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -248,13 +277,16 @@ class PlayerAdvancedSeasonTotalsTable:
 
     @property
     def rows_query(self):
+        # Basketball Reference includes individual rows for players that played for multiple teams in a season.
+        # It also includes a "League Average" row that has a class value of 'norank'.
         return """
-            //table[@id="advanced_stats"]
+            //table[@id="advanced"]
             /tbody
             /tr[
-                contains(@class, "full_table") or 
-                contains(@class, "italic_text partial_table") 
-                and not(contains(@class, "rowSum"))
+                (
+                    not(contains(@class, 'thead')) and 
+                    not(contains(@class, 'norank'))
+                )
             ]
         """
 
@@ -277,18 +309,16 @@ class PlayerSeasonTotalTable:
 
     @property
     def rows_query(self):
-        # Basketball Reference includes individual rows for players that played for multiple teams in a season
-        # These rows have a separate class ("italic_text partial_table") than the players that played for a single team
-        # across a season.
+        # Basketball Reference includes individual rows for players that played for multiple teams in a season.
+        # It also includes a "League Average" row that has a class value of 'norank'.
         return """
-            //table[@id="totals_stats"]
-            /tbody
-            /tr[
-                contains(@class, "full_table") or 
-                contains(@class, "italic_text partial_table") 
-                and not(contains(@class, "rowSum"))
-            ]
-        """
+                    //table[@id='totals_stats']
+                    /tbody
+                    /tr[
+                        not(contains(@class, 'thead')) and 
+                        not(contains(@class, 'norank'))
+                    ]
+                """
 
     @property
     def rows(self):
@@ -307,6 +337,31 @@ class PlayerSeasonTotalTable:
 class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
     def __init__(self, html):
         super().__init__(html=html)
+
+    @property
+    def player_cell(self):
+        cells = self.html.xpath('td[@data-stat="name_display"]')
+
+        if len(cells) > 0:
+            return cells[0]
+
+        return None
+
+    @property
+    def slug(self):
+        cell = self.player_cell
+        if cell is None:
+            return ''
+
+        return cell.get('data-append-csv')
+
+    @property
+    def name(self):
+        cell = self.player_cell
+        if cell is None:
+            return ''
+
+        return cell.text_content()
 
     @property
     def position_abbreviations(self):
@@ -328,7 +383,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
 
     @property
     def team_abbreviation(self):
-        cells = self.html.xpath('td[@data-stat="team_id"]')
+        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -337,7 +392,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
 
     @property
     def games_played(self):
-        cells = self.html.xpath('td[@data-stat="g"]')
+        cells = self.html.xpath('td[@data-stat="games"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -535,12 +590,15 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
 
     @property
     def is_combined_totals(self):
-        return self.team_abbreviation == "TOT"
+        #  No longer says 'TOT' - now says 2TM, 3TM, etc.
+        # Can safely use the 'TM' suffix as an identifier as no team abbreviations
+        # end in 'TM'
+        return self.team_abbreviation.endswith("TM")
 
 
-class PlayerSeasonTotalsRow(PlayerBoxScoreRow, PlayerIdentificationRow):
+class PlayerSeasonTotalsRow:
     def __init__(self, html):
-        super().__init__(html=html)
+        self.html = html
 
     @property
     def position_abbreviations(self):
@@ -562,7 +620,7 @@ class PlayerSeasonTotalsRow(PlayerBoxScoreRow, PlayerIdentificationRow):
 
     @property
     def games_played(self):
-        cells = self.html.xpath('td[@data-stat="g"]')
+        cells = self.html.xpath('td[@data-stat="games"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -571,7 +629,7 @@ class PlayerSeasonTotalsRow(PlayerBoxScoreRow, PlayerIdentificationRow):
 
     @property
     def games_started(self):
-        cells = self.html.xpath('td[@data-stat="gs"]')
+        cells = self.html.xpath('td[@data-stat="games_started"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -580,7 +638,183 @@ class PlayerSeasonTotalsRow(PlayerBoxScoreRow, PlayerIdentificationRow):
 
     @property
     def is_combined_totals(self):
-        return self.team_abbreviation == "TOT"
+        #  No longer says 'TOT' - now says 2TM, 3TM, etc.
+        # Can safely use the 'TM' suffix as an identifier as no team abbreviations
+        # end in 'TM'
+        return self.team_abbreviation.endswith("TM")
+
+    @property
+    def team_abbreviation(self):
+        cells = self.html.xpath('td[@data-stat="team_name_abbr"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def player_cell(self):
+        cells = self.html.xpath('td[@data-stat="name_display"]')
+
+        if len(cells) > 0:
+            return cells[0]
+
+        return None
+
+    @property
+    def slug(self):
+        cell = self.player_cell
+        if cell is None:
+            return ''
+
+        return cell.get('data-append-csv')
+
+    @property
+    def name(self):
+        cell = self.player_cell
+        if cell is None:
+            return ''
+
+        return cell.text_content()
+
+    @property
+    def playing_time(self):
+        cells = self.html.xpath('td[@data-stat="mp"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def minutes_played(self):
+        return self.playing_time
+
+    @property
+    def made_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fg"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def attempted_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fga"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def made_three_point_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fg3"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def attempted_three_point_field_goals(self):
+        cells = self.html.xpath('td[@data-stat="fg3a"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def made_free_throws(self):
+        cells = self.html.xpath('td[@data-stat="ft"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def attempted_free_throws(self):
+        cells = self.html.xpath('td[@data-stat="fta"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def offensive_rebounds(self):
+        cells = self.html.xpath('td[@data-stat="orb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def defensive_rebounds(self):
+        cells = self.html.xpath('td[@data-stat="drb"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def assists(self):
+        cells = self.html.xpath('td[@data-stat="ast"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def steals(self):
+        cells = self.html.xpath('td[@data-stat="stl"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def blocks(self):
+        cells = self.html.xpath('td[@data-stat="blk"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def turnovers(self):
+        cells = self.html.xpath('td[@data-stat="tov"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def personal_fouls(self):
+        cells = self.html.xpath('td[@data-stat="pf"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
+
+    @property
+    def points(self):
+        cells = self.html.xpath('td[@data-stat="pts"]')
+
+        if len(cells) > 0:
+            return cells[0].text_content()
+
+        return ''
 
 
 class BoxScoresPage:
@@ -645,7 +879,7 @@ class PlayerSeasonBoxScoresPage:
 
     @property
     def regular_season_box_scores_table_query(self):
-        return '//table[@id="pgl_basic"]'
+        return '//table[@id="player_game_log_reg"]'
 
     @property
     def regular_season_box_scores_table(self):
@@ -657,43 +891,12 @@ class PlayerSeasonBoxScoresPage:
         return PlayerSeasonBoxScoresTable(html=matching_tables[0])
 
     @property
-    def playoff_box_scores_table_container_query(self):
-        return '//div[@id="all_pgl_basic_playoffs"]'
-
-    """
-    This is a limitation of requests as the playoff box scores table is "hidden" in a comment that is rendered later
-    via some JavaScript.
-    
-    Because requests only fetches the raw HTML and doesn't process any JavaScript, this DOM element that (eventually)
-    renders in the browser is not part of the HTML that is part of the initial fetched markup.
-    
-    Thus, the comment containing the playoff table is identified and parsed and then fed into lxml to create the element
-    tree that will eventually be rendered on the page.
-    """
+    def playoff_box_scores_table_query(self):
+        return '//table[@id="player_game_log_post"]'
 
     @property
     def playoff_box_scores_table(self):
-        matching_containers = self.html.xpath(self.playoff_box_scores_table_container_query)
-
-        if len(matching_containers) != 1:
-            return None
-
-        match = matching_containers[0]
-        comments = [child for child in match.iter() if isinstance(child, HtmlComment)]
-
-        if len(comments) != 1:
-            return None
-
-        first_comment = comments[0]
-
-        try:
-            playoff_table_html = re.search(r'(<!--)([\s\S]*?)(-->)', str(first_comment)).group(2).strip()
-        except IndexError:
-            return None
-
-        tree = html.fromstring(playoff_table_html)
-
-        matching_tables = tree.xpath('//table[@id="pgl_basic_playoffs"]')
+        matching_tables = self.html.xpath(self.playoff_box_scores_table_query)
 
         if len(matching_tables) != 1:
             return None
@@ -708,8 +911,7 @@ class PlayerSeasonBoxScoresTable:
     @property
     def rows_query(self):
         # Every 20 rows, there's a row that has the column header values - those should be ignored
-        return '//tbody' \
-               '/tr[not(contains(@class, "thead"))]'
+        return 'tbody/tr[not(contains(@class, "spacer")) and not(contains(@class, "thead"))]'
 
     @property
     def rows(self):
@@ -719,7 +921,7 @@ class PlayerSeasonBoxScoresTable:
         ]
 
 
-class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
+class PlayerSeasonBoxScoresRow(PlayerSeasonGameLogRow):
     def __init__(self, html):
         super().__init__(html)
 
@@ -731,13 +933,18 @@ class PlayerSeasonBoxScoresRow(PlayerBoxScoreRow):
     @property
     def is_active(self):
         # When a player is not active (for a reason like "Inactive", "Did Not Play", "Did Not Dress")
-        # the game played counter is blank (and a "reason" column will exist)
-        cells = self.html.xpath('td[@data-stat="reason"]')
-        return len(cells) < 1
+        # "is_starter" column has a "colspan" attribute. When a player is active, the "is_starter" column does not
+        # have a "colspan" attribute
+        cells = self.html.xpath('td[@data-stat="is_starter"]')
+        if len(cells) > 0:
+            colspan_value = cells[0].get('colspan', None)
+            return colspan_value is None
+
+        return False
 
     @property
     def date(self):
-        cells = self.html.xpath('td[@data-stat="date_game"]')
+        cells = self.html.xpath('td[@data-stat="date"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
@@ -824,11 +1031,17 @@ class PlayByPlayRow:
 
     @property
     def away_team_play_description(self):
-        return self.html[1].text_content().strip()
+        if 6 == len(self.html):
+            return self.html[1].text_content().strip()
+
+        return ''
 
     @property
     def home_team_play_description(self):
-        return self.html[5].text_content().strip()
+        if 6 == len(self.html):
+            return self.html[5].text_content().strip()
+
+        return ''
 
     @property
     def is_away_team_play(self):
@@ -840,7 +1053,9 @@ class PlayByPlayRow:
 
     @property
     def formatted_scores(self):
-        return self.html[3].text_content().strip()
+        if 6 == len(self.html):
+            return self.html[3].text_content().strip()
+        return ''
 
     @property
     def is_start_of_period(self):
@@ -852,7 +1067,10 @@ class PlayByPlayRow:
         # Need to avoid rows that indicate start of period
         # Or denote tipoff / end of period (colspan = 5)
         # Or are one of the table headers for each period group (aria-label = Time)
+        # There are certain cases, like at the 10 minute mark in https://www.basketball-reference.com/boxscores/pbp/199911160ATL.html
+        # where there are no event details. Probably a visual bug on Basketball Reference's side of things.
         return not self.is_start_of_period \
+            and 2 <= len(self.html) \
             and self.html[1].get('colspan') != '5' \
             and self.timestamp_cell.get('aria-label') != 'Time'
 

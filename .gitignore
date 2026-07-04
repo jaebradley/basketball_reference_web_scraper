@@ -4,19 +4,30 @@
 build/
 dist/
 *egg-info/
+bin/
+lib/
+.vscode/
 
 # Don't commit files from integration test output
 tests/integration/output/**.csv
 tests/integration/output/**.json
 !tests/integration/output/.gitkeep
+
+# Don't commit files from end to end test output
+tests/end to end/output/generated/**.json
+tests/end to end/output/generated/**.csv
+!tests/end to end/output/.gitkeep
+
 # Ignore generated code coverage files
 .coverage
+coverage.xml
 
 dependencies/*
 
 # virtualenv's
 venv/
 .venv/
+pyvenv.cfg
 
 # caches
 .pytest_cache/
