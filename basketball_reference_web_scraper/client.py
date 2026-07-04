@@ -1,18 +1,18 @@
 import requests
 
-from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason
+from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason, \
+    InvalidTeamSeason
 from basketball_reference_web_scraper.http_service import HTTPService
 from basketball_reference_web_scraper.output.columns import BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, \
     PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
     PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES, TEAM_BOX_SCORES_COLUMN_NAMES, PLAY_BY_PLAY_COLUMN_NAMES, \
-    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SEARCH_RESULTS_COLUMN_NAMES, STANDINGS_COLUMNS_NAMES
+    PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES, SEARCH_RESULTS_COLUMN_NAMES, STANDINGS_COLUMNS_NAMES, ROSTER_COLUMN_NAMES
 from basketball_reference_web_scraper.output.fields import format_value, BasketballReferenceJSONEncoder
 from basketball_reference_web_scraper.output.service import OutputService
 from basketball_reference_web_scraper.output.writers import CSVWriter, JSONWriter, FileOptions, OutputOptions, \
     SearchCSVWriter
 from basketball_reference_web_scraper.parser_service import ParserService
-
-
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
 def standings(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
               json_options=None):
     try:
@@ -225,6 +225,32 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
     return output_service.output(data=values, options=options)
 
 
+def roster(team, season_end_year, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
+    try:
+        http_service = HTTPService(parser=ParserService())
+        if len(team) > 3:
+            team = TEAM_TO_TEAM_ABBREVIATION[team.upper()]
+        values = http_service.get_team_roster(team=team, season_end_year=season_end_year)
+    except requests.exceptions.HTTPError as http_error:
+        if http_error.response.status_code == requests.codes.not_found:
+            raise InvalidTeamSeason(team=team, year=season_end_year)
+        else:
+            raise http_error
+
+    options = OutputOptions.of(
+        file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
+        output_type=output_type,
+        json_options=json_options,
+        csv_options={"column_names": ROSTER_COLUMN_NAMES}
+    )
+
+    output_service = OutputService(
+        json_writer=JSONWriter(value_formatter=BasketballReferenceJSONEncoder),
+        csv_writer=CSVWriter(value_formatter=format_value)
+    )
+    return output_service.output(data=values, options=options)
+
+
 def play_by_play(home_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
                  json_options=None):
     try:
@@ -262,3 +288,5 @@ def search(term, output_type=None, output_file_path=None, output_write_option=No
         csv_writer=SearchCSVWriter(value_formatter=format_value)
     )
     return output_service.output(data=values, options=options)
+
+

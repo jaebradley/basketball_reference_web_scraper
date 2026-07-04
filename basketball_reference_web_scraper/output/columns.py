@@ -136,3 +136,8 @@ STANDINGS_COLUMNS_NAMES = [
     "division",
     "conference",
 ]
+
+ROSTER_COLUMN_NAMES = [
+    "slug",
+    "name",
+]

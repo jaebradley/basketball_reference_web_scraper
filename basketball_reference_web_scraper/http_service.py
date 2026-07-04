@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import requests
 from lxml import html
 
@@ -5,8 +7,10 @@ from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, Tea
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
-    PlayerPage, StandingsPage
+    PlayerPage, StandingsPage, TeamSeasonPage
+
 from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
+
 
 
 class HTTPService:
@@ -206,6 +210,17 @@ class HTTPService:
             for box_score in self.team_box_score(game_url_path=game_url_path)
         ]
 
+    def get_team_roster(self, team, season_end_year):
+        url = "{BASE_URL}/teams/{team}/{season_end_year}.html".format(BASE_URL=HTTPService.BASE_URL, team=team, season_end_year=season_end_year)
+
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+
+        page = TeamSeasonPage(html=html.fromstring(response.content))
+        return [{'slug': row.slug, 'name': row.name} for row in page.rows]
+
+
     def search(self, term):
         response = requests.get(
             url="{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL),
@@ -252,3 +267,5 @@ class HTTPService:
         return {
             "players": player_results
         }
+
+
