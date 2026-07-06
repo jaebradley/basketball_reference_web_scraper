@@ -626,3 +626,24 @@ or appended to the specified file path (or any of other the Python file mode opt
 
     !!! note
     This API **only** currently supports listing lists of dictionaries containing shooting statistics. It does not currently support exporting this data to JSON or CSV formats (unlike other client methods), for now.
+
+### A Team's Roster For A Given Season
+
+=== "Python Data Structures"
+    ```python
+    from basketball_reference_web_scraper import client
+    from basketball_reference_web_scraper.data import Team
+
+    client.roster(team=Team.BOSTON_CELTICS, season_end_year=2026)
+    ```
+
+=== "Example List Element"
+    
+    This API returns a list of dictionaries. These dictionaries contain player data that has the following form
+    ```python
+    {'slug': 'pritcpa01',
+     'name': 'Payton Pritchard',
+     'number': '11',
+     'position': <Position.POINT_GUARD: 'POINT GUARD'>}
+    ```
+    
