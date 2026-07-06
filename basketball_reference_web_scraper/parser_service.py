@@ -90,7 +90,7 @@ class ParserService:
             team_standings_parser=self.team_standings_parser,
             divisions_to_conferences=DIVISIONS_TO_CONFERENCES,
         )
-        self.roster_parser = RosterParser(slug_parser=PlayerUrlSlugParser())
+        self.roster_parser = RosterParser(slug_parser=PlayerUrlSlugParser(), position_abbreviation_parser=self.position_abbreviation_parser)
 
     def parse_division_standings(self, standings):
         return self.conference_division_standings_parser.parse(division_standings=standings)

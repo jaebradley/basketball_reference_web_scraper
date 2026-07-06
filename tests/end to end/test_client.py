@@ -309,3 +309,5 @@ class TestRoster(BaseEndToEndTest):
             self.assertIsNotNone(teammate)
             self.assertTrue(teammate["name"])
             self.assertTrue(teammate["slug"])
+            self.assertTrue(teammate["number"])
+            self.assertTrue(teammate["position"])

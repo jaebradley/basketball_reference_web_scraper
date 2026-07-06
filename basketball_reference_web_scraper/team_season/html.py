@@ -34,16 +34,16 @@ class RosterRow(PlayerIdentificationRow):
 
     @property
     def number(self):
-        cells = self.html.xpath('.//td[@data-stat="number"]')
-        if len(cells) > 0:
+        cells = self.html.xpath('.//th[@data-stat="number"]')
+        if len(cells) == 1:
             return cells[0].text_content()
 
         return ''
 
     @property
-    def position_abbreviations(self):
+    def position_abbreviation(self):
         cells = self.html.xpath('.//td[@data-stat="pos"]')
-        if len(cells) > 0:
+        if len(cells) == 1:
             return cells[0].text_content()
 
         return ''
