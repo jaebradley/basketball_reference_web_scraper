@@ -228,9 +228,7 @@ def team_box_scores(day, month, year, output_type=None, output_file_path=None, o
 def roster(team, season_end_year, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
     try:
         http_service = HTTPService(parser=ParserService())
-        if len(team) > 3:
-            team = TEAM_TO_TEAM_ABBREVIATION[team.upper()]
-        values = http_service.get_team_roster(team=team, season_end_year=season_end_year)
+        values = http_service.roster(team=team, season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidTeamSeason(team=team, year=season_end_year)

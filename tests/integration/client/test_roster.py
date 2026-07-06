@@ -1,0 +1,53 @@
+import os
+from unittest import TestCase
+
+import requests_mock
+from basketball_reference_web_scraper.client import roster
+from basketball_reference_web_scraper.data import Team
+from basketball_reference_web_scraper.errors import InvalidTeamSeason
+
+
+class Test2026BostonRoster(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/teams/2026/BOS.html",
+        ), 'r') as file_input: self._html = file_input.read();
+
+    @requests_mock.Mocker()
+    def test_length(self, m):
+        m.get("https://www.basketball-reference.com/teams/BOS/2026.html", text=self._html, status_code=200)
+        result = roster(season_end_year=2026, team=Team.BOSTON_CELTICS)
+        self.assertEqual(len(result), 16)
+        self.assertEqual(result[15], {"name": "Dalano Banton", "slug": "bantoda01"})
+
+
+class Test1992ChicagoRoster(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/teams/1992/CHI.html",
+        ), 'r') as file_input: self._html = file_input.read();
+
+    @requests_mock.Mocker()
+    def test_length(self, m):
+        m.get("https://www.basketball-reference.com/teams/CHI/1992.html", text=self._html, status_code=200)
+        result = roster(season_end_year=1992, team=Team.CHICAGO_BULLS)
+        self.assertEqual(len(result), 16)
+        self.assertEqual(result[-1], {"name": "Scott Williams", "slug": "willisc01"})
+
+
+class TestInvalidTeamSeason(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/teams/not_found.html",
+        ), 'r') as file_input: self._html = file_input.read();
+
+    @requests_mock.Mocker()
+    def test_invalid_season(self, m):
+        m.get("https://www.basketball-reference.com/teams/BOS/2026.html", text=self._html, status_code=404)
+        self.assertRaisesRegex(InvalidTeamSeason, f'Team "Team.BOSTON_CELTICS" in 2026 is invalid',
+                               roster,
+                               season_end_year=2026,
+                               team=Team.BOSTON_CELTICS)

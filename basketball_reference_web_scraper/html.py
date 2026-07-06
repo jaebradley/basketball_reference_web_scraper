@@ -1,8 +1,5 @@
 import re
 
-from lxml import html
-from lxml.html import HtmlComment
-
 
 class BasicBoxScoreRow:
     def __init__(self, html):
@@ -155,7 +152,6 @@ class BasicBoxScoreRow:
             return cells[0].text_content()
 
         return ''
-
 
     @property
     def outcome(self):
@@ -1087,67 +1083,6 @@ class DailyBoxScoresPage:
     def game_url_paths(self):
         game_links = self.html.xpath(self.game_url_paths_query)
         return [game_link.attrib['href'] for game_link in game_links]
-
-
-class TeamSeasonPage:
-    def __init__(self, html):
-        self.html = html
-
-    @property
-    def roster_query(self):
-        return '//table[@id="roster"]'
-
-    @property
-    def rows_query(self):
-        return '//table[@id="roster"]//tbody//tr'
-
-    @property
-    def team_roster_table(self):
-        return self.html.xpath(self.roster_query)
-
-    @property
-    def rows(self):
-        return [
-            RosterRow(html=row_html)
-            for row_html in self.html.xpath(self.rows_query)
-        ]
-
-
-class RosterRow(PlayerIdentificationRow):
-    def __init__(self, html):
-        super().__init__(html=html)
-
-    @property
-    def number(self):
-        cells = self.html.xpath('.//td[@data-stat="number"]')
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def position_abbreviations(self):
-        cells = self.html.xpath('.//td[@data-stat="pos"]')
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def height(self):
-        cells = self.html.xpath('.//td[@data-stat="height"]')
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
-
-    @property
-    def weight(self):
-        cells = self.html.xpath('.//td[@data-stat="weight"]')
-        if len(cells) > 0:
-            return cells[0].text_content()
-
-        return ''
 
 
 class SchedulePage:
