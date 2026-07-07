@@ -1,11 +1,85 @@
+import filecmp
 import os
 from unittest import TestCase
 
 import requests_mock
 
 from basketball_reference_web_scraper.client import roster
-from basketball_reference_web_scraper.data import Team, Position
+from basketball_reference_web_scraper.data import Team, Position, OutputType, OutputWriteOption
 from basketball_reference_web_scraper.errors import InvalidTeamSeason
+
+
+class TestCSV2026RosterForBoston(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/teams/2026/BOS.html",
+        ), 'r') as file_input: self._html = file_input.read();
+
+        self.output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "output/generated/rosters/BOS/2026.csv"
+        )
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "output/expected/rosters/BOS/2026.csv"
+        )
+
+    def tearDown(self):
+        os.remove(self.output_file_path)
+
+    @requests_mock.Mocker()
+    def test_output(self, m):
+        m.get("https://www.basketball-reference.com/teams/BOS/2026.html", text=self._html, status_code=200)
+
+        roster(
+            team=Team.BOSTON_CELTICS,
+            season_end_year=2026,
+            output_type=OutputType.CSV,
+            output_file_path=self.output_file_path,
+            output_write_option=OutputWriteOption.WRITE,
+        )
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
+
+
+
+class TestJSON2026RosterForBoston(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/teams/2026/BOS.html",
+        ), 'r') as file_input: self._html = file_input.read();
+
+        self.output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "output/generated/rosters/BOS/2026.json"
+        )
+        self.expected_output_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "output/expected/rosters/BOS/2026.json"
+        )
+
+    def tearDown(self):
+        os.remove(self.output_file_path)
+
+    @requests_mock.Mocker()
+    def test_output(self, m):
+        m.get("https://www.basketball-reference.com/teams/BOS/2026.html", text=self._html, status_code=200)
+
+        roster(
+            team=Team.BOSTON_CELTICS,
+            season_end_year=2026,
+            output_type=OutputType.JSON,
+            output_file_path=self.output_file_path,
+            output_write_option=OutputWriteOption.WRITE,
+        )
+        self.assertTrue(
+            filecmp.cmp(
+                self.output_file_path,
+                self.expected_output_file_path))
 
 
 class Test2026BostonRoster(TestCase):

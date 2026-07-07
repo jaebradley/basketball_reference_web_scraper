@@ -33,6 +33,17 @@ class RosterRow(PlayerIdentificationRow):
         return ''
 
     @property
+    def name(self):
+        if self.player_cell is None:
+            return ''
+
+        urls = self.player_cell.xpath('a')
+        if len(urls) == 1:
+            return urls[0].text_content()
+
+        return ''
+
+    @property
     def number(self):
         cells = self.html.xpath('.//th[@data-stat="number"]')
         if len(cells) == 1:
