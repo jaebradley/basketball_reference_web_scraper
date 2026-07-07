@@ -140,4 +140,6 @@ STANDINGS_COLUMNS_NAMES = [
 ROSTER_COLUMN_NAMES = [
     "slug",
     "name",
+    "number",
+    "position"
 ]
