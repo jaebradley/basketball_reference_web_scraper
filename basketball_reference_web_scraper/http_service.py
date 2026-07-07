@@ -7,6 +7,7 @@ from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeason
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage
 from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
+from basketball_reference_web_scraper.team_season.html import TeamSeasonPage
 
 
 class HTTPService:
@@ -27,7 +28,7 @@ class HTTPService:
 
         page = StandingsPage(html=html.fromstring(response.content))
         return self.parser.parse_division_standings(standings=page.division_standings.eastern_conference_table.rows) + \
-               self.parser.parse_division_standings(standings=page.division_standings.western_conference_table.rows)
+            self.parser.parse_division_standings(standings=page.division_standings.western_conference_table.rows)
 
     def player_box_scores(self, day, month, year):
         url = '{BASE_URL}/friv/dailyleaders.cgi?month={month}&day={day}&year={year}'.format(
@@ -66,7 +67,8 @@ class HTTPService:
         if page.regular_season_box_scores_table is None:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
-        return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows, include_inactive_games=include_inactive_games)
+        return self.parser.parse_player_season_box_scores(box_scores=page.regular_season_box_scores_table.rows,
+                                                          include_inactive_games=include_inactive_games)
 
     def playoff_player_box_scores(self, player_identifier, season_end_year, include_inactive_games=False):
         # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
@@ -87,7 +89,8 @@ class HTTPService:
         if page.playoff_box_scores_table is None:
             raise InvalidPlayerAndSeason(player_identifier=player_identifier, season_end_year=season_end_year)
 
-        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows, include_inactive_games=include_inactive_games)
+        return self.parser.parse_player_season_box_scores(box_scores=page.playoff_box_scores_table.rows,
+                                                          include_inactive_games=include_inactive_games)
 
     def play_by_play(self, home_team, day, month, year):
         add_0_if_needed = lambda s: "0" + s if len(s) == 1 else s
@@ -205,6 +208,17 @@ class HTTPService:
             for game_url_path in page.game_url_paths
             for box_score in self.team_box_score(game_url_path=game_url_path)
         ]
+
+    def roster(self, team, season_end_year):
+        url = "{BASE_URL}/teams/{team}/{season_end_year}.html".format(BASE_URL=HTTPService.BASE_URL,
+                                                                      team=TEAM_TO_TEAM_ABBREVIATION[team],
+                                                                      season_end_year=season_end_year)
+
+        response = requests.get(url=url)
+
+        response.raise_for_status()
+
+        return self.parser.parse_roster_data(team_season_page=TeamSeasonPage(html=html.fromstring(response.content)))
 
     def search(self, term):
         response = requests.get(

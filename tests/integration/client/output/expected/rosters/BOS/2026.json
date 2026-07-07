@@ -1,0 +1,98 @@
+[
+    {
+        "name": "Payton Pritchard",
+        "number": "11",
+        "position": "POINT GUARD",
+        "slug": "pritcpa01"
+    },
+    {
+        "name": "Sam Hauser",
+        "number": "30",
+        "position": "POWER FORWARD",
+        "slug": "hausesa01"
+    },
+    {
+        "name": "Derrick White",
+        "number": "9",
+        "position": "SHOOTING GUARD",
+        "slug": "whitede01"
+    },
+    {
+        "name": "Baylor Scheierman",
+        "number": "55",
+        "position": "SHOOTING GUARD",
+        "slug": "scheiba01"
+    },
+    {
+        "name": "Neemias Queta",
+        "number": "88",
+        "position": "CENTER",
+        "slug": "quetane01"
+    },
+    {
+        "name": "Hugo Gonz\u00e1lez",
+        "number": "28",
+        "position": "SMALL FORWARD",
+        "slug": "gonzahu01"
+    },
+    {
+        "name": "Jaylen Brown",
+        "number": "7",
+        "position": "SMALL FORWARD",
+        "slug": "brownja02"
+    },
+    {
+        "name": "Luka Garza",
+        "number": "52",
+        "position": "CENTER",
+        "slug": "garzalu01"
+    },
+    {
+        "name": "Jordan Walsh",
+        "number": "27",
+        "position": "POWER FORWARD",
+        "slug": "walshjo01"
+    },
+    {
+        "name": "Ron Harper Jr.",
+        "number": "13",
+        "position": "SMALL FORWARD",
+        "slug": "harpero02"
+    },
+    {
+        "name": "Amari Williams",
+        "number": "77",
+        "position": "POWER FORWARD",
+        "slug": "william01"
+    },
+    {
+        "name": "Jayson Tatum",
+        "number": "0",
+        "position": "POWER FORWARD",
+        "slug": "tatumja01"
+    },
+    {
+        "name": "Nikola Vu\u010devi\u0107",
+        "number": "4",
+        "position": "CENTER",
+        "slug": "vucevni01"
+    },
+    {
+        "name": "Max Shulga",
+        "number": "44",
+        "position": "SHOOTING GUARD",
+        "slug": "shulgma01"
+    },
+    {
+        "name": "John Tonje",
+        "number": "8",
+        "position": "SHOOTING GUARD",
+        "slug": "tonjejo01"
+    },
+    {
+        "name": "Dalano Banton",
+        "number": "45",
+        "position": "POINT GUARD",
+        "slug": "bantoda01"
+    }
+]

@@ -1,8 +1,5 @@
 import re
 
-from lxml import html
-from lxml.html import HtmlComment
-
 
 class BasicBoxScoreRow:
     def __init__(self, html):
@@ -155,7 +152,6 @@ class BasicBoxScoreRow:
             return cells[0].text_content()
 
         return ''
-
 
     @property
     def outcome(self):

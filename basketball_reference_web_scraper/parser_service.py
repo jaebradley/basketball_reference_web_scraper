@@ -8,6 +8,7 @@ from basketball_reference_web_scraper.parsers import PositionAbbreviationParser,
     ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser, DivisionNameParser, \
     TeamStandingsParser, ConferenceDivisionStandingsParser
 from basketball_reference_web_scraper.shooting.parsers import PlayerSeasonShootingStatisticsParser
+from basketball_reference_web_scraper.team_season.parsers import RosterParser, PlayerUrlSlugParser
 
 
 class ParserService:
@@ -89,6 +90,7 @@ class ParserService:
             team_standings_parser=self.team_standings_parser,
             divisions_to_conferences=DIVISIONS_TO_CONFERENCES,
         )
+        self.roster_parser = RosterParser(slug_parser=PlayerUrlSlugParser(), position_abbreviation_parser=self.position_abbreviation_parser)
 
     def parse_division_standings(self, standings):
         return self.conference_division_standings_parser.parse(division_standings=standings)
@@ -126,3 +128,6 @@ class ParserService:
 
     def parse_player_data(self, player):
         return self.player_data_parser.parse(player=player)
+
+    def parse_roster_data(self, team_season_page):
+        return self.roster_parser.parse(team_season_page=team_season_page)
