@@ -109,6 +109,19 @@ TEAM_BOX_SCORES_COLUMN_NAMES = [
     "personal_fouls",
     "points",
     "outcome",
+    "true_shooting_percentage",
+    "effective_field_goal_percentage",
+    "three_point_attempt_rate",
+    "free_throw_attempt_rate",
+    "offensive_rebound_percentage",
+    "defensive_rebound_percentage",
+    "total_rebound_percentage",
+    "assist_percentage",
+    "steal_percentage",
+    "block_percentage",
+    "turnover_rate",
+    "offensive_rating",
+    "defensive_rating",
 ]
 
 PLAY_BY_PLAY_COLUMN_NAMES = [

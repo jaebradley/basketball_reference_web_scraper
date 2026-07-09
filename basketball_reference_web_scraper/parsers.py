@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from basketball_reference_web_scraper.data import PeriodType, Outcome
+from basketball_reference_web_scraper.data import PeriodType, Outcome, TeamTotal
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 PLAYER_SEASON_BOX_SCORES_GAME_DATE_FORMAT = '%Y-%m-%d'
@@ -383,7 +383,7 @@ class TeamTotalsParser:
             ),
         ]
 
-    def parse_totals(self, team_totals, opposing_team_totals):
+    def parse_totals(self, team_totals: TeamTotal, opposing_team_totals: TeamTotal):
         current_team = self.team_abbreviation_parser.from_abbreviation(team_totals.team_abbreviation)
 
         if str_to_int(team_totals.points) > str_to_int(opposing_team_totals.points):
@@ -411,6 +411,17 @@ class TeamTotalsParser:
             "turnovers": str_to_int(team_totals.turnovers),
             "personal_fouls": str_to_int(team_totals.personal_fouls),
             "points": str_to_int(team_totals.points),
+            "true_shooting_percentage": str_to_float(team_totals.true_shooting_percentage),
+            "effective_field_goal_percentage": str_to_float(team_totals.effective_field_goal_percentage),
+            "three_point_attempt_rate": str_to_float(team_totals.three_point_attempt_rate),
+            "free_throw_attempt_rate": str_to_float(team_totals.free_throw_attempt_rate),
+            "offensive_rebound_percentage": str_to_float(team_totals.offensive_rebound_percentage),
+            "defensive_rebound_percentage": str_to_float(team_totals.defensive_rebound_percentage),
+            "total_rebound_percentage": str_to_float(team_totals.total_rebound_percentage),
+            "assist_percentage": str_to_float(team_totals.assist_percentage),
+            "steal_percentage": str_to_float(team_totals.steal_percentage),
+            "block_percentage": str_to_float(team_totals.block_percentage),
+            "turnover_rate": str_to_float(team_totals.turnover_rate),
             "offensive_rating": str_to_float(team_totals.offensive_rating),
             "defensive_rating": str_to_float(team_totals.defensive_rating),
         }

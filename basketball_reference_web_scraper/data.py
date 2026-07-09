@@ -1,5 +1,7 @@
 from enum import Enum
 
+from html import BasicTeamStatisticsTable, AdvancedTeamStatisticsTable
+
 
 class Location(Enum):
     HOME = "HOME"
@@ -110,9 +112,8 @@ DIVISIONS_TO_CONFERENCES = {
     Division.MIDWEST: Conference.WESTERN,
     Division.PACIFIC: Conference.WESTERN,
     Division.SOUTHWEST: Conference.WESTERN,
-    Division.NORTHWEST : Conference.WESTERN
+    Division.NORTHWEST: Conference.WESTERN
 }
-
 
 TEAM_ABBREVIATIONS_TO_TEAM = {
     'ATL': Team.ATLANTA_HAWKS,
@@ -216,12 +217,10 @@ POSITION_ABBREVIATIONS_TO_POSITION = {
     "G": Position.GUARD,
 }
 
-
 LOCATION_ABBREVIATIONS_TO_POSITION = {
     "": Location.HOME,
     "@": Location.AWAY,
 }
-
 
 OUTCOME_ABBREVIATIONS_TO_OUTCOME = {
     "W": Outcome.WIN,
@@ -236,10 +235,119 @@ LEAGUE_ABBREVIATIONS_TO_LEAGUE = {
 
 
 class TeamTotal:
-    def __init__(self, team_abbreviation, totals, advanced_totals):
-        self.team_abbreviation = team_abbreviation
-        self.totals = totals
-        self.advanced_totals = advanced_totals
+    def __init__(self, basic_statistics_table: BasicTeamStatisticsTable,
+                 advanced_statistics_table: AdvancedTeamStatisticsTable):
+        if basic_statistics_table.team_abbreviation != advanced_statistics_table.team_abbreviation:
+            raise ValueError(
+                f"mismatched team abbreviations between the basic totals team: {basic_statistics_table.team_abbreviation} and the advanced totals team: {advanced_statistics_table.team_abbreviation}")
+
+        self.team_abbreviation = basic_statistics_table.team_abbreviation
+        self.basic_totals = basic_statistics_table.team_totals
+        self.advanced_totals = advanced_statistics_table.team_totals
+
+    @property
+    def minutes_played(self):
+        return self.basic_totals.minutes_played
+
+    @property
+    def made_field_goals(self):
+        return self.basic_totals.made_field_goals
+
+    @property
+    def attempted_field_goals(self):
+        return self.basic_totals.attempted_field_goals
+
+    @property
+    def made_three_point_field_goals(self):
+        return self.basic_totals.made_three_point_field_goals
+
+    @property
+    def attempted_three_point_field_goals(self):
+        return self.basic_totals.attempted_three_point_field_goals
+
+    @property
+    def made_free_throws(self):
+        return self.basic_totals.made_free_throws
+
+    @property
+    def attempted_free_throws(self):
+        return self.basic_totals.attempted_free_throws
+
+    @property
+    def offensive_rebounds(self):
+        return self.basic_totals.offensive_rebounds
+
+    @property
+    def defensive_rebounds(self):
+        return self.basic_totals.defensive_rebounds
+
+    @property
+    def assists(self):
+        return self.basic_totals.assists
+
+    @property
+    def steals(self):
+        return self.basic_totals.steals
+
+    @property
+    def blocks(self):
+        return self.basic_totals.blocks
+
+    @property
+    def turnovers(self):
+        return self.basic_totals.turnovers
+
+    @property
+    def personal_fouls(self):
+        return self.basic_totals.personal_fouls
+
+    @property
+    def points(self):
+        return self.basic_totals.points
+
+    @property
+    def true_shooting_percentage(self):
+        return self.advanced_totals.true_shooting_percentage
+
+    @property
+    def effective_field_goal_percentage(self):
+        return self.advanced_totals.effective_field_goal_percentage
+
+    @property
+    def three_point_attempt_rate(self):
+        return self.advanced_totals.three_point_attempt_rate
+
+    @property
+    def free_throw_attempt_rate(self):
+        return self.advanced_totals.free_throw_attempt_rate
+
+    @property
+    def offensive_rebound_percentage(self):
+        return self.advanced_totals.offensive_rebound_percentage
+
+    @property
+    def defensive_rebound_percentage(self):
+        return self.advanced_totals.defensive_rebound_percentage
+
+    @property
+    def total_rebound_percentage(self):
+        return self.advanced_totals.total_rebound_percentage
+
+    @property
+    def assist_percentage(self):
+        return self.advanced_totals.assist_percentage
+
+    @property
+    def steal_percentage(self):
+        return self.advanced_totals.steal_percentage
+
+    @property
+    def block_percentage(self):
+        return self.advanced_totals.block_percentage
+
+    @property
+    def turnover_rate(self):
+        return self.advanced_totals.turnover_rate
 
     @property
     def offensive_rating(self):
@@ -248,66 +356,6 @@ class TeamTotal:
     @property
     def defensive_rating(self):
         return self.advanced_totals.defensive_rating
-
-    @property
-    def minutes_played(self):
-        return self.totals.minutes_played
-
-    @property
-    def made_field_goals(self):
-        return self.totals.made_field_goals
-
-    @property
-    def attempted_field_goals(self):
-        return self.totals.attempted_field_goals
-
-    @property
-    def made_three_point_field_goals(self):
-        return self.totals.made_three_point_field_goals
-
-    @property
-    def attempted_three_point_field_goals(self):
-        return self.totals.attempted_three_point_field_goals
-
-    @property
-    def made_free_throws(self):
-        return self.totals.made_free_throws
-
-    @property
-    def attempted_free_throws(self):
-        return self.totals.attempted_free_throws
-
-    @property
-    def offensive_rebounds(self):
-        return self.totals.offensive_rebounds
-
-    @property
-    def defensive_rebounds(self):
-        return self.totals.defensive_rebounds
-
-    @property
-    def assists(self):
-        return self.totals.assists
-
-    @property
-    def steals(self):
-        return self.totals.steals
-
-    @property
-    def blocks(self):
-        return self.totals.blocks
-
-    @property
-    def turnovers(self):
-        return self.totals.turnovers
-
-    @property
-    def personal_fouls(self):
-        return self.totals.personal_fouls
-
-    @property
-    def points(self):
-        return self.totals.points
 
 
 class PlayerData:
