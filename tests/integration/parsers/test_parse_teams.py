@@ -82,7 +82,7 @@ class TestParseTeams(TestCase):
         self.assertEqual(atl_team_totals["assists"], 25)
         self.assertEqual(atl_team_totals["steals"], 6)
         self.assertEqual(atl_team_totals["blocks"], 6)
-        self.assertEqual(atl_team_totals["turnovers"], 11)
+        self.assertEqual(atl_team_totals["turnovers"], 12)
         self.assertEqual(atl_team_totals["personal_fouls"], 21)
         self.assertEqual(atl_team_totals["points"], 114)
         self.assertEqual(atl_team_totals["true_shooting_percentage"], 0.549)

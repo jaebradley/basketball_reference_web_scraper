@@ -32,5 +32,5 @@ For documentation about installing the package and API methods see [the document
 ## Contributors
 
 Thanks to [@DaiJunyan](https://github.com/DaiJunyan), [@ecallahan5](https://github.com/ecallahan5), 
-[@Yotamho](https://github.com/Yotamho), [@ntsirakis](https://github.com/ntsirakis), [@allanbelliti](https://github.com/allanbelliti), [@krlu](https://github.com/krlu), [@aaronbannin](https://github.com/aaronbannin), [@benjaminmesser](https://github.com/benjaminmesser), [@pepeefirat](https://github.com/pepeefirat), [@PGats](https://github.com/PGatts) for their contributions!
+[@Yotamho](https://github.com/Yotamho), [@ntsirakis](https://github.com/ntsirakis), [@allanbelliti](https://github.com/allanbelliti), [@krlu](https://github.com/krlu), [@aaronbannin](https://github.com/aaronbannin), [@benjaminmesser](https://github.com/benjaminmesser), [@pepeefirat](https://github.com/pepeefirat), [@PGats](https://github.com/PGatts), and [@jakeakopp](https://github.com/jakeakopp) for their contributions!
 
