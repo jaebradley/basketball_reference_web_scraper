@@ -1,9 +1,9 @@
-team,minutes_played,made_field_goals,attempted_field_goals,made_three_point_field_goals,attempted_three_point_field_goals,made_free_throws,attempted_free_throws,offensive_rebounds,defensive_rebounds,assists,steals,blocks,turnovers,personal_fouls,points,outcome
-ORLANDO MAGIC,240,35,96,6,31,19,25,19,33,16,5,5,12,18,95,LOSS
-BROOKLYN NETS,240,36,82,9,25,17,23,10,42,17,7,10,13,22,98,WIN
-PORTLAND TRAIL BLAZERS,265,47,108,14,33,16,18,12,38,25,7,5,8,16,124,WIN
-CHICAGO BULLS,265,45,104,11,27,19,23,15,43,28,5,7,12,21,120,LOSS
-LOS ANGELES LAKERS,240,34,76,8,26,20,29,9,28,18,12,4,24,25,96,LOSS
-MINNESOTA TIMBERWOLVES,240,40,81,7,20,27,30,7,34,26,14,5,17,24,114,WIN
-MILWAUKEE BUCKS,265,44,93,13,27,26,28,10,33,27,9,3,15,23,127,LOSS
-TORONTO RAPTORS,265,45,91,14,33,27,33,6,34,25,8,8,13,20,131,WIN
+team,minutes_played,made_field_goals,attempted_field_goals,made_three_point_field_goals,attempted_three_point_field_goals,made_free_throws,attempted_free_throws,offensive_rebounds,defensive_rebounds,assists,steals,blocks,turnovers,personal_fouls,points,outcome,true_shooting_percentage,effective_field_goal_percentage,three_point_attempt_rate,free_throw_attempt_rate,offensive_rebound_percentage,defensive_rebound_percentage,total_rebound_percentage,assist_percentage,steal_percentage,block_percentage,turnover_rate,offensive_rating,defensive_rating
+ORLANDO MAGIC,240,35,96,6,31,19,25,19,33,16,5,5,12,18,95,LOSS,0.444,0.396,0.323,0.26,31.1,76.7,50.0,45.7,5.3,8.8,10.1,99.8,102.9
+BROOKLYN NETS,240,36,82,9,25,17,23,10,42,17,7,10,13,22,98,WIN,0.532,0.494,0.305,0.28,23.3,68.9,50.0,47.2,7.4,15.4,12.4,102.9,99.8
+PORTLAND TRAIL BLAZERS,265,47,108,14,33,16,18,12,38,25,7,5,8,16,124,WIN,0.535,0.5,0.306,0.167,21.8,71.7,46.3,53.2,6.5,6.5,6.5,114.7,111.0
+CHICAGO BULLS,265,45,104,11,27,19,23,15,43,28,5,7,12,21,120,LOSS,0.526,0.486,0.26,0.221,28.3,78.2,53.7,62.2,4.6,9.3,9.5,111.0,114.7
+LOS ANGELES LAKERS,240,34,76,8,26,20,29,9,28,18,12,4,24,25,96,LOSS,0.541,0.5,0.342,0.382,20.9,80.0,47.4,52.9,11.8,6.6,21.3,94.4,112.1
+MINNESOTA TIMBERWOLVES,240,40,81,7,20,27,30,7,34,26,14,5,17,24,114,WIN,0.605,0.537,0.247,0.37,20.0,79.1,52.6,65.0,13.8,10.0,15.3,112.1,94.4
+MILWAUKEE BUCKS,265,44,93,13,27,26,28,10,33,27,9,3,15,23,127,LOSS,0.603,0.543,0.29,0.301,22.7,84.6,51.8,61.4,8.3,5.2,12.5,117.1,120.8
+TORONTO RAPTORS,265,45,91,14,33,27,33,6,34,25,8,8,13,20,131,WIN,0.621,0.571,0.363,0.363,15.4,77.3,48.2,55.6,7.4,12.1,11.0,120.8,117.1

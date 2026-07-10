@@ -184,10 +184,11 @@ class HTTPService:
         response.raise_for_status()
 
         page = BoxScoresPage(html.fromstring(response.content))
-        combined_team_totals = [
-            TeamTotal(team_abbreviation=table.team_abbreviation, totals=table.team_totals)
-            for table in page.basic_statistics_tables
-        ]
+        tables = page.statistics_tables
+        # Use batched when the minimum python version supported is 3.12 (https://docs.python.org/3/library/itertools.html#itertools.batched)
+        paired_basic_and_advanced_tables = list(zip(tables[::2], tables[1::2]))
+        # TODO @jaebradley: This logic is pretty messy. There's gotta be a better way of determining first/second team (perhaps via the game URL path). Additionally, a Mapping feels like the most natural way of representing the statistics tables.
+        combined_team_totals = list(map(lambda paired_tables: TeamTotal(basic_statistics_table=paired_tables[0], advanced_statistics_table=paired_tables[1]), paired_basic_and_advanced_tables))
 
         return self.parser.parse_team_totals(
             first_team_totals=combined_team_totals[0],

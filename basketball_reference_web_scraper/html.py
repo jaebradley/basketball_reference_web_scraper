@@ -819,27 +819,20 @@ class BoxScoresPage:
 
     @property
     def statistics_tables(self):
-        return [
-            StatisticsTable(table_html)
-            for table_html in self.html.xpath('//table[contains(@class, "stats_table")]')
-        ]
-
-    @property
-    def basic_statistics_tables(self):
-        return [
-            table
-            for table in self.statistics_tables
-            if table.has_basic_statistics is True
-        ]
+        return list(
+            map(
+                lambda table_html: BasicTeamStatisticsTable(table_html) if 'game-basic' in table_html.attrib["id"] \
+                    else AdvancedTeamStatisticsTable(table_html),
+                filter(lambda table_html: 'game-basic' in table_html.attrib["id"] \
+                                          or 'game-advanced' in table_html.attrib["id"],
+                       self.html.xpath('//table[contains(@class, "stats_table")]'))
+            )
+        )
 
 
-class StatisticsTable:
+class TeamStatisticsTable:
     def __init__(self, html):
         self.html = html
-
-    @property
-    def has_basic_statistics(self):
-        return 'game-basic' in self.html.attrib["id"]
 
     @property
     def team_abbreviation(self):
@@ -849,12 +842,132 @@ class StatisticsTable:
 
     @property
     def team_totals(self):
+        raise NotImplementedError("Concrete subclasses need to implement how team totals are extracted")
+
+
+class BasicTeamStatisticsTable(TeamStatisticsTable):
+    def __init__(self, html):
+        super().__init__(html)
+
+    @property
+    def team_totals(self):
         # Team totals are stored as table footers
         footers = self.html.xpath('tfoot/tr')
-        if len(footers) > 0:
+        if len(footers) == 1:
             return BasicBoxScoreRow(html=footers[0])
 
         return None
+
+
+class AdvancedTeamStatisticsTable(TeamStatisticsTable):
+
+    def __init__(self, html):
+        super().__init__(html)
+
+    @property
+    def team_totals(self):
+        # Team totals are stored as table footers
+        footers = self.html.xpath('tfoot/tr')
+        if len(footers) == 1:
+            return AdvancedTeamTotalRow(html=footers[0])
+
+        return None
+
+
+class AdvancedTeamTotalRow:
+    def __init__(self, html):
+        self.html = html
+
+    @property
+    def true_shooting_percentage(self):
+        cells = self.html.xpath('td[@data-stat="ts_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def effective_field_goal_percentage(self):
+        cells = self.html.xpath('td[@data-stat="efg_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def three_point_attempt_rate(self):
+        cells = self.html.xpath('td[@data-stat="fg3a_per_fga_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def free_throw_attempt_rate(self):
+        cells = self.html.xpath('td[@data-stat="fta_per_fga_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def offensive_rebound_percentage(self):
+        cells = self.html.xpath('td[@data-stat="orb_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def defensive_rebound_percentage(self):
+        cells = self.html.xpath('td[@data-stat="drb_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def total_rebound_percentage(self):
+        cells = self.html.xpath('td[@data-stat="trb_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def assist_percentage(self):
+        cells = self.html.xpath('td[@data-stat="ast_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def steal_percentage(self):
+        cells = self.html.xpath('td[@data-stat="stl_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def block_percentage(self):
+        cells = self.html.xpath('td[@data-stat="blk_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def turnover_rate(self):
+        cells = self.html.xpath('td[@data-stat="tov_pct"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def offensive_rating(self):
+        cells = self.html.xpath('td[@data-stat="off_rtg"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
+
+    @property
+    def defensive_rating(self):
+        cells = self.html.xpath('td[@data-stat="def_rtg"]')
+        if len(cells) == 1:
+            return cells[0].text_content()
+        return ''
 
 
 class DailyLeadersPage:

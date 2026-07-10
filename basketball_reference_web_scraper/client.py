@@ -12,7 +12,8 @@ from basketball_reference_web_scraper.output.service import OutputService
 from basketball_reference_web_scraper.output.writers import CSVWriter, JSONWriter, FileOptions, OutputOptions, \
     SearchCSVWriter
 from basketball_reference_web_scraper.parser_service import ParserService
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
+
+
 def standings(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
               json_options=None):
     try:
@@ -163,6 +164,7 @@ def players_season_totals(season_end_year, output_type=None, output_file_path=No
     )
     return output_service.output(data=values, options=options)
 
+
 def players_regular_season_shooting_statistics(season_end_year):
     try:
         http_service = HTTPService(parser=ParserService())
@@ -286,5 +288,3 @@ def search(term, output_type=None, output_file_path=None, output_write_option=No
         csv_writer=SearchCSVWriter(value_formatter=format_value)
     )
     return output_service.output(data=values, options=options)
-
-
