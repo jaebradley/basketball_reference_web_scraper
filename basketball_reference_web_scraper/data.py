@@ -1,6 +1,6 @@
 from enum import Enum
 
-from html import BasicTeamStatisticsTable, AdvancedTeamStatisticsTable
+from basketball_reference_web_scraper.html import BasicTeamStatisticsTable, AdvancedTeamStatisticsTable
 
 
 class Location(Enum):
