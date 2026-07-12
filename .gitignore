@@ -12,8 +12,8 @@ lib/
 !**/.gitkeep
 
 # Don't commit files from integration test output
-tests/integration/client/output/generated/**.csv
-tests/integration/client/output/generated/**.json
+tests/integration/client/output/generated/**/**.csv
+tests/integration/client/output/generated/**/**.json
 
 # Don't commit files from end to end test output
 tests/end to end/output/generated/**.json
