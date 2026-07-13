@@ -1,13 +1,18 @@
-import requests
-from lxml import html
+from typing import Callable
 
+import requests
+from basketball_reference_web_scraper.contracts.data.models import Contract
+from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, NothingMoreToParse, \
+    ContractRowData
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
+from basketball_reference_web_scraper.errors import CouldNotGetPlayerContractData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage
 from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
 from basketball_reference_web_scraper.team_season.html import TeamSeasonPage
+from lxml import html
 
 
 class HTTPService:
@@ -267,3 +272,29 @@ class HTTPService:
         return {
             "players": player_results
         }
+
+    def contracts(self, parsed_contract_row_processor: Callable[[ContractRowData], Contract]) -> None:
+        """
+        Makes an HTTP request to fetch player contract content.
+        Streams through the HTML page content in chunks, passing parsed data to the specified callback.
+        This approach attempts to keep memory allocation to a minimum.
+        :param parsed_contract_row_processor:
+        :return:
+        """
+        with requests.get(
+                url=f"{HTTPService.BASE_URL}/contracts/players.html",
+                stream=True,
+
+        ) as response:
+            if not response.ok:
+                raise CouldNotGetPlayerContractData(response)
+
+            if response.encoding is None:
+                response.encoding = 'utf-8'
+
+            with PlayerContractsPageParser(contract_data_processor=parsed_contract_row_processor) as p:
+                for chunk in response.iter_content(chunk_size=1024, decode_unicode=True):
+                    try:
+                        p.parse(chunk=chunk)
+                    except NothingMoreToParse:
+                        break

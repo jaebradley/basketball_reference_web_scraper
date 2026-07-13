@@ -646,4 +646,41 @@ or appended to the specified file path (or any of other the Python file mode opt
      'number': '11',
      'position': <Position.POINT_GUARD: 'POINT GUARD'>}
     ```
+
+### All Current Player Contracts
+
+This API is an intentional departure from the behavior of the other API methods. 
+
+Instead of returning a `list` of `dictionaries`, this API method produces `Contract` data model objects that the client
+can then utilize via a `contract_processor` `Callable` defined as part of the `contracts` API.
+
+Under the hood, this allows for more efficient resource consumption by chunking the HTML response and processing these
+individual chunks vs. loading the entire HTML response into memory.
+
+The intent is for future API methods and major package versions to emulate both this underlying behavior and dedicated data model objects. 
+
+=== "Python Data Structures"
+    ```python
+    from basketball_reference_web_scraper import client
+    
+    data = []
+    client.contracts(contract_processor=lambda contract: data.append(contract))
+    ```
+
+=== "Example List Element"
+
+    This API returns a list of data objects. These data objects are `Contract`-related model objects defined in the `basketball_reference_web_scraper.contracts.data.models` module.
+    ```python
+    Contract(
+        player=Player(identifier='curryst01', name='Stephen Curry'),
+        team=<Team.GOLDEN_STATE_WARRIORS: 'GOLDEN STATE WARRIORS'>,
+        salaries_by_season_start_year={
+                                        2026: Salary(amount_in_usd=Decimal('62587158')),
+                                        2027: None,
+                                        2028: None,
+                                        2029: None,
+                                        2030: None,
+                                        2031: None},
+        remaining_guaranteed_salary=Salary(amount_in_usd=Decimal('62587158')))
+    ```
     
