@@ -5,9 +5,10 @@ import time
 from unittest import TestCase
 
 from basketball_reference_web_scraper.client import player_box_scores, season_schedule, players_advanced_season_totals, \
-    play_by_play, players_season_totals, players_regular_season_shooting_statistics, roster
+    play_by_play, players_season_totals, players_regular_season_shooting_statistics, roster, player_contracts
 from basketball_reference_web_scraper.data import Location, Outcome
 from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
+from contracts.data.models import Player
 
 
 class BaseEndToEndTest(TestCase):
@@ -311,3 +312,23 @@ class TestRoster(BaseEndToEndTest):
             self.assertTrue(teammate["slug"])
             self.assertTrue(teammate["number"])
             self.assertTrue(teammate["position"])
+
+class TestContracts(BaseEndToEndTest):
+    def test_contracts(self):
+        contracts = []
+        player_contracts(player_contract_processor=lambda contract: contracts.append(contract))
+        self.assertGreaterEqual(len(contracts), 1)
+
+        for contract in contracts:
+            self.assertIsNotNone(contract)
+            self.assertIsNotNone(contract.player)
+            self.assertIsNotNone(contract.player.identifier)
+            self.assertGreaterEqual(len(contract.player.identifier), 1)
+
+            self.assertIsNotNone(contract.player.name)
+            self.assertGreaterEqual(len(contract.player.name), 1)
+
+            self.assertIsNotNone(contract.team)
+
+            self.assertIsNotNone(contract.salaries_by_season_start_year)
+            self.assertGreaterEqual(len(contract.salaries_by_season_start_year.keys()), 1)

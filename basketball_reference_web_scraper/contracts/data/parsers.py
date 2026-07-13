@@ -47,8 +47,7 @@ def deserialize_season_start_year(serialized_season: str) -> int:
 
 
 def deserialize_optional_salary(salary: Optional[str]) -> Optional[Salary]:
-    if salary:
-        return Salary(amount=Decimal(salary), currency="USD")
+    return Salary(amount_in_usd=Decimal(salary)) if salary else None
 
 
 def deserialize_team(abbreviation: str) -> Team:
@@ -59,23 +58,21 @@ def deserialize_team(abbreviation: str) -> Team:
     raise ValueError(f"Unable to deserialize team abbreviation: {abbreviation}")
 
 
-def deserialize_guaranteed_salary(contract_values_by_column_identifier: Dict[str, str]) -> Salary:
-    guaranteed_salary_value = deserialize_optional_salary(
+def deserialize_guaranteed_salary(contract_values_by_column_identifier: Dict[str, str]) -> Optional[Salary]:
+    if GUARANTEED_SALARY_COLUMN_DATA_STAT_VALUE not in contract_values_by_column_identifier:
+        raise ValueError(f"Unable to identify remaining guaranteed salary column for columns: {contract_values_by_column_identifier.keys()}")
+
+    return deserialize_optional_salary(
         contract_values_by_column_identifier.get(
             GUARANTEED_SALARY_COLUMN_DATA_STAT_VALUE, None
         )
     )
-    if guaranteed_salary_value:
-        return guaranteed_salary_value
-
-    raise ValueError(
-        f"Could not identify guaranteed salary value in header values: {contract_values_by_column_identifier}")
 
 
 class PlayerContractParser:
     def __init__(self,
                  salary_generator: SalariesBySeasonParser,
-                 guaranteed_salary_generator: Callable[[Dict[str, Optional[str]]], Salary],
+                 guaranteed_salary_generator: Callable[[Dict[str, Optional[str]]], Optional[Salary]],
                  player_generator: Callable[[PlayerRowData], Player],
                  team_generator: Callable[[str], Team]):
         self.salary_generator = salary_generator
@@ -88,5 +85,5 @@ class PlayerContractParser:
             player=self.player_generator(data.row),
             team=self.team_generator(data.row.team_abbreviation),
             salaries_by_season_start_year=self.salary_generator.parse(data.row.values_by_header, data.headers),
-            guaranteed_salary=self.guaranteed_salary_generator(data.row.values_by_header)
+            remaining_guaranteed_salary=self.guaranteed_salary_generator(data.row.values_by_header)
         )

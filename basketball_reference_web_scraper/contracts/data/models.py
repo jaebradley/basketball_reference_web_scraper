@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from decimal import Decimal
+from locale import currency
 from typing import Dict, Optional
 
 from basketball_reference_web_scraper.data import Team
@@ -23,14 +24,13 @@ class Player:
 
 @dataclass(frozen=True)
 class Salary:
-    amount: Decimal
-    currency: str
+    amount_in_usd: Decimal
 
     def __post_init__(self):
-        if self.amount is None:
+        if self.amount_in_usd is None:
             raise ValueError("amount should not be None")
 
-        if 0 > self.amount:
+        if 0 > self.amount_in_usd:
             raise ValueError("amount should not be negative")
 
 
@@ -39,7 +39,7 @@ class PlayerContract:
     player: Player
     team: Team
     salaries_by_season_start_year: Dict[int, Optional[Salary]]
-    guaranteed_salary: Salary
+    remaining_guaranteed_salary: Optional[Salary]
 
     def __post_init__(self):
         if self.player is None:
@@ -53,9 +53,6 @@ class PlayerContract:
 
         if 0 == len(self.salaries_by_season_start_year):
             raise ValueError("season salaries should not be empty")
-
-        if self.guaranteed_salary is None:
-            raise ValueError("guaranteed salary should not be None")
 
         if all(salary is None for salary in self.salaries_by_season_start_year.values()):
             raise ValueError("not all salaries should be None")

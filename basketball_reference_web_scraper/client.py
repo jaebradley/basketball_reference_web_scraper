@@ -17,7 +17,7 @@ from basketball_reference_web_scraper.output.writers import CSVWriter, JSONWrite
     SearchCSVWriter
 from basketball_reference_web_scraper.parser_service import ParserService
 
-player_contract_parser = PlayerContractParser(
+__player_contract_parser = PlayerContractParser(
     salary_generator=SalariesBySeasonParser(season_start_year_deserializer=deserialize_season_start_year,
                                             salary_deserializer=deserialize_optional_salary),
     guaranteed_salary_generator=deserialize_guaranteed_salary,
@@ -316,4 +316,4 @@ def player_contracts(player_contract_processor: Callable[[PlayerContract], Any])
     """
     HTTPService(parser=ParserService()).player_contracts(
         player_contract_processor=lambda player_row_contract_data: player_contract_processor(
-            player_contract_parser.parse_table_data(data=player_row_contract_data)))
+            __player_contract_parser.parse_table_data(data=player_row_contract_data)))
