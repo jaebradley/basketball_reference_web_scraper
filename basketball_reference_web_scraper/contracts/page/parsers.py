@@ -4,7 +4,7 @@ from typing import Optional, Dict, Callable
 
 from lxml.etree import HTMLPullParser, LxmlError
 
-from basketball_reference_web_scraper.contracts.data.models import PlayerContract
+from basketball_reference_web_scraper.contracts.data.models import Contract
 
 
 @dataclass(frozen=False)
@@ -16,7 +16,7 @@ class PlayerRowData:
 
 
 @dataclass(frozen=True)
-class PlayerContractData:
+class ContractRowData:
     row: PlayerRowData
     headers: Dict[str, str]
 
@@ -29,12 +29,13 @@ class NothingMoreToParse(StopIteration):
 
 
 class PlayerContractsPageParser:
-    def __init__(self, player_contract_data_processor: Callable[[PlayerContractData], PlayerContract]):
-        self._data_processor = player_contract_data_processor
+    def __init__(self, contract_data_processor: Callable[[ContractRowData], Contract]):
+        self._data_processor = contract_data_processor
         self._seen_table = False
         self._started_processing_table_body = False
         self._headers = defaultdict(str)
-        self._current_player_data = PlayerRowData(id=None, name=None, team_abbreviation=None, values_by_header={})
+        self._current_player_data = PlayerRowData(id=None, name=None, team_abbreviation=None,
+                                                  values_by_header={})
 
     def __enter__(self):
         self._html_parser = HTMLPullParser(events=["start", "end"], tag=["table", "tbody", "th", "tr", "td"])
@@ -65,7 +66,7 @@ class PlayerContractsPageParser:
                     elif event == "end" and element.tag == "tr" and element.attrib.get("class") is None:
                         element.clear(keep_tail=True)
                         if self._current_player_data.id is not None:
-                            self._data_processor(PlayerContractData(
+                            self._data_processor(ContractRowData(
                                 row=self._current_player_data,
                                 headers=self._headers
                             ))
@@ -76,7 +77,8 @@ class PlayerContractsPageParser:
                         elif element.attrib.get('data-stat') == "team_id":
                             self._current_player_data.team_abbreviation = "".join(element.itertext())
                         else:
-                            self._current_player_data.values_by_header[element.attrib.get('data-stat')] = element.attrib.get("csk")
+                            self._current_player_data.values_by_header[
+                                element.attrib.get('data-stat')] = element.attrib.get("csk")
                         element.clear(keep_tail=True)
                 else:
                     if event == "end" and element.tag == "th" and element.attrib.get(
@@ -86,4 +88,3 @@ class PlayerContractsPageParser:
                     elif event == "start" and element.tag == "tbody":
                         self._started_processing_table_body = True
                         element.clear(keep_tail=True)
-

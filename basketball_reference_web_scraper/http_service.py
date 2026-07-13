@@ -1,9 +1,9 @@
 from typing import Callable
 
 import requests
-from basketball_reference_web_scraper.contracts.data.models import PlayerContract
+from basketball_reference_web_scraper.contracts.data.models import Contract
 from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, NothingMoreToParse, \
-    PlayerContractData
+    ContractRowData
 from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
 from basketball_reference_web_scraper.errors import CouldNotGetPlayerContractData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
@@ -273,12 +273,12 @@ class HTTPService:
             "players": player_results
         }
 
-    def player_contracts(self, player_contract_processor: Callable[[PlayerContractData], PlayerContract]) -> None:
+    def contracts(self, parsed_contract_row_processor: Callable[[ContractRowData], Contract]) -> None:
         """
         Makes an HTTP request to fetch player contract content.
         Streams through the HTML page content in chunks, passing parsed data to the specified callback.
         This approach attempts to keep memory allocation to a minimum.
-        :param player_contract_processor:
+        :param parsed_contract_row_processor:
         :return:
         """
         with requests.get(
@@ -292,7 +292,7 @@ class HTTPService:
             if response.encoding is None:
                 response.encoding = 'utf-8'
 
-            with PlayerContractsPageParser(player_contract_data_processor=player_contract_processor) as p:
+            with PlayerContractsPageParser(contract_data_processor=parsed_contract_row_processor) as p:
                 for chunk in response.iter_content(chunk_size=1024, decode_unicode=True):
                     try:
                         p.parse(chunk=chunk)

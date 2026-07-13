@@ -2,8 +2,8 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Dict, Optional
 
-from basketball_reference_web_scraper.contracts.data.models import Salary, PlayerContract, Player
-from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractData as PlayerContractTableData, \
+from basketball_reference_web_scraper.contracts.data.models import Salary, Contract, Player
+from basketball_reference_web_scraper.contracts.page.parsers import ContractRowData as PlayerContractTableData, \
     PlayerRowData
 from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, Team
 
@@ -60,7 +60,8 @@ def deserialize_team(abbreviation: str) -> Team:
 
 def deserialize_guaranteed_salary(contract_values_by_column_identifier: Dict[str, str]) -> Optional[Salary]:
     if GUARANTEED_SALARY_COLUMN_DATA_STAT_VALUE not in contract_values_by_column_identifier:
-        raise ValueError(f"Unable to identify remaining guaranteed salary column for columns: {contract_values_by_column_identifier.keys()}")
+        raise ValueError(
+            f"Unable to identify remaining guaranteed salary column for columns: {contract_values_by_column_identifier.keys()}")
 
     return deserialize_optional_salary(
         contract_values_by_column_identifier.get(
@@ -69,7 +70,7 @@ def deserialize_guaranteed_salary(contract_values_by_column_identifier: Dict[str
     )
 
 
-class PlayerContractParser:
+class ContractsTableRowParser:
     def __init__(self,
                  salary_generator: SalariesBySeasonParser,
                  guaranteed_salary_generator: Callable[[Dict[str, Optional[str]]], Optional[Salary]],
@@ -80,8 +81,8 @@ class PlayerContractParser:
         self.player_generator = player_generator
         self.team_generator = team_generator
 
-    def parse_table_data(self, data: PlayerContractTableData) -> PlayerContract:
-        return PlayerContract(
+    def parse_combined_row_data(self, data: PlayerContractTableData) -> Contract:
+        return Contract(
             player=self.player_generator(data.row),
             team=self.team_generator(data.row.team_abbreviation),
             salaries_by_season_start_year=self.salary_generator.parse(data.row.values_by_header, data.headers),

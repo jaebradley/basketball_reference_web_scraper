@@ -1,11 +1,12 @@
 from typing import Any, Callable
 
 import requests
-from basketball_reference_web_scraper.contracts.data.models import PlayerContract, Player
-from basketball_reference_web_scraper.contracts.data.parsers import PlayerContractParser, \
+from basketball_reference_web_scraper.contracts.data.models import Contract, Player
+from basketball_reference_web_scraper.contracts.data.parsers import ContractsTableRowParser, \
     SalariesBySeasonParser, deserialize_season_start_year, deserialize_guaranteed_salary, \
     deserialize_optional_salary, deserialize_team
-from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason, InvalidTeamSeason
+from basketball_reference_web_scraper.errors import InvalidSeason, InvalidDate, InvalidPlayerAndSeason, \
+    InvalidTeamSeason
 from basketball_reference_web_scraper.http_service import HTTPService
 from basketball_reference_web_scraper.output.columns import BOX_SCORE_COLUMN_NAMES, SCHEDULE_COLUMN_NAMES, \
     PLAYER_SEASON_TOTALS_COLUMN_NAMES, \
@@ -17,7 +18,7 @@ from basketball_reference_web_scraper.output.writers import CSVWriter, JSONWrite
     SearchCSVWriter
 from basketball_reference_web_scraper.parser_service import ParserService
 
-__player_contract_parser = PlayerContractParser(
+__contracts_table_row_parser = ContractsTableRowParser(
     salary_generator=SalariesBySeasonParser(season_start_year_deserializer=deserialize_season_start_year,
                                             salary_deserializer=deserialize_optional_salary),
     guaranteed_salary_generator=deserialize_guaranteed_salary,
@@ -302,7 +303,7 @@ def search(term, output_type=None, output_file_path=None, output_write_option=No
     return output_service.output(data=values, options=options)
 
 
-def player_contracts(player_contract_processor: Callable[[PlayerContract], Any]):
+def contracts(contract_processor: Callable[[Contract], Any]):
     """
     Parses player contract data found on this page: https://www.basketball-reference.com/contracts/players.html
     PlayerContract results are processed by the client caller via a callback.
@@ -310,10 +311,10 @@ def player_contracts(player_contract_processor: Callable[[PlayerContract], Any])
     For example:
     client.player_contracts(player_contract_processor=lambda player_contract_data: print(player_contract_data))
 
-    :param player_contract_processor:
+    :param contract_processor:
     :return: None
     :raises: CouldNotGetPlayerContractData
     """
-    HTTPService(parser=ParserService()).player_contracts(
-        player_contract_processor=lambda player_row_contract_data: player_contract_processor(
-            __player_contract_parser.parse_table_data(data=player_row_contract_data)))
+    HTTPService(parser=ParserService()).contracts(
+        parsed_contract_row_processor=lambda contract_data: contract_processor(
+            __contracts_table_row_parser.parse_combined_row_data(data=contract_data)))

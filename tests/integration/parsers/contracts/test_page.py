@@ -2,12 +2,12 @@ import os
 from decimal import Decimal
 from unittest import TestCase
 
-from basketball_reference_web_scraper.contracts.data.models import Player, PlayerContract, Salary
-from basketball_reference_web_scraper.contracts.data.parsers import PlayerContractParser, SalariesBySeasonParser, \
+from basketball_reference_web_scraper.contracts.data.models import Player, Contract, Salary
+from basketball_reference_web_scraper.contracts.data.parsers import ContractsTableRowParser, SalariesBySeasonParser, \
     deserialize_season_start_year, \
     deserialize_optional_salary, deserialize_guaranteed_salary, deserialize_team
 from basketball_reference_web_scraper.contracts.page.parsers import NothingMoreToParse
-from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, PlayerContractData
+from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, ContractRowData
 from basketball_reference_web_scraper.data import Team
 
 
@@ -15,7 +15,7 @@ class TestParseContractsPage(TestCase):
     def setUp(self):
         super().setUp()
 
-        self.player_contract_parser = PlayerContractParser(
+        self.player_contract_parser = ContractsTableRowParser(
             salary_generator=SalariesBySeasonParser(season_start_year_deserializer=deserialize_season_start_year,
                                                     salary_deserializer=deserialize_optional_salary),
             guaranteed_salary_generator=deserialize_guaranteed_salary,
@@ -26,8 +26,8 @@ class TestParseContractsPage(TestCase):
     def test_parsing_contracts_on_20260712(self):
         contracts = []
 
-        def extract_table_data(row: PlayerContractData) -> PlayerContract:
-            parsed_row = self.player_contract_parser.parse_table_data(data=row)
+        def extract_table_data(row: ContractRowData) -> Contract:
+            parsed_row = self.player_contract_parser.parse_combined_row_data(data=row)
             contracts.append(parsed_row)
             return parsed_row
 
@@ -44,7 +44,7 @@ class TestParseContractsPage(TestCase):
                         break
 
         self.assertEqual(416, len(contracts))
-        self.assertEqual(PlayerContract(
+        self.assertEqual(Contract(
             player=Player(identifier="curryst01", name="Stephen Curry"),
             team=Team.GOLDEN_STATE_WARRIORS,
             salaries_by_season_start_year={
@@ -58,7 +58,7 @@ class TestParseContractsPage(TestCase):
             remaining_guaranteed_salary=Salary(Decimal(62587158))
         ), contracts[0])
 
-        self.assertEqual(PlayerContract(
+        self.assertEqual(Contract(
             player=Player(identifier="hardeja01", name="James Harden"),
             team=Team.CLEVELAND_CAVALIERS,
             salaries_by_season_start_year={
@@ -72,7 +72,7 @@ class TestParseContractsPage(TestCase):
             remaining_guaranteed_salary=None
         ), contracts[29])
 
-        self.assertEqual(PlayerContract(
+        self.assertEqual(Contract(
             player=Player(identifier="louzama01", name="Didi Louzada"),
             team=Team.PORTLAND_TRAIL_BLAZERS,
             salaries_by_season_start_year={

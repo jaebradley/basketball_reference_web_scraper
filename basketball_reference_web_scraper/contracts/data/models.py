@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from decimal import Decimal
-from locale import currency
 from typing import Dict, Optional
 
 from basketball_reference_web_scraper.data import Team
@@ -35,7 +34,7 @@ class Salary:
 
 
 @dataclass(frozen=True)
-class PlayerContract:
+class Contract:
     player: Player
     team: Team
     salaries_by_season_start_year: Dict[int, Optional[Salary]]
