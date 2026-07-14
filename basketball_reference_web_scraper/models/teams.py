@@ -1,0 +1,49 @@
+from basketball_reference_web_scraper.data import Team, TeamAbbreviation
+
+TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
+    TeamAbbreviation.ATL: Team.ATLANTA_HAWKS,
+    TeamAbbreviation.BOS: Team.BOSTON_CELTICS,
+    TeamAbbreviation.BRK: Team.BROOKLYN_NETS,
+    TeamAbbreviation.CHI: Team.CHICAGO_BULLS,
+    TeamAbbreviation.CHO: Team.CHARLOTTE_HORNETS,
+    TeamAbbreviation.CLE: Team.CLEVELAND_CAVALIERS,
+    TeamAbbreviation.DAL: Team.DALLAS_MAVERICKS,
+    TeamAbbreviation.DEN: Team.DENVER_NUGGETS,
+    TeamAbbreviation.DET: Team.DETROIT_PISTONS,
+    TeamAbbreviation.GSW: Team.GOLDEN_STATE_WARRIORS,
+    TeamAbbreviation.HOU: Team.HOUSTON_ROCKETS,
+    TeamAbbreviation.IND: Team.INDIANA_PACERS,
+    TeamAbbreviation.LAC: Team.LOS_ANGELES_CLIPPERS,
+    TeamAbbreviation.LAL: Team.LOS_ANGELES_LAKERS,
+    TeamAbbreviation.MEM: Team.MEMPHIS_GRIZZLIES,
+    TeamAbbreviation.MIA: Team.MIAMI_HEAT,
+    TeamAbbreviation.MIL: Team.MILWAUKEE_BUCKS,
+    TeamAbbreviation.MIN: Team.MINNESOTA_TIMBERWOLVES,
+    TeamAbbreviation.NOP: Team.NEW_ORLEANS_PELICANS,
+    TeamAbbreviation.NYK: Team.NEW_YORK_KNICKS,
+    TeamAbbreviation.OKC: Team.OKLAHOMA_CITY_THUNDER,
+    TeamAbbreviation.ORL: Team.ORLANDO_MAGIC,
+    TeamAbbreviation.PHI: Team.PHILADELPHIA_76ERS,
+    TeamAbbreviation.PHO: Team.PHOENIX_SUNS,
+    TeamAbbreviation.POR: Team.PORTLAND_TRAIL_BLAZERS,
+    TeamAbbreviation.SAC: Team.SACRAMENTO_KINGS,
+    TeamAbbreviation.SAS: Team.SAN_ANTONIO_SPURS,
+    TeamAbbreviation.TOR: Team.TORONTO_RAPTORS,
+    TeamAbbreviation.UTA: Team.UTAH_JAZZ,
+    TeamAbbreviation.WAS: Team.WASHINGTON_WIZARDS,
+
+    # DEPRECATED TEAMS
+    TeamAbbreviation.KCK: Team.KANSAS_CITY_KINGS,
+    TeamAbbreviation.NJN: Team.NEW_JERSEY_NETS,
+    TeamAbbreviation.NOH: Team.NEW_ORLEANS_HORNETS,
+    TeamAbbreviation.NOK: Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
+    TeamAbbreviation.CHA: Team.CHARLOTTE_BOBCATS,
+    TeamAbbreviation.CHH: Team.CHARLOTTE_HORNETS,
+    TeamAbbreviation.SEA: Team.SEATTLE_SUPERSONICS,
+    TeamAbbreviation.STL: Team.ST_LOUIS_HAWKS,
+    TeamAbbreviation.VAN: Team.VANCOUVER_GRIZZLIES,
+    TeamAbbreviation.WSB: Team.WASHINGTON_BULLETS,
+}
+
+ABBREVIATIONS_BY_TEAM: dict[Team, TeamAbbreviation] = {v: k for k, v in TEAMS_BY_ABBREVIATION.items()}
+ABBREVIATIONS_BY_TEAM[Team.CHARLOTTE_HORNETS] = TeamAbbreviation.CHO
