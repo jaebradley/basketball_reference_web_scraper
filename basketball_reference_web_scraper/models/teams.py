@@ -33,14 +33,20 @@ TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
     TeamAbbreviation.WAS: Team.WASHINGTON_WIZARDS,
 
     # DEPRECATED TEAMS
+    TeamAbbreviation.FTW: Team.FORT_WAYNE_PISTONS,
     TeamAbbreviation.KCK: Team.KANSAS_CITY_KINGS,
+    TeamAbbreviation.MLH: Team.MILWAUKEE_HAWKS,
     TeamAbbreviation.NJN: Team.NEW_JERSEY_NETS,
     TeamAbbreviation.NOH: Team.NEW_ORLEANS_HORNETS,
     TeamAbbreviation.NOK: Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
+    TeamAbbreviation.NYN: Team.NEW_YORK_NETS,
     TeamAbbreviation.CHA: Team.CHARLOTTE_BOBCATS,
     TeamAbbreviation.CHH: Team.CHARLOTTE_HORNETS,
+    TeamAbbreviation.PHW: Team.PHILADELPHIA_WARRIORS,
     TeamAbbreviation.SEA: Team.SEATTLE_SUPERSONICS,
+    TeamAbbreviation.SFW: Team.SAN_FRANCISCO_WARRIORS,
     TeamAbbreviation.STL: Team.ST_LOUIS_HAWKS,
+    TeamAbbreviation.TRI: Team.TRI_CITIES_BLACKHAWKS,
     TeamAbbreviation.VAN: Team.VANCOUVER_GRIZZLIES,
     TeamAbbreviation.WSB: Team.WASHINGTON_BULLETS,
 }
