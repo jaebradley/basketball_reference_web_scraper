@@ -1,26 +1,23 @@
-from typing import Callable
-
 import datetime
+from typing import Callable
 
 import requests
 from basketball_reference_web_scraper.contracts.data.models import Contract
 from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, NothingMoreToParse, \
     ContractRowData
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION, TeamTotal, PlayerData
-from basketball_reference_web_scraper.errors import CouldNotGetPlayerContractData
-from lxml import html
-
+from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
 from basketball_reference_web_scraper.data import TeamTotal, PlayerData
+from basketball_reference_web_scraper.errors import CouldNotGetPlayerContractData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage
-from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
-from basketball_reference_web_scraper.team_season.html import TeamSeasonPage
-from lxml import html
 from basketball_reference_web_scraper.models.calculators import calculate_team_abbreviation
 from basketball_reference_web_scraper.serialization.urls.models import PlayByPlayURLData
 from basketball_reference_web_scraper.serialization.urls.serializers import DEFAULT_PLAY_BY_PLAY_URL_SERIALIZER
+from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
+from basketball_reference_web_scraper.team_season.html import TeamSeasonPage
+from lxml import html
 
 
 class HTTPService:
@@ -204,7 +201,9 @@ class HTTPService:
         # Use batched when the minimum python version supported is 3.12 (https://docs.python.org/3/library/itertools.html#itertools.batched)
         paired_basic_and_advanced_tables = list(zip(tables[::2], tables[1::2]))
         # TODO @jaebradley: This logic is pretty messy. There's gotta be a better way of determining first/second team (perhaps via the game URL path). Additionally, a Mapping feels like the most natural way of representing the statistics tables.
-        combined_team_totals = list(map(lambda paired_tables: TeamTotal(basic_statistics_table=paired_tables[0], advanced_statistics_table=paired_tables[1]), paired_basic_and_advanced_tables))
+        combined_team_totals = list(map(lambda paired_tables: TeamTotal(basic_statistics_table=paired_tables[0],
+                                                                        advanced_statistics_table=paired_tables[1]),
+                                        paired_basic_and_advanced_tables))
 
         return self.parser.parse_team_totals(
             first_team_totals=combined_team_totals[0],

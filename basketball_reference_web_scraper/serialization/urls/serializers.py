@@ -1,23 +1,29 @@
 from datetime import date
+from typing import Protocol
 from urllib.parse import urljoin, SplitResult
 
 from basketball_reference_web_scraper.data import TeamAbbreviation
 from basketball_reference_web_scraper.serialization.urls.models import PlayByPlayURLData
 
 
-# TODO: @jaebradley once Python 3.7 support is deprecated, add a Serializer Protocol
-class DateSerializer:
+class Serializer[T](Protocol):
+    def serialize(self, value: T) -> str:
+        ...
+
+
+class DateSerializer(Serializer):
     def serialize(self, value: date) -> str:
         return value.strftime("%Y%m%d")
 
 
-class TeamAbbreviationSerializer:
+class TeamAbbreviationSerializer(Serializer):
     def serialize(self, value: TeamAbbreviation) -> str:
         return value.name
 
 
-class PlayByPlayURLSerializer:
-    def __init__(self, date_serializer, team_abbreviation_serializer):
+class PlayByPlayURLSerializer(Serializer):
+    def __init__(self, date_serializer: Serializer[date],
+                 team_abbreviation_serializer: Serializer[TeamAbbreviation]) -> None:
         self._date_serializer = date_serializer
         self._team_abbreviation_serializer = team_abbreviation_serializer
 

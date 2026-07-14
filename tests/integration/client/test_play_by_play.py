@@ -3,7 +3,6 @@ import os
 from unittest import TestCase
 
 import requests_mock
-
 from basketball_reference_web_scraper.client import play_by_play
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption, PeriodType
 from basketball_reference_web_scraper.data import Team
