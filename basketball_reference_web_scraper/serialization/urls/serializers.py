@@ -1,14 +1,16 @@
 from datetime import date
-from typing import Protocol
+from typing import Protocol, TypeVar
 from urllib.parse import urljoin, SplitResult
 
 from basketball_reference_web_scraper.data import TeamAbbreviation
 from basketball_reference_web_scraper.serialization.urls.models import PlayByPlayURLData
 
+T = TypeVar('T')
 
-class Serializer[T](Protocol):
+
+class Serializer(Protocol[T]):
     def serialize(self, value: T) -> str:
-        ...
+        raise NotImplementedError()
 
 
 class DateSerializer(Serializer):
