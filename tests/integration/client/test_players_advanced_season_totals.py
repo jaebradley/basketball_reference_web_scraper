@@ -5,7 +5,6 @@ import sys
 from unittest import TestCase
 
 import requests_mock
-
 from basketball_reference_web_scraper.client import players_advanced_season_totals
 from basketball_reference_web_scraper.data import OutputType, Team, Position
 from basketball_reference_web_scraper.errors import InvalidSeason
@@ -372,3 +371,59 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
                 json.loads(result),
                 json.load(expected_output),
             )
+
+
+@requests_mock.Mocker()
+class TestPlayerAdvanced1950SeasonTotalsInMemoryOutput(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                f"../files/player_advanced_season_totals/1950.html",
+        ), 'r') as file_input: self._html = file_input.read()
+
+    def test_1950_players_advanced_season_totals_length(self, m):
+        m.get(f"https://www.basketball-reference.com/leagues/NBA_1950_advanced.html",
+              text=self._html,
+              status_code=200)
+
+        result = players_advanced_season_totals(season_end_year=1950)
+        self.assertTrue(set(Team).issuperset(set(map(lambda row: row["team"], result))))
+        self.assertEqual(len(result), 269)
+
+    def test_first_2018_players_advanced_season_totals_row(self, m):
+        m.get(f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
+              text=self._html,
+              status_code=200)
+
+        result = players_advanced_season_totals(season_end_year=2018)
+        self.assertEqual(
+            result[0],
+            {'age': 25,
+             'assist_percentage': 0.0,
+             'block_percentage': 0.0,
+             'box_plus_minus': 0.0,
+             'defensive_box_plus_minus': 0.0,
+             'defensive_rebound_percentage': 0.0,
+             'defensive_win_shares': 2.5,
+             'free_throw_attempt_rate': 0.183,
+             'games_played': 68,
+             'is_combined_totals': False,
+             'minutes_played': 0,
+             'name': 'Jack Coleman',
+             'offensive_box_plus_minus': 0.0,
+             'offensive_rebound_percentage': 0.0,
+             'offensive_win_shares': 1.9,
+             'player_efficiency_rating': 0.0,
+             'positions': [Position.POWER_FORWARD],
+             'slug': 'colemja01',
+             'steal_percentage': 0.0,
+             'team': Team.ROCHESTER_ROYALS,
+             'three_point_attempt_rate': 0.0,
+             'total_rebound_percentage': 0.0,
+             'true_shooting_percentage': 0.412,
+             'turnover_percentage': 0.0,
+             'usage_percentage': 0.0,
+             'value_over_replacement_player': 0.0,
+             'win_shares': 4.3,
+             'win_shares_per_48_minutes': 0.0
+             })

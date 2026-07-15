@@ -5,14 +5,15 @@ import requests
 from basketball_reference_web_scraper.contracts.data.models import Contract
 from basketball_reference_web_scraper.contracts.page.parsers import PlayerContractsPageParser, NothingMoreToParse, \
     ContractRowData
-from basketball_reference_web_scraper.data import TEAM_TO_TEAM_ABBREVIATION
+from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_BY_TEAM
 from basketball_reference_web_scraper.data import TeamTotal, PlayerData
 from basketball_reference_web_scraper.errors import CouldNotGetPlayerContractData
 from basketball_reference_web_scraper.errors import InvalidDate, InvalidPlayerAndSeason
 from basketball_reference_web_scraper.html import DailyLeadersPage, PlayerSeasonBoxScoresPage, PlayerSeasonTotalTable, \
     PlayerAdvancedSeasonTotalsTable, PlayByPlayPage, SchedulePage, BoxScoresPage, DailyBoxScoresPage, SearchPage, \
     PlayerPage, StandingsPage
-from basketball_reference_web_scraper.models.calculators import calculate_team_abbreviation
+from basketball_reference_web_scraper.models.calculators import calculate_team_abbreviation, \
+    calculate_team_abbreviation_from_team_and_season
 from basketball_reference_web_scraper.serialization.urls.models import PlayByPlayURLData
 from basketball_reference_web_scraper.serialization.urls.serializers import DEFAULT_PLAY_BY_PLAY_URL_SERIALIZER
 from basketball_reference_web_scraper.shooting.html import PlayersSeasonShootingStatisticsTable
@@ -226,8 +227,8 @@ class HTTPService:
         ]
 
     def roster(self, team, season_end_year):
-        url = "{BASE_URL}/teams/{team}/{season_end_year}.html".format(BASE_URL=HTTPService.BASE_URL,
-                                                                      team=TEAM_TO_TEAM_ABBREVIATION[team],
+        url = "{BASE_URL}/teams/{team_abbreviation}/{season_end_year}.html".format(BASE_URL=HTTPService.BASE_URL,
+                                                                      team_abbreviation=calculate_team_abbreviation_from_team_and_season(team=team, season_end_year=season_end_year).value,
                                                                       season_end_year=season_end_year)
 
         response = requests.get(url=url)

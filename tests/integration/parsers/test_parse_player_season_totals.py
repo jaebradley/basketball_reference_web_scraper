@@ -1,13 +1,11 @@
 import os
 from unittest import TestCase
 
-from lxml import html
-
-from basketball_reference_web_scraper.data import Team, Position, POSITION_ABBREVIATIONS_TO_POSITION, \
-    TEAM_ABBREVIATIONS_TO_TEAM
+from basketball_reference_web_scraper.data import Team, Position, POSITION_ABBREVIATIONS_TO_POSITION
 from basketball_reference_web_scraper.html import PlayerSeasonTotalTable
 from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
     PlayerSeasonTotalsParser
+from lxml import html
 
 
 class BasePlayerSeasonTotalsTestCase(TestCase):
@@ -23,9 +21,7 @@ class BasePlayerSeasonTotalsTestCase(TestCase):
             position_abbreviation_parser=PositionAbbreviationParser(
                 abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
             ),
-            team_abbreviation_parser=TeamAbbreviationParser(
-                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM,
-            )
+            team_abbreviation_parser=TeamAbbreviationParser()
         ).parse(PlayerSeasonTotalTable(html=html.fromstring(_html)).rows)
 
 

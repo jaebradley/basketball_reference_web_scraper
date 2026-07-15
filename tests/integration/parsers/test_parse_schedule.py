@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from unittest import TestCase
 from zoneinfo import ZoneInfo
 
-from basketball_reference_web_scraper.data import Team, TEAM_NAME_TO_TEAM
+from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.html import SchedulePage
 from basketball_reference_web_scraper.parsers import ScheduledGamesParser, TeamNameParser, ScheduledStartTimeParser
 from lxml import html
@@ -33,7 +33,7 @@ class BaseParserTest(BaseTest):
         ), 'r') as file_input: _html = file_input.read()
         cls._parsed_results = ScheduledGamesParser(
             start_time_parser=ScheduledStartTimeParser(),
-            team_name_parser=TeamNameParser(team_names_to_teams=TEAM_NAME_TO_TEAM),
+            team_name_parser=TeamNameParser(),
         ).parse_games(games=SchedulePage(html=html.fromstring(_html)).rows)
 
         super().setUpClass()

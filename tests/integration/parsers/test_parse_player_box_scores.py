@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from lxml import html
 
-from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, LOCATION_ABBREVIATIONS_TO_POSITION, \
+from basketball_reference_web_scraper.data import LOCATION_ABBREVIATIONS_TO_POSITION, \
     OUTCOME_ABBREVIATIONS_TO_OUTCOME
 from basketball_reference_web_scraper.data import Team, Outcome
 from basketball_reference_web_scraper.html import DailyLeadersPage
@@ -24,9 +24,7 @@ class BaseBoxScoresTestCase(TestCase):
                 f"../files/player_box_scores/{year}/{month}/{day}.html",
         ), 'r') as file_input: _html = file_input.read()
         cls._parsed_results = PlayerBoxScoresParser(
-            team_abbreviation_parser=TeamAbbreviationParser(
-                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
-            ),
+            team_abbreviation_parser=TeamAbbreviationParser(),
             location_abbreviation_parser=LocationAbbreviationParser(
                 abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION
             ),

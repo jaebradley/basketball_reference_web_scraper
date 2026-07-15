@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, unique
 
 from basketball_reference_web_scraper.html import BasicTeamStatisticsTable, AdvancedTeamStatisticsTable
 
@@ -13,6 +13,7 @@ class Outcome(Enum):
     LOSS = "LOSS"
 
 
+@unique
 class Team(Enum):
     ATLANTA_HAWKS = "ATLANTA HAWKS"
     BOSTON_CELTICS = "BOSTON CELTICS"
@@ -45,23 +46,45 @@ class Team(Enum):
     UTAH_JAZZ = "UTAH JAZZ"
     WASHINGTON_WIZARDS = "WASHINGTON WIZARDS"
 
-    # DEPRECATED TEAMS
+    # INACTIVE NBA TEAMS (see https://www.basketball-reference.com/teams/)
+    ANDERSON_PACKERS = "ANDERSON PACKERS"
+    BALTIMORE_BULLETS = "BALTIMORE BULLETS"
+    BUFFALO_BRAVES = "BUFFALO BRAVES"
+    CAPITAL_BULLETS = "CAPITAL BULLETS"
+    CHICAGO_PACKERS = "CHICAGO PACKERS"
+    CHICAGO_STAGS = "CHICAGO STAGS"
+    CHICAGO_ZEPHYRS = "CHICAGO ZEPHYRS"
+    CINCINNATI_ROYALS = "CINCINNATI ROYALS"
     FORT_WAYNE_PISTONS = "FORT WAYNE PISTONS"
+    INDIANAPOLIS_OLYMPIANS = "INDIANAPOLIS OLYMPIANS"
     KANSAS_CITY_KINGS = "KANSAS CITY KINGS"
+    KANSAS_CITY_OMAHA_KINGS = "KANSAS CITY-OMAHA KINGS"
     CHARLOTTE_BOBCATS = "CHARLOTTE BOBCATS"
+    MINNEAPOLIS_LAKERS = "MINNEAPOLIS LAKERS"
     MILWAUKEE_HAWKS = "MILWAUKEE HAWKS"
     NEW_JERSEY_NETS = "NEW JERSEY NETS"
     NEW_ORLEANS_HORNETS = "NEW ORLEANS HORNETS"
+    NEW_ORLEANS_JAZZ = "NEW ORLEANS JAZZ"
     NEW_ORLEANS_OKLAHOMA_CITY_HORNETS = "NEW ORLEANS/OKLAHOMA CITY HORNETS"
     NEW_YORK_NETS = "NEW YORK NETS"
     PHILADELPHIA_WARRIORS = "PHILADELPHIA WARRIORS"
-    TRI_CITIES_BLACKHAWKS = "TRI_CITIES_BLACKHAWKS"
-    SAN_FRANCISCO_WARRIORS = "SAN_FRANCISCO WARRIORS"
+    ROCHESTER_ROYALS = "ROCHESTER ROYALS"
+    SAN_DIEGO_CLIPPERS = "SAN DIEGO CLIPPERS"
+    SAN_DIEGO_ROCKETS = "SAN DIEGO ROCKETS"
+    SAN_FRANCISCO_WARRIORS = "SAN FRANCISCO WARRIORS"
+    SHEBOYGAN_RED_SKINS = "SHEBOYGAN RED SKINS"
     SEATTLE_SUPERSONICS = "SEATTLE SUPERSONICS"
+    ST_LOUIS_BOMBERS = "ST. LOUIS BOMBERS"
     ST_LOUIS_HAWKS = "ST. LOUIS HAWKS"
+    SYRACUSE_NATIONALS = "SYRACUSE NATIONALS"
+    TRI_CITIES_BLACKHAWKS = "TRI-CITIES BLACKHAWKS"
     VANCOUVER_GRIZZLIES = "VANCOUVER GRIZZLIES"
     WASHINGTON_BULLETS = "WASHINGTON BULLETS"
+    WASHINGTON_CAPITOLS = "WASHINGTON CAPITOLS"
+    WATERLOO_HAWKS = "WATERLOO HAWKS"
 
+
+@unique
 class TeamAbbreviation(Enum):
     ATL = "ATL"
     BOS = "BOS"
@@ -94,23 +117,45 @@ class TeamAbbreviation(Enum):
     UTA = "UTA"
     WAS = "WAS"
 
-    # DEPRECATED TEAMS
+    # INACTIVE NBA TEAMS (see https://www.basketball-reference.com/teams/)
+    AND = "AND"
+    BAL = "BAL"
+    BLB = "BLB"
+    BUF = "BUF"
+    CAP = "CAP"
+    CHA = "CHA"
+    CHH = "CHH"
+    CHP = "CHP"
+    CHS = "CHS"
+    CHZ = "CHZ"
+    CIN = "CIN"
+    DNN = "DNN"
     FTW = "FTW"
+    INO = "INO"
     KCK = "KCK"
+    KCO = "KCO"
     MLH = "MLH"
     NJN = "NJN"
     NOH = "NOH"
+    NOJ = "NOJ"
     NOK = "NOK"
     NYN = "NYN"
-    CHA = "CHA"
-    CHH = "CHH"
+    MNL = "MNL"
     PHW = "PHW"
+    ROC = "ROC"
+    SDC = "SDC"
+    SDR = "SDR"
     SEA = "SEA"
+    SHE = "SHE"
     SFW = "SFW"
+    STB = "STB"
     STL = "STL"
+    SYR = "SYR"
     TRI = "TRI"
     VAN = "VAN"
+    WAT = "WAT"
     WSB = "WSB"
+    WSC = "WSC"
 
 
 class OutputType(Enum):
@@ -171,97 +216,88 @@ DIVISIONS_TO_CONFERENCES = {
     Division.NORTHWEST: Conference.WESTERN
 }
 
-TEAM_ABBREVIATIONS_TO_TEAM = {
-    'ATL': Team.ATLANTA_HAWKS,
-    'BOS': Team.BOSTON_CELTICS,
-    'BRK': Team.BROOKLYN_NETS,
-    'CHI': Team.CHICAGO_BULLS,
-    'CHO': Team.CHARLOTTE_HORNETS,
-    'CLE': Team.CLEVELAND_CAVALIERS,
-    'DAL': Team.DALLAS_MAVERICKS,
-    'DEN': Team.DENVER_NUGGETS,
-    'DET': Team.DETROIT_PISTONS,
-    'GSW': Team.GOLDEN_STATE_WARRIORS,
-    'HOU': Team.HOUSTON_ROCKETS,
-    'IND': Team.INDIANA_PACERS,
-    'LAC': Team.LOS_ANGELES_CLIPPERS,
-    'LAL': Team.LOS_ANGELES_LAKERS,
-    'MEM': Team.MEMPHIS_GRIZZLIES,
-    'MIA': Team.MIAMI_HEAT,
-    'MIL': Team.MILWAUKEE_BUCKS,
-    'MIN': Team.MINNESOTA_TIMBERWOLVES,
-    'NOP': Team.NEW_ORLEANS_PELICANS,
-    'NYK': Team.NEW_YORK_KNICKS,
-    'OKC': Team.OKLAHOMA_CITY_THUNDER,
-    'ORL': Team.ORLANDO_MAGIC,
-    'PHI': Team.PHILADELPHIA_76ERS,
-    'PHO': Team.PHOENIX_SUNS,
-    'POR': Team.PORTLAND_TRAIL_BLAZERS,
-    'SAC': Team.SACRAMENTO_KINGS,
-    'SAS': Team.SAN_ANTONIO_SPURS,
-    'TOR': Team.TORONTO_RAPTORS,
-    'UTA': Team.UTAH_JAZZ,
-    'WAS': Team.WASHINGTON_WIZARDS,
+TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
+    TeamAbbreviation.ATL: Team.ATLANTA_HAWKS,
+    TeamAbbreviation.BOS: Team.BOSTON_CELTICS,
+    TeamAbbreviation.BRK: Team.BROOKLYN_NETS,
+    TeamAbbreviation.CHI: Team.CHICAGO_BULLS,
+    TeamAbbreviation.CHO: Team.CHARLOTTE_HORNETS,
+    TeamAbbreviation.CLE: Team.CLEVELAND_CAVALIERS,
+    TeamAbbreviation.DAL: Team.DALLAS_MAVERICKS,
+    TeamAbbreviation.DEN: Team.DENVER_NUGGETS,
+    TeamAbbreviation.DET: Team.DETROIT_PISTONS,
+    TeamAbbreviation.DNN: Team.DENVER_NUGGETS,
+    TeamAbbreviation.GSW: Team.GOLDEN_STATE_WARRIORS,
+    TeamAbbreviation.HOU: Team.HOUSTON_ROCKETS,
+    TeamAbbreviation.IND: Team.INDIANA_PACERS,
+    TeamAbbreviation.LAC: Team.LOS_ANGELES_CLIPPERS,
+    TeamAbbreviation.LAL: Team.LOS_ANGELES_LAKERS,
+    TeamAbbreviation.MEM: Team.MEMPHIS_GRIZZLIES,
+    TeamAbbreviation.MIA: Team.MIAMI_HEAT,
+    TeamAbbreviation.MIL: Team.MILWAUKEE_BUCKS,
+    TeamAbbreviation.MIN: Team.MINNESOTA_TIMBERWOLVES,
+    TeamAbbreviation.NOP: Team.NEW_ORLEANS_PELICANS,
+    TeamAbbreviation.NYK: Team.NEW_YORK_KNICKS,
+    TeamAbbreviation.OKC: Team.OKLAHOMA_CITY_THUNDER,
+    TeamAbbreviation.ORL: Team.ORLANDO_MAGIC,
+    TeamAbbreviation.PHI: Team.PHILADELPHIA_76ERS,
+    TeamAbbreviation.PHO: Team.PHOENIX_SUNS,
+    TeamAbbreviation.POR: Team.PORTLAND_TRAIL_BLAZERS,
+    TeamAbbreviation.SAC: Team.SACRAMENTO_KINGS,
+    TeamAbbreviation.SAS: Team.SAN_ANTONIO_SPURS,
+    TeamAbbreviation.TOR: Team.TORONTO_RAPTORS,
+    TeamAbbreviation.UTA: Team.UTAH_JAZZ,
+    TeamAbbreviation.WAS: Team.WASHINGTON_WIZARDS,
 
-    # DEPRECATED TEAMS
-    'KCK': Team.KANSAS_CITY_KINGS,
-    'NJN': Team.NEW_JERSEY_NETS,
-    'NOH': Team.NEW_ORLEANS_HORNETS,
-    'NOK': Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
-    'CHA': Team.CHARLOTTE_BOBCATS,
-    'CHH': Team.CHARLOTTE_HORNETS,
-    'SEA': Team.SEATTLE_SUPERSONICS,
-    'STL': Team.ST_LOUIS_HAWKS,
-    'VAN': Team.VANCOUVER_GRIZZLIES,
-    "WSB": Team.WASHINGTON_BULLETS,
+    # INACTIVE NBA TEAMS (see https://www.basketball-reference.com/teams/)
+    TeamAbbreviation.AND: Team.ANDERSON_PACKERS,
+    TeamAbbreviation.BAL: Team.BALTIMORE_BULLETS,
+    TeamAbbreviation.BLB: Team.BALTIMORE_BULLETS,
+    TeamAbbreviation.BUF: Team.BUFFALO_BRAVES,
+    TeamAbbreviation.CAP: Team.CAPITAL_BULLETS,
+    TeamAbbreviation.CHP: Team.CHICAGO_PACKERS,
+    TeamAbbreviation.CHS: Team.CHICAGO_STAGS,
+    TeamAbbreviation.CHZ: Team.CHICAGO_ZEPHYRS,
+    TeamAbbreviation.CIN: Team.CINCINNATI_ROYALS,
+    TeamAbbreviation.FTW: Team.FORT_WAYNE_PISTONS,
+    TeamAbbreviation.INO: Team.INDIANAPOLIS_OLYMPIANS,
+    TeamAbbreviation.KCK: Team.KANSAS_CITY_KINGS,
+    TeamAbbreviation.KCO: Team.KANSAS_CITY_OMAHA_KINGS,
+    TeamAbbreviation.MLH: Team.MILWAUKEE_HAWKS,
+    TeamAbbreviation.MNL: Team.MINNEAPOLIS_LAKERS,
+    TeamAbbreviation.NJN: Team.NEW_JERSEY_NETS,
+    TeamAbbreviation.NOH: Team.NEW_ORLEANS_HORNETS,
+    TeamAbbreviation.NOJ: Team.NEW_ORLEANS_JAZZ,
+    TeamAbbreviation.NOK: Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
+    TeamAbbreviation.NYN: Team.NEW_YORK_NETS,
+    TeamAbbreviation.CHA: Team.CHARLOTTE_BOBCATS,
+    TeamAbbreviation.CHH: Team.CHARLOTTE_HORNETS,
+    TeamAbbreviation.PHW: Team.PHILADELPHIA_WARRIORS,
+    TeamAbbreviation.ROC: Team.ROCHESTER_ROYALS,
+    TeamAbbreviation.SDC: Team.SAN_DIEGO_CLIPPERS,
+    TeamAbbreviation.SDR: Team.SAN_DIEGO_ROCKETS,
+    TeamAbbreviation.SEA: Team.SEATTLE_SUPERSONICS,
+    TeamAbbreviation.SHE: Team.SHEBOYGAN_RED_SKINS,
+    TeamAbbreviation.SFW: Team.SAN_FRANCISCO_WARRIORS,
+    TeamAbbreviation.STB: Team.ST_LOUIS_BOMBERS,
+    TeamAbbreviation.STL: Team.ST_LOUIS_HAWKS,
+    TeamAbbreviation.SYR: Team.SYRACUSE_NATIONALS,
+    TeamAbbreviation.TRI: Team.TRI_CITIES_BLACKHAWKS,
+    TeamAbbreviation.VAN: Team.VANCOUVER_GRIZZLIES,
+    TeamAbbreviation.WAT: Team.WATERLOO_HAWKS,
+    TeamAbbreviation.WSB: Team.WASHINGTON_BULLETS,
+    TeamAbbreviation.WSC: Team.WASHINGTON_CAPITOLS,
 }
 
-TEAM_TO_TEAM_ABBREVIATION = {v: k for k, v in TEAM_ABBREVIATIONS_TO_TEAM.items()}
-TEAM_TO_TEAM_ABBREVIATION[Team.CHARLOTTE_HORNETS] = "CHO"
-
-TEAM_NAME_TO_TEAM = {
-    "ATLANTA HAWKS": Team.ATLANTA_HAWKS,
-    "BOSTON CELTICS": Team.BOSTON_CELTICS,
-    "BROOKLYN NETS": Team.BROOKLYN_NETS,
-    "CHARLOTTE HORNETS": Team.CHARLOTTE_HORNETS,
-    "CHICAGO BULLS": Team.CHICAGO_BULLS,
-    "CLEVELAND CAVALIERS": Team.CLEVELAND_CAVALIERS,
-    "DALLAS MAVERICKS": Team.DALLAS_MAVERICKS,
-    "DENVER NUGGETS": Team.DENVER_NUGGETS,
-    "DETROIT PISTONS": Team.DETROIT_PISTONS,
-    "GOLDEN STATE WARRIORS": Team.GOLDEN_STATE_WARRIORS,
-    "HOUSTON ROCKETS": Team.HOUSTON_ROCKETS,
-    "INDIANA PACERS": Team.INDIANA_PACERS,
-    "LOS ANGELES CLIPPERS": Team.LOS_ANGELES_CLIPPERS,
-    "LOS ANGELES LAKERS": Team.LOS_ANGELES_LAKERS,
-    "MEMPHIS GRIZZLIES": Team.MEMPHIS_GRIZZLIES,
-    "MIAMI HEAT": Team.MIAMI_HEAT,
-    "MILWAUKEE BUCKS": Team.MILWAUKEE_BUCKS,
-    "MINNESOTA TIMBERWOLVES": Team.MINNESOTA_TIMBERWOLVES,
-    "NEW ORLEANS PELICANS": Team.NEW_ORLEANS_PELICANS,
-    "NEW YORK KNICKS": Team.NEW_YORK_KNICKS,
-    "OKLAHOMA CITY THUNDER": Team.OKLAHOMA_CITY_THUNDER,
-    "ORLANDO MAGIC": Team.ORLANDO_MAGIC,
-    "PHILADELPHIA 76ERS": Team.PHILADELPHIA_76ERS,
-    "PHOENIX SUNS": Team.PHOENIX_SUNS,
-    "PORTLAND TRAIL BLAZERS": Team.PORTLAND_TRAIL_BLAZERS,
-    "SACRAMENTO KINGS": Team.SACRAMENTO_KINGS,
-    "SAN ANTONIO SPURS": Team.SAN_ANTONIO_SPURS,
-    "TORONTO RAPTORS": Team.TORONTO_RAPTORS,
-    "UTAH JAZZ": Team.UTAH_JAZZ,
-    "WASHINGTON WIZARDS": Team.WASHINGTON_WIZARDS,
-
-    # DEPRECATED TEAMS
-    "CHARLOTTE BOBCATS": Team.CHARLOTTE_BOBCATS,
-    "KANSAS CITY KINGS": Team.KANSAS_CITY_KINGS,
-    "NEW JERSEY NETS": Team.NEW_JERSEY_NETS,
-    "NEW ORLEANS HORNETS": Team.NEW_ORLEANS_HORNETS,
-    "NEW ORLEANS/OKLAHOMA CITY HORNETS": Team.NEW_ORLEANS_OKLAHOMA_CITY_HORNETS,
-    "SEATTLE SUPERSONICS": Team.SEATTLE_SUPERSONICS,
-    "ST. LOUIS HAWKS": Team.ST_LOUIS_HAWKS,
-    "VANCOUVER GRIZZLIES": Team.VANCOUVER_GRIZZLIES,
-    "WASHINGTON BULLETS": Team.WASHINGTON_BULLETS,
-}
+TEAM_ABBREVIATIONS_BY_TEAM: dict[Team, TeamAbbreviation] = {v: k for k, v in TEAMS_BY_ABBREVIATION.items()}
+# Both CHH and CHO are abbreviations for the Charlotte Hornets. Use the current active team abbreviation when identifying the abbreviation for the Charlotte Hornets.
+TEAM_ABBREVIATIONS_BY_TEAM[Team.CHARLOTTE_HORNETS] = TeamAbbreviation.CHO
+# The Baltimore Bullets existed from 1949-1955 in the NBA: https://www.basketball-reference.com/teams/BLB/
+# A different Baltimore Bullets team existed in the NBA (associated with the Washington Wizards franchise: https://www.basketball-reference.com/teams/BAL/1964.html)
+TEAM_ABBREVIATIONS_BY_TEAM[Team.BALTIMORE_BULLETS] = TeamAbbreviation.BAL
+# A Denver Nuggets team existed from 1949-1950 in the NBA: https://www.basketball-reference.com/teams/DNN/
+# The currently active Denver Nuggets franchise only became an NBA team starting in the 1976-1977 NBA season: https://www.basketball-reference.com/teams/DEN/
+TEAM_ABBREVIATIONS_BY_TEAM[Team.DENVER_NUGGETS] = TeamAbbreviation.DEN
 
 POSITION_ABBREVIATIONS_TO_POSITION = {
     "PG": Position.POINT_GUARD,

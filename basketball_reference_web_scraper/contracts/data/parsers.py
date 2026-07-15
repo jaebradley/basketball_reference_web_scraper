@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from basketball_reference_web_scraper.contracts.data.models import Salary, Contract, Player
 from basketball_reference_web_scraper.contracts.page.parsers import ContractRowData as PlayerContractTableData, \
     PlayerRowData
-from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, Team
+from basketball_reference_web_scraper.data import Team, TEAMS_BY_ABBREVIATION, TeamAbbreviation
 
 GUARANTEED_SALARY_COLUMN_DATA_STAT_VALUE = "remain_gtd"
 
@@ -51,7 +51,11 @@ def deserialize_optional_salary(salary: Optional[str]) -> Optional[Salary]:
 
 
 def deserialize_team(abbreviation: str) -> Team:
-    team = TEAM_ABBREVIATIONS_TO_TEAM.get(abbreviation, None)
+    try:
+        team = TEAMS_BY_ABBREVIATION.get(TeamAbbreviation(abbreviation), None)
+    except ValueError:
+        raise ValueError(f"Unable to deserialize team abbreviation: {abbreviation}")
+
     if team:
         return team
 
