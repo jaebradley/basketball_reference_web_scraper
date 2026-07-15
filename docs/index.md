@@ -24,13 +24,13 @@ pip install basketball_reference_web_scraper
 ```
 
 !!! note
-    This library requires `Python 3.7+` 
+    This library requires Python `3.10+` and attempts to mirror the [officially supported Python versions](https://devguide.python.org/versions/) 
 
 !!! note
-    Currently, only data from seasons after the `1999-2000` season is supported
+    Currently, only [NBA teams](https://www.basketball-reference.com/teams/) are supported. ABA/BAA teams are currently not fully supported.
 
 !!! note
-    There are currently two supported major versions - `3+` and `4+`.
+    There is only one supported major version: `4.x.x`.
 
 ## Contributors
 
