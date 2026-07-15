@@ -144,3 +144,19 @@ class TestInvalidTeamSeason(TestCase):
                                roster,
                                season_end_year=2026,
                                team=Team.BOSTON_CELTICS)
+
+
+class Test2001CharlotteHornetsRoster(TestCase):
+    def setUp(self):
+        with open(os.path.join(
+                os.path.dirname(__file__),
+                "../files/teams/2001/CHH.html",
+        ), 'r') as file_input: self._html = file_input.read();
+
+    @requests_mock.Mocker()
+    def test_length(self, m):
+        m.get("https://www.basketball-reference.com/teams/CHH/2001.html", text=self._html, status_code=200)
+        result = roster(season_end_year=2001, team=Team.CHARLOTTE_HORNETS)
+        self.assertEqual(len(result), 16)
+        self.assertEqual(result[-1], {"name": "David Wesley", "slug": "wesleda01", "number": "4",
+                                      "position": Position.SHOOTING_GUARD})

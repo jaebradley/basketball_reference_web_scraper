@@ -2,7 +2,8 @@ import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from basketball_reference_web_scraper.data import PeriodType, Outcome, TeamTotal
+from basketball_reference_web_scraper.data import PeriodType, Outcome, TeamTotal, Team, TeamAbbreviation, \
+    TEAMS_BY_ABBREVIATION
 from basketball_reference_web_scraper.utilities import str_to_int, str_to_float
 
 PLAYER_SEASON_BOX_SCORES_GAME_DATE_FORMAT = '%Y-%m-%d'
@@ -11,11 +12,11 @@ SEARCH_RESULT_NAME_REGEX = '(?P<name>^[^\\(]+)'
 
 
 class TeamAbbreviationParser:
-    def __init__(self, abbreviations_to_teams):
-        self.abbreviations_to_teams = abbreviations_to_teams
-
     def from_abbreviation(self, abbreviation):
-        return self.abbreviations_to_teams.get(abbreviation)
+        try:
+            return TEAMS_BY_ABBREVIATION[TeamAbbreviation(abbreviation)]
+        except ValueError:
+            return None
 
 
 class PositionAbbreviationParser:
@@ -179,11 +180,11 @@ class ScoresParser:
 
 
 class TeamNameParser:
-    def __init__(self, team_names_to_teams):
-        self.team_names_to_teams = team_names_to_teams
-
     def parse_team_name(self, team_name):
-        return self.team_names_to_teams[team_name.strip().upper()]
+        try:
+            return Team(team_name.strip().upper())
+        except ValueError:
+            return None
 
 
 class ScheduledStartTimeParser:

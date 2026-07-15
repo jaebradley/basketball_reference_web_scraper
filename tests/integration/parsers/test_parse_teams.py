@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import TEAM_ABBREVIATIONS_TO_TEAM, TeamTotal
+from basketball_reference_web_scraper.data import TeamTotal
 from basketball_reference_web_scraper.data import Team, Outcome
 from basketball_reference_web_scraper.html import BoxScoresPage
 from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
@@ -22,9 +22,7 @@ class TestParseTeams(TestCase):
                                                 advanced_statistics_table=paired_tables[1]),
                 zip(tables[::2], tables[1::2])))
         cls._parsed_results = TeamTotalsParser(
-            team_abbreviation_parser=TeamAbbreviationParser(
-                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
-            ),
+            team_abbreviation_parser=TeamAbbreviationParser(),
         ).parse(
             first_team_totals=first_team_totals,
             second_team_totals=second_team_totals,

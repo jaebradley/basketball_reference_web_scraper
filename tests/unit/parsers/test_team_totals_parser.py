@@ -1,16 +1,14 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
 
-from basketball_reference_web_scraper.data import TeamTotal, TEAM_ABBREVIATIONS_TO_TEAM
+from basketball_reference_web_scraper.data import TeamTotal
 from basketball_reference_web_scraper.parsers import TeamTotalsParser, TeamAbbreviationParser
 
 
 class TestTeamTotalsParser(TestCase):
     def setUp(self):
         self.parser = TeamTotalsParser(
-            team_abbreviation_parser=TeamAbbreviationParser(
-                abbreviations_to_teams=TEAM_ABBREVIATIONS_TO_TEAM
-            )
+            team_abbreviation_parser=TeamAbbreviationParser()
         )
 
     def test_parse_none_outcome_when_points_are_same(self):
