@@ -38,7 +38,7 @@ pull_requests = "https://github.com/jaebradley/basketball_reference_web_scraper/
 dev = [
     "codecov==2.1.13",
     "mkdocs==1.6.1",
-    "mkdocs-material==9.7.6",
+    "mkdocs-material==9.7.7",
     "pymdown-extensions==11.0.1",
     "coverage==7.14.3",
     "pytest==9.1.1",
