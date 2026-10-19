@@ -120,7 +120,9 @@ class CSVWriter(Writer):
                 csv_file,
                 fieldnames=options.formatting_options.get("column_names"),
             )
-            writer.writeheader()
+            if options.file_options.mode not in (OutputWriteOption.APPEND, OutputWriteOption.APPEND_AND_WRITE) \
+                    or csv_file.tell() == 0:
+                writer.writeheader()
 
             writer.writerows(self.rows(data=data))
 

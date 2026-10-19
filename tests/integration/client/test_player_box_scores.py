@@ -1,6 +1,8 @@
+import csv
 import filecmp
 import json
 import os
+from tempfile import TemporaryDirectory
 from unittest import TestCase
 
 import requests_mock
@@ -115,6 +117,28 @@ class Test20010101(TestCase):
                     )))
         finally:
             os.remove(output_file_path)
+
+    @requests_mock.Mocker()
+    def test_csv_append_preserves_box_score_rows(self, m):
+        m.get("https://www.basketball-reference.com/friv/dailyleaders.cgi?month=1&day=1&year=2001",
+              text=self._html,
+              status_code=200)
+
+        for mode in (OutputWriteOption.APPEND, OutputWriteOption.APPEND_AND_WRITE):
+            with self.subTest(mode=mode), TemporaryDirectory() as directory:
+                output_file_path = os.path.join(directory, "box_scores.csv")
+                for _ in range(2):
+                    player_box_scores(
+                        day=1, month=1, year=2001,
+                        output_type=OutputType.CSV,
+                        output_file_path=output_file_path,
+                        output_write_option=mode,
+                    )
+
+                with open(output_file_path, newline="", encoding="utf8") as output:
+                    rows = list(csv.DictReader(output))
+                self.assertEqual(78, len(rows))
+                self.assertEqual(rows[:39], rows[39:])
 
 
 class TestPlayerBoxScores(TestCase):
