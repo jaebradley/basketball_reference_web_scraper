@@ -6,6 +6,7 @@ repo_url: https://github.com/jaebradley/basketball_reference_web_scraper
 nav:
   - Home: index.md
   - API: api.md
+  - Agents and CLI: agents.md
   - Development: development.md
 theme: material
 markdown_extensions:
