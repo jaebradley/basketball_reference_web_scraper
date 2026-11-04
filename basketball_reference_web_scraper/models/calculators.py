@@ -1,6 +1,10 @@
 import datetime
 
-from basketball_reference_web_scraper.data import TeamAbbreviation, Team, TEAM_ABBREVIATIONS_BY_TEAM
+from basketball_reference_web_scraper.data import (
+    TeamAbbreviation,
+    Team,
+    TEAM_ABBREVIATIONS_BY_TEAM,
+)
 
 # The Charlotte Hornets' (with Basketball Reference abbreviation CHH) last game was May 15th, 2002
 # https://www.basketball-reference.com/teams/CHH/2002_games.html
@@ -12,11 +16,22 @@ def calculate_team_abbreviation(team: Team, date: datetime.date) -> TeamAbbrevia
     if team is Team.CHARLOTTE_HORNETS and date <= DATE_OF_CHARLOTTE_HORNETS_LAST_GAME:
         return TeamAbbreviation.CHH
 
-    return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    try:
+        return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    except KeyError:
+        raise ValueError("{team} is not a valid Team".format(team=team)) from None
 
 
-def calculate_team_abbreviation_from_team_and_season(team: Team, season_end_year: int) -> TeamAbbreviation:
-    if team is Team.CHARLOTTE_HORNETS and season_end_year <= DATE_OF_CHARLOTTE_HORNETS_LAST_GAME.year:
+def calculate_team_abbreviation_from_team_and_season(
+    team: Team, season_end_year: int
+) -> TeamAbbreviation:
+    if (
+        team is Team.CHARLOTTE_HORNETS
+        and season_end_year <= DATE_OF_CHARLOTTE_HORNETS_LAST_GAME.year
+    ):
         return TeamAbbreviation.CHH
 
-    return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    try:
+        return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    except KeyError:
+        raise ValueError("{team} is not a valid Team".format(team=team)) from None

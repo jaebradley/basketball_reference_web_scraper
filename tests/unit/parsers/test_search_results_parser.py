@@ -3,8 +3,12 @@ from unittest.mock import MagicMock
 
 from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, League
 from basketball_reference_web_scraper.parser_service import ParserService
-from basketball_reference_web_scraper.parsers import SearchResultsParser, SearchResultNameParser, \
-    ResourceLocationParser, LeagueAbbreviationParser
+from basketball_reference_web_scraper.parsers import (
+    SearchResultsParser,
+    SearchResultNameParser,
+    ResourceLocationParser,
+    LeagueAbbreviationParser,
+)
 
 
 class TestSearchResultsParser(TestCase):
@@ -24,7 +28,7 @@ class TestSearchResultsParser(TestCase):
             MagicMock(
                 resource_name="jaebaebae",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae.html",
-                league_abbreviations="NBA"
+                league_abbreviations="NBA",
             )
         ]
         self.assertEqual(
@@ -37,15 +41,24 @@ class TestSearchResultsParser(TestCase):
                         "leagues": {League.NATIONAL_BASKETBALL_ASSOCIATION},
                     }
                 ]
-            }
+            },
         )
+
+    def test_parse_search_result_without_resource_link_raises_value_error(self):
+        players = [
+            MagicMock(
+                resource_name=None, resource_location=None, league_abbreviations="NBA"
+            )
+        ]
+        with self.assertRaisesRegex(ValueError, "search result name is missing"):
+            self.parser.parse(nba_aba_baa_players=players)
 
     def test_parse_single_aba_player(self):
         players = [
             MagicMock(
                 resource_name="jaebaebae",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae.html",
-                league_abbreviations="ABA"
+                league_abbreviations="ABA",
             )
         ]
         self.assertEqual(
@@ -58,7 +71,7 @@ class TestSearchResultsParser(TestCase):
                         "leagues": {League.AMERICAN_BASKETBALL_ASSOCIATION},
                     }
                 ]
-            }
+            },
         )
 
     def test_parse_single_baa_player(self):
@@ -66,7 +79,7 @@ class TestSearchResultsParser(TestCase):
             MagicMock(
                 resource_name="jaebaebae",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae.html",
-                league_abbreviations="BAA"
+                league_abbreviations="BAA",
             )
         ]
         self.assertEqual(
@@ -79,7 +92,7 @@ class TestSearchResultsParser(TestCase):
                         "leagues": {League.BASKETBALL_ASSOCIATION_OF_AMERICA},
                     }
                 ]
-            }
+            },
         )
 
     def test_parse_single_nba_aba_baa_player(self):
@@ -87,7 +100,7 @@ class TestSearchResultsParser(TestCase):
             MagicMock(
                 resource_name="jaebaebae",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae.html",
-                league_abbreviations="NBA/ABA/BAA"
+                league_abbreviations="NBA/ABA/BAA",
             )
         ]
         self.assertEqual(
@@ -100,11 +113,11 @@ class TestSearchResultsParser(TestCase):
                         "leagues": {
                             League.NATIONAL_BASKETBALL_ASSOCIATION,
                             League.AMERICAN_BASKETBALL_ASSOCIATION,
-                            League.BASKETBALL_ASSOCIATION_OF_AMERICA
+                            League.BASKETBALL_ASSOCIATION_OF_AMERICA,
                         },
                     }
                 ]
-            }
+            },
         )
 
     def test_parse_multiple_nba_aba_baa_players(self):
@@ -112,18 +125,18 @@ class TestSearchResultsParser(TestCase):
             MagicMock(
                 resource_name="jaebaebae1",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae1.html",
-                league_abbreviations="NBA/ABA/BAA"
+                league_abbreviations="NBA/ABA/BAA",
             ),
             MagicMock(
                 resource_name="jaebaebae2",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae2.html",
-                league_abbreviations="NBA/ABA/BAA"
+                league_abbreviations="NBA/ABA/BAA",
             ),
             MagicMock(
                 resource_name="jaebaebae3",
                 resource_location="https://www.basketball-reference.com/players/j/jaebaebae3.html",
-                league_abbreviations="NBA/ABA/BAA"
-            )
+                league_abbreviations="NBA/ABA/BAA",
+            ),
         ]
         self.assertEqual(
             self.parser.parse(nba_aba_baa_players=players),
@@ -157,5 +170,5 @@ class TestSearchResultsParser(TestCase):
                         },
                     },
                 ]
-            }
+            },
         )
