@@ -1,41 +1,81 @@
-from basketball_reference_web_scraper.data import LOCATION_ABBREVIATIONS_TO_POSITION, \
-    OUTCOME_ABBREVIATIONS_TO_OUTCOME, \
-    POSITION_ABBREVIATIONS_TO_POSITION, LEAGUE_ABBREVIATIONS_TO_LEAGUE, Division, Team, DIVISIONS_TO_CONFERENCES
-from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
-    PlayerSeasonTotalsParser, TeamTotalsParser, LocationAbbreviationParser, OutcomeAbbreviationParser, \
-    SecondsPlayedParser, PlayerBoxScoresParser, PlayerAdvancedSeasonTotalsParser, PeriodDetailsParser, \
-    PeriodTimestampParser, ScoresParser, PlayByPlaysParser, TeamNameParser, ScheduledStartTimeParser, \
-    ScheduledGamesParser, PlayerBoxScoreOutcomeParser, PlayerSeasonBoxScoresParser, SearchResultNameParser, \
-    ResourceLocationParser, SearchResultsParser, LeagueAbbreviationParser, PlayerDataParser, DivisionNameParser, \
-    TeamStandingsParser, ConferenceDivisionStandingsParser
-from basketball_reference_web_scraper.shooting.parsers import PlayerSeasonShootingStatisticsParser
-from basketball_reference_web_scraper.team_season.parsers import RosterParser, PlayerUrlSlugParser
+from basketball_reference_web_scraper.data import (
+    LOCATION_ABBREVIATIONS_TO_POSITION,
+    OUTCOME_ABBREVIATIONS_TO_OUTCOME,
+    POSITION_ABBREVIATIONS_TO_POSITION,
+    LEAGUE_ABBREVIATIONS_TO_LEAGUE,
+    Division,
+    Team,
+    DIVISIONS_TO_CONFERENCES,
+)
+from basketball_reference_web_scraper.parsers import (
+    PositionAbbreviationParser,
+    TeamAbbreviationParser,
+    PlayerSeasonTotalsParser,
+    TeamTotalsParser,
+    LocationAbbreviationParser,
+    OutcomeAbbreviationParser,
+    SecondsPlayedParser,
+    PlayerBoxScoresParser,
+    PlayerAdvancedSeasonTotalsParser,
+    PeriodDetailsParser,
+    PeriodTimestampParser,
+    ScoresParser,
+    PlayByPlaysParser,
+    TeamNameParser,
+    ScheduledStartTimeParser,
+    ScheduledGamesParser,
+    PlayerBoxScoreOutcomeParser,
+    PlayerSeasonBoxScoresParser,
+    SearchResultNameParser,
+    ResourceLocationParser,
+    SearchResultsParser,
+    LeagueAbbreviationParser,
+    PlayerDataParser,
+    DivisionNameParser,
+    TeamStandingsParser,
+    ConferenceDivisionStandingsParser,
+)
+from basketball_reference_web_scraper.shooting.parsers import (
+    PlayerSeasonShootingStatisticsParser,
+)
+from basketball_reference_web_scraper.team_season.parsers import (
+    RosterParser,
+    PlayerUrlSlugParser,
+)
 
 
 class ParserService:
     PLAY_BY_PLAY_TIMESTAMP_FORMAT = "%M:%S.%f"
-    PLAY_BY_PLAY_SCORES_REGEX = "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
-    SEARCH_RESULT_RESOURCE_LOCATION_REGEX = r'(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html'
+    PLAY_BY_PLAY_SCORES_REGEX = (
+        "(?P<away_team_score>[0-9]+)-(?P<home_team_score>[0-9]+)"
+    )
+    SEARCH_RESULT_RESOURCE_LOCATION_REGEX = r"(https?:\/\/www\.basketball-reference\.com\/)?(?P<resource_type>.+?(?=\/)).*\/(?P<resource_identifier>.+).html"
 
     def __init__(self):
         self.team_abbreviation_parser = TeamAbbreviationParser()
         self.league_abbreviation_parser = LeagueAbbreviationParser(
-            abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE)
+            abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE
+        )
         self.location_abbreviation_parser = LocationAbbreviationParser(
             abbreviations_to_locations=LOCATION_ABBREVIATIONS_TO_POSITION,
         )
         self.outcome_abbreviation_parser = OutcomeAbbreviationParser(
             abbreviations_to_outcomes=OUTCOME_ABBREVIATIONS_TO_OUTCOME,
         )
-        self.outcome_parser = PlayerBoxScoreOutcomeParser(outcome_abbreviation_parser=self.outcome_abbreviation_parser)
+        self.outcome_parser = PlayerBoxScoreOutcomeParser(
+            outcome_abbreviation_parser=self.outcome_abbreviation_parser
+        )
         self.period_details_parser = PeriodDetailsParser(regulation_periods_count=4)
         self.period_timestamp_parser = PeriodTimestampParser(
-            timestamp_format=ParserService.PLAY_BY_PLAY_TIMESTAMP_FORMAT)
+            timestamp_format=ParserService.PLAY_BY_PLAY_TIMESTAMP_FORMAT
+        )
         self.position_abbreviation_parser = PositionAbbreviationParser(
             abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION,
         )
         self.seconds_played_parser = SecondsPlayedParser()
-        self.scores_parser = ScoresParser(scores_regex=ParserService.PLAY_BY_PLAY_SCORES_REGEX)
+        self.scores_parser = ScoresParser(
+            scores_regex=ParserService.PLAY_BY_PLAY_SCORES_REGEX
+        )
         self.search_result_name_parser = SearchResultNameParser()
         self.search_result_location_parser = ResourceLocationParser(
             resource_location_regex=ParserService.SEARCH_RESULT_RESOURCE_LOCATION_REGEX
@@ -51,7 +91,7 @@ class ParserService:
             team_abbreviation_parser=self.team_abbreviation_parser,
             location_abbreviation_parser=self.location_abbreviation_parser,
             outcome_abbreviation_parser=self.outcome_abbreviation_parser,
-            seconds_played_parser=self.seconds_played_parser
+            seconds_played_parser=self.seconds_played_parser,
         )
         self.player_data_parser = PlayerDataParser(
             search_result_location_parser=self.search_result_location_parser,
@@ -61,7 +101,7 @@ class ParserService:
             team_abbreviation_parser=self.team_abbreviation_parser,
             location_abbreviation_parser=self.location_abbreviation_parser,
             outcome_parser=self.outcome_parser,
-            seconds_played_parser=self.seconds_played_parser
+            seconds_played_parser=self.seconds_played_parser,
         )
         self.player_season_totals_parser = PlayerSeasonTotalsParser(
             position_abbreviation_parser=self.position_abbreviation_parser,
@@ -71,9 +111,11 @@ class ParserService:
             team_abbreviation_parser=self.team_abbreviation_parser,
             position_abbreviation_parser=self.position_abbreviation_parser,
         )
-        self.player_season_shooting_statistics_parser = PlayerSeasonShootingStatisticsParser(
-            position_abbreviation_parser=self.position_abbreviation_parser,
-            team_abbreviation_parser=self.team_abbreviation_parser,
+        self.player_season_shooting_statistics_parser = (
+            PlayerSeasonShootingStatisticsParser(
+                position_abbreviation_parser=self.position_abbreviation_parser,
+                team_abbreviation_parser=self.team_abbreviation_parser,
+            )
         )
         self.scheduled_start_time_parser = ScheduledStartTimeParser()
         self.scheduled_games_parser = ScheduledGamesParser(
@@ -85,7 +127,9 @@ class ParserService:
             search_result_location_parser=self.search_result_location_parser,
             league_abbreviation_parser=self.league_abbreviation_parser,
         )
-        self.team_totals_parser = TeamTotalsParser(team_abbreviation_parser=self.team_abbreviation_parser)
+        self.team_totals_parser = TeamTotalsParser(
+            team_abbreviation_parser=self.team_abbreviation_parser
+        )
         self.division_name_parser = DivisionNameParser(divisions=Division)
         self.team_standings_parser = TeamStandingsParser(teams=Team)
         self.conference_division_standings_parser = ConferenceDivisionStandingsParser(
@@ -93,11 +137,15 @@ class ParserService:
             team_standings_parser=self.team_standings_parser,
             divisions_to_conferences=DIVISIONS_TO_CONFERENCES,
         )
-        self.roster_parser = RosterParser(slug_parser=PlayerUrlSlugParser(),
-                                          position_abbreviation_parser=self.position_abbreviation_parser)
+        self.roster_parser = RosterParser(
+            slug_parser=PlayerUrlSlugParser(),
+            position_abbreviation_parser=self.position_abbreviation_parser,
+        )
 
     def parse_division_standings(self, standings):
-        return self.conference_division_standings_parser.parse(division_standings=standings)
+        return self.conference_division_standings_parser.parse(
+            division_standings=standings
+        )
 
     def parse_play_by_plays(self, play_by_plays, away_team_name, home_team_name):
         return self.play_by_plays_parser.parse(
@@ -109,9 +157,14 @@ class ParserService:
     def parse_player_box_scores(self, box_scores):
         return self.player_box_scores_parser.parse(box_scores=box_scores)
 
-    def parse_player_season_box_scores(self, box_scores, include_inactive_games=False):
-        return self.player_season_box_scores_parser.parse(box_scores=box_scores,
-                                                          include_inactive_games=include_inactive_games)
+    def parse_player_season_box_scores(
+        self, box_scores, include_inactive_games=False, player_identifier=None
+    ):
+        return self.player_season_box_scores_parser.parse(
+            box_scores=box_scores,
+            include_inactive_games=include_inactive_games,
+            player_identifier=player_identifier,
+        )
 
     def parse_player_advanced_season_totals_parser(self, totals):
         return self.player_advanced_season_totals_parser.parse(totals=totals)
@@ -126,7 +179,9 @@ class ParserService:
         return self.scheduled_games_parser.parse_games(games)
 
     def parse_team_totals(self, first_team_totals, second_team_totals):
-        return self.team_totals_parser.parse(first_team_totals=first_team_totals, second_team_totals=second_team_totals)
+        return self.team_totals_parser.parse(
+            first_team_totals=first_team_totals, second_team_totals=second_team_totals
+        )
 
     def parse_player_search_results(self, nba_aba_baa_players):
         return self.search_results_parser.parse(nba_aba_baa_players=nba_aba_baa_players)
