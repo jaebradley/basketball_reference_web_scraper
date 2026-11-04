@@ -71,3 +71,6 @@ testpaths = "tests"
 addopts = [
     "--import-mode=importlib",
 ]
+
+[tool.ty.environment]
+python = ".venv/bin/python"

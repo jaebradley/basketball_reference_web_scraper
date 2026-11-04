@@ -104,10 +104,9 @@ Use the `OutputType` `enum` as the `output_type` value to specify `CSV` or `JSON
 
 The `output_file_path` argument takes a string and specifies where the result output should be written.
 
-!!! warning
-    Currently, specifying an `output_type` of `OutputType.CSV` **requires** an `output_file_path` value.
-    
-    `JSON` output can be returned by API methods without having to be written to a file.
+!!! note
+    Specifying an `output_type` without an `output_file_path` returns the serialized output as a string —
+    this works for both `JSON` and `CSV` output types.
 
 Use the `OutputWriteOption` `enum` as the `output_write_option` value to specify if the result output should be written,
 or appended to the specified file path (or any of other the Python file mode options).
@@ -161,6 +160,10 @@ or appended to the specified file path (or any of other the Python file mode opt
 
 ### Team Box Scores For A Given Day
 
+!!! note
+    `max_workers` controls how many game pages are fetched concurrently; the
+    default is `1` (sequential), and returned records keep game order.
+
 === "Python Data Structures"
     ```python
     from basketball_reference_web_scraper import client
@@ -201,6 +204,14 @@ or appended to the specified file path (or any of other the Python file mode opt
     ```
     
 ### Get Season Schedule
+
+!!! note
+    Each record contains the source game `date` (the Eastern calendar date shown
+    on Basketball Reference) and `start_time`, a timezone-aware datetime in UTC.
+    Join schedules to game logs with `date`; using the UTC calendar date of
+    `start_time` shifts evening games to the next day. Pass `max_workers` to
+    fetch the month pages concurrently while preserving row order; the default
+    is `1` (sequential).
 
 === "Python Data Structures"
     ```python
@@ -383,7 +394,9 @@ or appended to the specified file path (or any of other the Python file mode opt
     In the case of Russell Westbrook, their `player_identifier` is **`westbru01`**.
     
     You can see this from their player page URL: https://www.basketball-reference.com/players/w/westbru01/gamelog/2020.
-    
+
+    Every returned row repeats the requested `player_identifier`, so rows from
+    several calls can be concatenated without losing player identity.
 
 === "Python Data Structures"
     ```python
@@ -442,7 +455,9 @@ or appended to the specified file path (or any of other the Python file mode opt
     In the case of Russell Westbrook, their `player_identifier` is **`westbru01`**.
     
     You can see this from their player page URL: https://www.basketball-reference.com/players/w/westbru01/gamelog/2020.
-    
+
+    Every returned row repeats the requested `player_identifier`, so rows from
+    several calls can be concatenated without losing player identity.
 
 === "Python Data Structures"
     ```python

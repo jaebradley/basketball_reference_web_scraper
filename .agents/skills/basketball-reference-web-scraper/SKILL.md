@@ -24,20 +24,26 @@ runner; this package does not itself supply an MCP server.
    fetching. For a team use the enum name from `teams`. `play-by-play` requires
    the **home** team and the calendar date; find these in `season-schedule` when
    the request supplies only an opponent or an away team.
-3. Fetch only the required data, sequentially. JSON is the default; supported
-   flat tables also accept `--format csv`. Use `--output PATH` to save; add
-   `--overwrite` only when replacing that file is intended. Set a finite runner
-   deadline appropriate to the task (for example, 120 seconds for one lookup;
-   schedules can make several requests). On deadline expiry stop the process
-   and report incomplete work. The CLI performs no automatic retries.
+3. Fetch only the required data. JSON is the default; supported flat tables also
+   accept `--format csv`. Combine work in one invocation by repeating `--player`
+   and `--season`; rows are emitted in request order and tagged with the
+   requested `season_end_year`. Add `--jobs N` (1-16) to fetch independent pages
+   or player-seasons concurrently; the default is sequential. Use `--output
+   PATH` to save; add `--overwrite` only when replacing that file is intended.
+   Set a finite runner deadline appropriate to the task (for example, 120
+   seconds for one lookup; schedules can make several requests). On deadline
+   expiry stop the process and report incomplete work. The CLI performs no
+   automatic retries.
 4. Check the exit status before parsing stdout or reading an export. Failures
    produce a JSON `error` on stderr: exit 2 means invalid arguments; exit 1 means
    fetch, parse, or output failure. On 403 or 429, stop and report the access or
    rate limit failure. Preserve partial task progress when doing multiple calls;
    report which calls succeeded. An empty result establishes no matching rows,
    not a zero-valued statistic or proof of complete source coverage.
-5. Compute the requested answer from the returned rows. Avoid double-counting
-   combined and team-specific rows for traded players (advanced totals offer
+5. Compute the requested answer from the returned rows. Game-log rows carry
+   `player_identifier`; schedule rows carry the source game `date` as well as the
+   UTC `start_time`, so join on `date`. Avoid double-counting combined and
+   team-specific rows for traded players (advanced totals offer
    `--include-combined-values`). Check the actual output fields before computing
    a metric; a box score may require deriving points from made shots, and minute
    totals may be represented as seconds. Contracts use **season start years**
