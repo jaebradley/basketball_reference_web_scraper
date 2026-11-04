@@ -28,9 +28,9 @@ __contracts_table_row_parser = ContractsTableRowParser(
 
 
 def standings(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
-              json_options=None):
+              json_options=None, headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.standings(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -51,9 +51,9 @@ def standings(season_end_year, output_type=None, output_file_path=None, output_w
 
 
 def player_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
-                      json_options=None):
+                      json_options=None, headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.player_box_scores(day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -75,9 +75,10 @@ def player_box_scores(day, month, year, output_type=None, output_file_path=None,
 
 
 def regular_season_player_box_scores(player_identifier, season_end_year, output_type=None, output_file_path=None,
-                                     output_write_option=None, json_options=None, include_inactive_games=False):
+                                     output_write_option=None, json_options=None, include_inactive_games=False,
+                                     headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.regular_season_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
@@ -103,9 +104,10 @@ def regular_season_player_box_scores(player_identifier, season_end_year, output_
 
 
 def playoff_player_box_scores(player_identifier, season_end_year, output_type=None, output_file_path=None,
-                              output_write_option=None, json_options=None, include_inactive_games=False):
+                              output_write_option=None, json_options=None, include_inactive_games=False,
+                              headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.playoff_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
@@ -132,9 +134,9 @@ def playoff_player_box_scores(player_identifier, season_end_year, output_type=No
 
 
 def season_schedule(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
-                    json_options=None):
+                    json_options=None, headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.season_schedule(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         # https://github.com/requests/requests/blob/master/requests/status_codes.py#L58
@@ -156,9 +158,9 @@ def season_schedule(season_end_year, output_type=None, output_file_path=None, ou
 
 
 def players_season_totals(season_end_year, output_type=None, output_file_path=None, output_write_option=None,
-                          json_options=None):
+                          json_options=None, headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.players_season_totals(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -192,9 +194,10 @@ def players_regular_season_shooting_statistics(season_end_year):
 
 
 def players_advanced_season_totals(season_end_year, include_combined_values=False, output_type=None,
-                                   output_file_path=None, output_write_option=None, json_options=None):
+                                   output_file_path=None, output_write_option=None, json_options=None,
+                                   headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.players_advanced_season_totals(
             season_end_year,
             include_combined_values=include_combined_values
@@ -218,9 +221,9 @@ def players_advanced_season_totals(season_end_year, include_combined_values=Fals
 
 
 def team_box_scores(day, month, year, output_type=None, output_file_path=None, output_write_option=None,
-                    json_options=None):
+                    json_options=None, headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.team_box_scores(day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -265,9 +268,9 @@ def roster(team, season_end_year, output_type=None, output_file_path=None, outpu
 
 
 def play_by_play(home_team, day, month, year, output_type=None, output_file_path=None, output_write_option=None,
-                 json_options=None):
+                 json_options=None, headers=None, proxies=None, timeout=None):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
         values = http_service.play_by_play(home_team=home_team, day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -287,8 +290,9 @@ def play_by_play(home_team, day, month, year, output_type=None, output_file_path
     return output_service.output(data=values, options=options)
 
 
-def search(term, output_type=None, output_file_path=None, output_write_option=None, json_options=None):
-    http_service = HTTPService(parser=ParserService())
+def search(term, output_type=None, output_file_path=None, output_write_option=None, json_options=None,
+           headers=None, proxies=None, timeout=None):
+    http_service = HTTPService(parser=ParserService(), headers=headers, proxies=proxies, timeout=timeout)
     values = http_service.search(term=term)
     options = OutputOptions.of(
         file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
