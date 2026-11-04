@@ -137,7 +137,9 @@ current data, not a historical-season query.
   path is preserved unless `--overwrite` is supplied; replacement is atomic.
   No success message is mixed into result data.
 - Argument errors exit 2. Runtime errors exit 1. Both emit a JSON object of the
-  form `{"error": {"type": "...", "message": "..."}}` on stderr. HTTP errors
+  form `{"error": {"type": "...", "message": "..."}}` on stderr and both are
+  retained in the diagnostics journal with `run_id` and `diagnostics_path`
+  pointing at the run's retained evidence journal. HTTP errors
   include `status_code` when available. Empty data is a successful fetch, but
   does not prove source completeness. Check exit status before using output.
 - The CLI does not retry failures. Stop on access denial (403) or rate limiting
@@ -149,3 +151,45 @@ current data, not a historical-season query.
   instead of inventing missing results.
 
 The existing [Python API](api.md) remains available for direct integrations.
+
+## Investigate past runs (diagnostics journal)
+
+Every CLI invocation or library session records structured JSON evidence to one
+JSONL file per run under
+`~/.basketball_reference_web_scraper/diagnostics/` (override with
+`BASKETBALL_REFERENCE_DIAGNOSTICS_DIR`; set
+`BASKETBALL_REFERENCE_DIAGNOSTICS=off` to disable). When a run failed hours or
+days ago and cannot be reproduced, this journal is what an agent can retrieve:
+each request's URL, status, latency, and outcome, per-operation start/end with
+row counts, and terminal errors with environment and traceback context. Events
+carry a shared `run_id`, so one invocation's concurrent fetches stay
+attributable. The package version, Python version, platform, and pid are in
+each `run_start` event.
+
+Query the journal with the `diagnostics` command (offline; reads only local
+files):
+
+```bash
+basketball-reference diagnostics --runs                    # summarize retained runs
+basketball-reference diagnostics --since 2026-11-03T00:00:00Z --until 2026-11-04T00:00:00Z
+basketball-reference diagnostics --run-id 1a2b3c4d5e6f     # one invocation
+basketball-reference diagnostics --operation season_schedule --event http_request
+basketball-reference diagnostics --kind http_error         # terminal errors only
+basketball-reference diagnostics --dir /path/to/journal --limit 200
+```
+
+To investigate a past failure: run `--runs` to find the run file and `run_id`,
+then query that `run_id` and look at `http_request.outcome` (`response`,
+`timeout`, `connection_error`, `request_error`) and `http_stream` events for
+what actually happened, `operation_end` for outcomes and row counts, and the
+`error` event (with bounded traceback and the last requested URL) for how the
+run terminated. Runtime error JSON on stderr also carries `run_id` and
+`diagnostics_path`, so a pasted error already points at its evidence.
+
+Retention is bounded to the newest 20 run files of at most 5 MiB each; the
+journal records no response bodies, headers (except `Retry-After` on 429/503),
+or environment values, and truncates recorded values at 300 characters. A
+journaling failure never changes scrape behavior or exit codes. The journal
+does not recover anything from runs before instrumentation existed, and a run
+with journaling disabled leaves no evidence.
+

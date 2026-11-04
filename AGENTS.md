@@ -8,3 +8,8 @@ the requested result. CLI setup and examples are in [docs/agents.md](docs/agents
 For code changes, run the offline suite with
 `uv run pytest --ignore="tests/end to end/"`. The end-to-end directory makes live
 requests; the integration directory uses recorded HTML and mocked HTTP.
+
+To investigate a past or intermittent CLI failure, query the retained evidence
+journal: `basketball-reference diagnostics --runs`, then filter by `--run-id`,
+`--since`/`--until`, `--operation`, or `--kind`. The runbook is in
+[docs/agents.md](docs/agents.md#investigate-past-runs-diagnostics-journal).

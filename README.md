@@ -39,7 +39,9 @@ and a JSON-first CLI covering all public client operations.
 Install this checkout with `python -m pip install .`, then run
 `basketball-reference --help` (or `python -m basketball_reference_web_scraper --help`).
 See the [agent and CLI guide](docs/agents.md) for setup, examples, and output and
-failure contracts.
+failure contracts. Past runs leave a bounded JSONL evidence journal; investigate
+failures with `basketball-reference diagnostics --runs` (see
+[Investigate past runs](docs/agents.md#investigate-past-runs-diagnostics-journal)).
 
 ## Contributors
 

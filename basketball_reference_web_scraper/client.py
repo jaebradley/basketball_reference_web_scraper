@@ -1,6 +1,7 @@
 from typing import Any, Callable
 
 import requests
+from basketball_reference_web_scraper import diagnostics
 from basketball_reference_web_scraper.contracts.data.models import Contract, Player
 from basketball_reference_web_scraper.contracts.data.parsers import (
     ContractsTableRowParser,
@@ -54,6 +55,7 @@ __contracts_table_row_parser = ContractsTableRowParser(
 )
 
 
+@diagnostics.traced
 def standings(
     season_end_year,
     output_type=None,
@@ -62,7 +64,7 @@ def standings(
     json_options=None,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), operation="standings")
         values = http_service.standings(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -82,6 +84,7 @@ def standings(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def player_box_scores(
     day,
     month,
@@ -92,7 +95,9 @@ def player_box_scores(
     json_options=None,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(
+            parser=ParserService(), operation="player_box_scores"
+        )
         values = http_service.player_box_scores(day=day, month=month, year=year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -113,6 +118,7 @@ def player_box_scores(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def regular_season_player_box_scores(
     player_identifier,
     season_end_year,
@@ -123,7 +129,9 @@ def regular_season_player_box_scores(
     include_inactive_games=False,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(
+            parser=ParserService(), operation="regular_season_player_box_scores"
+        )
         values = http_service.regular_season_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
@@ -152,6 +160,7 @@ def regular_season_player_box_scores(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def playoff_player_box_scores(
     player_identifier,
     season_end_year,
@@ -162,7 +171,9 @@ def playoff_player_box_scores(
     include_inactive_games=False,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(
+            parser=ParserService(), operation="playoff_player_box_scores"
+        )
         values = http_service.playoff_player_box_scores(
             player_identifier=player_identifier,
             season_end_year=season_end_year,
@@ -192,6 +203,7 @@ def playoff_player_box_scores(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def season_schedule(
     season_end_year,
     output_type=None,
@@ -201,7 +213,7 @@ def season_schedule(
     max_workers=1,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), operation="season_schedule")
         values = http_service.season_schedule(
             season_end_year=season_end_year, max_workers=max_workers
         )
@@ -224,6 +236,7 @@ def season_schedule(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def players_season_totals(
     season_end_year,
     output_type=None,
@@ -232,7 +245,9 @@ def players_season_totals(
     json_options=None,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(
+            parser=ParserService(), operation="players_season_totals"
+        )
         values = http_service.players_season_totals(season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -252,9 +267,13 @@ def players_season_totals(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def players_regular_season_shooting_statistics(season_end_year):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(
+            parser=ParserService(),
+            operation="players_regular_season_shooting_statistics",
+        )
         values = http_service.players_season_shooting_statistics(
             season_end_year=season_end_year
         )
@@ -267,6 +286,7 @@ def players_regular_season_shooting_statistics(season_end_year):
     return values
 
 
+@diagnostics.traced
 def players_advanced_season_totals(
     season_end_year,
     include_combined_values=False,
@@ -276,7 +296,9 @@ def players_advanced_season_totals(
     json_options=None,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(
+            parser=ParserService(), operation="players_advanced_season_totals"
+        )
         values = http_service.players_advanced_season_totals(
             season_end_year, include_combined_values=include_combined_values
         )
@@ -298,6 +320,7 @@ def players_advanced_season_totals(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def team_box_scores(
     day,
     month,
@@ -309,7 +332,7 @@ def team_box_scores(
     max_workers=1,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), operation="team_box_scores")
         values = http_service.team_box_scores(
             day=day, month=month, year=year, max_workers=max_workers
         )
@@ -331,6 +354,7 @@ def team_box_scores(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def roster(
     team,
     season_end_year,
@@ -340,7 +364,7 @@ def roster(
     json_options=None,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), operation="roster")
         values = http_service.roster(team=team, season_end_year=season_end_year)
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
@@ -362,6 +386,7 @@ def roster(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def play_by_play(
     home_team,
     day,
@@ -373,7 +398,7 @@ def play_by_play(
     json_options=None,
 ):
     try:
-        http_service = HTTPService(parser=ParserService())
+        http_service = HTTPService(parser=ParserService(), operation="play_by_play")
         values = http_service.play_by_play(
             home_team=home_team, day=day, month=month, year=year
         )
@@ -395,6 +420,7 @@ def play_by_play(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def search(
     term,
     output_type=None,
@@ -402,7 +428,7 @@ def search(
     output_write_option=None,
     json_options=None,
 ):
-    http_service = HTTPService(parser=ParserService())
+    http_service = HTTPService(parser=ParserService(), operation="search")
     values = http_service.search(term=term)
     options = OutputOptions.of(
         file_options=FileOptions.of(path=output_file_path, mode=output_write_option),
@@ -417,6 +443,7 @@ def search(
     return output_service.output(data=values, options=options)
 
 
+@diagnostics.traced
 def contracts(contract_processor: Callable[[Contract], Any]):
     """
     Parses player contract data found on this page: https://www.basketball-reference.com/contracts/players.html
@@ -429,7 +456,7 @@ def contracts(contract_processor: Callable[[Contract], Any]):
     :return: None
     :raises: CouldNotGetPlayerContractData
     """
-    HTTPService(parser=ParserService()).contracts(
+    HTTPService(parser=ParserService(), operation="contracts").contracts(
         parsed_contract_row_processor=lambda contract_data: contract_processor(
             __contracts_table_row_parser.parse_combined_row_data(data=contract_data)
         )

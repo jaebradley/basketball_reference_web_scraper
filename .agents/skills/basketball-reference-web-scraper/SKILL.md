@@ -36,10 +36,15 @@ runner; this package does not itself supply an MCP server.
    automatic retries.
 4. Check the exit status before parsing stdout or reading an export. Failures
    produce a JSON `error` on stderr: exit 2 means invalid arguments; exit 1 means
-   fetch, parse, or output failure. On 403 or 429, stop and report the access or
+   fetch, parse, or output failure. Runtime errors also carry `run_id` and
+   `diagnostics_path`, pointing at the run's evidence journal. On 403 or 429, stop and report the access or
    rate limit failure. Preserve partial task progress when doing multiple calls;
    report which calls succeeded. An empty result establishes no matching rows,
-   not a zero-valued statistic or proof of complete source coverage.
+   not a zero-valued statistic or proof of complete source coverage. When a past
+   failure needs investigation, query the journal with
+   `basketball-reference diagnostics --runs` and filter by `--run-id`,
+   `--since`/`--until`, `--operation`, or `--kind`; see
+   [Investigate past runs](../../../docs/agents.md#investigate-past-runs-diagnostics-journal).
 5. Compute the requested answer from the returned rows. Game-log rows carry
    `player_identifier`; schedule rows carry the source game `date` as well as the
    UTC `start_time`, so join on `date`. Avoid double-counting combined and
