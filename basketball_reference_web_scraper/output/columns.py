@@ -33,6 +33,7 @@ PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = [
 ] + SHARED_COLUMN_NAMES
 
 SCHEDULE_COLUMN_NAMES = [
+    "date",
     "start_time",
     "away_team",
     "away_team_score",

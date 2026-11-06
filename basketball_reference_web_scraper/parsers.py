@@ -238,6 +238,12 @@ class ScheduledStartTimeParser:
     def __init__(self, time_zone=ZoneInfo("UTC")):
         self.time_zone = time_zone
 
+    def parse_date(self, formatted_date):
+        # Basketball Reference labels the date and start time in Eastern time.
+        # Keep that calendar date separate from the UTC start_time so schedule
+        # rows can be joined to game logs, which use the same game date.
+        return datetime.strptime(formatted_date, "%a, %b %d, %Y").date()
+
     def parse_start_time(self, formatted_date, formatted_time_of_day):
         if formatted_time_of_day is not None and formatted_time_of_day not in ["", " "]:
             # Starting in 2018, the start times had a "p" or "a" appended to the end
@@ -378,6 +384,9 @@ class ScheduledGamesParser:
     def parse_games(self, games):
         return [
             {
+                "date": self.start_time_parser.parse_date(
+                    formatted_date=game.start_date
+                ),
                 "start_time": self.start_time_parser.parse_start_time(
                     formatted_date=game.start_date,
                     formatted_time_of_day=game.start_time_of_day,

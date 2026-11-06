@@ -1,7 +1,7 @@
 import filecmp
 import json
 import os
-from datetime import datetime
+from datetime import date, datetime
 from unittest import TestCase
 from zoneinfo import ZoneInfo
 
@@ -20,7 +20,6 @@ from tests.integration.client.utilities import SeasonScheduleMocker
     season_end_year=2018,
 )
 class TestSeasonScheduleInMemoryOutput(TestCase):
-
     def test_2018_season_schedule_length(self):
         result = season_schedule(season_end_year=2018)
         self.assertEqual(1416, len(result))
@@ -32,6 +31,7 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
             {
                 "away_team": Team.BOSTON_CELTICS,
                 "away_team_score": 99,
+                "date": date(2017, 10, 17),
                 "home_team": Team.CLEVELAND_CAVALIERS,
                 "home_team_score": 102,
                 "start_time": datetime(2017, 10, 18, 0, 1, tzinfo=ZoneInfo("UTC")),
@@ -45,6 +45,7 @@ class TestSeasonScheduleInMemoryOutput(TestCase):
             {
                 "away_team": Team.GOLDEN_STATE_WARRIORS,
                 "away_team_score": 108,
+                "date": date(2018, 6, 8),
                 "home_team": Team.CLEVELAND_CAVALIERS,
                 "home_team_score": 85,
                 "start_time": datetime(2018, 6, 9, 1, 0, tzinfo=ZoneInfo("UTC")),
