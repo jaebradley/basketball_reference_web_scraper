@@ -1,12 +1,14 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import League, LEAGUE_ABBREVIATIONS_TO_LEAGUE
+from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, League
 from basketball_reference_web_scraper.parsers import LeagueAbbreviationParser
 
 
 class TestLeagueAbbreviationParser(TestCase):
     def setUp(self):
-        self.parser = LeagueAbbreviationParser(abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE)
+        self.parser = LeagueAbbreviationParser(
+            abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE
+        )
 
     def test_parsing_unknown_abbreviation(self):
         self.assertRaisesRegex(
@@ -35,10 +37,7 @@ class TestLeagueAbbreviationParser(TestCase):
         )
 
     def test_from_abbreviations_when_abbreviations_is_none(self):
-        self.assertEqual(
-            self.parser.from_abbreviations(abbreviations=None),
-            []
-        )
+        self.assertEqual(self.parser.from_abbreviations(abbreviations=None), [])
 
     def test_from_abbreviations_parsing_single_league(self):
         self.assertEqual(
