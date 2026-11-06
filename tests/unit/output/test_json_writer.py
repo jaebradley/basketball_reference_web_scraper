@@ -40,7 +40,7 @@ class TestJSONWriter(TestCase):
                 path="some path",
                 mode=OutputWriteOption.WRITE,
                 should_write_to_file=False,
-            )
+            ),
         )
 
         self.writer.write(data=self.mock_data, options=options)
@@ -66,7 +66,9 @@ class TestJSONWriter(TestCase):
             )
 
             self.writer.write(data=self.mock_data, options=options)
-            mock_file.assert_called_once_with("some path", OutputWriteOption.WRITE.value, newline="", encoding="utf8")
+            mock_file.assert_called_once_with(
+                "some path", OutputWriteOption.WRITE.value, newline="", encoding="utf8"
+            )
             json_dump.assert_called_once_with(
                 self.mock_data,
                 mock_file(),
@@ -90,7 +92,9 @@ class TestJSONWriter(TestCase):
                 ),
             )
             self.writer.write(data=self.mock_data, options=options)
-            mock_file.assert_called_once_with("some path", OutputWriteOption.WRITE.value, newline="", encoding="utf8")
+            mock_file.assert_called_once_with(
+                "some path", OutputWriteOption.WRITE.value, newline="", encoding="utf8"
+            )
             json_dump.assert_called_once_with(
                 self.mock_data,
                 mock_file(),

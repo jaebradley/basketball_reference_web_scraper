@@ -1,15 +1,17 @@
 import os
 from unittest import TestCase
 
-from basketball_reference_web_scraper.html import PlayByPlayPage
 from lxml import html
+
+from basketball_reference_web_scraper.html import PlayByPlayPage
 
 
 class TestPlayByPlayPage(TestCase):
     def setUp(self):
         with open(
-                os.path.join(os.path.dirname(__file__),
-                             '../files/play_by_play/199911160ATL.html')
+            os.path.join(
+                os.path.dirname(__file__), "../files/play_by_play/199911160ATL.html"
+            )
         ) as f:
             self._1999_11_16_ATL_html = f.read()
 
@@ -19,18 +21,11 @@ class TestPlayByPlayPage(TestCase):
         self.assertEqual(len(rows), 449)
 
         last_row = rows[448]
-        self.assertEqual(
-            last_row.timestamp,
-            '0:01.0'
-        )
-        self.assertEqual(
-            last_row.away_team_play_description,
-            ''
-        )
+        self.assertEqual(last_row.timestamp, "0:01.0")
+        self.assertEqual(last_row.away_team_play_description, "")
         self.assertFalse(last_row.is_away_team_play)
         self.assertTrue(last_row.is_home_team_play)
         self.assertEqual(
-            last_row.home_team_play_description,
-            'Defensive rebound by D. Mutombo'
+            last_row.home_team_play_description, "Defensive rebound by D. Mutombo"
         )
-        self.assertEqual(last_row.formatted_scores, '98-103')
+        self.assertEqual(last_row.formatted_scores, "98-103")

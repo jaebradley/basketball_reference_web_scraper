@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date, datetime
 from enum import Enum
 from json import JSONEncoder
 
@@ -51,7 +51,11 @@ FORMATTER_CLASSES = [
 
 def format_value(value):
     formatter_class = next(
-        (formatter_class for formatter_class in FORMATTER_CLASSES if formatter_class.can_format(value)),
+        (
+            formatter_class
+            for formatter_class in FORMATTER_CLASSES
+            if formatter_class.can_format(value)
+        ),
         None,
     )
 

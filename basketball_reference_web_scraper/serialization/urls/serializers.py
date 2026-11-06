@@ -1,11 +1,11 @@
 from datetime import date
 from typing import Protocol, TypeVar
-from urllib.parse import urljoin, SplitResult
+from urllib.parse import SplitResult, urljoin
 
 from basketball_reference_web_scraper.data import TeamAbbreviation
 from basketball_reference_web_scraper.serialization.urls.models import PlayByPlayURLData
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class Serializer(Protocol[T]):
@@ -24,8 +24,11 @@ class TeamAbbreviationSerializer(Serializer):
 
 
 class PlayByPlayURLSerializer(Serializer):
-    def __init__(self, date_serializer: Serializer[date],
-                 team_abbreviation_serializer: Serializer[TeamAbbreviation]) -> None:
+    def __init__(
+        self,
+        date_serializer: Serializer[date],
+        team_abbreviation_serializer: Serializer[TeamAbbreviation],
+    ) -> None:
         self._date_serializer = date_serializer
         self._team_abbreviation_serializer = team_abbreviation_serializer
 
@@ -38,14 +41,16 @@ class PlayByPlayURLSerializer(Serializer):
                 "/boxscores/",
                 urljoin(
                     "pbp/",
-                    f"{self._date_serializer.serialize(value.date)}0{self._team_abbreviation_serializer.serialize(value.team_abbreviation)}.html")),
+                    f"{self._date_serializer.serialize(value.date)}0{self._team_abbreviation_serializer.serialize(value.team_abbreviation)}.html",
+                ),
+            ),
             query="",
-            fragment=""
+            fragment="",
         ).geturl()
 
 
 # TODO: @jaebradley create a proper singleton metaclass
 DEFAULT_PLAY_BY_PLAY_URL_SERIALIZER = PlayByPlayURLSerializer(
     date_serializer=DateSerializer(),
-    team_abbreviation_serializer=TeamAbbreviationSerializer()
+    team_abbreviation_serializer=TeamAbbreviationSerializer(),
 )

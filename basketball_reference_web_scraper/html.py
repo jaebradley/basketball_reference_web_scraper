@@ -12,7 +12,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def minutes_played(self):
@@ -25,7 +25,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def attempted_field_goals(self):
@@ -34,7 +34,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def made_three_point_field_goals(self):
@@ -43,7 +43,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def attempted_three_point_field_goals(self):
@@ -52,7 +52,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def made_free_throws(self):
@@ -61,7 +61,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def attempted_free_throws(self):
@@ -70,7 +70,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def offensive_rebounds(self):
@@ -79,7 +79,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def defensive_rebounds(self):
@@ -88,7 +88,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def assists(self):
@@ -97,7 +97,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def steals(self):
@@ -106,7 +106,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def blocks(self):
@@ -115,7 +115,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def turnovers(self):
@@ -124,7 +124,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def personal_fouls(self):
@@ -133,7 +133,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def points(self):
@@ -142,7 +142,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def location_abbreviation(self):
@@ -151,7 +151,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def outcome(self):
@@ -160,7 +160,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def plus_minus(self):
@@ -169,7 +169,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def game_score(self):
@@ -178,7 +178,7 @@ class BasicBoxScoreRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
 
 class PlayerSeasonGameLogRow(BasicBoxScoreRow):
@@ -197,7 +197,7 @@ class PlayerSeasonGameLogRow(BasicBoxScoreRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def opponent_abbreviation(self):
@@ -206,7 +206,7 @@ class PlayerSeasonGameLogRow(BasicBoxScoreRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
 
 class PlayerBoxScoreRow(BasicBoxScoreRow):
@@ -225,7 +225,7 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def opponent_abbreviation(self):
@@ -234,7 +234,7 @@ class PlayerBoxScoreRow(BasicBoxScoreRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
 
 class PlayerIdentificationRow:
@@ -254,15 +254,15 @@ class PlayerIdentificationRow:
     def slug(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
-        return cell.get('data-append-csv')
+        return cell.get("data-append-csv")
 
     @property
     def name(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
         return cell.text_content()
 
@@ -290,7 +290,9 @@ class PlayerAdvancedSeasonTotalsTable:
         player_advanced_season_totals_rows = []
         for row_html in self.html.xpath(self.rows_query):
             row = PlayerAdvancedSeasonTotalsRow(html=row_html)
-            if (include_combined_totals is True and row.is_combined_totals is True) or row.is_combined_totals is False:
+            if (
+                include_combined_totals is True and row.is_combined_totals is True
+            ) or row.is_combined_totals is False:
                 # Basketball Reference includes a "total" row for players that got traded
                 # which is essentially a sum of all player team rows
                 # I want to avoid including those, so I check the "team" field value for "TOT"
@@ -347,15 +349,15 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
     def slug(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
-        return cell.get('data-append-csv')
+        return cell.get("data-append-csv")
 
     @property
     def name(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
         return cell.text_content()
 
@@ -366,7 +368,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def age(self):
@@ -375,7 +377,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def team_abbreviation(self):
@@ -384,7 +386,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def games_played(self):
@@ -393,7 +395,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def minutes_played(self):
@@ -402,7 +404,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def player_efficiency_rating(self):
@@ -411,7 +413,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def true_shooting_percentage(self):
@@ -420,7 +422,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def three_point_attempt_rate(self):
@@ -429,7 +431,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def free_throw_attempt_rate(self):
@@ -438,7 +440,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def offensive_rebound_percentage(self):
@@ -447,7 +449,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def defensive_rebound_percentage(self):
@@ -456,7 +458,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def total_rebound_percentage(self):
@@ -465,7 +467,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def assist_percentage(self):
@@ -474,7 +476,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def steal_percentage(self):
@@ -483,7 +485,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def block_percentage(self):
@@ -492,7 +494,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def turnover_percentage(self):
@@ -501,7 +503,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def usage_percentage(self):
@@ -510,7 +512,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def offensive_win_shares(self):
@@ -519,7 +521,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def defensive_win_shares(self):
@@ -528,7 +530,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def win_shares(self):
@@ -537,7 +539,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def win_shares_per_48_minutes(self):
@@ -546,7 +548,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def offensive_plus_minus(self):
@@ -555,7 +557,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def defensive_plus_minus(self):
@@ -564,7 +566,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def plus_minus(self):
@@ -573,7 +575,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def value_over_replacement_player(self):
@@ -582,7 +584,7 @@ class PlayerAdvancedSeasonTotalsRow(PlayerIdentificationRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def is_combined_totals(self):
@@ -603,7 +605,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def age(self):
@@ -612,7 +614,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def games_played(self):
@@ -621,7 +623,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def games_started(self):
@@ -630,7 +632,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def is_combined_totals(self):
@@ -646,7 +648,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def player_cell(self):
@@ -661,15 +663,15 @@ class PlayerSeasonTotalsRow:
     def slug(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
-        return cell.get('data-append-csv')
+        return cell.get("data-append-csv")
 
     @property
     def name(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
         return cell.text_content()
 
@@ -680,7 +682,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def minutes_played(self):
@@ -693,7 +695,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def attempted_field_goals(self):
@@ -702,7 +704,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def made_three_point_field_goals(self):
@@ -711,7 +713,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def attempted_three_point_field_goals(self):
@@ -720,7 +722,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def made_free_throws(self):
@@ -729,7 +731,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def attempted_free_throws(self):
@@ -738,7 +740,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def offensive_rebounds(self):
@@ -747,7 +749,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def defensive_rebounds(self):
@@ -756,7 +758,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def assists(self):
@@ -765,7 +767,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def steals(self):
@@ -774,7 +776,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def blocks(self):
@@ -783,7 +785,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def turnovers(self):
@@ -792,7 +794,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def personal_fouls(self):
@@ -801,7 +803,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def points(self):
@@ -810,7 +812,7 @@ class PlayerSeasonTotalsRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
 
 class BoxScoresPage:
@@ -821,11 +823,18 @@ class BoxScoresPage:
     def statistics_tables(self):
         return list(
             map(
-                lambda table_html: BasicTeamStatisticsTable(table_html) if 'game-basic' in table_html.attrib["id"] \
-                    else AdvancedTeamStatisticsTable(table_html),
-                filter(lambda table_html: 'game-basic' in table_html.attrib["id"] \
-                                          or 'game-advanced' in table_html.attrib["id"],
-                       self.html.xpath('//table[contains(@class, "stats_table")]'))
+                lambda table_html: (
+                    BasicTeamStatisticsTable(table_html)
+                    if "game-basic" in table_html.attrib["id"]
+                    else AdvancedTeamStatisticsTable(table_html)
+                ),
+                filter(
+                    lambda table_html: (
+                        "game-basic" in table_html.attrib["id"]
+                        or "game-advanced" in table_html.attrib["id"]
+                    ),
+                    self.html.xpath('//table[contains(@class, "stats_table")]'),
+                ),
             )
         )
 
@@ -837,12 +846,21 @@ class TeamStatisticsTable:
     @property
     def team_abbreviation(self):
         # Example id value is box-BOS-game-basic or box-BOS-game-advanced
-        match = re.match('^box-(.+)-game', self.html.attrib["id"])
+        match = re.match("^box-(.+)-game", self.html.attrib["id"])
+        if match is None:
+            raise ValueError(
+                "Could not parse team abbreviation from id: {id}".format(
+                    id=self.html.attrib["id"]
+                )
+            )
+
         return match.group(1)
 
     @property
     def team_totals(self):
-        raise NotImplementedError("Concrete subclasses need to implement how team totals are extracted")
+        raise NotImplementedError(
+            "Concrete subclasses need to implement how team totals are extracted"
+        )
 
 
 class BasicTeamStatisticsTable(TeamStatisticsTable):
@@ -852,7 +870,7 @@ class BasicTeamStatisticsTable(TeamStatisticsTable):
     @property
     def team_totals(self):
         # Team totals are stored as table footers
-        footers = self.html.xpath('tfoot/tr')
+        footers = self.html.xpath("tfoot/tr")
         if len(footers) == 1:
             return BasicBoxScoreRow(html=footers[0])
 
@@ -860,14 +878,13 @@ class BasicTeamStatisticsTable(TeamStatisticsTable):
 
 
 class AdvancedTeamStatisticsTable(TeamStatisticsTable):
-
     def __init__(self, html):
         super().__init__(html)
 
     @property
     def team_totals(self):
         # Team totals are stored as table footers
-        footers = self.html.xpath('tfoot/tr')
+        footers = self.html.xpath("tfoot/tr")
         if len(footers) == 1:
             return AdvancedTeamTotalRow(html=footers[0])
 
@@ -883,91 +900,91 @@ class AdvancedTeamTotalRow:
         cells = self.html.xpath('td[@data-stat="ts_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def effective_field_goal_percentage(self):
         cells = self.html.xpath('td[@data-stat="efg_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def three_point_attempt_rate(self):
         cells = self.html.xpath('td[@data-stat="fg3a_per_fga_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def free_throw_attempt_rate(self):
         cells = self.html.xpath('td[@data-stat="fta_per_fga_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def offensive_rebound_percentage(self):
         cells = self.html.xpath('td[@data-stat="orb_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def defensive_rebound_percentage(self):
         cells = self.html.xpath('td[@data-stat="drb_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def total_rebound_percentage(self):
         cells = self.html.xpath('td[@data-stat="trb_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def assist_percentage(self):
         cells = self.html.xpath('td[@data-stat="ast_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def steal_percentage(self):
         cells = self.html.xpath('td[@data-stat="stl_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def block_percentage(self):
         cells = self.html.xpath('td[@data-stat="blk_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def turnover_rate(self):
         cells = self.html.xpath('td[@data-stat="tov_pct"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def offensive_rating(self):
         cells = self.html.xpath('td[@data-stat="off_rtg"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
     @property
     def defensive_rating(self):
         cells = self.html.xpath('td[@data-stat="def_rtg"]')
         if len(cells) == 1:
             return cells[0].text_content()
-        return ''
+        return ""
 
 
 class DailyLeadersPage:
@@ -978,7 +995,9 @@ class DailyLeadersPage:
     def daily_leaders(self):
         return [
             PlayerGameBoxScoreRow(row_html)
-            for row_html in self.html.xpath('//table[@id="stats"]//tbody/tr[not(contains(@class, "thead"))]')
+            for row_html in self.html.xpath(
+                '//table[@id="stats"]//tbody/tr[not(contains(@class, "thead"))]'
+            )
         ]
 
 
@@ -1046,7 +1065,7 @@ class PlayerSeasonBoxScoresRow(PlayerSeasonGameLogRow):
         # have a "colspan" attribute
         cells = self.html.xpath('td[@data-stat="is_starter"]')
         if len(cells) > 0:
-            colspan_value = cells[0].get('colspan', None)
+            colspan_value = cells[0].get("colspan", None)
             return colspan_value is None
 
         return False
@@ -1058,7 +1077,7 @@ class PlayerSeasonBoxScoresRow(PlayerSeasonGameLogRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def points_scored(self):
@@ -1067,7 +1086,7 @@ class PlayerSeasonBoxScoresRow(PlayerSeasonGameLogRow):
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
 
 class PlayerGameBoxScoreRow(PlayerBoxScoreRow, PlayerIdentificationRow):
@@ -1085,11 +1104,7 @@ class PlayByPlayPage:
 
     @property
     def team_names_query(self):
-        return \
-            '//*[@id="content"]' \
-            '//div[@class="scorebox"]' \
-            '//strong' \
-            '//a'
+        return '//*[@id="content"]//div[@class="scorebox"]//strong//a'
 
     @property
     def play_by_play_table(self):
@@ -1099,10 +1114,7 @@ class PlayByPlayPage:
     def team_names(self):
         names = self.html.xpath(self.team_names_query)
 
-        return [
-            name.text_content()
-            for name in names
-        ]
+        return [name.text_content() for name in names]
 
     @property
     def away_team_name(self):
@@ -1143,14 +1155,14 @@ class PlayByPlayRow:
         if 6 == len(self.html):
             return self.html[1].text_content().strip()
 
-        return ''
+        return ""
 
     @property
     def home_team_play_description(self):
         if 6 == len(self.html):
             return self.html[5].text_content().strip()
 
-        return ''
+        return ""
 
     @property
     def is_away_team_play(self):
@@ -1164,11 +1176,11 @@ class PlayByPlayRow:
     def formatted_scores(self):
         if 6 == len(self.html):
             return self.html[3].text_content().strip()
-        return ''
+        return ""
 
     @property
     def is_start_of_period(self):
-        return self.timestamp_cell.get('colspan') == '6'
+        return self.timestamp_cell.get("colspan") == "6"
 
     @property
     def has_play_by_play_data(self):
@@ -1178,10 +1190,12 @@ class PlayByPlayRow:
         # Or are one of the table headers for each period group (aria-label = Time)
         # There are certain cases, like at the 10 minute mark in https://www.basketball-reference.com/boxscores/pbp/199911160ATL.html
         # where there are no event details. Probably a visual bug on Basketball Reference's side of things.
-        return not self.is_start_of_period \
-            and 2 <= len(self.html) \
-            and self.html[1].get('colspan') != '5' \
-            and self.timestamp_cell.get('aria-label') != 'Time'
+        return (
+            not self.is_start_of_period
+            and 2 <= len(self.html)
+            and self.html[1].get("colspan") != "5"
+            and self.timestamp_cell.get("aria-label") != "Time"
+        )
 
 
 class DailyBoxScoresPage:
@@ -1195,7 +1209,7 @@ class DailyBoxScoresPage:
     @property
     def game_url_paths(self):
         game_links = self.html.xpath(self.game_url_paths_query)
-        return [game_link.attrib['href'] for game_link in game_links]
+        return [game_link.attrib["href"] for game_link in game_links]
 
 
 class SchedulePage:
@@ -1204,10 +1218,12 @@ class SchedulePage:
 
     @property
     def other_months_schedule_links_query(self):
-        return '//div[@id="content"]' \
-               '/div[@class="filter"]' \
-               '/div[not(contains(@class, "current"))]' \
-               '/a'
+        return (
+            '//div[@id="content"]'
+            '/div[@class="filter"]'
+            '/div[not(contains(@class, "current"))]'
+            "/a"
+        )
 
     @property
     def rows_query(self):
@@ -1216,10 +1232,7 @@ class SchedulePage:
     @property
     def other_months_schedule_urls(self):
         links = self.html.xpath(self.other_months_schedule_links_query)
-        return [
-            link.attrib['href']
-            for link in links
-        ]
+        return [link.attrib["href"] for link in links]
 
     @property
     def rows(self):
@@ -1228,7 +1241,7 @@ class SchedulePage:
             for row in self.html.xpath(self.rows_query)
             # Every row in each month's schedule table represents a game
             # except for the row where the only content is "Playoffs"
-            if row.text_content() != 'Playoffs'
+            if row.text_content() != "Playoffs"
         ]
 
 
@@ -1248,7 +1261,7 @@ class ScheduleRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def start_time_of_day(self):
@@ -1257,7 +1270,7 @@ class ScheduleRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def away_team_name(self):
@@ -1266,7 +1279,7 @@ class ScheduleRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def home_team_name(self):
@@ -1275,7 +1288,7 @@ class ScheduleRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def away_team_score(self):
@@ -1284,7 +1297,7 @@ class ScheduleRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def home_team_score(self):
@@ -1293,7 +1306,7 @@ class ScheduleRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
 
 class SearchPage:
@@ -1306,8 +1319,10 @@ class SearchPage:
 
     @property
     def nba_aba_baa_players_pagination_links_query(self):
-        return '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-pagination"]/a'.format(
-            NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
+        return (
+            '{NBA_ABA_PLAYERS_CONTENT_QUERY}/div[@class="search-pagination"]/a'.format(
+                NBA_ABA_PLAYERS_CONTENT_QUERY=self.nba_aba_baa_players_content_query
+            )
         )
 
     @property
@@ -1330,18 +1345,20 @@ class SearchPage:
         first_link = links[0]
 
         if len(links) == 1:
-            if first_link.text_content() == 'Previous 100 Results':
+            if first_link.text_content() == "Previous 100 Results":
                 return None
 
-            return first_link.attrib["href"]
+            return first_link.attrib.get("href")
 
-        return links[1].attrib["href"]
+        return links[1].attrib.get("href")
 
     @property
     def nba_aba_baa_players(self):
         return [
             PlayerSearchResult(html=result_html)
-            for result_html in self.html.xpath(self.nba_aba_baa_player_search_items_query)
+            for result_html in self.html.xpath(
+                self.nba_aba_baa_player_search_items_query
+            )
         ]
 
 
@@ -1428,7 +1445,7 @@ class PlayerPageTotalsTable:
     def rows(self):
         return [
             PlayerPageTotalsRow(html=row_html)
-            for row_html in self.html.xpath('.//tbody/tr')
+            for row_html in self.html.xpath(".//tbody/tr")
         ]
 
     def __eq__(self, other):
@@ -1505,7 +1522,7 @@ class ConferenceDivisionStandingsTable:
     def rows(self):
         return [
             ConferenceDivisionStandingsRow(html=row_html)
-            for row_html in self.html.xpath('.//tbody/tr')
+            for row_html in self.html.xpath(".//tbody/tr")
         ]
 
 
@@ -1515,15 +1532,15 @@ class ConferenceDivisionStandingsRow:
 
     @property
     def is_division_name_row(self):
-        return self.html.attrib['class'] == 'thead'
+        return self.html.attrib["class"] == "thead"
 
     @property
     def is_standings_row(self):
-        return self.html.attrib['class'] == 'full_table'
+        return self.html.attrib["class"] == "full_table"
 
     @property
     def division_name(self):
-        cells = self.html.xpath('.//th')
+        cells = self.html.xpath(".//th")
 
         if len(cells) == 1:
             return cells[0].text_content()
@@ -1573,7 +1590,7 @@ class PlayerContractsRow:
 
     @property
     def player_identifier(self):
-        matching_attribute_value = self.html.xpath('.//td/@data-append-csv')
+        matching_attribute_value = self.html.xpath(".//td/@data-append-csv")
         if 1 == len(matching_attribute_value):
             return matching_attribute_value[0]
 
@@ -1590,27 +1607,39 @@ class PlayerContractsRow:
 
     @property
     def first_contract_year_data(self):
-        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y1")
+        return self.calculate_contract_year_data(
+            contract_year_data_stat_attribute_value="y1"
+        )
 
     @property
     def second_contract_year_data(self):
-        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y2")
+        return self.calculate_contract_year_data(
+            contract_year_data_stat_attribute_value="y2"
+        )
 
     @property
     def third_contract_year_data(self):
-        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y3")
+        return self.calculate_contract_year_data(
+            contract_year_data_stat_attribute_value="y3"
+        )
 
     @property
     def fourth_contract_year_data(self):
-        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y4")
+        return self.calculate_contract_year_data(
+            contract_year_data_stat_attribute_value="y4"
+        )
 
     @property
     def fifth_contract_year_data(self):
-        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y5")
+        return self.calculate_contract_year_data(
+            contract_year_data_stat_attribute_value="y5"
+        )
 
     @property
     def sixth_contract_year_data(self):
-        return self.calculate_contract_year_data(contract_year_data_stat_attribute_value="y6")
+        return self.calculate_contract_year_data(
+            contract_year_data_stat_attribute_value="y6"
+        )
 
     @property
     def guaranteed(self):
@@ -1622,11 +1651,13 @@ class PlayerContractsRow:
         return None
 
     def calculate_contract_year_data(self, contract_year_data_stat_attribute_value):
-        matching_cells = self.html.xpath(f'.//td[@data-stat="{contract_year_data_stat_attribute_value}"]')
+        matching_cells = self.html.xpath(
+            f'.//td[@data-stat="{contract_year_data_stat_attribute_value}"]'
+        )
 
         if 1 == len(matching_cells):
             salary = matching_cells[0].text_content()
-            class_names = matching_cells[0].get('class')
+            class_names = matching_cells[0].get("class")
 
             return salary, class_names
 

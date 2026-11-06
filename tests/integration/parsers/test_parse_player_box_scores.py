@@ -4,13 +4,20 @@ from unittest import TestCase
 
 from lxml import html
 
-from basketball_reference_web_scraper.data import LOCATION_ABBREVIATIONS_TO_POSITION, \
-    OUTCOME_ABBREVIATIONS_TO_OUTCOME
-from basketball_reference_web_scraper.data import Team, Outcome
+from basketball_reference_web_scraper.data import (
+    LOCATION_ABBREVIATIONS_TO_POSITION,
+    OUTCOME_ABBREVIATIONS_TO_OUTCOME,
+    Outcome,
+    Team,
+)
 from basketball_reference_web_scraper.html import DailyLeadersPage
-from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
-    LocationAbbreviationParser, OutcomeAbbreviationParser, \
-    SecondsPlayedParser, PlayerBoxScoresParser
+from basketball_reference_web_scraper.parsers import (
+    LocationAbbreviationParser,
+    OutcomeAbbreviationParser,
+    PlayerBoxScoresParser,
+    SecondsPlayedParser,
+    TeamAbbreviationParser,
+)
 
 
 class BaseBoxScoresTestCase(TestCase):
@@ -19,10 +26,14 @@ class BaseBoxScoresTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         year, month, day = cls._date.year, cls._date.month, cls._date.day
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/player_box_scores/{year}/{month}/{day}.html",
-        ), 'r') as file_input: _html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            _html = file_input.read()
         cls._parsed_results = PlayerBoxScoresParser(
             team_abbreviation_parser=TeamAbbreviationParser(),
             location_abbreviation_parser=LocationAbbreviationParser(

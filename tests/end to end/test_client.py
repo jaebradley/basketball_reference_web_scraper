@@ -4,10 +4,24 @@ import os
 import time
 from unittest import TestCase
 
-from basketball_reference_web_scraper.client import player_box_scores, season_schedule, players_advanced_season_totals, \
-    play_by_play, players_season_totals, players_regular_season_shooting_statistics, roster, contracts
-from basketball_reference_web_scraper.data import Location, Outcome
-from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, PeriodType
+from basketball_reference_web_scraper.client import (
+    contracts,
+    play_by_play,
+    player_box_scores,
+    players_advanced_season_totals,
+    players_regular_season_shooting_statistics,
+    players_season_totals,
+    roster,
+    season_schedule,
+)
+from basketball_reference_web_scraper.data import (
+    Location,
+    Outcome,
+    OutputType,
+    OutputWriteOption,
+    PeriodType,
+    Team,
+)
 
 
 class BaseEndToEndTest(TestCase):
@@ -32,31 +46,33 @@ class TestPlayerBoxScores(BaseEndToEndTest):
         self.assertIsNotNone(self.box_scores)
         self.assertNotEqual(0, len(self.box_scores))
         self.assertEqual(124, len(self.box_scores))
-        self.assertDictEqual({
-            "name": "Nikola Jokić",
-            "slug": "jokicni01",
-            "team": Team.DENVER_NUGGETS,
-            "opponent": Team.TORONTO_RAPTORS,
-            "location": Location.HOME,
-            "outcome": Outcome.WIN,
-            "seconds_played": 2286,
-            "made_field_goals": 14,
-            "attempted_field_goals": 26,
-            "made_three_point_field_goals": 1,
-            "attempted_three_point_field_goals": 3,
-            "made_free_throws": 6,
-            "attempted_free_throws": 6,
-            "offensive_rebounds": 6,
-            "defensive_rebounds": 11,
-            "assists": 12,
-            "steals": 6,
-            "blocks": 2,
-            "turnovers": 2,
-            "personal_fouls": 3,
-            "plus_minus": 13.0,
-            "game_score": 42.5,
-        },
-            self.box_scores[0])
+        self.assertDictEqual(
+            {
+                "name": "Nikola Jokić",
+                "slug": "jokicni01",
+                "team": Team.DENVER_NUGGETS,
+                "opponent": Team.TORONTO_RAPTORS,
+                "location": Location.HOME,
+                "outcome": Outcome.WIN,
+                "seconds_played": 2286,
+                "made_field_goals": 14,
+                "attempted_field_goals": 26,
+                "made_three_point_field_goals": 1,
+                "attempted_three_point_field_goals": 3,
+                "made_free_throws": 6,
+                "attempted_free_throws": 6,
+                "offensive_rebounds": 6,
+                "defensive_rebounds": 11,
+                "assists": 12,
+                "steals": 6,
+                "blocks": 2,
+                "turnovers": 2,
+                "personal_fouls": 3,
+                "plus_minus": 13.0,
+                "game_score": 42.5,
+            },
+            self.box_scores[0],
+        )
 
 
 class TestCsvPlayerBoxScores(BaseEndToEndTest):
@@ -81,7 +97,9 @@ class TestCsvPlayerBoxScores(BaseEndToEndTest):
                 os.path.join(
                     os.path.dirname(__file__),
                     "./output/expected/playerboxscores/2024/03/11.csv",
-                )))
+                ),
+            )
+        )
 
 
 class TestJsonPlayerBoxScores(BaseEndToEndTest):
@@ -106,7 +124,9 @@ class TestJsonPlayerBoxScores(BaseEndToEndTest):
                 os.path.join(
                     os.path.dirname(__file__),
                     "./output/expected/playerboxscores/2024/03/11.json",
-                )))
+                ),
+            )
+        )
 
 
 class TestSeasonSchedule(BaseEndToEndTest):
@@ -157,7 +177,9 @@ class TestPlayByPlay(BaseEndToEndTest):
                 os.path.join(
                     os.path.dirname(__file__),
                     "./output/expected/2018_10_16_BOS_pbp.csv",
-                )))
+                ),
+            )
+        )
 
     def test_overtime_play_by_play(self):
         plays = play_by_play(
@@ -187,11 +209,14 @@ class TestPlayByPlay(BaseEndToEndTest):
         )
 
         self.assertTrue(
-            filecmp.cmp(output_file_path,
-                        os.path.join(
-                            os.path.dirname(__file__),
-                            "./output/expected/2018_10_22_POR_pbp.json",
-                        )))
+            filecmp.cmp(
+                output_file_path,
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "./output/expected/2018_10_22_POR_pbp.json",
+                ),
+            )
+        )
 
 
 class TestPlayersSeasonTotals(BaseEndToEndTest):
@@ -211,11 +236,18 @@ class TestPlayersSeasonTotals(BaseEndToEndTest):
             self.assertGreaterEqual(total["games_started"], 0)
             self.assertGreaterEqual(total["minutes_played"], 0)
             self.assertGreaterEqual(total["made_field_goals"], 0)
-            self.assertGreaterEqual(total["attempted_field_goals"], total["made_field_goals"])
+            self.assertGreaterEqual(
+                total["attempted_field_goals"], total["made_field_goals"]
+            )
             self.assertGreaterEqual(total["made_three_point_field_goals"], 0)
-            self.assertGreaterEqual(total["attempted_three_point_field_goals"], total["made_three_point_field_goals"])
+            self.assertGreaterEqual(
+                total["attempted_three_point_field_goals"],
+                total["made_three_point_field_goals"],
+            )
             self.assertGreaterEqual(total["made_free_throws"], 0)
-            self.assertGreaterEqual(total["attempted_free_throws"], total["made_free_throws"])
+            self.assertGreaterEqual(
+                total["attempted_free_throws"], total["made_free_throws"]
+            )
             self.assertGreaterEqual(total["offensive_rebounds"], 0)
             self.assertGreaterEqual(total["defensive_rebounds"], 0)
             self.assertGreaterEqual(total["assists"], 0)
@@ -231,10 +263,23 @@ class TestPlayersRegularSeasonShootingStatistics(BaseEndToEndTest):
         totals = players_regular_season_shooting_statistics(season_end_year=2026)
 
         for total in totals:
-            self.assertEqual(total.keys(), {"slug", "name", "position", "age", "team", "games_played", "games_started",
-                                            "minutes_played", "field_goal_percentage",
-                                            "average_field_goal_attempt_distance", "two_point_shot_statistics",
-                                            "three_point_shot_statistics"})
+            self.assertEqual(
+                total.keys(),
+                {
+                    "slug",
+                    "name",
+                    "position",
+                    "age",
+                    "team",
+                    "games_played",
+                    "games_started",
+                    "minutes_played",
+                    "field_goal_percentage",
+                    "average_field_goal_attempt_distance",
+                    "two_point_shot_statistics",
+                    "three_point_shot_statistics",
+                },
+            )
             self.assertIsNot("", total["name"])
             self.assertIsNot("League Average", total["name"])
             self.assertTrue(total["slug"])
@@ -245,62 +290,165 @@ class TestPlayersRegularSeasonShootingStatistics(BaseEndToEndTest):
             self.assertGreaterEqual(total["games_started"], 0)
             self.assertGreaterEqual(total["minutes_played"], 0)
             self.assertIsNotNone(total["average_field_goal_attempt_distance"])
-            self.assertGreaterEqual(total["average_field_goal_attempt_distance"]["value"], 0)
-            self.assertEqual(total["average_field_goal_attempt_distance"]["units"], "feet")
+            self.assertGreaterEqual(
+                total["average_field_goal_attempt_distance"]["value"], 0
+            )
+            self.assertEqual(
+                total["average_field_goal_attempt_distance"]["units"], "feet"
+            )
             self.assertIsNotNone(total["two_point_shot_statistics"])
-            self.assertGreaterEqual(total["two_point_shot_statistics"]["field_goal_percentage"], 0)
-            self.assertLessEqual(total["two_point_shot_statistics"]["field_goal_percentage"], 1)
-            self.assertGreaterEqual(total["two_point_shot_statistics"]["assisted_percentage"], 0)
-            self.assertLessEqual(total["two_point_shot_statistics"]["assisted_percentage"], 1)
-            self.assertGreaterEqual(total["two_point_shot_statistics"]["percentage_of_total_field_goal_attempts"], 0)
-            self.assertLessEqual(total["two_point_shot_statistics"]["percentage_of_total_field_goal_attempts"], 1)
-            self.assertIsNotNone(total["two_point_shot_statistics"]["statistics_by_range"])
+            self.assertGreaterEqual(
+                total["two_point_shot_statistics"]["field_goal_percentage"], 0
+            )
+            self.assertLessEqual(
+                total["two_point_shot_statistics"]["field_goal_percentage"], 1
+            )
+            self.assertGreaterEqual(
+                total["two_point_shot_statistics"]["assisted_percentage"], 0
+            )
+            self.assertLessEqual(
+                total["two_point_shot_statistics"]["assisted_percentage"], 1
+            )
+            self.assertGreaterEqual(
+                total["two_point_shot_statistics"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                0,
+            )
+            self.assertLessEqual(
+                total["two_point_shot_statistics"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                1,
+            )
+            self.assertIsNotNone(
+                total["two_point_shot_statistics"]["statistics_by_range"]
+            )
 
-            self.assertEqual(total["two_point_shot_statistics"]["statistics_by_range"].keys(),
-                             {"0-3", "3-10", "10-16", "16+"})
+            self.assertEqual(
+                total["two_point_shot_statistics"]["statistics_by_range"].keys(),
+                {"0-3", "3-10", "10-16", "16+"},
+            )
 
-            for key, range_statistics in total["two_point_shot_statistics"]["statistics_by_range"].items():
-                self.assertEqual(range_statistics.keys(),
-                                 {"percentage_of_total_field_goal_attempts", "field_goal_percentage", "units"}),
-                self.assertGreaterEqual(range_statistics["percentage_of_total_field_goal_attempts"], 0)
-                self.assertLessEqual(range_statistics["percentage_of_total_field_goal_attempts"], 1)
+            for key, range_statistics in total["two_point_shot_statistics"][
+                "statistics_by_range"
+            ].items():
+                self.assertEqual(
+                    range_statistics.keys(),
+                    {
+                        "percentage_of_total_field_goal_attempts",
+                        "field_goal_percentage",
+                        "units",
+                    },
+                ),
+                self.assertGreaterEqual(
+                    range_statistics["percentage_of_total_field_goal_attempts"], 0
+                )
+                self.assertLessEqual(
+                    range_statistics["percentage_of_total_field_goal_attempts"], 1
+                )
                 self.assertGreaterEqual(range_statistics["field_goal_percentage"], 0)
                 self.assertLessEqual(range_statistics["field_goal_percentage"], 1)
                 self.assertEqual(range_statistics["units"], "feet")
 
             self.assertIsNotNone(total["two_point_shot_statistics"]["dunks"])
-            self.assertEqual(total["two_point_shot_statistics"]["dunks"].keys(),
-                             {"percentage_of_total_field_goal_attempts", "made"})
-            self.assertGreaterEqual(total["two_point_shot_statistics"]["dunks"]["made"], 0)
+            self.assertEqual(
+                total["two_point_shot_statistics"]["dunks"].keys(),
+                {"percentage_of_total_field_goal_attempts", "made"},
+            )
             self.assertGreaterEqual(
-                total["two_point_shot_statistics"]["dunks"]["percentage_of_total_field_goal_attempts"], 0)
+                total["two_point_shot_statistics"]["dunks"]["made"], 0
+            )
+            self.assertGreaterEqual(
+                total["two_point_shot_statistics"]["dunks"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                0,
+            )
             self.assertLessEqual(
-                total["two_point_shot_statistics"]["dunks"]["percentage_of_total_field_goal_attempts"], 1)
+                total["two_point_shot_statistics"]["dunks"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                1,
+            )
 
             self.assertIsNotNone(total["three_point_shot_statistics"])
-            self.assertEqual(total["three_point_shot_statistics"].keys(),
-                             {"field_goal_percentage", "assisted_percentage", "percentage_of_total_field_goal_attempts",
-                              "corner", "beyond_half_court"})
+            self.assertEqual(
+                total["three_point_shot_statistics"].keys(),
+                {
+                    "field_goal_percentage",
+                    "assisted_percentage",
+                    "percentage_of_total_field_goal_attempts",
+                    "corner",
+                    "beyond_half_court",
+                },
+            )
 
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["field_goal_percentage"], 0)
-            self.assertLessEqual(total["three_point_shot_statistics"]["field_goal_percentage"], 1)
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["assisted_percentage"], 0)
-            self.assertLessEqual(total["three_point_shot_statistics"]["assisted_percentage"], 1)
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["percentage_of_total_field_goal_attempts"], 0)
-            self.assertLessEqual(total["three_point_shot_statistics"]["percentage_of_total_field_goal_attempts"], 1)
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"]["field_goal_percentage"], 0
+            )
+            self.assertLessEqual(
+                total["three_point_shot_statistics"]["field_goal_percentage"], 1
+            )
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"]["assisted_percentage"], 0
+            )
+            self.assertLessEqual(
+                total["three_point_shot_statistics"]["assisted_percentage"], 1
+            )
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                0,
+            )
+            self.assertLessEqual(
+                total["three_point_shot_statistics"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                1,
+            )
 
             self.assertIsNotNone(total["three_point_shot_statistics"]["corner"])
-            self.assertEqual(total["three_point_shot_statistics"]["corner"].keys(),
-                             {"field_goal_percentage", "percentage_of_three_point_field_goal_attempts"})
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["field_goal_percentage"], 0)
-            self.assertLessEqual(total["three_point_shot_statistics"]["field_goal_percentage"], 1)
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["percentage_of_total_field_goal_attempts"], 0)
-            self.assertLessEqual(total["three_point_shot_statistics"]["percentage_of_total_field_goal_attempts"], 1)
+            self.assertEqual(
+                total["three_point_shot_statistics"]["corner"].keys(),
+                {
+                    "field_goal_percentage",
+                    "percentage_of_three_point_field_goal_attempts",
+                },
+            )
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"]["field_goal_percentage"], 0
+            )
+            self.assertLessEqual(
+                total["three_point_shot_statistics"]["field_goal_percentage"], 1
+            )
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                0,
+            )
+            self.assertLessEqual(
+                total["three_point_shot_statistics"][
+                    "percentage_of_total_field_goal_attempts"
+                ],
+                1,
+            )
 
-            self.assertIsNotNone(total["three_point_shot_statistics"]["beyond_half_court"])
-            self.assertEqual(total["three_point_shot_statistics"]["beyond_half_court"].keys(), {"attempts", "made"})
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["beyond_half_court"]["attempts"], 0)
-            self.assertGreaterEqual(total["three_point_shot_statistics"]["beyond_half_court"]["made"], 0)
+            self.assertIsNotNone(
+                total["three_point_shot_statistics"]["beyond_half_court"]
+            )
+            self.assertEqual(
+                total["three_point_shot_statistics"]["beyond_half_court"].keys(),
+                {"attempts", "made"},
+            )
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"]["beyond_half_court"]["attempts"], 0
+            )
+            self.assertGreaterEqual(
+                total["three_point_shot_statistics"]["beyond_half_court"]["made"], 0
+            )
 
 
 class TestRoster(BaseEndToEndTest):
@@ -332,4 +480,6 @@ class TestContracts(BaseEndToEndTest):
             self.assertIsNotNone(contract.team)
 
             self.assertIsNotNone(contract.salaries_by_season_start_year)
-            self.assertGreaterEqual(len(contract.salaries_by_season_start_year.keys()), 1)
+            self.assertGreaterEqual(
+                len(contract.salaries_by_season_start_year.keys()), 1
+            )
