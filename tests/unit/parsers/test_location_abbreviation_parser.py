@@ -21,3 +21,7 @@ class TestLocationAbbreviationParser(TestCase):
 
     def test_parse_unknown_location_symbol(self):
         self.assertRaises(ValueError, self.parser.from_abbreviation, "jaebaebae")
+
+    def test_unknown_location_symbol_error_message_names_input(self):
+        with self.assertRaisesRegex(ValueError, "jaebaebae"):
+            self.parser.from_abbreviation("jaebaebae")

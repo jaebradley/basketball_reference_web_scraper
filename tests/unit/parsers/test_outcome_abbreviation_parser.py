@@ -16,6 +16,10 @@ class TestOutcomeAbbreviationParser(TestCase):
     def test_parse_unknown_outcome_symbol(self):
         self.assertRaises(ValueError, self.parser.from_abbreviation, "jaebaebae")
 
+    def test_unknown_outcome_symbol_error_message_names_input(self):
+        with self.assertRaisesRegex(ValueError, "jaebaebae"):
+            self.parser.from_abbreviation("jaebaebae")
+
     def test_parse_win(self):
         self.assertEqual(Outcome.WIN, self.parser.from_abbreviation("W"))
 

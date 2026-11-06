@@ -4,6 +4,7 @@ import unittest
 from basketball_reference_web_scraper.data import Team, TeamAbbreviation
 from basketball_reference_web_scraper.models.calculators import (
     calculate_team_abbreviation,
+    calculate_team_abbreviation_from_team_and_season,
 )
 
 
@@ -25,3 +26,15 @@ class TestCalculatingTeamAbbreviations(unittest.TestCase):
             ),
             TeamAbbreviation.CHO,
         )
+
+    def test_invalid_team_raises_value_error(self):
+        with self.assertRaisesRegex(ValueError, "CHUCK NORRIS is not a valid Team"):
+            calculate_team_abbreviation(
+                team="CHUCK NORRIS", date=datetime.date(year=2018, month=1, day=1)
+            )
+
+    def test_invalid_team_raises_value_error_for_season_calculation(self):
+        with self.assertRaisesRegex(ValueError, "CHUCK NORRIS is not a valid Team"):
+            calculate_team_abbreviation_from_team_and_season(
+                team="CHUCK NORRIS", season_end_year=2018
+            )

@@ -70,14 +70,29 @@ class TestSearchPage(TestCase):
         link = MagicMock()
         link.text_content = MagicMock(return_value="jaebaebae")
         link.attrib = MagicMock()
-        link.attrib.__getitem__ = MagicMock(return_value="some text content")
+        link.attrib.get = MagicMock(return_value="some text content")
         mocked_links.return_value = [link]
 
         self.assertEqual(
             SearchPage(html=MagicMock()).nba_aba_baa_players_pagination_url,
             "some text content",
         )
-        link.attrib.__getitem__.assert_called_once_with("href")
+        link.attrib.get.assert_called_once_with("href")
+
+    @patch.object(
+        SearchPage, "nba_aba_baa_players_pagination_links", new_callable=PropertyMock
+    )
+    def test_nba_aba_baa_players_pagination_url_is_none_when_single_link_has_no_href(
+        self, mocked_links
+    ):
+        link = MagicMock()
+        link.text_content = MagicMock(return_value="jaebaebae")
+        link.attrib = {"foo": "bar"}
+        mocked_links.return_value = [link]
+
+        self.assertIsNone(
+            SearchPage(html=MagicMock()).nba_aba_baa_players_pagination_url
+        )
 
     @patch.object(
         SearchPage, "nba_aba_baa_players_pagination_links", new_callable=PropertyMock
@@ -102,20 +117,18 @@ class TestSearchPage(TestCase):
     ):
         first_link = MagicMock()
         first_link.attrib = MagicMock()
-        first_link.attrib.__getitem__ = MagicMock(return_value="some text content")
+        first_link.attrib.get = MagicMock(return_value="some text content")
 
         second_link = MagicMock()
         second_link.attrib = MagicMock()
-        second_link.attrib.__getitem__ = MagicMock(
-            return_value="some other text content"
-        )
+        second_link.attrib.get = MagicMock(return_value="some other text content")
         mocked_links.return_value = [first_link, second_link]
 
         self.assertEqual(
             SearchPage(html=MagicMock()).nba_aba_baa_players_pagination_url,
             "some other text content",
         )
-        second_link.attrib.__getitem__.assert_called_once_with("href")
+        second_link.attrib.get.assert_called_once_with("href")
 
     @patch.object(
         SearchPage, "nba_aba_baa_player_search_items_query", new_callable=PropertyMock

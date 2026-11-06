@@ -44,6 +44,15 @@ class TestSearchResultsParser(TestCase):
             },
         )
 
+    def test_parse_search_result_without_resource_link_raises_value_error(self):
+        players = [
+            MagicMock(
+                resource_name=None, resource_location=None, league_abbreviations="NBA"
+            )
+        ]
+        with self.assertRaisesRegex(ValueError, "search result name is missing"):
+            self.parser.parse(nba_aba_baa_players=players)
+
     def test_parse_single_aba_player(self):
         players = [
             MagicMock(

@@ -26,6 +26,10 @@ class TestStrToInt(TestCase):
     def test_with_default(self):
         self.assertIsNone(str_to_int("", default=None))
 
+    def test_none_returns_default(self):
+        self.assertEqual(0, str_to_int(None))
+        self.assertIsNone(str_to_int(None, default=None))
+
 
 class TestStrToFloat(TestCase):
     def test_empty_string_is_zero(self):
@@ -45,6 +49,19 @@ class TestStrToFloat(TestCase):
 
     def test_with_default(self):
         self.assertIsNone(str_to_float("", default=None))
+
+    def test_none_returns_default(self):
+        self.assertEqual(0.0, str_to_float(None))
+        self.assertIsNone(str_to_float(None, default=None))
+
+    def test_nan_returns_default(self):
+        self.assertEqual(0.0, str_to_float("NaN"))
+        self.assertIsNone(str_to_float("NaN", default=None))
+
+    def test_infinity_returns_default(self):
+        self.assertEqual(0.0, str_to_float("inf"))
+        self.assertEqual(0.0, str_to_float("-inf"))
+        self.assertIsNone(str_to_float("Infinity", default=None))
 
 
 class TestMergeTwoDicts(TestCase):

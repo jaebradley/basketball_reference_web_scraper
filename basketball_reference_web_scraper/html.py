@@ -829,8 +829,10 @@ class BoxScoresPage:
                     else AdvancedTeamStatisticsTable(table_html)
                 ),
                 filter(
-                    lambda table_html: "game-basic" in table_html.attrib["id"]
-                    or "game-advanced" in table_html.attrib["id"],
+                    lambda table_html: (
+                        "game-basic" in table_html.attrib["id"]
+                        or "game-advanced" in table_html.attrib["id"]
+                    ),
                     self.html.xpath('//table[contains(@class, "stats_table")]'),
                 ),
             )
@@ -845,6 +847,13 @@ class TeamStatisticsTable:
     def team_abbreviation(self):
         # Example id value is box-BOS-game-basic or box-BOS-game-advanced
         match = re.match("^box-(.+)-game", self.html.attrib["id"])
+        if match is None:
+            raise ValueError(
+                "Could not parse team abbreviation from id: {id}".format(
+                    id=self.html.attrib["id"]
+                )
+            )
+
         return match.group(1)
 
     @property
@@ -869,7 +878,6 @@ class BasicTeamStatisticsTable(TeamStatisticsTable):
 
 
 class AdvancedTeamStatisticsTable(TeamStatisticsTable):
-
     def __init__(self, html):
         super().__init__(html)
 
@@ -1096,7 +1104,7 @@ class PlayByPlayPage:
 
     @property
     def team_names_query(self):
-        return '//*[@id="content"]' '//div[@class="scorebox"]' "//strong" "//a"
+        return '//*[@id="content"]//div[@class="scorebox"]//strong//a'
 
     @property
     def play_by_play_table(self):
@@ -1340,9 +1348,9 @@ class SearchPage:
             if first_link.text_content() == "Previous 100 Results":
                 return None
 
-            return first_link.attrib["href"]
+            return first_link.attrib.get("href")
 
-        return links[1].attrib["href"]
+        return links[1].attrib.get("href")
 
     @property
     def nba_aba_baa_players(self):

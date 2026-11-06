@@ -16,7 +16,10 @@ def calculate_team_abbreviation(team: Team, date: datetime.date) -> TeamAbbrevia
     if team is Team.CHARLOTTE_HORNETS and date <= DATE_OF_CHARLOTTE_HORNETS_LAST_GAME:
         return TeamAbbreviation.CHH
 
-    return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    try:
+        return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    except KeyError:
+        raise ValueError("{team} is not a valid Team".format(team=team)) from None
 
 
 def calculate_team_abbreviation_from_team_and_season(
@@ -28,4 +31,7 @@ def calculate_team_abbreviation_from_team_and_season(
     ):
         return TeamAbbreviation.CHH
 
-    return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    try:
+        return TEAM_ABBREVIATIONS_BY_TEAM[team]
+    except KeyError:
+        raise ValueError("{team} is not a valid Team".format(team=team)) from None

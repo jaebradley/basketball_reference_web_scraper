@@ -51,7 +51,9 @@ class LocationAbbreviationParser:
     def from_abbreviation(self, abbreviation):
         location = self.abbreviations_to_locations.get(abbreviation)
         if location is None:
-            raise ValueError("Unknown symbol: {location}".format(location=location))
+            raise ValueError(
+                "Unknown symbol: {abbreviation}".format(abbreviation=abbreviation)
+            )
 
         return location
 
@@ -63,7 +65,9 @@ class OutcomeAbbreviationParser:
     def from_abbreviation(self, abbreviation):
         outcome = self.abbreviations_to_outcomes.get(abbreviation)
         if outcome is None:
-            raise ValueError("Unknown symbol: {outcome}".format(outcome=outcome))
+            raise ValueError(
+                "Unknown symbol: {abbreviation}".format(abbreviation=abbreviation)
+            )
 
         return outcome
 
@@ -110,7 +114,17 @@ class PlayerBoxScoreOutcomeParser:
         return re.search(self.formatted_outcome_regex, formatted_outcome)
 
     def parse_outcome_abbreviation(self, formatted_outcome):
-        return self.search_formatted_outcome(formatted_outcome=formatted_outcome).group(
+        outcome_abbreviation_match = self.search_formatted_outcome(
+            formatted_outcome=formatted_outcome
+        )
+        if outcome_abbreviation_match is None:
+            raise ValueError(
+                "Could not parse outcome from formatted outcome: {formatted_outcome}".format(
+                    formatted_outcome=formatted_outcome
+                )
+            )
+
+        return outcome_abbreviation_match.group(
             self.outcome_abbreviation_regex_group_name
         )
 
@@ -134,6 +148,13 @@ class SecondsPlayedParser:
         # So have to parse time by splitting on ":" and assuming that
         # the first part is the minute part and the second part is the seconds part
         time_parts = formatted_playing_time.split(":")
+        if len(time_parts) != 2:
+            raise ValueError(
+                "Could not parse playing time from formatted playing time: {formatted_playing_time}".format(
+                    formatted_playing_time=formatted_playing_time
+                )
+            )
+
         minutes_played = time_parts[0]
         seconds_played = time_parts[1]
         return 60 * int(minutes_played) + int(seconds_played)
@@ -180,7 +201,15 @@ class ScoresParser:
         self.home_team_score_group_name = home_team_score_group_name
 
     def parse_scores(self, formatted_scores):
-        return re.search(self.scores_regex, formatted_scores)
+        scores_match = re.search(self.scores_regex, formatted_scores)
+        if scores_match is None:
+            raise ValueError(
+                "Could not parse scores from formatted scores: {formatted_scores}".format(
+                    formatted_scores=formatted_scores
+                )
+            )
+
+        return scores_match
 
     def parse_away_team_score(self, formatted_scores):
         return int(
@@ -255,11 +284,22 @@ class SearchResultNameParser:
         self.result_name_regex_group_name = result_name_regex_group_name
 
     def parse(self, search_result_name):
-        return (
-            re.search(self.search_result_name_regex, search_result_name)
-            .group(self.result_name_regex_group_name)
-            .strip()
+        if search_result_name is None:
+            raise ValueError(
+                "Could not parse name from search result name: search result name is missing"
+            )
+
+        search_result_name_match = re.search(
+            self.search_result_name_regex, search_result_name
         )
+        if search_result_name_match is None:
+            raise ValueError(
+                "Could not parse name from search result name: {search_result_name}".format(
+                    search_result_name=search_result_name
+                )
+            )
+
+        return search_result_name_match.group(self.result_name_regex_group_name).strip()
 
 
 class ResourceLocationParser:
@@ -274,17 +314,34 @@ class ResourceLocationParser:
         self.resource_identifier_regex_group_name = resource_identifier_regex_group_name
 
     def search(self, resource_location):
+        if resource_location is None:
+            raise ValueError(
+                "Could not parse resource location: resource location is missing"
+            )
+
         return re.search(self.resource_location_regex, resource_location)
 
     def parse_resource_type(self, resource_location):
-        return self.search(resource_location=resource_location).group(
-            self.resource_type_regex_group_name
-        )
+        resource_location_match = self.search(resource_location=resource_location)
+        if resource_location_match is None:
+            raise ValueError(
+                "Could not parse resource type from resource location: {resource_location}".format(
+                    resource_location=resource_location
+                )
+            )
+
+        return resource_location_match.group(self.resource_type_regex_group_name)
 
     def parse_resource_identifier(self, resource_location):
-        return self.search(resource_location=resource_location).group(
-            self.resource_identifier_regex_group_name
-        )
+        resource_location_match = self.search(resource_location=resource_location)
+        if resource_location_match is None:
+            raise ValueError(
+                "Could not parse resource identifier from resource location: {resource_location}".format(
+                    resource_location=resource_location
+                )
+            )
+
+        return resource_location_match.group(self.resource_identifier_regex_group_name)
 
 
 class TeamStandingsParser:
