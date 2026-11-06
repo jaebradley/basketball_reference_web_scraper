@@ -1,8 +1,16 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import LEAGUE_ABBREVIATIONS_TO_LEAGUE, PlayerData, League
+from basketball_reference_web_scraper.data import (
+    LEAGUE_ABBREVIATIONS_TO_LEAGUE,
+    League,
+    PlayerData,
+)
 from basketball_reference_web_scraper.parser_service import ParserService
-from basketball_reference_web_scraper.parsers import PlayerDataParser, ResourceLocationParser, LeagueAbbreviationParser
+from basketball_reference_web_scraper.parsers import (
+    LeagueAbbreviationParser,
+    PlayerDataParser,
+    ResourceLocationParser,
+)
 
 
 class TestPlayerDataParser(TestCase):
@@ -11,15 +19,17 @@ class TestPlayerDataParser(TestCase):
             search_result_location_parser=ResourceLocationParser(
                 resource_location_regex=ParserService.SEARCH_RESULT_RESOURCE_LOCATION_REGEX,
             ),
-            league_abbreviation_parser=LeagueAbbreviationParser(abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE),
+            league_abbreviation_parser=LeagueAbbreviationParser(
+                abbreviations_to_league=LEAGUE_ABBREVIATIONS_TO_LEAGUE
+            ),
         )
 
     def test_parse_name(self):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=[]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=[],
             )
         )
         self.assertEqual(parsed_player["name"], "jaebaebae")
@@ -28,8 +38,8 @@ class TestPlayerDataParser(TestCase):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=[]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=[],
             )
         )
         self.assertEqual(parsed_player["identifier"], "bryanko01")
@@ -38,68 +48,82 @@ class TestPlayerDataParser(TestCase):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["NBA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["NBA"],
             )
         )
-        self.assertEqual(parsed_player["leagues"], {League.NATIONAL_BASKETBALL_ASSOCIATION})
+        self.assertEqual(
+            parsed_player["leagues"], {League.NATIONAL_BASKETBALL_ASSOCIATION}
+        )
 
     def test_parse_league_abbreviations_for_single_aba_abbreviation(self):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["ABA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["ABA"],
             )
         )
-        self.assertEqual(parsed_player["leagues"], {League.AMERICAN_BASKETBALL_ASSOCIATION})
+        self.assertEqual(
+            parsed_player["leagues"], {League.AMERICAN_BASKETBALL_ASSOCIATION}
+        )
 
     def test_parse_league_abbreviations_for_single_baa_abbreviation(self):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["BAA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["BAA"],
             )
         )
-        self.assertEqual(parsed_player["leagues"], {League.BASKETBALL_ASSOCIATION_OF_AMERICA})
+        self.assertEqual(
+            parsed_player["leagues"], {League.BASKETBALL_ASSOCIATION_OF_AMERICA}
+        )
 
     def test_parse_league_abbreviations_for_multiple_nba_abbreviations(self):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["NBA", "NBA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["NBA", "NBA"],
             )
         )
-        self.assertEqual(parsed_player["leagues"], {League.NATIONAL_BASKETBALL_ASSOCIATION})
+        self.assertEqual(
+            parsed_player["leagues"], {League.NATIONAL_BASKETBALL_ASSOCIATION}
+        )
 
     def test_parse_league_abbreviations_for_multiple_aba_abbreviations(self):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["ABA", "ABA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["ABA", "ABA"],
             )
         )
-        self.assertEqual(parsed_player["leagues"], {League.AMERICAN_BASKETBALL_ASSOCIATION})
+        self.assertEqual(
+            parsed_player["leagues"], {League.AMERICAN_BASKETBALL_ASSOCIATION}
+        )
 
     def test_parse_league_abbreviations_for_multiple_baa_abbreviations(self):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["BAA", "BAA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["BAA", "BAA"],
             )
         )
-        self.assertEqual(parsed_player["leagues"], {League.BASKETBALL_ASSOCIATION_OF_AMERICA})
+        self.assertEqual(
+            parsed_player["leagues"], {League.BASKETBALL_ASSOCIATION_OF_AMERICA}
+        )
 
-    def test_parse_league_abbreviations_for_multiple_nba_and_aba_and_baa_abbreviations(self):
+    def test_parse_league_abbreviations_for_multiple_nba_and_aba_and_baa_abbreviations(
+        self,
+    ):
         parsed_player = self.parser.parse(
             player=PlayerData(
                 name="jaebaebae",
-                resource_location='/players/b/bryanko01.html',
-                league_abbreviations=["NBA", "ABA", "BAA", "NBA", "ABA", "BAA"]
+                resource_location="/players/b/bryanko01.html",
+                league_abbreviations=["NBA", "ABA", "BAA", "NBA", "ABA", "BAA"],
             )
         )
         self.assertEqual(
@@ -107,7 +131,6 @@ class TestPlayerDataParser(TestCase):
             {
                 League.NATIONAL_BASKETBALL_ASSOCIATION,
                 League.AMERICAN_BASKETBALL_ASSOCIATION,
-                League.BASKETBALL_ASSOCIATION_OF_AMERICA
-            }
+                League.BASKETBALL_ASSOCIATION_OF_AMERICA,
+            },
         )
-

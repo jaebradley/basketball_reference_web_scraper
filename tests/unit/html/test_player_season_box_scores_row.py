@@ -25,21 +25,27 @@ class TestPlayerSeasonBoxScoresRow(TestCase):
         )
 
     def test_date_when_cells_exist(self):
-        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some date"))])
+        self.html.xpath = MagicMock(
+            return_value=[MagicMock(text_content=MagicMock(return_value="some date"))]
+        )
         self.assertEqual(PlayerSeasonBoxScoresRow(html=self.html).date, "some date")
         self.html.xpath.assert_called_once_with('td[@data-stat="date"]')
 
     def test_date_is_empty_string_when_cells_do_not_exist(self):
         self.html.xpath = MagicMock(return_value=[])
-        self.assertEqual(PlayerSeasonBoxScoresRow(html=self.html).date, '')
+        self.assertEqual(PlayerSeasonBoxScoresRow(html=self.html).date, "")
         self.html.xpath.assert_called_once_with('td[@data-stat="date"]')
 
     def test_points_scored_when_cells_exist(self):
-        self.html.xpath = MagicMock(return_value=[MagicMock(text_content=MagicMock(return_value="some points"))])
-        self.assertEqual(PlayerSeasonBoxScoresRow(html=self.html).points_scored, "some points")
+        self.html.xpath = MagicMock(
+            return_value=[MagicMock(text_content=MagicMock(return_value="some points"))]
+        )
+        self.assertEqual(
+            PlayerSeasonBoxScoresRow(html=self.html).points_scored, "some points"
+        )
         self.html.xpath.assert_called_once_with('td[@data-stat="pts"]')
 
     def test_points_scored_is_empty_string_when_cells_do_not_exist(self):
         self.html.xpath = MagicMock(return_value=[])
-        self.assertEqual(PlayerSeasonBoxScoresRow(html=self.html).points_scored, '')
+        self.assertEqual(PlayerSeasonBoxScoresRow(html=self.html).points_scored, "")
         self.html.xpath.assert_called_once_with('td[@data-stat="pts"]')

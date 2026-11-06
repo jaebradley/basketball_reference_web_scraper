@@ -22,10 +22,7 @@ class TestPlayerPage(TestCase):
         html = MagicMock()
         html.xpath = MagicMock(return_value=[first_name_header, second_name_header])
 
-        self.assertEqual(
-            PlayerPage(html=html).name,
-            "first name"
-        )
+        self.assertEqual(PlayerPage(html=html).name, "first name")
         html.xpath.assert_called_once_with('.//h1[@itemprop="name"]')
 
     def test_totals_table_is_none_when_no_totals_tables(self):

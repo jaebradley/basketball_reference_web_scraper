@@ -4,8 +4,12 @@ from decimal import Decimal
 from unittest import TestCase
 
 from basketball_reference_web_scraper.contracts.data.models import Salary
-from basketball_reference_web_scraper.contracts.data.parsers import deserialize_season_start_year, deserialize_team, \
-    deserialize_guaranteed_salary, SalariesBySeasonParser
+from basketball_reference_web_scraper.contracts.data.parsers import (
+    SalariesBySeasonParser,
+    deserialize_guaranteed_salary,
+    deserialize_season_start_year,
+    deserialize_team,
+)
 from basketball_reference_web_scraper.data import Team
 
 
@@ -24,7 +28,9 @@ class TestDeserializingSeasonStartYear(TestCase):
 
 class TestDeserializingTeamAbbreviation(TestCase):
     def test_invalid_abbreviation_raises_error(self):
-        with self.assertRaisesRegex(ValueError, "Unable to deserialize team abbreviation: jaebaebae"):
+        with self.assertRaisesRegex(
+            ValueError, "Unable to deserialize team abbreviation: jaebaebae"
+        ):
             deserialize_team("jaebaebae")
 
     def test_valid_abbreviation_returns_team(self):
@@ -33,14 +39,23 @@ class TestDeserializingTeamAbbreviation(TestCase):
 
 class TestDeserializingGuaranteedSalary(TestCase):
     def test_raise_error_guaranteed_salary_column_does_not_exist(self):
-        with self.assertRaisesRegex(ValueError, "Unable to identify remaining guaranteed salary column for columns: "):
+        with self.assertRaisesRegex(
+            ValueError,
+            "Unable to identify remaining guaranteed salary column for columns: ",
+        ):
             deserialize_guaranteed_salary(contract_values_by_column_identifier={})
 
     def test_returns_none_when_value_is_empty(self):
-        self.assertIsNone(deserialize_guaranteed_salary(contract_values_by_column_identifier={"remain_gtd": ""}))
+        self.assertIsNone(
+            deserialize_guaranteed_salary(
+                contract_values_by_column_identifier={"remain_gtd": ""}
+            )
+        )
 
     def test_returns_salary_when_column_exists_and_value_is_not_an_empty_string(self):
-        assert Salary(amount_in_usd=Decimal(1_234_567)) == deserialize_guaranteed_salary(
+        assert Salary(
+            amount_in_usd=Decimal(1_234_567)
+        ) == deserialize_guaranteed_salary(
             contract_values_by_column_identifier={"remain_gtd": "1234567"}
         )
 
@@ -53,20 +68,23 @@ class TestSalariesBySeasonParser(TestCase):
 
         salary_generator = generate_salary()
         parser = SalariesBySeasonParser(
-            season_start_year_deserializer=lambda v: int.from_bytes(hashlib.md5(v.encode("utf-8")).digest()[:8],
-                                                                    'little', signed=True),
-            salary_deserializer=lambda v: None if v is None else next(salary_generator)
+            season_start_year_deserializer=lambda v: int.from_bytes(
+                hashlib.md5(v.encode("utf-8")).digest()[:8], "little", signed=True
+            ),
+            salary_deserializer=lambda v: None if v is None else next(salary_generator),
         )
-        assert {6699318081062747564: Salary(amount_in_usd=Decimal('0')),
-                -2012135647395072713: Salary(amount_in_usd=Decimal('1'))} == parser.parse(
+        assert {
+            6699318081062747564: Salary(amount_in_usd=Decimal("0")),
+            -2012135647395072713: Salary(amount_in_usd=Decimal("1")),
+        } == parser.parse(
             contract_values_by_column_identifier={
                 "f": "bar",
                 "b": "jae",
-                "remain_gtd": "test"
+                "remain_gtd": "test",
             },
             column_names_by_identifier={
                 "f": "foo",
                 "b": "bar",
-                "remain_gtd": "guaranteed_money"
-            }
+                "remain_gtd": "guaranteed_money",
+            },
         )
