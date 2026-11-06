@@ -30,3 +30,7 @@ class TestSecondsPlayedParser(TestCase):
 
     def test_parse_seconds_played_for_60_minutes_and_1_second(self):
         self.assertEqual(3601, self.parser.parse("60:01"))
+
+    def test_malformed_playing_time_raises_value_error_naming_input(self):
+        with self.assertRaisesRegex(ValueError, "NA"):
+            self.parser.parse("NA")

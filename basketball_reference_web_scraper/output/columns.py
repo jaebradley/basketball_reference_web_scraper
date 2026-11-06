@@ -25,9 +25,16 @@ SHARED_COLUMN_NAMES = [
 
 BOX_SCORE_COLUMN_NAMES = ["slug", "name"] + SHARED_COLUMN_NAMES + ["plus_minus"]
 
-PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = ["active", "date", "points_scored", "plus_minus"] + SHARED_COLUMN_NAMES
+PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = [
+    "player_identifier",
+    "active",
+    "date",
+    "points_scored",
+    "plus_minus",
+] + SHARED_COLUMN_NAMES
 
 SCHEDULE_COLUMN_NAMES = [
+    "date",
     "start_time",
     "away_team",
     "away_team_score",
@@ -57,7 +64,7 @@ PLAYER_SEASON_TOTALS_COLUMN_NAMES = [
     "blocks",
     "turnovers",
     "personal_fouls",
-    "points"
+    "points",
 ]
 
 PLAYER_ADVANCED_SEASON_TOTALS_COLUMN_NAMES = [
@@ -150,9 +157,4 @@ STANDINGS_COLUMNS_NAMES = [
     "conference",
 ]
 
-ROSTER_COLUMN_NAMES = [
-    "slug",
-    "name",
-    "number",
-    "position"
-]
+ROSTER_COLUMN_NAMES = ["slug", "name", "number", "position"]
