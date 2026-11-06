@@ -1,5 +1,7 @@
 import datetime
+import itertools
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Callable
 from urllib.parse import urljoin
@@ -7,6 +9,7 @@ from urllib.parse import urljoin
 import requests
 from lxml import html
 
+from basketball_reference_web_scraper import diagnostics
 from basketball_reference_web_scraper.contracts.data.models import Contract
 from basketball_reference_web_scraper.contracts.page.parsers import (
     ContractRowData,
@@ -62,14 +65,88 @@ def _default_session():
     return session
 
 
+def _elapsed_ms(started):
+    return round((time.perf_counter() - started) * 1000, 2)
+
+
 class HTTPService:
     BASE_URL = "https://www.basketball-reference.com"
     DEFAULT_REQUEST_TIMEOUT_SECONDS = 30
 
-    def __init__(self, parser, session_factory=None):
+    def __init__(self, parser, session_factory=None, operation=None):
         self.parser = parser
         self._session_factory = session_factory
         self._sessions = threading.local()
+        self.operation = operation
+        self._request_seq = itertools.count(1)
+
+    def _get(self, url, params=None, allow_redirects=None, stream=False):
+        # Single seam for every GET: behavior is unchanged, and each request
+        # appends one http_request event to the diagnostics journal.
+        started = time.perf_counter()
+        request_seq = next(self._request_seq)
+        kwargs = {"url": url, "timeout": HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS}
+        if params is not None:
+            kwargs["params"] = params
+        if allow_redirects is not None:
+            kwargs["allow_redirects"] = allow_redirects
+        if stream:
+            kwargs["stream"] = True
+        try:
+            response = self.session.get(**kwargs)
+        except requests.exceptions.Timeout as error:
+            diagnostics.record_http(
+                self.operation,
+                "GET",
+                url,
+                request_seq=request_seq,
+                outcome="timeout",
+                elapsed_ms=_elapsed_ms(started),
+                error=type(error).__name__,
+                params=params,
+            )
+            raise
+        except requests.exceptions.ConnectionError as error:
+            diagnostics.record_http(
+                self.operation,
+                "GET",
+                url,
+                request_seq=request_seq,
+                outcome="connection_error",
+                elapsed_ms=_elapsed_ms(started),
+                error=type(error).__name__,
+                params=params,
+            )
+            raise
+        except requests.exceptions.RequestException as error:
+            diagnostics.record_http(
+                self.operation,
+                "GET",
+                url,
+                request_seq=request_seq,
+                outcome="request_error",
+                elapsed_ms=_elapsed_ms(started),
+                error=type(error).__name__,
+                params=params,
+            )
+            raise
+        retry_after = None
+        if response.status_code in (429, 503):
+            retry_after = response.headers.get("Retry-After")
+        diagnostics.record_http(
+            self.operation,
+            "GET",
+            url,
+            request_seq=request_seq,
+            outcome="response",
+            status=response.status_code,
+            elapsed_ms=_elapsed_ms(started),
+            params=params,
+            retry_after=retry_after,
+        )
+        # Streaming consumers correlate their follow-up event to this request.
+        response.diagnostics_request_seq = request_seq
+        return response
 
     @property
     def session(self):
@@ -99,11 +176,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = self.session.get(
-            url=url,
-            allow_redirects=False,
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-        )
+        response = self._get(url, allow_redirects=False)
 
         response.raise_for_status()
 
@@ -132,11 +205,7 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL, day=day, month=month, year=year
         )
 
-        response = self.session.get(
-            url=url,
-            allow_redirects=False,
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-        )
+        response = self._get(url, allow_redirects=False)
 
         response.raise_for_status()
 
@@ -163,11 +232,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = self.session.get(
-            url=url,
-            allow_redirects=False,
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-        )
+        response = self._get(url, allow_redirects=False)
         response.raise_for_status()
 
         page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
@@ -199,11 +264,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = self.session.get(
-            url=url,
-            allow_redirects=False,
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-        )
+        response = self._get(url, allow_redirects=False)
         response.raise_for_status()
 
         page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
@@ -231,9 +292,7 @@ class HTTPService:
                 ),
             )
         )
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
         response.raise_for_status()
 
         page = PlayByPlayPage(html=html.fromstring(response.content))
@@ -252,9 +311,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
 
@@ -269,9 +326,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
 
@@ -283,9 +338,7 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL,
             season_end_year=season_end_year,
         )
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
         table = PlayersSeasonShootingStatisticsTable(
@@ -294,9 +347,7 @@ class HTTPService:
         return self.parser.parse_player_season_shooting_statistics(totals=table.rows)
 
     def schedule_for_month(self, url):
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
 
@@ -308,9 +359,7 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL, season_end_year=season_end_year
         )
 
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
 
@@ -337,9 +386,7 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL, game_url_path=game_url_path
         )
 
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
 
@@ -379,11 +426,7 @@ class HTTPService:
 
         url = "{BASE_URL}/boxscores/".format(BASE_URL=HTTPService.BASE_URL)
 
-        response = self.session.get(
-            url=url,
-            params={"day": day, "month": month, "year": year},
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-        )
+        response = self._get(url, params={"day": day, "month": month, "year": year})
 
         response.raise_for_status()
 
@@ -403,9 +446,7 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = self.session.get(
-            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
-        )
+        response = self._get(url)
 
         response.raise_for_status()
 
@@ -414,10 +455,9 @@ class HTTPService:
         )
 
     def search(self, term):
-        response = self.session.get(
-            url="{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL),
+        response = self._get(
+            "{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL),
             params={"search": term},
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
         )
 
         response.raise_for_status()
@@ -440,12 +480,11 @@ class HTTPService:
                 and pagination_url not in seen_pagination_urls
             ):
                 seen_pagination_urls.add(pagination_url)
-                response = self.session.get(
-                    url=urljoin(
+                response = self._get(
+                    urljoin(
                         "{BASE_URL}/search/".format(BASE_URL=HTTPService.BASE_URL),
                         pagination_url,
-                    ),
-                    timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+                    )
                 )
 
                 response.raise_for_status()
@@ -488,24 +527,48 @@ class HTTPService:
         :param parsed_contract_row_processor:
         :return:
         """
-        with self.session.get(
-            url=f"{HTTPService.BASE_URL}/contracts/players.html",
-            stream=True,
-            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-        ) as response:
+        contracts_url = f"{HTTPService.BASE_URL}/contracts/players.html"
+        with self._get(contracts_url, stream=True) as response:
             if not response.ok:
                 raise CouldNotGetPlayerContractData(response)
 
             if response.encoding is None:
                 response.encoding = "utf-8"
 
-            with PlayerContractsPageParser(
-                contract_data_processor=parsed_contract_row_processor
-            ) as p:
-                for chunk in response.iter_content(
-                    chunk_size=1024, decode_unicode=True
-                ):
-                    try:
-                        p.parse(chunk=chunk)
-                    except NothingMoreToParse:
-                        break
+            stream_started = time.perf_counter()
+            stream_chunks = 0
+            stream_chars = 0
+            try:
+                with PlayerContractsPageParser(
+                    contract_data_processor=parsed_contract_row_processor
+                ) as p:
+                    for chunk in response.iter_content(
+                        chunk_size=1024, decode_unicode=True
+                    ):
+                        stream_chunks += 1
+                        stream_chars += len(chunk)
+                        try:
+                            p.parse(chunk=chunk)
+                        except NothingMoreToParse:
+                            break
+            except requests.exceptions.RequestException as error:
+                diagnostics.record_stream(
+                    self.operation,
+                    contracts_url,
+                    response.diagnostics_request_seq,
+                    outcome="interrupted",
+                    stream_chunks=stream_chunks,
+                    stream_chars=stream_chars,
+                    elapsed_ms=_elapsed_ms(stream_started),
+                    error=type(error).__name__,
+                )
+                raise
+            diagnostics.record_stream(
+                self.operation,
+                contracts_url,
+                response.diagnostics_request_seq,
+                outcome="complete",
+                stream_chunks=stream_chunks,
+                stream_chars=stream_chars,
+                elapsed_ms=_elapsed_ms(stream_started),
+            )

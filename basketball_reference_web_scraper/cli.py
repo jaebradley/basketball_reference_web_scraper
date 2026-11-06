@@ -16,7 +16,7 @@ from pathlib import Path
 
 import requests
 
-from basketball_reference_web_scraper import client
+from basketball_reference_web_scraper import client, diagnostics
 from basketball_reference_web_scraper.data import Team
 from basketball_reference_web_scraper.errors import (
     CouldNotGetPlayerContractData,
@@ -120,6 +120,10 @@ MAX_JOBS = 16
 
 class ArgumentParser(argparse.ArgumentParser):
     def error(self, message):
+        # Parse-time failures still leave journal evidence: ensure a run,
+        # record the error, and let main() record the matching run_end.
+        diagnostics.ensure_run()
+        diagnostics.record_error("invalid_arguments", message)
         _error("invalid_arguments", message)
         self.exit(2)
 
@@ -135,8 +139,15 @@ class JSONEncoder(BasketballReferenceJSONEncoder):
 
 
 def _error(kind, message, **details):
+    payload = {"error": {"type": kind, "message": message, **details}}
+    run_id = diagnostics.current_run_id()
+    if run_id is not None:
+        payload["error"]["run_id"] = run_id
+    journal_path = diagnostics.current_journal_path()
+    if journal_path is not None:
+        payload["error"]["diagnostics_path"] = journal_path
     print(
-        json.dumps({"error": {"type": kind, "message": message, **details}}),
+        json.dumps(payload),
         file=sys.stderr,
     )
 
@@ -223,6 +234,49 @@ def build_parser():
         action="store_true",
         help="Replace an existing output file atomically",
     )
+    evidence = commands.add_parser(
+        "diagnostics",
+        help="Query retained evidence from past runs",
+        description=(
+            "Read the JSONL evidence journal left by past CLI or library runs: "
+            "per-request outcomes, operation timings, and terminal errors."
+        ),
+    )
+    evidence.add_argument(
+        "--dir",
+        type=Path,
+        default=None,
+        help=(
+            "Journal directory (default: "
+            "~/.basketball_reference_web_scraper/diagnostics or "
+            "BASKETBALL_REFERENCE_DIAGNOSTICS_DIR)"
+        ),
+    )
+    evidence.add_argument(
+        "--runs",
+        action="store_true",
+        help="Summarize each retained run instead of listing events",
+    )
+    evidence.add_argument("--run-id", default=None, help="Filter to one run id")
+    evidence.add_argument("--operation", default=None, help="Filter by operation name")
+    evidence.add_argument(
+        "--event",
+        default=None,
+        help="Filter by event type (run_start, http_request, http_stream, operation_start, operation_end, error, run_end)",
+    )
+    evidence.add_argument(
+        "--kind", default=None, help="Filter error events by kind (e.g. http_error)"
+    )
+    evidence.add_argument(
+        "--since", default=None, help="ISO 8601 timestamp lower bound (inclusive)"
+    )
+    evidence.add_argument(
+        "--until", default=None, help="ISO 8601 timestamp upper bound (inclusive)"
+    )
+    evidence.add_argument(
+        "--limit", type=int, default=100, help="Maximum events to return (default 100)"
+    )
+    evidence.set_defaults(function=None, schema=None)
     for name, (function, description, schema) in OPERATIONS.items():
         command = commands.add_parser(name, help=description, description=description)
         command.add_argument(
@@ -388,11 +442,62 @@ def _write_file(path, text, overwrite):
             temporary.unlink(missing_ok=True)
 
 
+def _diagnostics_report(args):
+    if args.runs:
+        sys.stdout.write(
+            json.dumps(
+                diagnostics.run_summaries(args.dir), ensure_ascii=False, indent=2
+            )
+            + "\n"
+        )
+        return 0
+    try:
+        events = diagnostics.read_events(
+            directory=args.dir,
+            since=args.since,
+            until=args.until,
+            run_id=args.run_id,
+            operation_name=args.operation,
+            event=args.event,
+            kind=args.kind,
+            limit=args.limit,
+        )
+    except (ValueError, TypeError) as exc:
+        _error("invalid_arguments", str(exc))
+        return 2
+    sys.stdout.write(json.dumps(events, ensure_ascii=False, indent=2) + "\n")
+    return 0
+
+
 def main(argv=None):
     parser = build_parser()
-    args = parser.parse_args(argv)
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit as exit_request:
+        # ArgumentParser.error ensured a run; close it with the parse exit code.
+        diagnostics.record_run_end(
+            exit_code=exit_request.code if isinstance(exit_request.code, int) else 1
+        )
+        raise
     if getattr(args, "overwrite", False) and args.output is None:
-        parser.error("--overwrite requires --output")
+        try:
+            parser.error("--overwrite requires --output")
+        finally:
+            diagnostics.record_run_end(exit_code=2)
+    if args.command == "diagnostics":
+        return _diagnostics_report(args)
+    diagnostics.start_run()
+    exit_code = 1
+    try:
+        exit_code = _execute(args)
+    except SystemExit as exit_request:
+        exit_code = exit_request.code if isinstance(exit_request.code, int) else 1
+    finally:
+        diagnostics.record_run_end(exit_code=exit_code)
+    return exit_code
+
+
+def _execute(args):
     try:
         path = getattr(args, "output", None)
         if path is not None:
@@ -418,8 +523,14 @@ def main(argv=None):
             message = "Basketball Reference denied this request (403). Stop and report the access failure."
         elif status == 429:
             message = "Basketball Reference rate limited this request (429). Stop and retry later."
+        diagnostics.record_error(
+            "http_error", message, status_code=status, operation=args.command
+        )
         _error("http_error", message, status_code=status)
     except requests.exceptions.RequestException as exc:
+        diagnostics.record_error(
+            "network_error", str(exc), operation=args.command, error=type(exc).__name__
+        )
         _error("network_error", str(exc))
     except (
         InvalidDate,
@@ -427,11 +538,20 @@ def main(argv=None):
         InvalidSeason,
         InvalidTeamSeason,
     ) as exc:
+        diagnostics.record_error("invalid_resource", str(exc), operation=args.command)
         _error("invalid_resource", str(exc))
     except CouldNotGetPlayerContractData as exc:
+        diagnostics.record_error("http_error", str(exc), operation=args.command)
         _error("http_error", str(exc))
     except OSError as exc:
+        diagnostics.record_error("output_error", str(exc), operation=args.command)
         _error("output_error", str(exc))
     except Exception as exc:
+        diagnostics.record_error(
+            "scrape_error",
+            f"{type(exc).__name__}: {exc}",
+            operation=args.command,
+            error=type(exc).__name__,
+        )
         _error("scrape_error", f"{type(exc).__name__}: {exc}")
     return 1
