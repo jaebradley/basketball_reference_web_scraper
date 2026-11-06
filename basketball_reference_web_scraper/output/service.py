@@ -17,10 +17,10 @@ class OutputService:
         writer = self.output_type_writers.get(options.output_type)
 
         if writer is None:
-            raise ValueError("Unknown output type: {output_type}".format(output_type=options.output_type))
+            raise ValueError(
+                "Unknown output type: {output_type}".format(
+                    output_type=options.output_type
+                )
+            )
 
         return writer.write(data=data, options=options)
-
-
-
-

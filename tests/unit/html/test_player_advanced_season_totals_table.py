@@ -1,8 +1,10 @@
 from unittest import TestCase
-from unittest.mock import MagicMock, PropertyMock
-from unittest.mock import patch
+from unittest.mock import MagicMock, PropertyMock, patch
 
-from basketball_reference_web_scraper.html import PlayerAdvancedSeasonTotalsRow, PlayerAdvancedSeasonTotalsTable
+from basketball_reference_web_scraper.html import (
+    PlayerAdvancedSeasonTotalsRow,
+    PlayerAdvancedSeasonTotalsTable,
+)
 
 
 class TestPlayerAdvancedSeasonTotalsTable(TestCase):
@@ -24,7 +26,12 @@ class TestPlayerAdvancedSeasonTotalsTable(TestCase):
             PlayerAdvancedSeasonTotalsTable(html=self.html).rows_query.strip(),
         )
 
-    @patch.object(PlayerAdvancedSeasonTotalsRow, 'is_combined_totals', new_callable=PropertyMock, return_value=False)
+    @patch.object(
+        PlayerAdvancedSeasonTotalsRow,
+        "is_combined_totals",
+        new_callable=PropertyMock,
+        return_value=False,
+    )
     def test_returns_all_rows_when_rows_are_not_combined_totals_rows(self, _):
         first_html_row = MagicMock()
         html_rows = [first_html_row]
@@ -33,7 +40,12 @@ class TestPlayerAdvancedSeasonTotalsTable(TestCase):
         rows = PlayerAdvancedSeasonTotalsTable(self.html).get_rows()
         self.assertTrue(len(html_rows) == len(rows))
 
-    @patch.object(PlayerAdvancedSeasonTotalsRow, 'is_combined_totals', new_callable=PropertyMock, return_value=True)
+    @patch.object(
+        PlayerAdvancedSeasonTotalsRow,
+        "is_combined_totals",
+        new_callable=PropertyMock,
+        return_value=True,
+    )
     def test_returns_no_rows_when_all_rows_are_combined_totals_rows(self, _):
         first_html_row = MagicMock()
         html_rows = [first_html_row]
