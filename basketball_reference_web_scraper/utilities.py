@@ -1,4 +1,10 @@
+import math
+
+
 def str_to_int(value, default=int(0)):
+    if value is None:
+        return default
+
     stripped_value = value.strip()
     try:
         return int(stripped_value)
@@ -7,11 +13,19 @@ def str_to_int(value, default=int(0)):
 
 
 def str_to_float(value, default=float(0)):
+    if value is None:
+        return default
+
     stripped_value = value.strip()
     try:
-        return float(stripped_value)
+        parsed_value = float(stripped_value)
     except ValueError:
         return default
+
+    if math.isfinite(parsed_value):
+        return parsed_value
+
+    return default
 
 
 def merge_two_dicts(first, second):
