@@ -6,14 +6,16 @@ from basketball_reference_web_scraper.parsers import ResourceLocationParser
 
 class TestResourceLocationParser(TestCase):
     def setUp(self):
-        self.parser = ResourceLocationParser(resource_location_regex=ParserService.SEARCH_RESULT_RESOURCE_LOCATION_REGEX)
+        self.parser = ResourceLocationParser(
+            resource_location_regex=ParserService.SEARCH_RESULT_RESOURCE_LOCATION_REGEX
+        )
 
     def test_parse_players_resource_type(self):
         self.assertEqual(
             self.parser.parse_resource_type(
                 resource_location="https://www.basketball-reference.com/players/k/koperbu01.html"
             ),
-            "players"
+            "players",
         )
 
     def test_parse_coaches_resource_type(self):
@@ -21,7 +23,7 @@ class TestResourceLocationParser(TestCase):
             self.parser.parse_resource_type(
                 resource_location="https://www.basketball-reference.com/coaches/vanbrbu01c.html"
             ),
-            "coaches"
+            "coaches",
         )
 
     def test_parse_executives_resource_type(self):
@@ -37,7 +39,7 @@ class TestResourceLocationParser(TestCase):
             self.parser.parse_resource_identifier(
                 resource_location="https://www.basketball-reference.com/players/k/koperbu01.html"
             ),
-            "koperbu01"
+            "koperbu01",
         )
 
     def test_parse_coaches_resource_identifier(self):
@@ -45,7 +47,7 @@ class TestResourceLocationParser(TestCase):
             self.parser.parse_resource_identifier(
                 resource_location="https://www.basketball-reference.com/coaches/vanbrbu01c.html"
             ),
-            "vanbrbu01c"
+            "vanbrbu01c",
         )
 
     def test_parse_executives_resource_identifier(self):

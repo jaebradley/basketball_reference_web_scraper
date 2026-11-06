@@ -1,6 +1,10 @@
 import datetime
 
-from basketball_reference_web_scraper.data import TeamAbbreviation, Team, TEAM_ABBREVIATIONS_BY_TEAM
+from basketball_reference_web_scraper.data import (
+    TEAM_ABBREVIATIONS_BY_TEAM,
+    Team,
+    TeamAbbreviation,
+)
 
 # The Charlotte Hornets' (with Basketball Reference abbreviation CHH) last game was May 15th, 2002
 # https://www.basketball-reference.com/teams/CHH/2002_games.html
@@ -15,8 +19,13 @@ def calculate_team_abbreviation(team: Team, date: datetime.date) -> TeamAbbrevia
     return TEAM_ABBREVIATIONS_BY_TEAM[team]
 
 
-def calculate_team_abbreviation_from_team_and_season(team: Team, season_end_year: int) -> TeamAbbreviation:
-    if team is Team.CHARLOTTE_HORNETS and season_end_year <= DATE_OF_CHARLOTTE_HORNETS_LAST_GAME.year:
+def calculate_team_abbreviation_from_team_and_season(
+    team: Team, season_end_year: int
+) -> TeamAbbreviation:
+    if (
+        team is Team.CHARLOTTE_HORNETS
+        and season_end_year <= DATE_OF_CHARLOTTE_HORNETS_LAST_GAME.year
+    ):
         return TeamAbbreviation.CHH
 
     return TEAM_ABBREVIATIONS_BY_TEAM[team]

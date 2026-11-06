@@ -3,8 +3,7 @@ import requests
 
 class InvalidDate(Exception):
     def __init__(self, day, month, year):
-        message = "Date with year set to {year}, month set to {month}, and day set to {day} is invalid" \
-            .format(
+        message = "Date with year set to {year}, month set to {month}, and day set to {day} is invalid".format(
             year=year,
             month=month,
             day=day,
@@ -14,20 +13,23 @@ class InvalidDate(Exception):
 
 class InvalidSeason(Exception):
     def __init__(self, season_end_year):
-        message = "Season end year of {season_end_year} is invalid".format(season_end_year=season_end_year)
+        message = "Season end year of {season_end_year} is invalid".format(
+            season_end_year=season_end_year
+        )
         super().__init__(message)
 
 
 class InvalidPlayerAndSeason(Exception):
     def __init__(self, player_identifier, season_end_year):
-        message = "Player with identifier \"{player_identifier}\" in season ending in {season_end_year} is invalid" \
-            .format(player_identifier=player_identifier, season_end_year=season_end_year)
+        message = 'Player with identifier "{player_identifier}" in season ending in {season_end_year} is invalid'.format(
+            player_identifier=player_identifier, season_end_year=season_end_year
+        )
         super().__init__(message)
 
 
 class InvalidTeamSeason(Exception):
     def __init__(self, team, year):
-        message = "Team \"{team}\" in {year} is invalid".format(team=team, year=year)
+        message = 'Team "{team}" in {year} is invalid'.format(team=team, year=year)
         super().__init__(message)
 
 
@@ -35,4 +37,6 @@ class CouldNotGetPlayerContractData(Exception):
     def __init__(self, response: requests.Response):
         self._response = response
 
-        super().__init__(f"HTTP request to {self._response.url} was unsuccessful: {self._response.status_code}")
+        super().__init__(
+            f"HTTP request to {self._response.url} was unsuccessful: {self._response.status_code}"
+        )

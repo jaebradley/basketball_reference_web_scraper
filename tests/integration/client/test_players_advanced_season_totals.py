@@ -5,21 +5,30 @@ import sys
 from unittest import TestCase
 
 import requests_mock
+
 from basketball_reference_web_scraper.client import players_advanced_season_totals
-from basketball_reference_web_scraper.data import OutputType, Team, Position
+from basketball_reference_web_scraper.data import OutputType, Position, Team
 from basketball_reference_web_scraper.errors import InvalidSeason
 
 
 class Test2019(TestCase):
     def setUp(self):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 "../files/player_advanced_season_totals/2019.html",
-        ), 'r') as file_input: self._html = file_input.read();
+            ),
+            "r",
+        ) as file_input:
+            self._html = file_input.read()
 
     @requests_mock.Mocker()
     def test_length(self, m):
-        m.get("https://www.basketball-reference.com/leagues/NBA_2019_advanced.html", text=self._html, status_code=200)
+        m.get(
+            "https://www.basketball-reference.com/leagues/NBA_2019_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
         result = players_advanced_season_totals(season_end_year=2019)
         self.assertEqual(len(result), 622)
 
@@ -34,10 +43,14 @@ class BaseTestPlayerAdvancedSeasonTotalsCSVOutput(TestCase):
         raise NotImplementedError
 
     def setUp(self):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/player_advanced_season_totals/{self.year}.html",
-        ), 'r') as file_input: self._html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            self._html = file_input.read()
 
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
@@ -53,9 +66,11 @@ class BaseTestPlayerAdvancedSeasonTotalsCSVOutput(TestCase):
 
     @requests_mock.Mocker()
     def assert_player_advanced_season_totals_csv(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_{self.year}_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_{self.year}_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         players_advanced_season_totals(
             season_end_year=self.year,
@@ -65,9 +80,8 @@ class BaseTestPlayerAdvancedSeasonTotalsCSVOutput(TestCase):
         )
 
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
@@ -80,10 +94,14 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
         raise NotImplementedError
 
     def setUp(self):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/player_advanced_season_totals/{self.year}.html",
-        ), 'r') as file_input: self._html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            self._html = file_input.read()
 
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
@@ -99,9 +117,11 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
 
     @requests_mock.Mocker()
     def assert_player_advanced_season_totals_json(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_{self.year}_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_{self.year}_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         players_advanced_season_totals(
             season_end_year=self.year,
@@ -110,15 +130,21 @@ class BaseTestPlayerAdvancedSeasonTotalsJSONOutput(TestCase):
             include_combined_values=self.include_combined_values,
         )
 
-        with open(self.output_file_path, "r", encoding="utf8") as output_file, \
-                open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
+        with (
+            open(self.output_file_path, "r", encoding="utf8") as output_file,
+            open(
+                self.expected_output_file_path, "r", encoding="utf8"
+            ) as expected_output_file,
+        ):
             self.assertEqual(
                 json.load(output_file),
                 json.load(expected_output_file),
             )
 
 
-class Test2019PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+class Test2019PlayerAdvancedSeasonTotalsCSVOutput(
+    BaseTestPlayerAdvancedSeasonTotalsCSVOutput
+):
     @property
     def year(self):
         return 2019
@@ -131,7 +157,9 @@ class Test2019PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
         self.assert_player_advanced_season_totals_csv()
 
 
-class Test2018PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+class Test2018PlayerAdvancedSeasonTotalsCSVOutput(
+    BaseTestPlayerAdvancedSeasonTotalsCSVOutput
+):
     @property
     def year(self):
         return 2018
@@ -144,7 +172,9 @@ class Test2018PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
         self.assert_player_advanced_season_totals_csv()
 
 
-class Test2017PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+class Test2017PlayerAdvancedSeasonTotalsCSVOutput(
+    BaseTestPlayerAdvancedSeasonTotalsCSVOutput
+):
     @property
     def year(self):
         return 2017
@@ -157,7 +187,9 @@ class Test2017PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
         self.assert_player_advanced_season_totals_csv()
 
 
-class Test2016PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+class Test2016PlayerAdvancedSeasonTotalsCSVOutput(
+    BaseTestPlayerAdvancedSeasonTotalsCSVOutput
+):
     @property
     def year(self):
         return 2016
@@ -170,7 +202,9 @@ class Test2016PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
         self.assert_player_advanced_season_totals_csv()
 
 
-class Test2001PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTotalsCSVOutput):
+class Test2001PlayerAdvancedSeasonTotalsCSVOutput(
+    BaseTestPlayerAdvancedSeasonTotalsCSVOutput
+):
     @property
     def year(self):
         return 2001
@@ -183,7 +217,9 @@ class Test2001PlayerAdvancedSeasonTotalsCSVOutput(BaseTestPlayerAdvancedSeasonTo
         self.assert_player_advanced_season_totals_csv()
 
 
-class Test2019PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+class Test2019PlayerAdvancedSeasonTotalsJSONOutput(
+    BaseTestPlayerAdvancedSeasonTotalsJSONOutput
+):
     @property
     def year(self):
         return 2019
@@ -196,7 +232,9 @@ class Test2019PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
         self.assert_player_advanced_season_totals_json()
 
 
-class Test2018PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+class Test2018PlayerAdvancedSeasonTotalsJSONOutput(
+    BaseTestPlayerAdvancedSeasonTotalsJSONOutput
+):
     @property
     def year(self):
         return 2018
@@ -209,7 +247,9 @@ class Test2018PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
         self.assert_player_advanced_season_totals_json()
 
 
-class Test2017PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+class Test2017PlayerAdvancedSeasonTotalsJSONOutput(
+    BaseTestPlayerAdvancedSeasonTotalsJSONOutput
+):
     @property
     def year(self):
         return 2017
@@ -222,7 +262,9 @@ class Test2017PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
         self.assert_player_advanced_season_totals_json()
 
 
-class Test2016PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+class Test2016PlayerAdvancedSeasonTotalsJSONOutput(
+    BaseTestPlayerAdvancedSeasonTotalsJSONOutput
+):
     @property
     def year(self):
         return 2016
@@ -235,7 +277,9 @@ class Test2016PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
         self.assert_player_advanced_season_totals_json()
 
 
-class Test2001PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonTotalsJSONOutput):
+class Test2001PlayerAdvancedSeasonTotalsJSONOutput(
+    BaseTestPlayerAdvancedSeasonTotalsJSONOutput
+):
     @property
     def year(self):
         return 2001
@@ -251,31 +295,44 @@ class Test2001PlayerAdvancedSeasonTotalsJSONOutput(BaseTestPlayerAdvancedSeasonT
 @requests_mock.Mocker()
 class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
     def setUp(self):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/player_advanced_season_totals/2018.html",
-        ), 'r') as file_input: self._html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            self._html = file_input.read()
 
     def test_future_season_raises_invalid_season(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_{sys.maxsize}_advanced.html",
-              text="Not found",
-              status_code=404)
-        self.assertRaisesRegex(InvalidSeason, f"Season end year of {sys.maxsize} is invalid",
-                               players_advanced_season_totals,
-                               season_end_year=sys.maxsize)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_{sys.maxsize}_advanced.html",
+            text="Not found",
+            status_code=404,
+        )
+        self.assertRaisesRegex(
+            InvalidSeason,
+            f"Season end year of {sys.maxsize} is invalid",
+            players_advanced_season_totals,
+            season_end_year=sys.maxsize,
+        )
 
     def test_2018_players_advanced_season_totals_length(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         result = players_advanced_season_totals(season_end_year=2018)
         self.assertEqual(len(result), 605)
 
     def test_first_2018_players_advanced_season_totals_row(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         result = players_advanced_season_totals(season_end_year=2018)
         self.assertEqual(
@@ -310,14 +367,16 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
                 "usage_percentage": 31.6,
                 "value_over_replacement_player": 8.2,
                 "win_shares": 14.0,
-                "win_shares_per_48_minutes": 0.221
+                "win_shares_per_48_minutes": 0.221,
             },
         )
 
     def test_last_2018_players_advanced_season_totals_row(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         result = players_advanced_season_totals(season_end_year=2018)
         self.assertEqual(
@@ -339,9 +398,7 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
                 "offensive_rebound_percentage": 0.0,
                 "offensive_win_shares": 0.0,
                 "player_efficiency_rating": 0.0,
-                "positions": [
-                    Position.SHOOTING_GUARD
-                ],
+                "positions": [Position.SHOOTING_GUARD],
                 "slug": "mckintr01",
                 "steal_percentage": 0.0,
                 "team": Team.INDIANA_PACERS,
@@ -352,20 +409,24 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
                 "usage_percentage": 0.0,
                 "value_over_replacement_player": 0.0,
                 "win_shares": 0.0,
-                "win_shares_per_48_minutes": -0.001
-            }
+                "win_shares_per_48_minutes": -0.001,
+            },
         )
 
     def test_players_advanced_season_totals_json(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
             "./output/expected/player_advanced_season_totals/2018.json",
         )
-        result = players_advanced_season_totals(season_end_year=2018, output_type=OutputType.JSON)
+        result = players_advanced_season_totals(
+            season_end_year=2018, output_type=OutputType.JSON
+        )
         with open(expected_output_file_path, "r", encoding="utf8") as expected_output:
             self.assertEqual(
                 json.loads(result),
@@ -376,54 +437,64 @@ class TestPlayerAdvancedSeasonTotalsInMemoryOutput(TestCase):
 @requests_mock.Mocker()
 class TestPlayerAdvanced1950SeasonTotalsInMemoryOutput(TestCase):
     def setUp(self):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/player_advanced_season_totals/1950.html",
-        ), 'r') as file_input: self._html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            self._html = file_input.read()
 
     def test_1950_players_advanced_season_totals_length(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_1950_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_1950_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         result = players_advanced_season_totals(season_end_year=1950)
         self.assertTrue(set(Team).issuperset(set(map(lambda row: row["team"], result))))
         self.assertEqual(len(result), 269)
 
     def test_first_2018_players_advanced_season_totals_row(self, m):
-        m.get(f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
-              text=self._html,
-              status_code=200)
+        m.get(
+            f"https://www.basketball-reference.com/leagues/NBA_2018_advanced.html",
+            text=self._html,
+            status_code=200,
+        )
 
         result = players_advanced_season_totals(season_end_year=2018)
         self.assertEqual(
             result[0],
-            {'age': 25,
-             'assist_percentage': 0.0,
-             'block_percentage': 0.0,
-             'box_plus_minus': 0.0,
-             'defensive_box_plus_minus': 0.0,
-             'defensive_rebound_percentage': 0.0,
-             'defensive_win_shares': 2.5,
-             'free_throw_attempt_rate': 0.183,
-             'games_played': 68,
-             'is_combined_totals': False,
-             'minutes_played': 0,
-             'name': 'Jack Coleman',
-             'offensive_box_plus_minus': 0.0,
-             'offensive_rebound_percentage': 0.0,
-             'offensive_win_shares': 1.9,
-             'player_efficiency_rating': 0.0,
-             'positions': [Position.POWER_FORWARD],
-             'slug': 'colemja01',
-             'steal_percentage': 0.0,
-             'team': Team.ROCHESTER_ROYALS,
-             'three_point_attempt_rate': 0.0,
-             'total_rebound_percentage': 0.0,
-             'true_shooting_percentage': 0.412,
-             'turnover_percentage': 0.0,
-             'usage_percentage': 0.0,
-             'value_over_replacement_player': 0.0,
-             'win_shares': 4.3,
-             'win_shares_per_48_minutes': 0.0
-             })
+            {
+                "age": 25,
+                "assist_percentage": 0.0,
+                "block_percentage": 0.0,
+                "box_plus_minus": 0.0,
+                "defensive_box_plus_minus": 0.0,
+                "defensive_rebound_percentage": 0.0,
+                "defensive_win_shares": 2.5,
+                "free_throw_attempt_rate": 0.183,
+                "games_played": 68,
+                "is_combined_totals": False,
+                "minutes_played": 0,
+                "name": "Jack Coleman",
+                "offensive_box_plus_minus": 0.0,
+                "offensive_rebound_percentage": 0.0,
+                "offensive_win_shares": 1.9,
+                "player_efficiency_rating": 0.0,
+                "positions": [Position.POWER_FORWARD],
+                "slug": "colemja01",
+                "steal_percentage": 0.0,
+                "team": Team.ROCHESTER_ROYALS,
+                "three_point_attempt_rate": 0.0,
+                "total_rebound_percentage": 0.0,
+                "true_shooting_percentage": 0.412,
+                "turnover_percentage": 0.0,
+                "usage_percentage": 0.0,
+                "value_over_replacement_player": 0.0,
+                "win_shares": 4.3,
+                "win_shares_per_48_minutes": 0.0,
+            },
+        )

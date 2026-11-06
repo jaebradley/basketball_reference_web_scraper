@@ -12,7 +12,9 @@ class TestPlayerPageTotalsRow(TestCase):
         self.assertIsNone(PlayerPageTotalsRow(html=html).league_abbreviation)
         html.xpath.assert_called_once_with('.//td[@data-stat="lg_id"]')
 
-    def test_league_abbreviation_is_first_abbreviation_text_content_when_matching_league_abbreviations(self):
+    def test_league_abbreviation_is_first_abbreviation_text_content_when_matching_league_abbreviations(
+        self,
+    ):
         first_abbreviation = MagicMock()
         first_abbreviation.text_content = MagicMock(return_value="first abbreviation")
 
@@ -23,21 +25,16 @@ class TestPlayerPageTotalsRow(TestCase):
         html.xpath = MagicMock(return_value=[first_abbreviation, second_abbreviation])
 
         self.assertEqual(
-            PlayerPageTotalsRow(html=html).league_abbreviation,
-            "first abbreviation"
+            PlayerPageTotalsRow(html=html).league_abbreviation, "first abbreviation"
         )
         html.xpath.assert_called_once_with('.//td[@data-stat="lg_id"]')
 
     def test_different_class_is_not_equal(self):
-        self.assertNotEqual(
-            PlayerPageTotalsRow(html=MagicMock()),
-            "jaebaebae"
-        )
+        self.assertNotEqual(PlayerPageTotalsRow(html=MagicMock()), "jaebaebae")
 
     def test_different_html_but_same_class_is_not_equal(self):
         self.assertNotEqual(
-            PlayerPageTotalsRow(html=MagicMock()),
-            PlayerPageTotalsRow(html=MagicMock())
+            PlayerPageTotalsRow(html=MagicMock()), PlayerPageTotalsRow(html=MagicMock())
         )
 
     def test_same_html_and_same_class_is_equal(self):
@@ -46,5 +43,3 @@ class TestPlayerPageTotalsRow(TestCase):
             PlayerPageTotalsRow(html=html),
             PlayerPageTotalsRow(html=html),
         )
-
-

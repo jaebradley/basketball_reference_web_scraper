@@ -7,7 +7,13 @@ from unittest import TestCase
 import requests_mock
 
 from basketball_reference_web_scraper.client import standings
-from basketball_reference_web_scraper.data import Team, Division, Conference, OutputWriteOption, OutputType
+from basketball_reference_web_scraper.data import (
+    Conference,
+    Division,
+    OutputType,
+    OutputWriteOption,
+    Team,
+)
 
 
 class StandingsMocker:
@@ -17,11 +23,11 @@ class StandingsMocker:
 
     def decorate_class(self, klass):
         for attr_name in dir(klass):
-            if not attr_name.startswith('test_'):
+            if not attr_name.startswith("test_"):
                 continue
 
             attr = getattr(klass, attr_name)
-            if not hasattr(attr, '__call__'):
+            if not hasattr(attr, "__call__"):
                 continue
 
             setattr(klass, attr_name, self.mock(attr))
@@ -31,14 +37,19 @@ class StandingsMocker:
     def mock(self, callable):
         @functools.wraps(callable)
         def inner(*args, **kwargs):
-            html_files_directory = os.path.join(self._schedules_directory, str(self._season_end_year))
+            html_files_directory = os.path.join(
+                self._schedules_directory, str(self._season_end_year)
+            )
             for file in os.listdir(os.fsencode(html_files_directory)):
                 filename = os.fsdecode(file)
                 if not filename.endswith(".html"):
                     raise ValueError(
-                        f"Unexpected prefix for {filename}. Expected all files in {html_files_directory} to end with .html.")
+                        f"Unexpected prefix for {filename}. Expected all files in {html_files_directory} to end with .html."
+                    )
 
-                with open(os.path.join(html_files_directory, filename), 'r') as file_input:
+                with open(
+                    os.path.join(html_files_directory, filename), "r"
+                ) as file_input:
                     if filename.startswith(str(self._season_end_year)):
                         key = f"https://www.basketball-reference.com/leagues/NBA_{self._season_end_year}_games.html"
                         with requests_mock.Mocker() as m:
@@ -60,7 +71,7 @@ class StandingsMocker:
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2000
+    season_end_year=2000,
 )
 class Test2000StandingsInMemory(TestCase):
     def test_2000_standings(self):
@@ -87,7 +98,7 @@ class Test2000StandingsInMemory(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2001
+    season_end_year=2001,
 )
 class Test2001StandingsInMemory(TestCase):
 
@@ -115,7 +126,7 @@ class Test2001StandingsInMemory(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2002
+    season_end_year=2002,
 )
 class Test2002StandingsInMemory(TestCase):
     def test_2002_standings(self):
@@ -142,7 +153,7 @@ class Test2002StandingsInMemory(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2005
+    season_end_year=2005,
 )
 class Test2005StandingsInMemory(TestCase):
     def test_2005_standings(self):
@@ -197,7 +208,7 @@ class Test2005StandingsInMemory(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2020
+    season_end_year=2020,
 )
 class Test2020StandingsInMemory(TestCase):
     def test_2020_standings(self):
@@ -252,17 +263,15 @@ class Test2020StandingsInMemory(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2001
+    season_end_year=2001,
 )
 class TestCSVStandingsFor2001(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/generated/standings/2001.csv"
+            os.path.dirname(__file__), "./output/generated/standings/2001.csv"
         )
         self.expected_output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/standings/2001.csv"
+            os.path.dirname(__file__), "./output/expected/standings/2001.csv"
         )
 
     def tearDown(self):
@@ -276,9 +285,8 @@ class TestCSVStandingsFor2001(TestCase):
             output_write_option=OutputWriteOption.WRITE,
         )
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 @StandingsMocker(
@@ -286,17 +294,15 @@ class TestCSVStandingsFor2001(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2001
+    season_end_year=2001,
 )
 class TestJSONPlayerBoxScores2001(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/generated/standings/2001.json"
+            os.path.dirname(__file__), "./output/generated/standings/2001.json"
         )
         self.expected_output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/standings/2001.json"
+            os.path.dirname(__file__), "./output/expected/standings/2001.json"
         )
 
     def tearDown(self):
@@ -311,9 +317,8 @@ class TestJSONPlayerBoxScores2001(TestCase):
         )
 
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 @StandingsMocker(
@@ -321,13 +326,12 @@ class TestJSONPlayerBoxScores2001(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2001
+    season_end_year=2001,
 )
 class TestInMemoryJSONStandings2001(TestCase):
     def setUp(self):
         self.expected_output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/standings/2001.json"
+            os.path.dirname(__file__), "./output/expected/standings/2001.json"
         )
 
     def test_2001_standings(self):
@@ -336,11 +340,10 @@ class TestInMemoryJSONStandings2001(TestCase):
             output_type=OutputType.JSON,
         )
 
-        with open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
-            self.assertEqual(
-                json.loads(box_scores),
-                json.load(expected_output_file)
-            )
+        with open(
+            self.expected_output_file_path, "r", encoding="utf8"
+        ) as expected_output_file:
+            self.assertEqual(json.loads(box_scores), json.load(expected_output_file))
 
 
 @StandingsMocker(
@@ -348,17 +351,15 @@ class TestInMemoryJSONStandings2001(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2019
+    season_end_year=2019,
 )
 class TestCSVStandingsFor2019(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/generated/standings/2019.csv"
+            os.path.dirname(__file__), "./output/generated/standings/2019.csv"
         )
         self.expected_output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/standings/2019.csv"
+            os.path.dirname(__file__), "./output/expected/standings/2019.csv"
         )
 
     def tearDown(self):
@@ -372,9 +373,8 @@ class TestCSVStandingsFor2019(TestCase):
             output_write_option=OutputWriteOption.WRITE,
         )
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 @StandingsMocker(
@@ -382,17 +382,15 @@ class TestCSVStandingsFor2019(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2019
+    season_end_year=2019,
 )
 class TestJSONPlayerBoxScores2019(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/generated/standings/2019.json"
+            os.path.dirname(__file__), "./output/generated/standings/2019.json"
         )
         self.expected_output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/standings/2019.json"
+            os.path.dirname(__file__), "./output/expected/standings/2019.json"
         )
 
     def tearDown(self):
@@ -407,9 +405,8 @@ class TestJSONPlayerBoxScores2019(TestCase):
         )
 
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 @StandingsMocker(
@@ -417,13 +414,12 @@ class TestJSONPlayerBoxScores2019(TestCase):
         os.path.dirname(__file__),
         "../files/schedule",
     ),
-    season_end_year=2019
+    season_end_year=2019,
 )
 class TestInMemoryJSONStandings2019(TestCase):
     def setUp(self):
         self.expected_output_file_path = os.path.join(
-            os.path.dirname(__file__),
-            "./output/expected/standings/2019.json"
+            os.path.dirname(__file__), "./output/expected/standings/2019.json"
         )
 
     def test_2019_standings(self):
@@ -432,8 +428,7 @@ class TestInMemoryJSONStandings2019(TestCase):
             output_type=OutputType.JSON,
         )
 
-        with open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
-            self.assertEqual(
-                json.loads(box_scores),
-                json.load(expected_output_file)
-            )
+        with open(
+            self.expected_output_file_path, "r", encoding="utf8"
+        ) as expected_output_file:
+            self.assertEqual(json.loads(box_scores), json.load(expected_output_file))
