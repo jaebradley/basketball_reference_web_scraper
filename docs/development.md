@@ -33,8 +33,13 @@ This is why API methods have their own integration test file under the `client` 
 implemented in the `client.py` file.
 
 !!! warning
-    Sometimes the suite of integration tests run into rate-limiting errors - I'm currently thinking of ways to mitigate
-    this behavior.
+    The `end to end` tests execute live HTTP requests to basketball-reference.com and sometimes run into rate-limiting errors. The `unit` and `integration` suites run offline - the `integration` directory uses recorded HTML and mocked HTTP.
+
+Run the offline suite with
+
+```bash
+uv run pytest --ignore="tests/end to end/"
+```
 
 Currently, this project uses [**Codecov**](https://codecov.io/gh/jaebradley/basketball_reference_web_scraper) for code coverage statistics.
 

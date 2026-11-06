@@ -32,6 +32,11 @@ pip install basketball_reference_web_scraper
 !!! note
     There is only one supported major version: `4.x.x`.
 
+## Agents and command line
+
+See [Use with agents](agents.md) for the CLI, setup, task examples, and the bundled
+agent skill. The CLI supports JSON and CSV without writing a Python wrapper.
+
 ## Contributors
 
 This is an open-source project that welcomes **_all_** pull requests and issues - I would love to hear your thoughts and 
