@@ -658,10 +658,11 @@ class PlayerSeasonBoxScoresParser:
         self.outcome_parser = outcome_parser
         self.seconds_played_parser = seconds_played_parser
 
-    def parse(self, box_scores, include_inactive_games=False):
+    def parse(self, box_scores, include_inactive_games=False, player_identifier=None):
         results = []
         for box_score in box_scores:
             common = {
+                "player_identifier": player_identifier,
                 "date": datetime.strptime(str(box_score.date), "%Y-%m-%d").date(),
                 "team": self.team_abbreviation_parser.from_abbreviation(
                     box_score.team_abbreviation

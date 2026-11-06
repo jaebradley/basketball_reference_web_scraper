@@ -110,6 +110,7 @@ class HTTPService:
         return self.parser.parse_player_season_box_scores(
             box_scores=page.regular_season_box_scores_table.rows,
             include_inactive_games=include_inactive_games,
+            player_identifier=player_identifier,
         )
 
     def playoff_player_box_scores(
@@ -137,6 +138,7 @@ class HTTPService:
         return self.parser.parse_player_season_box_scores(
             box_scores=page.playoff_box_scores_table.rows,
             include_inactive_games=include_inactive_games,
+            player_identifier=player_identifier,
         )
 
     def play_by_play(self, home_team, day, month, year):

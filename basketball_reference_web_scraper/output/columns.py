@@ -26,6 +26,7 @@ SHARED_COLUMN_NAMES = [
 BOX_SCORE_COLUMN_NAMES = ["slug", "name"] + SHARED_COLUMN_NAMES + ["plus_minus"]
 
 PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES = [
+    "player_identifier",
     "active",
     "date",
     "points_scored",
