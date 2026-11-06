@@ -24,24 +24,24 @@ class RosterRow(PlayerIdentificationRow):
     @property
     def player_url(self):
         if self.player_cell is None:
-            return ''
+            return ""
 
-        urls = self.player_cell.xpath('a')
+        urls = self.player_cell.xpath("a")
         if len(urls) == 1:
-            return urls[0].get('href')
+            return urls[0].get("href")
 
-        return ''
+        return ""
 
     @property
     def name(self):
         if self.player_cell is None:
-            return ''
+            return ""
 
-        urls = self.player_cell.xpath('a')
+        urls = self.player_cell.xpath("a")
         if len(urls) == 1:
             return urls[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def number(self):
@@ -49,7 +49,7 @@ class RosterRow(PlayerIdentificationRow):
         if len(cells) == 1:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def position_abbreviation(self):
@@ -57,4 +57,4 @@ class RosterRow(PlayerIdentificationRow):
         if len(cells) == 1:
             return cells[0].text_content()
 
-        return ''
+        return ""

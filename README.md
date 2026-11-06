@@ -29,6 +29,20 @@ I initially wrote this library as an exercise for creating my first `PyPi` packa
 
 For documentation about installing the package and API methods see [the documentation page](https://jaebradley.github.io/basketball_reference_web_scraper/).
 
+## Use with agents
+
+Ask a shell-enabled agent: “Use basketball reference web scraper to export
+Russell Westbrook's 2018-19 regular-season game log to CSV and calculate his
+average points.” This repository includes an [agent task skill](.agents/skills/basketball-reference-web-scraper/SKILL.md)
+and a JSON-first CLI covering all public client operations.
+
+Install this checkout with `python -m pip install .`, then run
+`basketball-reference --help` (or `python -m basketball_reference_web_scraper --help`).
+See the [agent and CLI guide](docs/agents.md) for setup, examples, and output and
+failure contracts. Past runs leave a bounded JSONL evidence journal; investigate
+failures with `basketball-reference diagnostics --runs` (see
+[Investigate past runs](docs/agents.md#investigate-past-runs-diagnostics-journal)).
+
 ## Contributors
 
 Thanks to [@DaiJunyan](https://github.com/DaiJunyan), [@ecallahan5](https://github.com/ecallahan5), 

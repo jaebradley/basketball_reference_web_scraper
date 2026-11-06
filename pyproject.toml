@@ -34,6 +34,9 @@ Repository = "https://github.com/jaebradley/basketball_reference_web_scraper"
 issues = "https://github.com/jaebradley/basketball_reference_web_scraper/issues"
 pull_requests = "https://github.com/jaebradley/basketball_reference_web_scraper/pull_requests"
 
+[project.scripts]
+basketball-reference = "basketball_reference_web_scraper.cli:main"
+
 [dependency-groups]
 dev = [
     "codecov==2.1.13",
@@ -68,3 +71,6 @@ testpaths = "tests"
 addopts = [
     "--import-mode=importlib",
 ]
+
+[tool.ty.environment]
+python = ".venv/bin/python"

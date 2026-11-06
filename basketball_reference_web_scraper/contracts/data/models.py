@@ -18,7 +18,9 @@ class Player:
             raise ValueError("name should not be an empty string")
 
         if any(char.isspace() for char in self.identifier):
-            raise ValueError(f"identifier: {self.identifier} should not contain whitespace")
+            raise ValueError(
+                f"identifier: {self.identifier} should not contain whitespace"
+            )
 
 
 @dataclass(frozen=True)
@@ -53,5 +55,7 @@ class Contract:
         if 0 == len(self.salaries_by_season_start_year):
             raise ValueError("season salaries should not be empty")
 
-        if all(salary is None for salary in self.salaries_by_season_start_year.values()):
+        if all(
+            salary is None for salary in self.salaries_by_season_start_year.values()
+        ):
             raise ValueError("not all salaries should be None")

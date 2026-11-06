@@ -1,5 +1,3 @@
-
-
 class PlayerShootingStatisticRow:
     def __init__(self, html):
         self.html = html
@@ -11,7 +9,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def age(self):
@@ -20,7 +18,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def games_played(self):
@@ -29,7 +27,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def games_started(self):
@@ -38,7 +36,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def is_combined_totals(self):
@@ -54,7 +52,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def player_cell(self):
@@ -69,15 +67,15 @@ class PlayerShootingStatisticRow:
     def slug(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
-        return cell.get('data-append-csv')
+        return cell.get("data-append-csv")
 
     @property
     def name(self):
         cell = self.player_cell
         if cell is None:
-            return ''
+            return ""
 
         return cell.text_content()
 
@@ -88,7 +86,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def field_goal_percentage(self):
@@ -97,7 +95,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def average_field_goal_attempt_distance_in_feet(self):
@@ -106,7 +104,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_field_goal_attempts_that_were_two_pointers(self):
@@ -115,7 +113,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_field_goal_attempts_zero_to_three_feet_from_the_basket(self):
@@ -124,7 +122,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_field_goal_attempts_three_to_ten_feet_from_the_basket(self):
@@ -133,7 +131,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_field_goal_attempts_ten_to_sixteen_feet_from_the_basket(self):
@@ -142,16 +140,18 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
-    def percentage_of_field_goal_attempts_sixteen_feet_from_the_basket_to_three_point_line(self):
+    def percentage_of_field_goal_attempts_sixteen_feet_from_the_basket_to_three_point_line(
+        self,
+    ):
         cells = self.html.xpath('td[@data-stat="pct_fga_16_xx"]')
 
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_field_goal_attempts_that_were_three_pointers(self):
@@ -160,7 +160,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def two_point_field_goal_percentage(self):
@@ -169,7 +169,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def zero_to_three_feet_from_the_basket_field_goal_percentage(self):
@@ -178,7 +178,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def three_to_ten_feet_from_the_basket_field_goal_percentage(self):
@@ -187,7 +187,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def ten_to_sixteen_feet_from_the_basket_field_goal_percentage(self):
@@ -196,7 +196,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def sixteen_to_three_point_line_field_goal_percentage(self):
@@ -205,7 +205,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def three_point_field_goal_percentage(self):
@@ -214,7 +214,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_two_pointers_that_were_assisted(self):
@@ -223,7 +223,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_three_pointers_that_were_assisted(self):
@@ -232,7 +232,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_field_goal_attempts_that_were_dunks(self):
@@ -241,7 +241,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def made_dunks(self):
@@ -250,7 +250,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def percentage_of_three_point_attempts_that_were_corner_threes(self):
@@ -259,7 +259,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def corner_three_field_goal_percentage(self):
@@ -268,7 +268,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def beyond_half_court_attempts(self):
@@ -277,7 +277,7 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
 
     @property
     def made_beyond_half_court_shots(self):
@@ -286,7 +286,8 @@ class PlayerShootingStatisticRow:
         if len(cells) > 0:
             return cells[0].text_content()
 
-        return ''
+        return ""
+
 
 class PlayersSeasonShootingStatisticsTable:
     def __init__(self, html):
