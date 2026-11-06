@@ -5,7 +5,12 @@ from datetime import date
 from unittest import TestCase
 
 import basketball_reference_web_scraper.client as client
-from basketball_reference_web_scraper.data import OutputWriteOption, OutputType, Team, Outcome
+from basketball_reference_web_scraper.data import (
+    Outcome,
+    OutputType,
+    OutputWriteOption,
+    Team,
+)
 from tests.integration.client.utilities import ResponseMocker
 
 
@@ -14,23 +19,28 @@ class BoxScoresResponseMocker(ResponseMocker):
     def __init__(self, boxscore_date: date):
         year, month, day = boxscore_date.year, boxscore_date.month, boxscore_date.day
         boxscores_directory = os.path.join(
-            os.path.dirname(__file__),
-            f"../files/boxscores/{year}/{month}/{day}")
+            os.path.dirname(__file__), f"../files/boxscores/{year}/{month}/{day}"
+        )
 
         basketball_reference_paths_by_filename = {}
         for file in os.listdir(os.fsencode(boxscores_directory)):
             filename = os.fsdecode(file)
             if not filename.endswith(".html"):
                 raise ValueError(
-                    f"Unexpected prefix for {filename}. Expected all files in {boxscores_directory} to end with .html.")
+                    f"Unexpected prefix for {filename}. Expected all files in {boxscores_directory} to end with .html."
+                )
 
             if filename.startswith("index"):
                 key = f"boxscores/?day={day}&month={month}&year={year}"
             else:
                 key = f"/boxscores/{filename}"
-            basketball_reference_paths_by_filename[os.path.join(boxscores_directory, filename)] = key
+            basketball_reference_paths_by_filename[
+                os.path.join(boxscores_directory, filename)
+            ] = key
 
-        super().__init__(basketball_reference_paths_by_filename=basketball_reference_paths_by_filename)
+        super().__init__(
+            basketball_reference_paths_by_filename=basketball_reference_paths_by_filename
+        )
 
 
 @BoxScoresResponseMocker(boxscore_date=date(year=2018, month=1, day=1))
@@ -70,7 +80,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 50.0,
                     "true_shooting_percentage": 0.444,
                     "turnover_rate": 10.1,
-                    "turnovers": 12
+                    "turnovers": 12,
                 },
                 {
                     "assist_percentage": 47.2,
@@ -102,7 +112,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 50.0,
                     "true_shooting_percentage": 0.532,
                     "turnover_rate": 12.4,
-                    "turnovers": 13
+                    "turnovers": 13,
                 },
                 {
                     "assist_percentage": 53.2,
@@ -134,7 +144,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 46.3,
                     "true_shooting_percentage": 0.535,
                     "turnover_rate": 6.5,
-                    "turnovers": 8
+                    "turnovers": 8,
                 },
                 {
                     "assist_percentage": 62.2,
@@ -166,7 +176,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 53.7,
                     "true_shooting_percentage": 0.526,
                     "turnover_rate": 9.5,
-                    "turnovers": 12
+                    "turnovers": 12,
                 },
                 {
                     "assist_percentage": 52.9,
@@ -198,7 +208,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 47.4,
                     "true_shooting_percentage": 0.541,
                     "turnover_rate": 21.3,
-                    "turnovers": 24
+                    "turnovers": 24,
                 },
                 {
                     "assist_percentage": 65.0,
@@ -230,7 +240,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 52.6,
                     "true_shooting_percentage": 0.605,
                     "turnover_rate": 15.3,
-                    "turnovers": 17
+                    "turnovers": 17,
                 },
                 {
                     "assist_percentage": 61.4,
@@ -262,7 +272,7 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 51.8,
                     "true_shooting_percentage": 0.603,
                     "turnover_rate": 12.5,
-                    "turnovers": 15
+                    "turnovers": 15,
                 },
                 {
                     "assist_percentage": 55.6,
@@ -294,9 +304,9 @@ class Test20180101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 48.2,
                     "true_shooting_percentage": 0.621,
                     "turnover_rate": 11.0,
-                    "turnovers": 13
-                }
-            ]
+                    "turnovers": 13,
+                },
+            ],
         )
 
 
@@ -337,7 +347,7 @@ class Test20010101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 43.4,
                     "true_shooting_percentage": 0.515,
                     "turnover_rate": 10.5,
-                    "turnovers": 11
+                    "turnovers": 11,
                 },
                 {
                     "assist_percentage": 85.4,
@@ -369,7 +379,7 @@ class Test20010101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 56.6,
                     "true_shooting_percentage": 0.565,
                     "turnover_rate": 7.9,
-                    "turnovers": 8
+                    "turnovers": 8,
                 },
                 {
                     "assist_percentage": 61.5,
@@ -401,7 +411,7 @@ class Test20010101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 46.6,
                     "true_shooting_percentage": 0.389,
                     "turnover_rate": 14.8,
-                    "turnovers": 15
+                    "turnovers": 15,
                 },
                 {
                     "assist_percentage": 69.0,
@@ -433,9 +443,9 @@ class Test20010101TeamBoxScoresInMemoryOutput(TestCase):
                     "total_rebound_percentage": 53.4,
                     "true_shooting_percentage": 0.535,
                     "turnover_rate": 14.4,
-                    "turnovers": 14
-                }
-            ]
+                    "turnovers": 14,
+                },
+            ],
         )
 
 
@@ -445,11 +455,11 @@ class TestTeamBoxScoresCSVOutput(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/generated/team_box_scores/2018/01/01.csv"
+            "./output/generated/team_box_scores/2018/01/01.csv",
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/team_box_scores/2018/01/01.csv"
+            "./output/expected/team_box_scores/2018/01/01.csv",
         )
 
     def tearDown(self):
@@ -462,13 +472,12 @@ class TestTeamBoxScoresCSVOutput(TestCase):
             year=2018,
             output_type=OutputType.CSV,
             output_file_path=self.output_file_path,
-            output_write_option=OutputWriteOption.WRITE
+            output_write_option=OutputWriteOption.WRITE,
         )
 
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 @BoxScoresResponseMocker(boxscore_date=date(year=2018, month=1, day=1))
@@ -476,7 +485,7 @@ class TestTeamBoxScoresInMemoryJSON(TestCase):
     def setUp(self):
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/team_box_scores/2018/01/01.json"
+            "./output/expected/team_box_scores/2018/01/01.json",
         )
 
     def test_output(self):
@@ -486,7 +495,9 @@ class TestTeamBoxScoresInMemoryJSON(TestCase):
             year=2018,
             output_type=OutputType.JSON,
         )
-        with open(self.expected_output_file_path, "r", encoding="utf8") as expected_output_file:
+        with open(
+            self.expected_output_file_path, "r", encoding="utf8"
+        ) as expected_output_file:
             self.assertEqual(
                 json.loads(results),
                 json.load(expected_output_file),
@@ -498,11 +509,11 @@ class Test20180101TeamBoxScoresJSONOutput(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/generated/team_box_scores/2018/01/01.json"
+            "./output/generated/team_box_scores/2018/01/01.json",
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/team_box_scores/2018/01/01.json"
+            "./output/expected/team_box_scores/2018/01/01.json",
         )
 
     def tearDown(self):
@@ -515,12 +526,11 @@ class Test20180101TeamBoxScoresJSONOutput(TestCase):
             year=2018,
             output_type=OutputType.JSON,
             output_file_path=self.output_file_path,
-            output_write_option=OutputWriteOption.WRITE
+            output_write_option=OutputWriteOption.WRITE,
         )
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )
 
 
 @BoxScoresResponseMocker(boxscore_date=date(year=2001, month=1, day=1))
@@ -528,11 +538,11 @@ class Test20010101TeamBoxScoresJSONOutput(TestCase):
     def setUp(self):
         self.output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/generated/team_box_scores/2001/01/01.json"
+            "./output/generated/team_box_scores/2001/01/01.json",
         )
         self.expected_output_file_path = os.path.join(
             os.path.dirname(__file__),
-            "./output/expected/team_box_scores/2001/01/01.json"
+            "./output/expected/team_box_scores/2001/01/01.json",
         )
 
     def tearDown(self):
@@ -545,9 +555,8 @@ class Test20010101TeamBoxScoresJSONOutput(TestCase):
             year=2001,
             output_type=OutputType.JSON,
             output_file_path=self.output_file_path,
-            output_write_option=OutputWriteOption.WRITE
+            output_write_option=OutputWriteOption.WRITE,
         )
         self.assertTrue(
-            filecmp.cmp(
-                self.output_file_path,
-                self.expected_output_file_path))
+            filecmp.cmp(self.output_file_path, self.expected_output_file_path)
+        )

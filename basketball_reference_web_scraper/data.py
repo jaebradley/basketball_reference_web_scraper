@@ -1,6 +1,9 @@
 from enum import Enum, unique
 
-from basketball_reference_web_scraper.html import BasicTeamStatisticsTable, AdvancedTeamStatisticsTable
+from basketball_reference_web_scraper.html import (
+    AdvancedTeamStatisticsTable,
+    BasicTeamStatisticsTable,
+)
 
 
 class Location(Enum):
@@ -213,7 +216,7 @@ DIVISIONS_TO_CONFERENCES = {
     Division.MIDWEST: Conference.WESTERN,
     Division.PACIFIC: Conference.WESTERN,
     Division.SOUTHWEST: Conference.WESTERN,
-    Division.NORTHWEST: Conference.WESTERN
+    Division.NORTHWEST: Conference.WESTERN,
 }
 
 TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
@@ -248,7 +251,6 @@ TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
     TeamAbbreviation.TOR: Team.TORONTO_RAPTORS,
     TeamAbbreviation.UTA: Team.UTAH_JAZZ,
     TeamAbbreviation.WAS: Team.WASHINGTON_WIZARDS,
-
     # INACTIVE NBA TEAMS (see https://www.basketball-reference.com/teams/)
     TeamAbbreviation.AND: Team.ANDERSON_PACKERS,
     TeamAbbreviation.BAL: Team.BALTIMORE_BULLETS,
@@ -289,7 +291,9 @@ TEAMS_BY_ABBREVIATION: dict[TeamAbbreviation, Team] = {
     TeamAbbreviation.WSC: Team.WASHINGTON_CAPITOLS,
 }
 
-TEAM_ABBREVIATIONS_BY_TEAM: dict[Team, TeamAbbreviation] = {v: k for k, v in TEAMS_BY_ABBREVIATION.items()}
+TEAM_ABBREVIATIONS_BY_TEAM: dict[Team, TeamAbbreviation] = {
+    v: k for k, v in TEAMS_BY_ABBREVIATION.items()
+}
 # Both CHH and CHO are abbreviations for the Charlotte Hornets. Use the current active team abbreviation when identifying the abbreviation for the Charlotte Hornets.
 TEAM_ABBREVIATIONS_BY_TEAM[Team.CHARLOTTE_HORNETS] = TeamAbbreviation.CHO
 # The Baltimore Bullets existed from 1949-1955 in the NBA: https://www.basketball-reference.com/teams/BLB/
@@ -327,11 +331,18 @@ LEAGUE_ABBREVIATIONS_TO_LEAGUE = {
 
 
 class TeamTotal:
-    def __init__(self, basic_statistics_table: BasicTeamStatisticsTable,
-                 advanced_statistics_table: AdvancedTeamStatisticsTable):
-        if basic_statistics_table.team_abbreviation != advanced_statistics_table.team_abbreviation:
+    def __init__(
+        self,
+        basic_statistics_table: BasicTeamStatisticsTable,
+        advanced_statistics_table: AdvancedTeamStatisticsTable,
+    ):
+        if (
+            basic_statistics_table.team_abbreviation
+            != advanced_statistics_table.team_abbreviation
+        ):
             raise ValueError(
-                f"mismatched team abbreviations between the basic totals team: {basic_statistics_table.team_abbreviation} and the advanced totals team: {advanced_statistics_table.team_abbreviation}")
+                f"mismatched team abbreviations between the basic totals team: {basic_statistics_table.team_abbreviation} and the advanced totals team: {advanced_statistics_table.team_abbreviation}"
+            )
 
         self.team_abbreviation = basic_statistics_table.team_abbreviation
         self.basic_totals = basic_statistics_table.team_totals
