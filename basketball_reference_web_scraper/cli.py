@@ -8,6 +8,7 @@ import os
 import re
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, is_dataclass
 from datetime import date
 from decimal import Decimal
@@ -54,17 +55,17 @@ OPERATIONS = {
     ),
     "regular-season-player-box-scores": (
         "regular_season_player_box_scores",
-        "One player's regular-season game log",
+        "Regular-season game logs; repeat --player to combine players",
         columns.PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES,
     ),
     "playoff-player-box-scores": (
         "playoff_player_box_scores",
-        "One player's playoff game log",
+        "Playoff game logs; repeat --player to combine players",
         columns.PLAYER_SEASON_BOX_SCORE_COLUMN_NAMES,
     ),
     "season-schedule": (
         "season_schedule",
-        "All scheduled games for a season",
+        "All scheduled games for one or more seasons",
         columns.SCHEDULE_COLUMN_NAMES,
     ),
     "players-season-totals": (
@@ -90,6 +91,31 @@ OPERATIONS = {
     ),
     "contracts": ("contracts", "Current player contracts (JSON only)", None),
 }
+
+# Commands addressed by one or more season end years. Their CLI records are
+# tagged with season_end_year because one invocation can combine seasons.
+SEASON_ARGUMENT_COMMANDS = {
+    "standings",
+    "season-schedule",
+    "players-season-totals",
+    "players-advanced-season-totals",
+    "players-regular-season-shooting-statistics",
+    "roster",
+    "regular-season-player-box-scores",
+    "playoff-player-box-scores",
+}
+PLAYER_ARGUMENT_COMMANDS = {
+    "regular-season-player-box-scores",
+    "playoff-player-box-scores",
+}
+DATE_ARGUMENT_COMMANDS = {
+    "player-box-scores",
+    "team-box-scores",
+    "play-by-play",
+}
+# Commands whose work contains independent fetches that --jobs may parallelize.
+CONCURRENCY_COMMANDS = SEASON_ARGUMENT_COMMANDS | {"team-box-scores"}
+MAX_JOBS = 16
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -162,6 +188,20 @@ def _team(value):
     )
 
 
+def _jobs(value):
+    try:
+        jobs = int(value)
+    except (TypeError, ValueError):
+        raise argparse.ArgumentTypeError(
+            f"jobs must be an integer from 1 to {MAX_JOBS}"
+        )
+    if not 1 <= jobs <= MAX_JOBS:
+        raise argparse.ArgumentTypeError(
+            f"jobs must be an integer from 1 to {MAX_JOBS}"
+        )
+    return jobs
+
+
 def build_parser():
     parser = ArgumentParser(
         prog="basketball-reference",
@@ -173,6 +213,16 @@ def build_parser():
         "teams", help="List accepted team names without a network request"
     )
     teams.add_argument("--format", choices=["json"], default="json")
+    teams.add_argument(
+        "--output",
+        type=Path,
+        help="Write to this file instead of stdout; parent directory must exist",
+    )
+    teams.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace an existing output file atomically",
+    )
     for name, (function, description, schema) in OPERATIONS.items():
         command = commands.add_parser(name, help=description, description=description)
         command.add_argument(
@@ -188,32 +238,42 @@ def build_parser():
             action="store_true",
             help="Replace an existing output file atomically",
         )
+        if schema and name in SEASON_ARGUMENT_COMMANDS:
+            # One CLI invocation may merge seasons, so CLI rows state their season.
+            schema = ["season_end_year", *schema]
+        if name in CONCURRENCY_COMMANDS:
+            command.add_argument(
+                "--jobs",
+                type=_jobs,
+                default=1,
+                help=(
+                    "Concurrent independent fetches, 1-"
+                    f"{MAX_JOBS} (default 1; stop on 403 or 429)"
+                ),
+            )
         if name == "search":
             command.add_argument(
                 "term", type=_term, help="Player name; quote names containing spaces"
             )
-        elif name not in {
-            "contracts",
-            "player-box-scores",
-            "team-box-scores",
-            "play-by-play",
-        }:
+        if name in SEASON_ARGUMENT_COMMANDS:
             command.add_argument(
                 "--season",
                 type=_season,
+                action="append",
                 required=True,
-                help="Season END year (2018-19 = 2019)",
+                help="Season END year (2018-19 = 2019); repeat to combine seasons",
             )
-        if name in {"player-box-scores", "team-box-scores", "play-by-play"}:
+        if name in DATE_ARGUMENT_COMMANDS:
             command.add_argument(
                 "--date", type=_date, required=True, help="Calendar date YYYY-MM-DD"
             )
-        if name in {"regular-season-player-box-scores", "playoff-player-box-scores"}:
+        if name in PLAYER_ARGUMENT_COMMANDS:
             command.add_argument(
                 "--player",
                 type=_player,
+                action="append",
                 required=True,
-                help="Identifier returned by search",
+                help="Identifier returned by search; repeat to combine players",
             )
             command.add_argument("--include-inactive-games", action="store_true")
         if name == "players-advanced-season-totals":
@@ -233,26 +293,57 @@ def build_parser():
     return parser
 
 
+def _run(tasks, function, jobs):
+    if jobs > 1 and len(tasks) > 1:
+        with ThreadPoolExecutor(max_workers=jobs) as executor:
+            return list(executor.map(function, tasks))
+    return [function(task) for task in tasks]
+
+
 def _fetch(args):
-    kwargs = {}
-    for source, destination in (
-        ("term", "term"),
-        ("season", "season_end_year"),
-        ("player", "player_identifier"),
-        ("team", "team"),
-        ("home_team", "home_team"),
-        ("include_inactive_games", "include_inactive_games"),
-        ("include_combined_values", "include_combined_values"),
-    ):
-        if hasattr(args, source):
-            kwargs[destination] = getattr(args, source)
-    if hasattr(args, "date"):
-        kwargs.update(year=args.date.year, month=args.date.month, day=args.date.day)
     if args.command == "contracts":
         result = []
         client.contracts(contract_processor=result.append)
         return result
-    return getattr(client, args.function)(**kwargs)
+    if args.command == "search":
+        return client.search(term=args.term)
+    if args.command in DATE_ARGUMENT_COMMANDS:
+        kwargs = dict(year=args.date.year, month=args.date.month, day=args.date.day)
+        if args.command == "team-box-scores":
+            kwargs["max_workers"] = args.jobs
+        if args.command == "play-by-play":
+            kwargs["home_team"] = args.home_team
+        return getattr(client, args.function)(**kwargs)
+
+    players = getattr(args, "player", None) or [None]
+    # players-major, then the requested season order, so concatenated output is
+    # deterministic and preserves the order the caller typed.
+    tasks = [(player, season) for player in players for season in args.season]
+    single_season = len(args.season) == 1
+
+    def fetch(task):
+        player, season = task
+        kwargs = {"season_end_year": season}
+        if player is not None:
+            kwargs["player_identifier"] = player
+        if hasattr(args, "include_inactive_games"):
+            kwargs["include_inactive_games"] = args.include_inactive_games
+        if hasattr(args, "include_combined_values"):
+            kwargs["include_combined_values"] = args.include_combined_values
+        if hasattr(args, "team"):
+            kwargs["team"] = args.team
+        # Parallelize inside the operation for a single season; with several
+        # seasons the outer pool already keeps every worker busy.
+        if args.command == "season-schedule" and single_season:
+            kwargs["max_workers"] = args.jobs
+        return getattr(client, args.function)(**kwargs)
+
+    records = []
+    for (_, season), rows in zip(tasks, _run(tasks, fetch, args.jobs)):
+        for row in rows:
+            row["season_end_year"] = season
+            records.append(row)
+    return records
 
 
 def _serialize(data, args):
@@ -283,6 +374,11 @@ def _write_file(path, text, overwrite):
         ) as output:
             temporary = Path(output.name)
             output.write(text)
+        # NamedTemporaryFile is created 0600; publish with the umask default so
+        # exports stay readable by other users and overwrite does not tighten modes.
+        umask = os.umask(0)
+        os.umask(umask)
+        os.chmod(temporary, 0o666 & ~umask)
         if overwrite:
             os.replace(temporary, path)
         else:

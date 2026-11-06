@@ -1,6 +1,9 @@
 import csv
 import io
 import json
+import os
+import stat
+import threading
 from datetime import date
 from decimal import Decimal
 from unittest.mock import patch
@@ -15,6 +18,7 @@ from basketball_reference_web_scraper.contracts.data.models import (
     Salary,
 )
 from basketball_reference_web_scraper.data import Team
+from basketball_reference_web_scraper.errors import InvalidPlayerAndSeason
 
 
 @pytest.mark.parametrize(
@@ -30,7 +34,7 @@ from basketball_reference_web_scraper.data import Team
         (
             "team-box-scores",
             ["--date", "2018-01-01"],
-            {"year": 2018, "month": 1, "day": 1},
+            {"year": 2018, "month": 1, "day": 1, "max_workers": 1},
         ),
         (
             "regular-season-player-box-scores",
@@ -50,7 +54,11 @@ from basketball_reference_web_scraper.data import Team
                 "include_inactive_games": False,
             },
         ),
-        ("season-schedule", ["--season", "2019"], {"season_end_year": 2019}),
+        (
+            "season-schedule",
+            ["--season", "2019"],
+            {"season_end_year": 2019, "max_workers": 1},
+        ),
         ("players-season-totals", ["--season", "2019"], {"season_end_year": 2019}),
         (
             "players-advanced-season-totals",
@@ -82,6 +90,124 @@ def test_dispatch(command, arguments, expected, capsys):
     output = capsys.readouterr()
     assert json.loads(output.out) == []
     assert output.err == ""
+
+
+def test_repeated_players_and_seasons_are_fetched_in_request_order(capsys):
+    def fetch(player_identifier, season_end_year, include_inactive_games):
+        return [{"player_identifier": player_identifier, "season": season_end_year}]
+
+    with patch.object(
+        cli.client, "regular_season_player_box_scores", side_effect=fetch
+    ) as calls:
+        assert (
+            cli.main(
+                [
+                    "regular-season-player-box-scores",
+                    "--season",
+                    "2018",
+                    "--season",
+                    "2019",
+                    "--player",
+                    "westbru01",
+                    "--player",
+                    "hardeja01",
+                ]
+            )
+            == 0
+        )
+    rows = json.loads(capsys.readouterr().out)
+    assert [(row["player_identifier"], row["season_end_year"]) for row in rows] == [
+        ("westbru01", 2018),
+        ("westbru01", 2019),
+        ("hardeja01", 2018),
+        ("hardeja01", 2019),
+    ]
+    assert calls.call_count == 4
+
+
+def test_repeated_seasons_tag_every_row_with_its_season(capsys):
+    def fetch(season_end_year):
+        return [{"season_end_year": None, "season": season_end_year}]
+
+    with patch.object(cli.client, "standings", side_effect=fetch) as calls:
+        assert (
+            cli.main(
+                ["standings", "--season", "2018", "--season", "2019", "--jobs", "2"]
+            )
+            == 0
+        )
+    rows = json.loads(capsys.readouterr().out)
+    assert [(row["season"], row["season_end_year"]) for row in rows] == [
+        (2018, 2018),
+        (2019, 2019),
+    ]
+    assert calls.call_count == 2
+
+
+def test_csv_headers_include_season_and_player_identity(capsys):
+    with patch.object(cli.client, "regular_season_player_box_scores", return_value=[]):
+        assert (
+            cli.main(
+                [
+                    "regular-season-player-box-scores",
+                    "--season",
+                    "2019",
+                    "--player",
+                    "jamesle01",
+                    "--format",
+                    "csv",
+                ]
+            )
+            == 0
+        )
+    header = capsys.readouterr().out.splitlines()[0]
+    assert header.startswith("season_end_year,player_identifier,active,date")
+
+
+def test_schedule_csv_header_includes_season(capsys):
+    with patch.object(cli.client, "season_schedule", return_value=[]):
+        assert cli.main(["season-schedule", "--season", "2019", "--format", "csv"]) == 0
+    header = capsys.readouterr().out.splitlines()[0]
+    assert header.startswith("season_end_year,date,start_time")
+
+
+def test_csv_rows_tag_season_and_keep_identity(capsys):
+    def fetch(season_end_year, player_identifier, include_inactive_games):
+        return [
+            {
+                "season_end_year": None,
+                "player_identifier": player_identifier,
+                "date": "2018-10-17",
+                "points_scored": 10,
+            }
+        ]
+
+    with patch.object(
+        cli.client, "regular_season_player_box_scores", side_effect=fetch
+    ):
+        assert (
+            cli.main(
+                [
+                    "regular-season-player-box-scores",
+                    "--season",
+                    "2018",
+                    "--season",
+                    "2019",
+                    "--player",
+                    "westbru01",
+                    "--format",
+                    "csv",
+                ]
+            )
+            == 0
+        )
+    rows = list(csv.DictReader(io.StringIO(capsys.readouterr().out)))
+    assert [
+        (row["season_end_year"], row["player_identifier"], row["date"]) for row in rows
+    ] == [
+        ("2018", "westbru01", "2018-10-17"),
+        ("2019", "westbru01", "2018-10-17"),
+    ]
 
 
 def test_contracts_preserve_nested_data_and_exact_salary(capsys):
@@ -144,10 +270,14 @@ def test_every_team_key_and_full_name_can_be_used_in_a_task(team, capsys):
             "csv",
         ],
         ["standings", "--season", "2019", "--overwrite"],
+        ["standings", "--season", "2019", "--jobs", "0"],
+        ["standings", "--season", "2019", "--jobs", "17"],
+        ["standings", "--season", "2019", "--jobs", "many"],
+        ["standings", "--jobs", "2"],
     ],
 )
 def test_invalid_inputs_fail_before_network(arguments, capsys):
-    with patch("requests.get") as fetch, pytest.raises(SystemExit) as stopped:
+    with patch("requests.Session.get") as fetch, pytest.raises(SystemExit) as stopped:
         cli.main(arguments)
     assert stopped.value.code == 2
     fetch.assert_not_called()
@@ -202,6 +332,69 @@ def test_runtime_failures_are_machine_readable(failure, kind, capsys):
     assert json.loads(output.err)["error"]["type"] == kind
 
 
+def test_batch_failure_publishes_no_partial_output(tmp_path, capsys):
+    destination = tmp_path / "batch.json"
+    failure = InvalidPlayerAndSeason(
+        player_identifier="missing01", season_end_year=2019
+    )
+    with patch.object(
+        cli.client,
+        "regular_season_player_box_scores",
+        side_effect=[[{"player_identifier": "westbru01"}], failure],
+    ):
+        assert (
+            cli.main(
+                [
+                    "regular-season-player-box-scores",
+                    "--season",
+                    "2019",
+                    "--player",
+                    "westbru01",
+                    "--player",
+                    "missing01",
+                    "--output",
+                    str(destination),
+                ]
+            )
+            == 1
+        )
+    assert not destination.exists()
+    assert list(tmp_path.iterdir()) == []
+    output = capsys.readouterr()
+    assert output.out == ""
+    assert json.loads(output.err)["error"]["type"] == "invalid_resource"
+
+
+def test_jobs_fetches_players_concurrently_and_preserves_request_order(capsys):
+    barrier = threading.Barrier(2)
+
+    def fetch(player_identifier, season_end_year, include_inactive_games):
+        barrier.wait(timeout=5)
+        return [{"player_identifier": player_identifier}]
+
+    with patch.object(
+        cli.client, "regular_season_player_box_scores", side_effect=fetch
+    ):
+        assert (
+            cli.main(
+                [
+                    "regular-season-player-box-scores",
+                    "--season",
+                    "2019",
+                    "--player",
+                    "westbru01",
+                    "--player",
+                    "hardeja01",
+                    "--jobs",
+                    "2",
+                ]
+            )
+            == 0
+        )
+    rows = json.loads(capsys.readouterr().out)
+    assert [row["player_identifier"] for row in rows] == ["westbru01", "hardeja01"]
+
+
 def test_existing_file_and_missing_directory_fail_before_fetch(tmp_path, capsys):
     existing = tmp_path / "data.json"
     existing.write_text("keep")
@@ -233,6 +426,7 @@ def test_json_handles_dates_enums_sets_and_unicode(capsys):
             "team": "BOSTON CELTICS",
             "tags": ["NBA"],
             "name": "Nikola Jokić",
+            "season_end_year": 2019,
         }
     ]
 
@@ -270,6 +464,29 @@ def test_file_publication_and_explicit_overwrite(tmp_path, capsys):
         assert json.loads(destination.read_text(encoding="utf-8")) == data
         assert capsys.readouterr().out == ""
     assert list(tmp_path.iterdir()) == [destination]
+
+
+def test_teams_output_publication_and_overwrite(tmp_path, capsys):
+    destination = tmp_path / "teams.json"
+    assert cli.main(["teams", "--output", str(destination)]) == 0
+    assert json.loads(destination.read_text(encoding="utf-8"))[0] == "ATLANTA_HAWKS"
+    assert capsys.readouterr().out == ""
+    assert cli.main(["teams", "--output", str(destination)]) == 1
+    assert json.loads(capsys.readouterr().err)["error"]["type"] == "output_error"
+    assert destination.read_text(encoding="utf-8").startswith("[")
+    assert cli.main(["teams", "--output", str(destination), "--overwrite"]) == 0
+    assert list(tmp_path.iterdir()) == [destination]
+
+
+def test_published_file_uses_umask_default_mode(tmp_path):
+    umask = os.umask(0)
+    os.umask(umask)
+    destination = tmp_path / "mode.json"
+    assert cli.main(["teams", "--output", str(destination)]) == 0
+    assert stat.S_IMODE(destination.stat().st_mode) == 0o666 & ~umask
+    os.chmod(destination, 0o644)
+    assert cli.main(["teams", "--output", str(destination), "--overwrite"]) == 0
+    assert stat.S_IMODE(destination.stat().st_mode) == 0o666 & ~umask
 
 
 def test_publication_race_preserves_other_writer(tmp_path):
@@ -311,7 +528,7 @@ def test_serialization_failure_preserves_file(tmp_path, capsys):
 
 
 def test_help_and_team_discovery_are_offline(capsys):
-    with patch("requests.get") as fetch:
+    with patch("requests.Session.get") as fetch:
         assert cli.main(["teams"]) == 0
         assert "BOSTON_CELTICS" in json.loads(capsys.readouterr().out)
         with pytest.raises(SystemExit) as stopped:

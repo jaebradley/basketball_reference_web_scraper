@@ -93,3 +93,47 @@ class TestCSVWriter(TestCase):
             self.csv_dict_writer.writerows.assert_called_once_with(
                 [{"value": "some"}, {"value": "row"}, {"value": "data"}]
             )
+
+    def test_in_memory_output_returns_csv_string_when_no_file_path(self):
+        writer = CSVWriter(value_formatter=lambda value: value)
+        output = writer.write(
+            data=[{"name": "jaebaebae", "value": 1}],
+            options=OutputOptions(
+                file_options=FileOptions(path=None, mode=None),
+                formatting_options={"column_names": ["name", "value"]},
+                output_type=OutputType.CSV,
+            ),
+        )
+        self.assertEqual("name,value\r\njaebaebae,1\r\n", output)
+
+    def test_missing_column_names_raises_value_error(self):
+        writer = CSVWriter(value_formatter=lambda value: value)
+        with self.assertRaisesRegex(ValueError, "column_names"):
+            writer.write(
+                data=[{"name": "jaebaebae"}],
+                options=OutputOptions(
+                    file_options=FileOptions(path=None, mode=None),
+                    formatting_options=None,
+                    output_type=OutputType.CSV,
+                ),
+            )
+
+    def test_file_output_returns_none(self):
+        writer = CSVWriter(value_formatter=lambda value: value)
+        with (
+            mock.patch("builtins.open", mock.mock_open()) as mock_file,
+            mock.patch("csv.DictWriter") as mock_csv_dict_writer,
+        ):
+            mock_csv_dict_writer.return_value = self.csv_dict_writer
+            result = writer.write(
+                data=self.DATA,
+                options=OutputOptions(
+                    file_options=FileOptions(
+                        path="some file path", mode=OutputWriteOption.WRITE
+                    ),
+                    formatting_options={"column_names": self.COLUMN_NAMES},
+                    output_type=OutputType.CSV,
+                ),
+            )
+            mock_file.assert_called_once()
+            self.assertIsNone(result)

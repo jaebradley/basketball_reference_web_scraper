@@ -1,4 +1,5 @@
 import csv
+import io
 import json
 
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
@@ -117,19 +118,36 @@ class CSVWriter(Writer):
         ]
 
     def write(self, data, options):
-        with open(
-            options.file_options.path,
-            options.file_options.mode.value,
-            newline="",
-            encoding="utf8",
-        ) as csv_file:
-            writer = csv.DictWriter(
-                csv_file,
-                fieldnames=options.formatting_options.get("column_names"),
-            )
-            writer.writeheader()
+        if options.file_options.should_write_to_file:
+            with open(
+                options.file_options.path,
+                options.file_options.mode.value,
+                newline="",
+                encoding="utf8",
+            ) as csv_file:
+                self._write_rows(csv_file, data, options)
+                return None
 
-            writer.writerows(self.rows(data=data))
+        csv_buffer = io.StringIO()
+        self._write_rows(csv_buffer, data, options)
+        output = csv_buffer.getvalue()
+        csv_buffer.close()
+        return output
+
+    def _write_rows(self, csv_file, data, options):
+        column_names = (options.formatting_options or {}).get("column_names")
+        if not column_names:
+            raise ValueError(
+                "CSV output requires a 'column_names' value in the CSV formatting options"
+            )
+
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=column_names,
+        )
+        writer.writeheader()
+
+        writer.writerows(self.rows(data=data))
 
 
 class SearchCSVWriter(CSVWriter):
