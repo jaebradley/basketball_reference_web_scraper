@@ -199,10 +199,13 @@ def season_schedule(
     output_file_path=None,
     output_write_option=None,
     json_options=None,
+    max_workers=1,
 ):
     try:
         http_service = HTTPService(parser=ParserService())
-        values = http_service.season_schedule(season_end_year=season_end_year)
+        values = http_service.season_schedule(
+            season_end_year=season_end_year, max_workers=max_workers
+        )
     except requests.exceptions.HTTPError as http_error:
         # https://github.com/requests/requests/blob/master/requests/status_codes.py#L58
         if http_error.response.status_code == requests.codes.not_found:
@@ -304,10 +307,13 @@ def team_box_scores(
     output_file_path=None,
     output_write_option=None,
     json_options=None,
+    max_workers=1,
 ):
     try:
         http_service = HTTPService(parser=ParserService())
-        values = http_service.team_box_scores(day=day, month=month, year=year)
+        values = http_service.team_box_scores(
+            day=day, month=month, year=year, max_workers=max_workers
+        )
     except requests.exceptions.HTTPError as http_error:
         if http_error.response.status_code == requests.codes.not_found:
             raise InvalidDate(day=day, month=month, year=year)

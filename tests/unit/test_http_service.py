@@ -56,7 +56,7 @@ class TestHTTPService(TestCase):
             year=2018,
         )
 
-    def test_schedule_month_pages_keep_page_order(self):
+    def test_schedule_month_pages_are_fetched_concurrently_and_keep_order(self):
         pages = {
             "games-november.html": _page(
                 _row("Thu, Nov 1, 2018", "Boston Celtics", "Cleveland Cavaliers")
@@ -65,11 +65,13 @@ class TestHTTPService(TestCase):
                 _row("Sat, Dec 1, 2018", "Golden State Warriors", "Los Angeles Lakers")
             ),
         }
+        barrier = threading.Barrier(2)
 
         class FakeSession:
             def get(self, url, **kwargs):
                 for suffix, body in pages.items():
                     if url.endswith(suffix):
+                        barrier.wait(timeout=5)
                         return _FakeResponse(body)
                 return _FakeResponse(
                     _page(
@@ -82,7 +84,7 @@ class TestHTTPService(TestCase):
                 )
 
         service = HTTPService(parser=ParserService(), session_factory=FakeSession)
-        rows = service.season_schedule(2019)
+        rows = service.season_schedule(2019, max_workers=2)
         self.assertEqual(
             [row["date"].isoformat() for row in rows],
             ["2018-10-30", "2018-11-01", "2018-12-01"],

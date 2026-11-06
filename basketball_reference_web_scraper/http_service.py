@@ -1,5 +1,6 @@
 import datetime
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from typing import Callable
 from urllib.parse import urljoin
 
@@ -82,6 +83,15 @@ class HTTPService:
             session = self._session_factory()
             self._sessions.session = session
         return session
+
+    def _map(self, function, items, max_workers):
+        values = list(items)
+        if max_workers is None or max_workers < 1:
+            raise ValueError("max_workers must be at least 1")
+        if max_workers == 1 or len(values) <= 1:
+            return [function(value) for value in values]
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            return list(executor.map(function, values))
 
     def standings(self, season_end_year):
         url = "{BASE_URL}/leagues/NBA_{season_end_year}.html".format(
@@ -293,7 +303,7 @@ class HTTPService:
         page = SchedulePage(html=html.fromstring(html=response.content))
         return self.parser.parse_scheduled_games(games=page.rows)
 
-    def season_schedule(self, season_end_year):
+    def season_schedule(self, season_end_year, max_workers=1):
         url = "{BASE_URL}/leagues/NBA_{season_end_year}_games.html".format(
             BASE_URL=HTTPService.BASE_URL, season_end_year=season_end_year
         )
@@ -313,8 +323,12 @@ class HTTPService:
             )
             for month_url_path in page.other_months_schedule_urls
         ]
-        for month_url in month_urls:
-            season_schedule_values.extend(self.schedule_for_month(url=month_url))
+        # executor.map preserves the page order, so concurrent output is
+        # identical to the sequential result.
+        for monthly_schedule in self._map(
+            self.schedule_for_month, month_urls, max_workers
+        ):
+            season_schedule_values.extend(monthly_schedule)
 
         return season_schedule_values
 
@@ -357,7 +371,7 @@ class HTTPService:
             second_team_totals=combined_team_totals[1],
         )
 
-    def team_box_scores(self, day, month, year):
+    def team_box_scores(self, day, month, year, max_workers=1):
         try:
             datetime.date(year=year, month=month, day=day)
         except (ValueError, TypeError):
@@ -374,11 +388,11 @@ class HTTPService:
         response.raise_for_status()
 
         page = DailyBoxScoresPage(html=html.fromstring(response.content))
-        return [
-            box_score
-            for game_url_path in page.game_url_paths
-            for box_score in self.team_box_score(game_url_path=game_url_path)
-        ]
+        game_box_scores = self._map(
+            self.team_box_score, page.game_url_paths, max_workers
+        )
+
+        return [box_score for game in game_box_scores for box_score in game]
 
     def roster(self, team, season_end_year):
         url = "{BASE_URL}/teams/{team_abbreviation}/{season_end_year}.html".format(
