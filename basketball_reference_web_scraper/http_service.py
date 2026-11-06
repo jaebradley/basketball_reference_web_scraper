@@ -1,5 +1,7 @@
 import datetime
+import threading
 from typing import Callable
+from urllib.parse import urljoin
 
 import requests
 from lxml import html
@@ -46,12 +48,40 @@ from basketball_reference_web_scraper.shooting.html import (
 )
 from basketball_reference_web_scraper.team_season.html import TeamSeasonPage
 
+# Default sessions are shared per thread so sequential client calls create
+# several HTTPService instances but still reuse one connection pool.
+_DEFAULT_SESSIONS = threading.local()
+
+
+def _default_session():
+    session = getattr(_DEFAULT_SESSIONS, "session", None)
+    if session is None:
+        session = requests.Session()
+        _DEFAULT_SESSIONS.session = session
+    return session
+
 
 class HTTPService:
     BASE_URL = "https://www.basketball-reference.com"
+    DEFAULT_REQUEST_TIMEOUT_SECONDS = 30
 
-    def __init__(self, parser):
+    def __init__(self, parser, session_factory=None):
         self.parser = parser
+        self._session_factory = session_factory
+        self._sessions = threading.local()
+
+    @property
+    def session(self):
+        if self._session_factory is None:
+            # Sequential client calls in one thread share this pool.
+            return _default_session()
+        # A custom factory is isolated per service and per thread, which keeps
+        # tests and embedders from sharing connection state.
+        session = getattr(self._sessions, "session", None)
+        if session is None:
+            session = self._session_factory()
+            self._sessions.session = session
+        return session
 
     def standings(self, season_end_year):
         url = "{BASE_URL}/leagues/NBA_{season_end_year}.html".format(
@@ -59,9 +89,21 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self.session.get(
+            url=url,
+            allow_redirects=False,
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+        )
 
         response.raise_for_status()
+
+        if response.status_code != requests.codes.ok:
+            raise requests.exceptions.HTTPError(
+                "{status_code} response for url: {url}".format(
+                    status_code=response.status_code, url=url
+                ),
+                response=response,
+            )
 
         page = StandingsPage(html=html.fromstring(response.content))
         return self.parser.parse_division_standings(
@@ -71,11 +113,20 @@ class HTTPService:
         )
 
     def player_box_scores(self, day, month, year):
+        try:
+            datetime.date(year=year, month=month, day=day)
+        except (ValueError, TypeError):
+            raise InvalidDate(day=day, month=month, year=year)
+
         url = "{BASE_URL}/friv/dailyleaders.cgi?month={month}&day={day}&year={year}".format(
             BASE_URL=HTTPService.BASE_URL, day=day, month=month, year=year
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self.session.get(
+            url=url,
+            allow_redirects=False,
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+        )
 
         response.raise_for_status()
 
@@ -88,6 +139,10 @@ class HTTPService:
     def regular_season_player_box_scores(
         self, player_identifier, season_end_year, include_inactive_games=False
     ):
+        if player_identifier is None or len(player_identifier) == 0:
+            raise InvalidPlayerAndSeason(
+                player_identifier=player_identifier, season_end_year=season_end_year
+            )
         # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
         # surname can be derived from the fact that basketball reference also has a pattern of player identifiers
         # starting with first few characters of player's surname
@@ -98,7 +153,11 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self.session.get(
+            url=url,
+            allow_redirects=False,
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+        )
         response.raise_for_status()
 
         page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
@@ -116,6 +175,10 @@ class HTTPService:
     def playoff_player_box_scores(
         self, player_identifier, season_end_year, include_inactive_games=False
     ):
+        if player_identifier is None or len(player_identifier) == 0:
+            raise InvalidPlayerAndSeason(
+                player_identifier=player_identifier, season_end_year=season_end_year
+            )
         # Makes assumption that basketball reference pattern of breaking out player pathing using first character of
         # surname can be derived from the fact that basketball reference also has a pattern of player identifiers
         # starting with first few characters of player's surname
@@ -126,7 +189,11 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url, allow_redirects=False)
+        response = self.session.get(
+            url=url,
+            allow_redirects=False,
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+        )
         response.raise_for_status()
 
         page = PlayerSeasonBoxScoresPage(html=html.fromstring(response.content))
@@ -144,7 +211,7 @@ class HTTPService:
     def play_by_play(self, home_team, day, month, year):
         try:
             date = datetime.date(year=year, month=month, day=day)
-        except ValueError:
+        except (ValueError, TypeError):
             raise InvalidDate(day=day, month=month, year=year)
         url = DEFAULT_PLAY_BY_PLAY_URL_SERIALIZER.serialize(
             value=PlayByPlayURLData(
@@ -154,7 +221,9 @@ class HTTPService:
                 ),
             )
         )
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
         response.raise_for_status()
 
         page = PlayByPlayPage(html=html.fromstring(response.content))
@@ -173,7 +242,9 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
 
@@ -188,7 +259,9 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
 
@@ -200,7 +273,9 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL,
             season_end_year=season_end_year,
         )
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
         table = PlayersSeasonShootingStatisticsTable(
@@ -209,7 +284,9 @@ class HTTPService:
         return self.parser.parse_player_season_shooting_statistics(totals=table.rows)
 
     def schedule_for_month(self, url):
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
 
@@ -221,19 +298,23 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL, season_end_year=season_end_year
         )
 
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
 
         page = SchedulePage(html=html.fromstring(html=response.content))
         season_schedule_values = self.parser.parse_scheduled_games(games=page.rows)
 
-        for month_url_path in page.other_months_schedule_urls:
-            url = "{BASE_URL}{month_url_path}".format(
+        month_urls = [
+            "{BASE_URL}{month_url_path}".format(
                 BASE_URL=HTTPService.BASE_URL, month_url_path=month_url_path
             )
-            monthly_schedule = self.schedule_for_month(url=url)
-            season_schedule_values.extend(monthly_schedule)
+            for month_url_path in page.other_months_schedule_urls
+        ]
+        for month_url in month_urls:
+            season_schedule_values.extend(self.schedule_for_month(url=month_url))
 
         return season_schedule_values
 
@@ -242,7 +323,9 @@ class HTTPService:
             BASE_URL=HTTPService.BASE_URL, game_url_path=game_url_path
         )
 
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
 
@@ -261,22 +344,36 @@ class HTTPService:
             )
         )
 
+        if len(combined_team_totals) != 2:
+            raise ValueError(
+                "Expected 2 teams' worth of statistics tables for game at {game_url_path} but found {combined_team_totals_count}".format(
+                    game_url_path=game_url_path,
+                    combined_team_totals_count=len(combined_team_totals),
+                )
+            )
+
         return self.parser.parse_team_totals(
             first_team_totals=combined_team_totals[0],
             second_team_totals=combined_team_totals[1],
         )
 
     def team_box_scores(self, day, month, year):
+        try:
+            datetime.date(year=year, month=month, day=day)
+        except (ValueError, TypeError):
+            raise InvalidDate(day=day, month=month, year=year)
+
         url = "{BASE_URL}/boxscores/".format(BASE_URL=HTTPService.BASE_URL)
 
-        response = requests.get(
-            url=url, params={"day": day, "month": month, "year": year}
+        response = self.session.get(
+            url=url,
+            params={"day": day, "month": month, "year": year},
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
         )
 
         response.raise_for_status()
 
         page = DailyBoxScoresPage(html=html.fromstring(response.content))
-
         return [
             box_score
             for game_url_path in page.game_url_paths
@@ -292,7 +389,9 @@ class HTTPService:
             season_end_year=season_end_year,
         )
 
-        response = requests.get(url=url)
+        response = self.session.get(
+            url=url, timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS
+        )
 
         response.raise_for_status()
 
@@ -301,9 +400,10 @@ class HTTPService:
         )
 
     def search(self, term):
-        response = requests.get(
+        response = self.session.get(
             url="{BASE_URL}/search/search.fcgi".format(BASE_URL=HTTPService.BASE_URL),
             params={"search": term},
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
         )
 
         response.raise_for_status()
@@ -319,12 +419,19 @@ class HTTPService:
             )
             player_results += parsed_results["players"]
 
-            while page.nba_aba_baa_players_pagination_url is not None:
-                response = requests.get(
-                    url="{BASE_URL}/search/{pagination_url}".format(
-                        BASE_URL=HTTPService.BASE_URL,
-                        pagination_url=page.nba_aba_baa_players_pagination_url,
-                    )
+            seen_pagination_urls = set()
+            pagination_url = page.nba_aba_baa_players_pagination_url
+            while (
+                pagination_url is not None
+                and pagination_url not in seen_pagination_urls
+            ):
+                seen_pagination_urls.add(pagination_url)
+                response = self.session.get(
+                    url=urljoin(
+                        "{BASE_URL}/search/".format(BASE_URL=HTTPService.BASE_URL),
+                        pagination_url,
+                    ),
+                    timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
                 )
 
                 response.raise_for_status()
@@ -335,6 +442,8 @@ class HTTPService:
                     nba_aba_baa_players=page.nba_aba_baa_players
                 )
                 player_results += parsed_results["players"]
+
+                pagination_url = page.nba_aba_baa_players_pagination_url
 
         elif response.url.startswith(
             "{BASE_URL}/players".format(BASE_URL=HTTPService.BASE_URL)
@@ -365,9 +474,10 @@ class HTTPService:
         :param parsed_contract_row_processor:
         :return:
         """
-        with requests.get(
+        with self.session.get(
             url=f"{HTTPService.BASE_URL}/contracts/players.html",
             stream=True,
+            timeout=HTTPService.DEFAULT_REQUEST_TIMEOUT_SECONDS,
         ) as response:
             if not response.ok:
                 raise CouldNotGetPlayerContractData(response)

@@ -1,5 +1,6 @@
 from unittest import TestCase, mock
 
+import requests_mock
 from requests import HTTPError, codes
 
 from basketball_reference_web_scraper.client import player_box_scores
@@ -21,3 +22,19 @@ class TestPlayerBoxScores(TestCase):
             response=mock.Mock(status_code=codes.server_error)
         )
         self.assertRaises(HTTPError, player_box_scores, day=1, month=1, year=2018)
+
+    @requests_mock.Mocker()
+    def test_raises_invalid_date_for_impossible_date_without_making_http_request(
+        self, m
+    ):
+        with self.assertRaises(InvalidDate):
+            player_box_scores(day=30, month=2, year=2021)
+        self.assertEqual([], m.request_history)
+
+    @requests_mock.Mocker()
+    def test_raises_invalid_date_for_non_date_values_without_making_http_request(
+        self, m
+    ):
+        with self.assertRaises(InvalidDate):
+            player_box_scores(day="bae", month="bae", year="jae")
+        self.assertEqual([], m.request_history)
