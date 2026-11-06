@@ -1,4 +1,5 @@
 import csv
+import io
 import json
 
 from basketball_reference_web_scraper.data import OutputType, OutputWriteOption
@@ -17,9 +18,9 @@ class FileOptions:
     def of(path=None, mode=None):
         if mode is None:
             return FileOptions(path=path, mode=OutputWriteOption.WRITE)
-        
+
         return FileOptions(path=path, mode=mode)
-    
+
     def __init__(self, path, mode):
         self.path = path
         self.mode = mode
@@ -30,8 +31,7 @@ class FileOptions:
 
     def __eq__(self, other):
         if isinstance(other, FileOptions):
-            return self.path == other.path \
-                   and self.mode == other.mode
+            return self.path == other.path and self.mode == other.mode
         return False
 
 
@@ -46,9 +46,13 @@ class OutputOptions:
         elif output_type == OutputType.CSV:
             formatting_options = csv_options
         elif output_type is None:
-            return OutputOptions(file_options=None, formatting_options={}, output_type=None)
+            return OutputOptions(
+                file_options=None, formatting_options={}, output_type=None
+            )
         else:
-            raise ValueError("Unknown output type: {output_type}".format(output_type=output_type))
+            raise ValueError(
+                "Unknown output type: {output_type}".format(output_type=output_type)
+            )
 
         return OutputOptions(
             file_options=file_options,
@@ -63,9 +67,11 @@ class OutputOptions:
 
     def __eq__(self, other):
         if isinstance(other, OutputOptions):
-            return self.file_options == other.file_options \
-                    and self.formatting_options == other.formatting_options \
-                    and self.output_type == other.output_type
+            return (
+                self.file_options == other.file_options
+                and self.formatting_options == other.formatting_options
+                and self.output_type == other.output_type
+            )
 
         return False
 
@@ -80,13 +86,15 @@ class Writer:
 
 class JSONWriter(Writer):
     def write(self, data, options):
-        output_options = merge_two_dicts(DEFAULT_JSON_OPTIONS, options.formatting_options)
+        output_options = merge_two_dicts(
+            DEFAULT_JSON_OPTIONS, options.formatting_options
+        )
         if options.file_options.should_write_to_file:
             with open(
-                    options.file_options.path,
-                    options.file_options.mode.value,
-                    newline="",
-                    encoding="utf8"
+                options.file_options.path,
+                options.file_options.mode.value,
+                newline="",
+                encoding="utf8",
             ) as json_file:
                 return json.dump(
                     data,
@@ -110,19 +118,36 @@ class CSVWriter(Writer):
         ]
 
     def write(self, data, options):
-        with open(
+        if options.file_options.should_write_to_file:
+            with open(
                 options.file_options.path,
                 options.file_options.mode.value,
                 newline="",
                 encoding="utf8",
-        ) as csv_file:
-            writer = csv.DictWriter(
-                csv_file,
-                fieldnames=options.formatting_options.get("column_names"),
-            )
-            writer.writeheader()
+            ) as csv_file:
+                self._write_rows(csv_file, data, options)
+                return None
 
-            writer.writerows(self.rows(data=data))
+        csv_buffer = io.StringIO()
+        self._write_rows(csv_buffer, data, options)
+        output = csv_buffer.getvalue()
+        csv_buffer.close()
+        return output
+
+    def _write_rows(self, csv_file, data, options):
+        column_names = (options.formatting_options or {}).get("column_names")
+        if not column_names:
+            raise ValueError(
+                "CSV output requires a 'column_names' value in the CSV formatting options"
+            )
+
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=column_names,
+        )
+        writer.writeheader()
+
+        writer.writerows(self.rows(data=data))
 
 
 class SearchCSVWriter(CSVWriter):
@@ -131,4 +156,3 @@ class SearchCSVWriter(CSVWriter):
             dict((key, self.value_formatter(value)) for key, value in row.items())
             for row in data["players"]
         ]
-

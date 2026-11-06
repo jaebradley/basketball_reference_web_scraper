@@ -1,7 +1,13 @@
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import OUTCOME_ABBREVIATIONS_TO_OUTCOME, Outcome
-from basketball_reference_web_scraper.parsers import OutcomeAbbreviationParser, PlayerBoxScoreOutcomeParser
+from basketball_reference_web_scraper.data import (
+    OUTCOME_ABBREVIATIONS_TO_OUTCOME,
+    Outcome,
+)
+from basketball_reference_web_scraper.parsers import (
+    OutcomeAbbreviationParser,
+    PlayerBoxScoreOutcomeParser,
+)
 
 
 class TestPlayerBoxScoreOutcomeParser(TestCase):
@@ -13,4 +19,6 @@ class TestPlayerBoxScoreOutcomeParser(TestCase):
         )
 
     def test_parse_win_abbreviation_for_single_digit_margin_of_victory(self):
-        self.assertEqual("W", self.parser.parse_outcome_abbreviation(formatted_outcome="W, (1, 0)"))
+        self.assertEqual(
+            "W", self.parser.parse_outcome_abbreviation(formatted_outcome="W, (1, 0)")
+        )
