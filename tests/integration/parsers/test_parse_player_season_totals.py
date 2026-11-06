@@ -1,11 +1,19 @@
 import os
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import Team, Position, POSITION_ABBREVIATIONS_TO_POSITION
-from basketball_reference_web_scraper.html import PlayerSeasonTotalTable
-from basketball_reference_web_scraper.parsers import PositionAbbreviationParser, TeamAbbreviationParser, \
-    PlayerSeasonTotalsParser
 from lxml import html
+
+from basketball_reference_web_scraper.data import (
+    POSITION_ABBREVIATIONS_TO_POSITION,
+    Position,
+    Team,
+)
+from basketball_reference_web_scraper.html import PlayerSeasonTotalTable
+from basketball_reference_web_scraper.parsers import (
+    PlayerSeasonTotalsParser,
+    PositionAbbreviationParser,
+    TeamAbbreviationParser,
+)
 
 
 class BasePlayerSeasonTotalsTestCase(TestCase):
@@ -13,15 +21,19 @@ class BasePlayerSeasonTotalsTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/players_season_totals/{cls._season_end_year}.html",
-        ), 'r') as file_input: _html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            _html = file_input.read()
         cls._parsed_season_totals = PlayerSeasonTotalsParser(
             position_abbreviation_parser=PositionAbbreviationParser(
                 abbreviations_to_positions=POSITION_ABBREVIATIONS_TO_POSITION
             ),
-            team_abbreviation_parser=TeamAbbreviationParser()
+            team_abbreviation_parser=TeamAbbreviationParser(),
         ).parse(PlayerSeasonTotalTable(html=html.fromstring(_html)).rows)
 
 

@@ -1,26 +1,37 @@
 import os
 from unittest import TestCase
 
-from basketball_reference_web_scraper.data import TeamTotal
-from basketball_reference_web_scraper.data import Team, Outcome
-from basketball_reference_web_scraper.html import BoxScoresPage
-from basketball_reference_web_scraper.parsers import TeamAbbreviationParser, \
-    TeamTotalsParser
 from lxml import html
+
+from basketball_reference_web_scraper.data import Outcome, Team, TeamTotal
+from basketball_reference_web_scraper.html import BoxScoresPage
+from basketball_reference_web_scraper.parsers import (
+    TeamAbbreviationParser,
+    TeamTotalsParser,
+)
 
 
 class TestParseTeams(TestCase):
     @classmethod
     def setUpClass(cls):
-        with open(os.path.join(
+        with open(
+            os.path.join(
                 os.path.dirname(__file__),
                 f"../files/boxscores/2017/1/201701010ATL.html",
-        ), 'r') as file_input: _html = file_input.read()
+            ),
+            "r",
+        ) as file_input:
+            _html = file_input.read()
         tables = BoxScoresPage(html.fromstring(html=_html)).statistics_tables
         first_team_totals, second_team_totals = list(
-            map(lambda paired_tables: TeamTotal(basic_statistics_table=paired_tables[0],
-                                                advanced_statistics_table=paired_tables[1]),
-                zip(tables[::2], tables[1::2])))
+            map(
+                lambda paired_tables: TeamTotal(
+                    basic_statistics_table=paired_tables[0],
+                    advanced_statistics_table=paired_tables[1],
+                ),
+                zip(tables[::2], tables[1::2]),
+            )
+        )
         cls._parsed_results = TeamTotalsParser(
             team_abbreviation_parser=TeamAbbreviationParser(),
         ).parse(
