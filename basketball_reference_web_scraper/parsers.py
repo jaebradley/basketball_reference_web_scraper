@@ -215,7 +215,7 @@ class ScheduledStartTimeParser:
             start_time = datetime.strptime(formatted_date, "%a, %b %d, %Y")
 
         # All basketball reference times seem to be in Eastern
-        localized_start_time = start_time.replace(tzinfo=ZoneInfo("US/Eastern"))
+        localized_start_time = start_time.replace(tzinfo=ZoneInfo("America/New_York"))
         return localized_start_time.astimezone(self.time_zone)
 
 

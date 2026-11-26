@@ -65,7 +65,7 @@ class TestOctober2001Parser(BaseParserTest):
     def test_first_game(self):
         first_game = self._parsed_results[0]
         expected_datetime = datetime(year=2000, month=10, day=31, hour=19, minute=30,
-                                     tzinfo=ZoneInfo("US/Eastern")).astimezone(ZoneInfo("UTC"))
+                                     tzinfo=ZoneInfo("America/New_York")).astimezone(ZoneInfo("UTC"))
 
         self.assertTrue(abs(first_game["start_time"] - expected_datetime) < timedelta(seconds=1))
         self.assertEqual(first_game["away_team"], Team.CHARLOTTE_HORNETS)
@@ -92,7 +92,7 @@ class TestParsingUpcomingGames(BaseParserTest):
 
         self.assertEqual(first_game["start_time"],
                          datetime(year=2019, month=4, day=1, hour=19, minute=30,
-                                  tzinfo=ZoneInfo("US/Eastern")).astimezone(ZoneInfo("UTC")))
+                                  tzinfo=ZoneInfo("America/New_York")).astimezone(ZoneInfo("UTC")))
         self.assertEqual(first_game["away_team"], Team.MIAMI_HEAT)
         self.assertEqual(first_game["home_team"], Team.BOSTON_CELTICS)
         self.assertIsNone(first_game["away_team_score"])
